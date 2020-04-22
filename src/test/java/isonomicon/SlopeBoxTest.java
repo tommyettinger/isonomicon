@@ -125,7 +125,7 @@ public class SlopeBoxTest extends ApplicationAdapter {
         batch.draw(screenRegion, 0, 0);
         //// for GB_GREEN
         //font.setColor(0x34 / 255f, 0x68 / 255f, 0x56 / 255f, 1f);
-        font.setColor(0f, 0f, 0f, 1f);
+        font.setColor(1f, 1f, 1f, 1f);
         //font.draw(batch, model.voxels.length + ", " + model.voxels[0].length + ", " + model.voxels[0][0].length + ", " + " (original)", 0, 80);
 //        font.draw(batch, model.sizeX() + ", " + model.sizeY() + ", " + model.sizeZ() + " (sizes)", 0, 60);
 //        font.draw(batch, StringKit.join(", ", model.rotation().rotation()) + " (rotation)", 0, 40);
