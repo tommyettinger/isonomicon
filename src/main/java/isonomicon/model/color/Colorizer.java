@@ -110,7 +110,7 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
     }
 
 
-    public static final Colorizer AuroraColorizer = new Colorizer(new PaletteReducer()) {
+    public static final Colorizer AuroraColorizer = new Colorizer(new PaletteReducer(Coloring.AURORA)) {
         private final byte[] primary = {
                 -104,
                 62,
@@ -139,69 +139,12 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
 
         @Override
         public byte brighten(byte voxel) {
-            return Dimmer.AURORA_RAMPS[voxel & 0xFF][0];
+            return AURORA_RAMPS[voxel & 0xFF][0];
         }
 
         @Override
         public byte darken(byte voxel) {
-            return Dimmer.AURORA_RAMPS[voxel & 0xFF][2];
-        }
-    };
-    public static final Colorizer FlesurrectColorizer = new Colorizer(Coloring.FLESURRECT_REDUCER) {
-        private final byte[] primary = {
-                63, 24, 27, 34, 42, 49, 55
-        }, grays = {
-                1, 2, 3, 4, 5, 6, 7, 8, 9
-        };
-
-        @Override
-        public byte[] mainColors() {
-            return primary;
-        }
-
-        /**
-         * @return An array of grayscale or close-to-grayscale color indices, with the darkest first and lightest last.
-         */
-        @Override
-        public byte[] grayscale() {
-            return grays;
-        }
-
-        @Override
-        public byte brighten(byte voxel) {
-            // the second half of voxels (with bit 0x40 set) don't shade visually, but Colorizer uses this method to
-            // denote a structural change to the voxel's makeup, so this uses the first 64 voxel colors to shade both
-            // halves, then marks voxels from the second half back to being an unshaded voxel as the last step.
-            return (byte) (Dimmer.FLESURRECT_RAMPS[voxel & 0x3F][3] | (voxel & 0xC0));
-        }
-
-        @Override
-        public byte darken(byte voxel) {
-            // the second half of voxels (with bit 0x40 set) don't shade visually, but Colorizer uses this method to
-            // denote a structural change to the voxel's makeup, so this uses the first 64 voxel colors to shade both
-            // halves, then marks voxels from the second half back to being an unshaded voxel as the last step.
-            return (byte) (Dimmer.FLESURRECT_RAMPS[voxel & 0x3F][1] | (voxel & 0xC0));
-        }
-
-        @Override
-        public int dimmer(int brightness, byte voxel) {
-            return Dimmer.FLESURRECT_RAMP_VALUES[voxel & 0xFF][
-                    brightness <= 0
-                            ? 0
-                            : brightness >= 3
-                            ? 3
-                            : brightness
-                    ];
-        }
-
-        @Override
-        public int getShadeBit() {
-            return 0x40;
-        }
-
-        @Override
-        public int getWaveBit() {
-            return 0x80;
+            return AURORA_RAMPS[voxel & 0xFF][2];
         }
     };
     public static final Colorizer AuroraBonusColorizer = new Colorizer(new PaletteReducer()) {
@@ -233,12 +176,12 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
 
         @Override
         public byte brighten(byte voxel) {
-            return Dimmer.AURORA_RAMPS[voxel & 0xFF][0];
+            return AURORA_RAMPS[voxel & 0xFF][0];
         }
 
         @Override
         public byte darken(byte voxel) {
-            return Dimmer.AURORA_RAMPS[voxel & 0xFF][2];
+            return AURORA_RAMPS[voxel & 0xFF][2];
         }
 
         private int[][] RAMP_VALUES = new int[][]{
@@ -511,6 +454,538 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
                     ];
         }
 
+    };
+    /**
+     * Color values as RGBA8888 ints to use when shading an Aurora-palette model.
+     * The color in index 1 of each 4-element sub-array is the "dimmer" color and the one that will match the voxel
+     * color used in a model. The color at index 0 is "bright", index 2 is "dim", and index 3 is "dark".
+     * To visualize this, <a href="https://i.imgur.com/rQDrPE7.png">use this image</a>, with the first 32 items in
+     * AURORA_RAMPS corresponding to the first column from top to bottom, the next 32 items in the second column, etc.
+     */
+    public static final int[][] AURORA_RAMP_VALUES = new int[][]{
+            { 0x00000000, 0x00000000, 0x00000000, 0x00000000 },
+            { 0x252525FF, 0x010101FF, 0x010101FF, 0x010101FF },
+            { 0x3C233CFF, 0x131313FF, 0x010101FF, 0x010101FF },
+            { 0x3B3B57FF, 0x252525FF, 0x010101FF, 0x010101FF },
+            { 0x5B5B5BFF, 0x373737FF, 0x0F192DFF, 0x131313FF },
+            { 0x6E6E6EFF, 0x494949FF, 0x3C233CFF, 0x252525FF },
+            { 0x6E8287FF, 0x5B5B5BFF, 0x3B3B57FF, 0x373737FF },
+            { 0x7E9494FF, 0x6E6E6EFF, 0x494949FF, 0x3B3B57FF },
+            { 0xA4A4A4FF, 0x808080FF, 0x5B5B5BFF, 0x494949FF },
+            { 0xBCAFC0FF, 0x929292FF, 0x6E6E6EFF, 0x5B5B5BFF },
+            { 0xC9C9C9FF, 0xA4A4A4FF, 0x808080FF, 0x6E8287FF },
+            { 0xE3C7E3FF, 0xB6B6B6FF, 0x929292FF, 0x7E9494FF },
+            { 0xE3E3FFFF, 0xC9C9C9FF, 0xA4A4A4FF, 0x929292FF },
+            { 0xFFFFFFFF, 0xDBDBDBFF, 0xB6B6B6FF, 0xBCAFC0FF },
+            { 0xFFFFFFFF, 0xEDEDEDFF, 0xC9C9C9FF, 0xB6B6B6FF },
+            { 0xFFFFFFFF, 0xFFFFFFFF, 0xDBDBDBFF, 0xE3C7E3FF },
+            { 0x06C491FF, 0x007F7FFF, 0x0F377DFF, 0x0C2148FF },
+            { 0x5AC5FFFF, 0x3FBFBFFF, 0x06C491FF, 0x129880FF },
+            { 0x55E6FFFF, 0x00FFFFFF, 0x00BFFFFF, 0x109CDEFF },
+            { 0xFFFFFFFF, 0xBFFFFFFF, 0xABC7E3FF, 0x8FC7C7FF },
+            { 0xB991FFFF, 0x8181FFFF, 0x4A5AFFFF, 0x6241F6FF },
+            { 0x3C3CF5FF, 0x0000FFFF, 0x00007FFF, 0x010101FF },
+            { 0x4A5AFFFF, 0x3F3FBFFF, 0x5010B0FF, 0x231094FF },
+            { 0x101CDAFF, 0x00007FFF, 0x010101FF, 0x010101FF },
+            { 0x0F377DFF, 0x0F0F50FF, 0x010101FF, 0x010101FF },
+            { 0x8C14BEFF, 0x7F007FFF, 0x320A46FF, 0x010101FF },
+            { 0xFF52FFFF, 0xBF3FBFFF, 0xBD10C5FF, 0x8C14BEFF },
+            { 0xFF52FFFF, 0xF500F5FF, 0x8C14BEFF, 0x7F007FFF },
+            { 0xF8C6FCFF, 0xFD81FFFF, 0xFF52FFFF, 0xBF3FBFFF },
+            { 0xFFFFFFFF, 0xFFC0CBFF, 0xD7A0BEFF, 0xC78FB9FF },
+            { 0xFAA0B9FF, 0xFF8181FF, 0xD5524AFF, 0xBF3F3FFF },
+            { 0xFF3C0AFF, 0xFF0000FF, 0xA5140AFF, 0x7F0000FF },
+            { 0xFF6262FF, 0xBF3F3FFF, 0xBD1039FF, 0x911437FF },
+            { 0x911437FF, 0x7F0000FF, 0x280A1EFF, 0x010101FF },
+            { 0x573B3BFF, 0x551414FF, 0x010101FF, 0x010101FF },
+            { 0xBF3F3FFF, 0x7F3F00FF, 0x621800FF, 0x401811FF },
+            { 0xE19B7DFF, 0xBF7F3FFF, 0xBF3F3FFF, 0xA04B05FF },
+            { 0xFFA53CFF, 0xFF7F00FF, 0xB45A00FF, 0xDA2010FF },
+            { 0xFFFFBFFF, 0xFFBF81FF, 0xE19B7DFF, 0xD08A74FF },
+            { 0xFFFFFFFF, 0xFFFFBFFF, 0xDADAABFF, 0xE3C7ABFF },
+            { 0xFFFFBFFF, 0xFFFF00FF, 0xB1B10AFF, 0xAC9400FF },
+            { 0xE6D55AFF, 0xBFBF3FFF, 0xAC9400FF, 0x7F7F00FF },
+            { 0xB1B10AFF, 0x7F7F00FF, 0x53500AFF, 0x5F3214FF },
+            { 0x00C514FF, 0x007F00FF, 0x191E0FFF, 0x010101FF },
+            { 0x4BF05AFF, 0x3FBF3FFF, 0x1C8C4EFF, 0x149605FF },
+            { 0x4BF05AFF, 0x00FF00FF, 0x00C514FF, 0x149605FF },
+            { 0xE1F8FAFF, 0xAFFFAFFF, 0x8FC78FFF, 0x87B48EFF },
+            { 0xE3C7E3FF, 0xBCAFC0FF, 0x929292FF, 0xAB73ABFF },
+            { 0xE3C7ABFF, 0xCBAA89FF, 0xC07872FF, 0xAB7373FF },
+            { 0xC9C9C9FF, 0xA6A090FF, 0x808080FF, 0x6E6E6EFF },
+            { 0xB6B6B6FF, 0x7E9494FF, 0x6E6E6EFF, 0x73578FFF },
+            { 0xA4A4A4FF, 0x6E8287FF, 0x5B5B5BFF, 0x494973FF },
+            { 0x929292FF, 0x7E6E60FF, 0x494949FF, 0x573B3BFF },
+            { 0xC78F8FFF, 0xA0695FFF, 0x98344DFF, 0x73413CFF },
+            { 0xE19B7DFF, 0xC07872FF, 0x8E5555FF, 0x98344DFF },
+            { 0xEBAA8CFF, 0xD08A74FF, 0xA0695FFF, 0x8E5555FF },
+            { 0xF6C8AFFF, 0xE19B7DFF, 0xC07872FF, 0xA0695FFF },
+            { 0xFFC0CBFF, 0xEBAA8CFF, 0xD08A74FF, 0xC07872FF },
+            { 0xF8D2DAFF, 0xF5B99BFF, 0xD08A74FF, 0xC07872FF },
+            { 0xFFFFBFFF, 0xF6C8AFFF, 0xCBAA89FF, 0xC78F8FFF },
+            { 0xFFFFFFFF, 0xF5E1D2FF, 0xC9C9C9FF, 0xE1B9D2FF },
+            { 0x8E5555FF, 0x573B3BFF, 0x321623FF, 0x280A1EFF },
+            { 0x7E6E60FF, 0x73413CFF, 0x551937FF, 0x401811FF },
+            { 0xAB7373FF, 0x8E5555FF, 0x573B3BFF, 0x551937FF },
+            { 0xC78F8FFF, 0xAB7373FF, 0x8E5555FF, 0x73413CFF },
+            { 0xE3ABABFF, 0xC78F8FFF, 0xAB7373FF, 0xA0695FFF },
+            { 0xF8D2DAFF, 0xE3ABABFF, 0xC78F8FFF, 0xC87DA0FF },
+            { 0xFFFFFFFF, 0xF8D2DAFF, 0xD7A0BEFF, 0xC78FB9FF },
+            { 0xEDEDEDFF, 0xE3C7ABFF, 0xCBAA89FF, 0xC78F8FFF },
+            { 0xE3ABABFF, 0xC49E73FF, 0xAB7373FF, 0xA0695FFF },
+            { 0x929292FF, 0x8F7357FF, 0x73573BFF, 0x73413CFF },
+            { 0x8F7357FF, 0x73573BFF, 0x414123FF, 0x3B2D1FFF },
+            { 0x494949FF, 0x3B2D1FFF, 0x010101FF, 0x010101FF },
+            { 0x73573BFF, 0x414123FF, 0x191E0FFF, 0x131313FF },
+            { 0x8F8F57FF, 0x73733BFF, 0x465032FF, 0x414123FF },
+            { 0xA6A090FF, 0x8F8F57FF, 0x73733BFF, 0x73573BFF },
+            { 0xCBAA89FF, 0xA2A255FF, 0x8F7357FF, 0x73733BFF },
+            { 0xE3C7ABFF, 0xB5B572FF, 0x8F8F57FF, 0x8C805AFF },
+            { 0xEDEDC7FF, 0xC7C78FFF, 0xC49E73FF, 0xA2A255FF },
+            { 0xEDEDEDFF, 0xDADAABFF, 0xCBAA89FF, 0xA6A090FF },
+            { 0xFFFFFFFF, 0xEDEDC7FF, 0xC9C9C9FF, 0xB6B6B6FF },
+            { 0xEDEDEDFF, 0xC7E3ABFF, 0xABC78FFF, 0x8FC78FFF },
+            { 0xC7E3ABFF, 0xABC78FFF, 0x929292FF, 0x8F8F57FF },
+            { 0xABC78FFF, 0x8EBE55FF, 0x738F57FF, 0x587D3EFF },
+            { 0x87B48EFF, 0x738F57FF, 0x506450FF, 0x465032FF },
+            { 0x73AB73FF, 0x587D3EFF, 0x3B573BFF, 0x465032FF },
+            { 0x507D5FFF, 0x465032FF, 0x1E2D23FF, 0x191E0FFF },
+            { 0x373737FF, 0x191E0FFF, 0x010101FF, 0x010101FF },
+            { 0x3B7349FF, 0x235037FF, 0x0F192DFF, 0x131313FF },
+            { 0x507D5FFF, 0x3B573BFF, 0x1E2D23FF, 0x252525FF },
+            { 0x6E8287FF, 0x506450FF, 0x373737FF, 0x1E2D23FF },
+            { 0x6E8287FF, 0x3B7349FF, 0x235037FF, 0x123832FF },
+            { 0x73AB73FF, 0x578F57FF, 0x3B573BFF, 0x235037FF },
+            { 0x8FC78FFF, 0x73AB73FF, 0x578F57FF, 0x507D5FFF },
+            { 0x8FC7C7FF, 0x64C082FF, 0x578F57FF, 0x507D5FFF },
+            { 0xABE3C5FF, 0x8FC78FFF, 0x73AB73FF, 0x6E8287FF },
+            { 0xC7F1F1FF, 0xA2D8A2FF, 0x87B48EFF, 0x73AB73FF },
+            { 0xFFFFFFFF, 0xE1F8FAFF, 0xBED2F0FF, 0xABC7E3FF },
+            { 0xE1F8FAFF, 0xB4EECAFF, 0x8FC7C7FF, 0x8FC78FFF },
+            { 0xE1F8FAFF, 0xABE3C5FF, 0x87B48EFF, 0x64ABABFF },
+            { 0xA2D8A2FF, 0x87B48EFF, 0x808080FF, 0x6E8287FF },
+            { 0x7E9494FF, 0x507D5FFF, 0x3B573BFF, 0x235037FF },
+            { 0x3B7373FF, 0x0F6946FF, 0x123832FF, 0x0C2148FF },
+            { 0x494949FF, 0x1E2D23FF, 0x010101FF, 0x010101FF },
+            { 0x3B7373FF, 0x234146FF, 0x0F192DFF, 0x010101FF },
+            { 0x6E8287FF, 0x3B7373FF, 0x3B3B57FF, 0x234146FF },
+            { 0x8FC7C7FF, 0x64ABABFF, 0x57738FFF, 0x3B7373FF },
+            { 0xABE3E3FF, 0x8FC7C7FF, 0x64ABABFF, 0x578FC7FF },
+            { 0xE1F8FAFF, 0xABE3E3FF, 0x8FC7C7FF, 0x8FABC7FF },
+            { 0xFFFFFFFF, 0xC7F1F1FF, 0xABC7E3FF, 0xA8B9DCFF },
+            { 0xE1F8FAFF, 0xBED2F0FF, 0xABABE3FF, 0x8FABC7FF },
+            { 0xE3E3FFFF, 0xABC7E3FF, 0x8FABC7FF, 0x8F8FC7FF },
+            { 0xD0DAF8FF, 0xA8B9DCFF, 0x8F8FC7FF, 0x7676CAFF },
+            { 0xABC7E3FF, 0x8FABC7FF, 0x7E9494FF, 0x736EAAFF },
+            { 0x90B0FFFF, 0x578FC7FF, 0x326496FF, 0x0F377DFF },
+            { 0x7E9494FF, 0x57738FFF, 0x3B5773FF, 0x494973FF },
+            { 0x57738FFF, 0x3B5773FF, 0x162C52FF, 0x0C2148FF },
+            { 0x234146FF, 0x0F192DFF, 0x010101FF, 0x010101FF },
+            { 0x3B3B57FF, 0x1F1F3BFF, 0x010101FF, 0x010101FF },
+            { 0x57578FFF, 0x3B3B57FF, 0x1F1F3BFF, 0x0F192DFF },
+            { 0x57738FFF, 0x494973FF, 0x162C52FF, 0x1F1F3BFF },
+            { 0x7676CAFF, 0x57578FFF, 0x3B3B57FF, 0x162C52FF },
+            { 0x8F8FC7FF, 0x736EAAFF, 0x494973FF, 0x573B73FF },
+            { 0x90B0FFFF, 0x7676CAFF, 0x57578FFF, 0x3F3FBFFF },
+            { 0xABABE3FF, 0x8F8FC7FF, 0x736EAAFF, 0x73578FFF },
+            { 0xBED2F0FF, 0xABABE3FF, 0x8F8FC7FF, 0x7676CAFF },
+            { 0xFFFFFFFF, 0xD0DAF8FF, 0xA8B9DCFF, 0xABABE3FF },
+            { 0xFFFFFFFF, 0xE3E3FFFF, 0xBEB9FAFF, 0xA8B9DCFF },
+            { 0xBEB9FAFF, 0xAB8FC7FF, 0x736EAAFF, 0x73578FFF },
+            { 0xBD62FFFF, 0x8F57C7FF, 0x8C14BEFF, 0x5A187BFF },
+            { 0xAB73ABFF, 0x73578FFF, 0x573B73FF, 0x5A187BFF },
+            { 0x73578FFF, 0x573B73FF, 0x410062FF, 0x320A46FF },
+            { 0x494949FF, 0x3C233CFF, 0x010101FF, 0x010101FF },
+            { 0x724072FF, 0x463246FF, 0x280A1EFF, 0x010101FF },
+            { 0xAB57ABFF, 0x724072FF, 0x641464FF, 0x3C233CFF },
+            { 0xAB73ABFF, 0x8F578FFF, 0x573B73FF, 0x641464FF },
+            { 0xAB8FC7FF, 0xAB57ABFF, 0x724072FF, 0xA01982FF },
+            { 0xD7A0BEFF, 0xAB73ABFF, 0x8F578FFF, 0x73578FFF },
+            { 0xFFDCF5FF, 0xEBACE1FF, 0xC78FB9FF, 0xC87DA0FF },
+            { 0xFFFFFFFF, 0xFFDCF5FF, 0xE1B9D2FF, 0xEBACE1FF },
+            { 0xFFFFFFFF, 0xE3C7E3FF, 0xBCAFC0FF, 0xC78FB9FF },
+            { 0xFFDCF5FF, 0xE1B9D2FF, 0xC78FB9FF, 0xAB73ABFF },
+            { 0xE3C7E3FF, 0xD7A0BEFF, 0xC87DA0FF, 0xAB73ABFF },
+            { 0xEBACE1FF, 0xC78FB9FF, 0xAB57ABFF, 0x8F578FFF },
+            { 0xD7A0BEFF, 0xC87DA0FF, 0xAB57ABFF, 0x8F578FFF },
+            { 0xC78FB9FF, 0xC35A91FF, 0x8E5555FF, 0xA01982FF },
+            { 0x724072FF, 0x4B2837FF, 0x280A1EFF, 0x010101FF },
+            { 0x463246FF, 0x321623FF, 0x010101FF, 0x010101FF },
+            { 0x4B2837FF, 0x280A1EFF, 0x010101FF, 0x010101FF },
+            { 0x573B3BFF, 0x401811FF, 0x010101FF, 0x010101FF },
+            { 0x7F3F00FF, 0x621800FF, 0x280A1EFF, 0x010101FF },
+            { 0xBF3F3FFF, 0xA5140AFF, 0x280A1EFF, 0x010101FF },
+            { 0xF55A32FF, 0xDA2010FF, 0x7F0000FF, 0x280A1EFF },
+            { 0xFF8181FF, 0xD5524AFF, 0xBD1039FF, 0x911437FF },
+            { 0xF55A32FF, 0xFF3C0AFF, 0xA5140AFF, 0x7F0000FF },
+            { 0xFF8181FF, 0xF55A32FF, 0xFF3C0AFF, 0xDA2010FF },
+            { 0xEBAA8CFF, 0xFF6262FF, 0xBF3F3FFF, 0xBD1039FF },
+            { 0xFFEA4AFF, 0xF6BD31FF, 0xD79B0FFF, 0xAC9400FF },
+            { 0xFFBF81FF, 0xFFA53CFF, 0xD79B0FFF, 0xDA6E0AFF },
+            { 0xFFA53CFF, 0xD79B0FFF, 0xB45A00FF, 0xA04B05FF },
+            { 0xFFA53CFF, 0xDA6E0AFF, 0xA04B05FF, 0xA5140AFF },
+            { 0xBF7F3FFF, 0xB45A00FF, 0x7F3F00FF, 0xA5140AFF },
+            { 0xDA6E0AFF, 0xA04B05FF, 0xA5140AFF, 0x621800FF },
+            { 0x73573BFF, 0x5F3214FF, 0x280A1EFF, 0x010101FF },
+            { 0x73733BFF, 0x53500AFF, 0x283405FF, 0x191E0FFF },
+            { 0x73733BFF, 0x626200FF, 0x283405FF, 0x401811FF },
+            { 0x929292FF, 0x8C805AFF, 0x73573BFF, 0x465032FF },
+            { 0xBFBF3FFF, 0xAC9400FF, 0xA04B05FF, 0x7F3F00FF },
+            { 0xE6D55AFF, 0xB1B10AFF, 0x7F7F00FF, 0x626200FF },
+            { 0xFFFFBFFF, 0xE6D55AFF, 0xBFBF3FFF, 0xB1B10AFF },
+            { 0xFFEA4AFF, 0xFFD510FF, 0xD79B0FFF, 0xAC9400FF },
+            { 0xFFFFBFFF, 0xFFEA4AFF, 0xF6BD31FF, 0xD79B0FFF },
+            { 0xFFFFBFFF, 0xC8FF41FF, 0x96DC19FF, 0x73C805FF },
+            { 0xAFFFAFFF, 0x9BF046FF, 0x8EBE55FF, 0x73C805FF },
+            { 0xC8FF41FF, 0x96DC19FF, 0x6AA805FF, 0x7F7F00FF },
+            { 0x9BF046FF, 0x73C805FF, 0x7F7F00FF, 0x3C6E14FF },
+            { 0x8EBE55FF, 0x6AA805FF, 0x626200FF, 0x53500AFF },
+            { 0x578F57FF, 0x3C6E14FF, 0x204608FF, 0x283405FF },
+            { 0x465032FF, 0x283405FF, 0x010101FF, 0x010101FF },
+            { 0x465032FF, 0x204608FF, 0x131313FF, 0x010101FF },
+            { 0x3B573BFF, 0x0C5C0CFF, 0x191E0FFF, 0x131313FF },
+            { 0x3FBF3FFF, 0x149605FF, 0x0C5C0CFF, 0x204608FF },
+            { 0x4BF05AFF, 0x0AD70AFF, 0x149605FF, 0x007F00FF },
+            { 0x4BF05AFF, 0x14E60AFF, 0x149605FF, 0x007F00FF },
+            { 0xAFFFAFFF, 0x7DFF73FF, 0x4BF05AFF, 0x3FBF3FFF },
+            { 0x7DFF73FF, 0x4BF05AFF, 0x3FBF3FFF, 0x05B450FF },
+            { 0x4BF05AFF, 0x00C514FF, 0x007F00FF, 0x0C5C0CFF },
+            { 0x06C491FF, 0x05B450FF, 0x0F6946FF, 0x0C5C0CFF },
+            { 0x578F57FF, 0x1C8C4EFF, 0x123832FF, 0x0F192DFF },
+            { 0x3B5773FF, 0x123832FF, 0x010101FF, 0x010101FF },
+            { 0x3FBFBFFF, 0x129880FF, 0x055A5CFF, 0x0C2148FF },
+            { 0x3FBFBFFF, 0x06C491FF, 0x007F7FFF, 0x055A5CFF },
+            { 0x2DEBA8FF, 0x00DE6AFF, 0x007F7FFF, 0x0F6946FF },
+            { 0x6AFFCDFF, 0x2DEBA8FF, 0x06C491FF, 0x129880FF },
+            { 0xBFFFFFFF, 0x3CFEA5FF, 0x00DE6AFF, 0x06C491FF },
+            { 0xBFFFFFFF, 0x6AFFCDFF, 0x2DEBA8FF, 0x3FBFBFFF },
+            { 0xBFFFFFFF, 0x91EBFFFF, 0x5AC5FFFF, 0x3FBFBFFF },
+            { 0xBFFFFFFF, 0x55E6FFFF, 0x08DED5FF, 0x4AA4FFFF },
+            { 0xBFFFFFFF, 0x7DD7F0FF, 0x3FBFBFFF, 0x699DC3FF },
+            { 0x00FFFFFF, 0x08DED5FF, 0x109CDEFF, 0x007F7FFF },
+            { 0x4AA4FFFF, 0x109CDEFF, 0x186ABDFF, 0x004A9CFF },
+            { 0x129880FF, 0x055A5CFF, 0x0C2148FF, 0x0F0F50FF },
+            { 0x3B5773FF, 0x162C52FF, 0x010101FF, 0x010101FF },
+            { 0x3F3FBFFF, 0x0F377DFF, 0x0F0F50FF, 0x00007FFF },
+            { 0x186ABDFF, 0x004A9CFF, 0x00007FFF, 0x010101FF },
+            { 0x4B7DC8FF, 0x326496FF, 0x0F377DFF, 0x162C52FF },
+            { 0x007FFFFF, 0x0052F6FF, 0x101CDAFF, 0x0010BDFF },
+            { 0x4B7DC8FF, 0x186ABDFF, 0x004A9CFF, 0x0F377DFF },
+            { 0x4AA4FFFF, 0x2378DCFF, 0x004A9CFF, 0x0010BDFF },
+            { 0x90B0FFFF, 0x699DC3FF, 0x4B7DC8FF, 0x57738FFF },
+            { 0x55E6FFFF, 0x4AA4FFFF, 0x109CDEFF, 0x2378DCFF },
+            { 0x91EBFFFF, 0x90B0FFFF, 0x8181FFFF, 0x786EF0FF },
+            { 0x91EBFFFF, 0x5AC5FFFF, 0x109CDEFF, 0x2378DCFF },
+            { 0xE3E3FFFF, 0xBEB9FAFF, 0x8F8FC7FF, 0x7676CAFF },
+            { 0x00FFFFFF, 0x00BFFFFF, 0x007FFFFF, 0x0052F6FF },
+            { 0x00BFFFFF, 0x007FFFFF, 0x0052F6FF, 0x004A9CFF },
+            { 0x8181FFFF, 0x4B7DC8FF, 0x186ABDFF, 0x326496FF },
+            { 0xB991FFFF, 0x786EF0FF, 0x6241F6FF, 0x3F3FBFFF },
+            { 0x786EF0FF, 0x4A5AFFFF, 0x101CDAFF, 0x0010BDFF },
+            { 0x786EF0FF, 0x6241F6FF, 0x6010D0FF, 0x101CDAFF },
+            { 0x8181FFFF, 0x3C3CF5FF, 0x101CDAFF, 0x0010BDFF },
+            { 0x3C3CF5FF, 0x101CDAFF, 0x00007FFF, 0x010101FF },
+            { 0x3C3CF5FF, 0x0010BDFF, 0x010101FF, 0x010101FF },
+            { 0x3F3FBFFF, 0x231094FF, 0x010101FF, 0x010101FF },
+            { 0x3B3B57FF, 0x0C2148FF, 0x010101FF, 0x010101FF },
+            { 0x8732D2FF, 0x5010B0FF, 0x00007FFF, 0x010101FF },
+            { 0x6241F6FF, 0x6010D0FF, 0x231094FF, 0x00007FFF },
+            { 0xBD62FFFF, 0x8732D2FF, 0x5010B0FF, 0x410062FF },
+            { 0xBD62FFFF, 0x9C41FFFF, 0x7F00FFFF, 0x6010D0FF },
+            { 0xBD29FFFF, 0x7F00FFFF, 0x231094FF, 0x00007FFF },
+            { 0xB991FFFF, 0xBD62FFFF, 0x9C41FFFF, 0x8732D2FF },
+            { 0xD7C3FAFF, 0xB991FFFF, 0xBD62FFFF, 0x8F57C7FF },
+            { 0xF8C6FCFF, 0xD7A5FFFF, 0xBD62FFFF, 0x8F57C7FF },
+            { 0xFFFFFFFF, 0xD7C3FAFF, 0xABABE3FF, 0xAB8FC7FF },
+            { 0xFFFFFFFF, 0xF8C6FCFF, 0xD7A5FFFF, 0xC78FB9FF },
+            { 0xD7A5FFFF, 0xE673FFFF, 0xBF3FBFFF, 0x8732D2FF },
+            { 0xFD81FFFF, 0xFF52FFFF, 0xDA20E0FF, 0xBD10C5FF },
+            { 0xFF52FFFF, 0xDA20E0FF, 0x8C14BEFF, 0x7F007FFF },
+            { 0xBD62FFFF, 0xBD29FFFF, 0x8C14BEFF, 0x7F00FFFF },
+            { 0xFF52FFFF, 0xBD10C5FF, 0x7F007FFF, 0x410062FF },
+            { 0xBD29FFFF, 0x8C14BEFF, 0x5010B0FF, 0x7F007FFF },
+            { 0x724072FF, 0x5A187BFF, 0x0F0F50FF, 0x010101FF },
+            { 0xA01982FF, 0x641464FF, 0x280A1EFF, 0x010101FF },
+            { 0x573B73FF, 0x410062FF, 0x010101FF, 0x010101FF },
+            { 0x5A187BFF, 0x320A46FF, 0x010101FF, 0x010101FF },
+            { 0x724072FF, 0x551937FF, 0x010101FF, 0x010101FF },
+            { 0xBF3FBFFF, 0xA01982FF, 0x410062FF, 0x280A1EFF },
+            { 0xFC3A8CFF, 0xC80078FF, 0x7F007FFF, 0x7F0000FF },
+            { 0xFD81FFFF, 0xFF50BFFF, 0xFC3A8CFF, 0xE61E78FF },
+            { 0xFD81FFFF, 0xFF6AC5FF, 0xFC3A8CFF, 0xE61E78FF },
+            { 0xF8D2DAFF, 0xFAA0B9FF, 0xFF6AC5FF, 0xC87DA0FF },
+            { 0xFF50BFFF, 0xFC3A8CFF, 0xC80078FF, 0x911437FF },
+            { 0xFF50BFFF, 0xE61E78FF, 0x911437FF, 0x7F0000FF },
+            { 0xE61E78FF, 0xBD1039FF, 0x7F0000FF, 0x280A1EFF },
+            { 0xC35A91FF, 0x98344DFF, 0x551937FF, 0x551414FF },
+            { 0xBF3F3FFF, 0x911437FF, 0x7F0000FF, 0x280A1EFF },
+    };
+    /**
+     * Bytes that correspond to palette indices to use when shading an Aurora-palette model.
+     * The color in index 1 of each 4-element sub-array is the "dimmer" color and the one that will match the voxel
+     * color used in a model. The color at index 0 is "bright", index 2 is "dim", and index 3 is "dark". Normal usage
+     * with a renderer will use {@link #AURORA_RAMP_VALUES}; this array would be used to figure out what indices are related to
+     * another color for the purpose of procedurally using similar colors with different lightness.
+     * To visualize this, <a href="https://i.imgur.com/rQDrPE7.png">use this image</a>, with the first 32 items in
+     * AURORA_RAMPS corresponding to the first column from top to bottom, the next 32 items in the second column, etc.
+     */
+    public static final byte[][] AURORA_RAMPS = new byte[][]{
+        { 0, 0, 0, 0 },
+        { 3, 1, 1, 1 },
+        { -124, 2, 1, 1 },
+        { 119, 3, 1, 1 },
+        { 6, 4, 117, 2 },
+        { 7, 5, -124, 3 },
+        { 51, 6, 119, 4 },
+        { 50, 7, 5, 119 },
+        { 10, 8, 6, 5 },
+        { 47, 9, 7, 6 },
+        { 12, 10, 8, 51 },
+        { -116, 11, 9, 50 },
+        { 127, 12, 10, 9 },
+        { 15, 13, 11, 47 },
+        { 15, 14, 12, 11 },
+        { 15, 15, 13, -116 },
+        { -65, 16, -53, -32 },
+        { -44, 17, -65, -66 },
+        { -59, 18, -42, -56 },
+        { 15, 19, 111, 107 },
+        { -25, 20, -38, -37 },
+        { -36, 21, 23, 1 },
+        { -38, 22, -31, -33 },
+        { -35, 23, 1, 1 },
+        { -53, 24, 1, 1 },
+        { -16, 25, -12, 1 },
+        { -20, 26, -17, -16 },
+        { -20, 27, -16, 25 },
+        { -22, 28, -20, 26 },
+        { 15, 29, -114, -113 },
+        { -6, 30, -103, 32 },
+        { -102, 31, -105, 33 },
+        { -100, 32, -3, -1 },
+        { -1, 33, -108, 1 },
+        { 61, 34, 1, 1 },
+        { 32, 35, -106, -107 },
+        { 56, 36, 32, -94 },
+        { -98, 37, -95, -104 },
+        { 39, 38, 56, 55 },
+        { 15, 39, 79, 68 },
+        { 39, 40, -88, -89 },
+        { -87, 41, -89, 42 },
+        { -88, 42, -92, -93 },
+        { -70, 43, 87, 1 },
+        { -71, 44, -68, -75 },
+        { -71, 45, -70, -75 },
+        { 97, 46, 95, 100 },
+        { -116, 47, 9, -119 },
+        { 68, 48, 54, 64 },
+        { 12, 49, 8, 7 },
+        { 11, 50, 7, -126 },
+        { 10, 51, 6, 120 },
+        { 9, 52, 5, 61 },
+        { 65, 53, -2, 62 },
+        { 56, 54, 63, -2 },
+        { 57, 55, 53, 63 },
+        { 59, 56, 54, 53 },
+        { 29, 57, 55, 54 },
+        { 67, 58, 55, 54 },
+        { 39, 59, 48, 65 },
+        { 15, 60, 12, -115 },
+        { 63, 61, -109, -108 },
+        { 52, 62, -11, -107 },
+        { 64, 63, 61, -11 },
+        { 65, 64, 63, 62 },
+        { 66, 65, 64, 53 },
+        { 67, 66, 65, -112 },
+        { 15, 67, -114, -113 },
+        { 14, 68, 48, 65 },
+        { 66, 69, 64, 53 },
+        { 9, 70, 71, 62 },
+        { 70, 71, 73, 72 },
+        { 5, 72, 1, 1 },
+        { 71, 73, 87, 2 },
+        { 75, 74, 86, 73 },
+        { 49, 75, 74, 71 },
+        { 48, 76, 70, 74 },
+        { 68, 77, 75, -90 },
+        { 80, 78, 69, 76 },
+        { 14, 79, 48, 49 },
+        { 15, 80, 12, 11 },
+        { 14, 81, 82, 95 },
+        { 81, 82, 9, 75 },
+        { 82, 83, 84, 85 },
+        { 100, 84, 90, 86 },
+        { 93, 85, 89, 86 },
+        { 101, 86, 103, 87 },
+        { 4, 87, 1, 1 },
+        { 91, 88, 117, 2 },
+        { 101, 89, 103, 3 },
+        { 51, 90, 4, 103 },
+        { 51, 91, 88, -67 },
+        { 93, 92, 89, 88 },
+        { 95, 93, 92, 101 },
+        { 107, 94, 92, 101 },
+        { 99, 95, 93, 51 },
+        { 109, 96, 100, 93 },
+        { 15, 97, 110, 111 },
+        { 97, 98, 107, 95 },
+        { 97, 99, 100, 106 },
+        { 96, 100, 8, 51 },
+        { 50, 101, 89, 88 },
+        { 105, 102, -67, -32 },
+        { 5, 103, 1, 1 },
+        { 105, 104, 117, 1 },
+        { 51, 105, 119, 104 },
+        { 107, 106, 115, 105 },
+        { 108, 107, 106, 114 },
+        { 97, 108, 107, 113 },
+        { 15, 109, 111, 112 },
+        { 97, 110, 125, 113 },
+        { 127, 111, 113, 124 },
+        { 126, 112, 124, 123 },
+        { 111, 113, 50, 122 },
+        { -45, 114, -51, -53 },
+        { 50, 115, 116, 120 },
+        { 115, 116, -54, -32 },
+        { 104, 117, 1, 1 },
+        { 119, 118, 1, 1 },
+        { 121, 119, 118, 117 },
+        { 115, 120, -54, 118 },
+        { 123, 121, 119, -54 },
+        { 124, 122, 120, -125 },
+        { -45, 123, 121, 22 },
+        { 125, 124, 122, -126 },
+        { 110, 125, 124, 123 },
+        { 15, 126, 112, 125 },
+        { 15, 127, -43, 112 },
+        { -43, -128, 122, -126 },
+        { -26, -127, -16, -15 },
+        { -119, -126, -125, -15 },
+        { -126, -125, -13, -12 },
+        { 5, -124, 1, 1 },
+        { -122, -123, -108, 1 },
+        { -120, -122, -14, -124 },
+        { -119, -121, -125, -14 },
+        { -128, -120, -122, -10 },
+        { -114, -119, -121, -126 },
+        { -117, -118, -113, -112 },
+        { 15, -117, -115, -118 },
+        { 15, -116, 47, -113 },
+        { -117, -115, -113, -119 },
+        { -116, -114, -112, -119 },
+        { -118, -113, -120, -121 },
+        { -114, -112, -120, -121 },
+        { -113, -111, 63, -10 },
+        { -122, -110, -108, 1 },
+        { -123, -109, 1, 1 },
+        { -110, -108, 1, 1 },
+        { 61, -107, 1, 1 },
+        { 35, -106, -108, 1 },
+        { 32, -105, -108, 1 },
+        { -101, -104, 33, -108 },
+        { 30, -103, -3, -1 },
+        { -101, -102, -105, 33 },
+        { 30, -101, -102, -104 },
+        { 57, -100, 32, -3 },
+        { -85, -99, -97, -89 },
+        { 38, -98, -97, -96 },
+        { -98, -97, -95, -94 },
+        { -98, -96, -94, -105 },
+        { 36, -95, 35, -105 },
+        { -96, -94, -105, -106 },
+        { 71, -93, -108, 1 },
+        { 74, -92, -78, 87 },
+        { 74, -91, -78, -107 },
+        { 9, -90, 71, 86 },
+        { 41, -89, -94, 35 },
+        { -87, -88, 42, -91 },
+        { 39, -87, 41, -88 },
+        { -85, -86, -97, -89 },
+        { 39, -85, -99, -97 },
+        { 39, -84, -82, -81 },
+        { 46, -83, 83, -81 },
+        { -84, -82, -80, 42 },
+        { -83, -81, 42, -79 },
+        { 83, -80, -91, -92 },
+        { 92, -79, -77, -78 },
+        { 86, -78, 1, 1 },
+        { 86, -77, 2, 1 },
+        { 89, -76, 87, 2 },
+        { 44, -75, -76, -77 },
+        { -71, -74, -75, 43 },
+        { -71, -73, -75, 43 },
+        { 46, -72, -71, 44 },
+        { -72, -71, 44, -69 },
+        { -71, -70, 43, -76 },
+        { -65, -69, 102, -76 },
+        { 92, -68, -67, 117 },
+        { 116, -67, 1, 1 },
+        { 17, -66, -55, -32 },
+        { 17, -65, 16, -55 },
+        { -63, -64, 16, 102 },
+        { -61, -63, -65, -66 },
+        { 19, -62, -64, -65 },
+        { 19, -61, -63, 17 },
+        { 19, -60, -44, 17 },
+        { 19, -59, -57, -46 },
+        { 19, -58, 17, -47 },
+        { 18, -57, -56, 16 },
+        { -46, -56, -49, -52 },
+        { -66, -55, -32, 24 },
+        { 116, -54, 1, 1 },
+        { 22, -53, 24, 23 },
+        { -49, -52, 23, 1 },
+        { -40, -51, -53, -54 },
+        { -41, -50, -35, -34 },
+        { -40, -49, -52, -53 },
+        { -46, -48, -52, -34 },
+        { -45, -47, -40, 115 },
+        { -59, -46, -56, -48 },
+        { -60, -45, 20, -39 },
+        { -60, -44, -56, -48 },
+        { 127, -43, 124, 123 },
+        { 18, -42, -41, -50 },
+        { -42, -41, -50, -52 },
+        { 20, -40, -49, -51 },
+        { -25, -39, -37, 22 },
+        { -39, -38, -35, -34 },
+        { -39, -37, -30, -35 },
+        { 20, -36, -35, -34 },
+        { -36, -35, 23, 1 },
+        { -36, -34, 1, 1 },
+        { 22, -33, 1, 1 },
+        { 119, -32, 1, 1 },
+        { -29, -31, 23, 1 },
+        { -37, -30, -33, 23 },
+        { -26, -29, -31, -13 },
+        { -26, -28, -27, -30 },
+        { -18, -27, -33, 23 },
+        { -25, -26, -28, -29 },
+        { -23, -25, -26, -127 },
+        { -22, -24, -26, -127 },
+        { 15, -23, 125, -128 },
+        { 15, -22, -24, -113 },
+        { -24, -21, 26, -29 },
+        { 28, -20, -19, -17 },
+        { -20, -19, -16, 25 },
+        { -26, -18, -16, -27 },
+        { -20, -17, 25, -13 },
+        { -18, -16, -31, 25 },
+        { -122, -15, 24, 1 },
+        { -10, -14, -108, 1 },
+        { -125, -13, 1, 1 },
+        { -15, -12, 1, 1 },
+        { -122, -11, 1, 1 },
+        { 26, -10, -13, -108 },
+        { -5, -9, 25, 33 },
+        { 28, -8, -5, -4 },
+        { 28, -7, -5, -4 },
+        { 67, -6, -7, -112 },
+        { -8, -5, -9, -1 },
+        { -8, -4, -1, 33 },
+        { -4, -3, 33, -108 },
+        { -111, -2, -11, 34 },
+        { 32, -1, 33, -108 },
     };
 
     public static final int[] FlesurrectBonusPalette = new int[256];
@@ -1102,7 +1577,6 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
     };
     // Toasty shares ramps with Lawn
     public static final int[] ToastyBonusPalette = new int[256];
-    private static final int[][] TOASTY_BONUS_RAMP_VALUES = new int[256][4];
     public static final int[] WardBonusPalette = new int[256];
     public static final byte[][] WARD_RAMPS = new byte[][]{
             { 0, 0, 0, 0 },
@@ -1493,398 +1967,6 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
             { 0xD62139FF, 0xA32435FF, 0xD62139FF, 0xD45E6EFF },
             { 0xA51829FF, 0x7E1B27FF, 0xA51829FF, 0xA34752FF },
             { 0x949C9CFF, 0x7B8181FF, 0x949C9CFF, 0xCCD1D1FF },
-    };
-
-    public static final int[] CubicleBonusPalette = new int[256];
-    public static final byte[][] CUBICLE64_RAMPS = new byte[][]{
-            { 0, 0, 0, 0 },
-            { 1, 1, 1, 37 },
-            { 37, 19, 2, 3 },
-            { 37, 2, 3, 4 },
-            { 2, 3, 4, 5 },
-            { 3, 4, 5, 6 },
-            { 4, 5, 6, 8 },
-            { 4, 5, 7, 9 },
-            { 5, 6, 8, 9 },
-            { 5, 6, 9, 9 },
-            { 1, 1, 10, 28 },
-            { 1, 28, 11, 2 },
-            { 28, 29, 12, 29 },
-            { 29, 3, 13, 3 },
-            { 30, 31, 14, 31 },
-            { 31, 4, 15, 34 },
-            { 4, 5, 16, 5 },
-            { 33, 5, 17, 6 },
-            { 4, 5, 18, 9 },
-            { 1, 37, 19, 37 },
-            { 37, 38, 20, 39 },
-            { 38, 39, 21, 3 },
-            { 40, 41, 22, 41 },
-            { 22, 41, 23, 41 },
-            { 41, 43, 24, 43 },
-            { 43, 44, 25, 45 },
-            { 43, 44, 26, 45 },
-            { 43, 44, 27, 9 },
-            { 1, 10, 28, 10 },
-            { 10, 2, 29, 2 },
-            { 12, 11, 30, 13 },
-            { 13, 3, 31, 3 },
-            { 13, 15, 32, 15 },
-            { 15, 16, 33, 17 },
-            { 16, 17, 34, 17 },
-            { 16, 5, 35, 18 },
-            { 5, 35, 36, 9 },
-            { 1, 1, 37, 19 },
-            { 46, 19, 38, 2 },
-            { 2, 21, 39, 21 },
-            { 20, 21, 40, 21 },
-            { 21, 4, 41, 23 },
-            { 22, 23, 42, 23 },
-            { 5, 6, 43, 26 },
-            { 23, 25, 44, 26 },
-            { 5, 43, 45, 9 },
-            { 1, 1, 46, 19 },
-            { 1, 46, 47, 37 },
-            { 1, 47, 48, 47 },
-            { 38, 20, 49, 39 },
-            { 47, 49, 50, 49 },
-            { 47, 49, 51, 52 },
-            { 49, 51, 52, 53 },
-            { 51, 52, 53, 54 },
-            { 53, 5, 54, 9 },
-            { 10, 28, 55, 2 },
-            { 10, 55, 56, 3 },
-            { 56, 3, 57, 59 },
-            { 57, 59, 58, 59 },
-            { 57, 5, 59, 17 },
-            { 59, 61, 60, 61 },
-            { 59, 18, 61, 9 },
-            { 18, 36, 62, 9 },
-            { 5, 6, 63, 9 },
-    };
-    public static final int[][] CUBICLE64_RAMP_VALUES = new int[][]{
-            { 0x00000000, 0x00000000, 0x00000000, 0x00000000 },
-            { 0x000000FF, 0x000000FF, 0x000000FF, 0x380038FF },
-            { 0x380038FF, 0x003838FF, 0x3B3B3BFF, 0x6F6F6FFF },
-            { 0x380038FF, 0x3B3B3BFF, 0x6F6F6FFF, 0x9B9B9BFF },
-            { 0x3B3B3BFF, 0x6F6F6FFF, 0x9B9B9BFF, 0xBFBFBFFF },
-            { 0x6F6F6FFF, 0x9B9B9BFF, 0xBFBFBFFF, 0xDBDBDBFF },
-            { 0x9B9B9BFF, 0xBFBFBFFF, 0xDBDBDBFF, 0xFBFBFBFF },
-            { 0x9B9B9BFF, 0xBFBFBFFF, 0xEFEFEFFF, 0xFFFFFFFF },
-            { 0xBFBFBFFF, 0xDBDBDBFF, 0xFBFBFBFF, 0xFFFFFFFF },
-            { 0xBFBFBFFF, 0xDBDBDBFF, 0xFFFFFFFF, 0xFFFFFFFF },
-            { 0x000000FF, 0x000000FF, 0x320000FF, 0x003200FF },
-            { 0x000000FF, 0x003200FF, 0x640A0AFF, 0x3B3B3BFF },
-            { 0x003200FF, 0x0A640AFF, 0xAA0000FF, 0x0A640AFF },
-            { 0x0A640AFF, 0x6F6F6FFF, 0xBC3E3EFF, 0x6F6F6FFF },
-            { 0x00AA00FF, 0x3EBC3EFF, 0xFF3C3CFF, 0x3EBC3EFF },
-            { 0x3EBC3EFF, 0x9B9B9BFF, 0xFF7272FF, 0x8CFF8CFF },
-            { 0x9B9B9BFF, 0xBFBFBFFF, 0xFF8C8CFF, 0xBFBFBFFF },
-            { 0x72FF72FF, 0xBFBFBFFF, 0xFFA6A6FF, 0xDBDBDBFF },
-            { 0x9B9B9BFF, 0xBFBFBFFF, 0xFFDCDCFF, 0xFFFFFFFF },
-            { 0x000000FF, 0x380038FF, 0x003838FF, 0x380038FF },
-            { 0x380038FF, 0x6A006AFF, 0x006A6AFF, 0x843084FF },
-            { 0x6A006AFF, 0x843084FF, 0x308484FF, 0x6F6F6FFF },
-            { 0xDA1ADAFF, 0xD070D0FF, 0x1ADADAFF, 0xD070D0FF },
-            { 0x1ADADAFF, 0xD070D0FF, 0x70D0D0FF, 0xD070D0FF },
-            { 0xD070D0FF, 0xFFB0FFFF, 0x6EFFFFFF, 0xFFB0FFFF },
-            { 0xFFB0FFFF, 0xFFC2FFFF, 0xB0FFFFFF, 0xFFDCFFFF },
-            { 0xFFB0FFFF, 0xFFC2FFFF, 0xC2FFFFFF, 0xFFDCFFFF },
-            { 0xFFB0FFFF, 0xFFC2FFFF, 0xDCFFFFFF, 0xFFFFFFFF },
-            { 0x000000FF, 0x320000FF, 0x003200FF, 0x320000FF },
-            { 0x320000FF, 0x3B3B3BFF, 0x0A640AFF, 0x3B3B3BFF },
-            { 0xAA0000FF, 0x640A0AFF, 0x00AA00FF, 0xBC3E3EFF },
-            { 0xBC3E3EFF, 0x6F6F6FFF, 0x3EBC3EFF, 0x6F6F6FFF },
-            { 0xBC3E3EFF, 0xFF7272FF, 0x3CFF3CFF, 0xFF7272FF },
-            { 0xFF7272FF, 0xFF8C8CFF, 0x72FF72FF, 0xFFA6A6FF },
-            { 0xFF8C8CFF, 0xFFA6A6FF, 0x8CFF8CFF, 0xFFA6A6FF },
-            { 0xFF8C8CFF, 0xBFBFBFFF, 0xA6FFA6FF, 0xFFDCDCFF },
-            { 0xBFBFBFFF, 0xA6FFA6FF, 0xDCFFDCFF, 0xFFFFFFFF },
-            { 0x000000FF, 0x000000FF, 0x380038FF, 0x003838FF },
-            { 0x000032FF, 0x003838FF, 0x6A006AFF, 0x3B3B3BFF },
-            { 0x3B3B3BFF, 0x308484FF, 0x843084FF, 0x308484FF },
-            { 0x006A6AFF, 0x308484FF, 0xDA1ADAFF, 0x308484FF },
-            { 0x308484FF, 0x9B9B9BFF, 0xD070D0FF, 0x70D0D0FF },
-            { 0x1ADADAFF, 0x70D0D0FF, 0xFF6EFFFF, 0x70D0D0FF },
-            { 0xBFBFBFFF, 0xDBDBDBFF, 0xFFB0FFFF, 0xC2FFFFFF },
-            { 0x70D0D0FF, 0xB0FFFFFF, 0xFFC2FFFF, 0xC2FFFFFF },
-            { 0xBFBFBFFF, 0xFFB0FFFF, 0xFFDCFFFF, 0xFFFFFFFF },
-            { 0x000000FF, 0x000000FF, 0x000032FF, 0x003838FF },
-            { 0x000000FF, 0x000032FF, 0x0A0A64FF, 0x380038FF },
-            { 0x000000FF, 0x0A0A64FF, 0x0000AAFF, 0x0A0A64FF },
-            { 0x6A006AFF, 0x006A6AFF, 0x3E3EBCFF, 0x843084FF },
-            { 0x0A0A64FF, 0x3E3EBCFF, 0x3C3CFFFF, 0x3E3EBCFF },
-            { 0x0A0A64FF, 0x3E3EBCFF, 0x7272FFFF, 0x8C8CFFFF },
-            { 0x3E3EBCFF, 0x7272FFFF, 0x8C8CFFFF, 0xA6A6FFFF },
-            { 0x7272FFFF, 0x8C8CFFFF, 0xA6A6FFFF, 0xDCDCFFFF },
-            { 0xA6A6FFFF, 0xBFBFBFFF, 0xDCDCFFFF, 0xFFFFFFFF },
-            { 0x320000FF, 0x003200FF, 0x383800FF, 0x3B3B3BFF },
-            { 0x320000FF, 0x383800FF, 0x6A6A00FF, 0x6F6F6FFF },
-            { 0x6A6A00FF, 0x6F6F6FFF, 0x848430FF, 0xD0D070FF },
-            { 0x848430FF, 0xD0D070FF, 0xDADA1AFF, 0xD0D070FF },
-            { 0x848430FF, 0xBFBFBFFF, 0xD0D070FF, 0xFFA6A6FF },
-            { 0xD0D070FF, 0xFFFFB0FF, 0xFFFF6EFF, 0xFFFFB0FF },
-            { 0xD0D070FF, 0xFFDCDCFF, 0xFFFFB0FF, 0xFFFFFFFF },
-            { 0xFFDCDCFF, 0xDCFFDCFF, 0xFFFFC2FF, 0xFFFFFFFF },
-            { 0xBFBFBFFF, 0xDBDBDBFF, 0xFFFFDCFF, 0xFFFFFFFF },
-    };
-    private static final int[][] CUBICLE_BONUS_RAMP_VALUES = new int[][] {
-            { 0x00000000, 0x00000000, 0x00000000, 0x00000000 },
-            { 0x000000FF, 0x000000FF, 0x000000FF, 0x000000FF },
-            { 0x262626FF, 0x313131FF, 0x3B3B3BFF, 0x464646FF },
-            { 0x484848FF, 0x5C5C5CFF, 0x6F6F6FFF, 0x858585FF },
-            { 0x646464FF, 0x808080FF, 0x9B9B9BFF, 0xBABABAFF },
-            { 0x7C7C7CFF, 0x9E9E9EFF, 0xBFBFBFFF, 0xE5E5E5FF },
-            { 0x8E8E8EFF, 0xB6B6B6FF, 0xDBDBDBFF, 0xFFFFFFFF },
-            { 0x9B9B9BFF, 0xC6C6C6FF, 0xEFEFEFFF, 0xFFFFFFFF },
-            { 0xA3A3A3FF, 0xD0D0D0FF, 0xFBFBFBFF, 0xFFFFFFFF },
-            { 0xA6A6A6FF, 0xD4D4D4FF, 0xFFFFFFFF, 0xFFFFFFFF },
-            { 0x250C00FF, 0x2D0F00FF, 0x320000FF, 0x2C160BFF },
-            { 0x491C05FF, 0x5A2409FF, 0x640A0AFF, 0x5C3420FF },
-            { 0x7E2900FF, 0x9B3501FF, 0xAA0000FF, 0x974C27FF },
-            { 0x864727FF, 0xA65A34FF, 0xBC3E3EFF, 0xBA8367FF },
-            { 0xB85625FF, 0xE36E34FF, 0xFF3C3CFF, 0xF6A075FF },
-            { 0xB36C49FF, 0xDF8A60FF, 0xFF7272FF, 0xFFC8A9FF },
-            { 0xB0775AFF, 0xDD9875FF, 0xFF8C8CFF, 0xFFDCC2FF },
-            { 0xAE816BFF, 0xDBA58BFF, 0xFFA6A6FF, 0xFFEFDCFF },
-            { 0xA9978FFF, 0xD6C1B7FF, 0xFFDCDCFF, 0xFFFFFFFF },
-            { 0x001624FF, 0x001D2DFF, 0x003838FF, 0x112A36FF },
-            { 0x002B45FF, 0x003756FF, 0x006A6AFF, 0x204F67FF },
-            { 0x174156FF, 0x21536CFF, 0x308484FF, 0x53788BFF },
-            { 0x005F8FFF, 0x0579B3FF, 0x1ADADAFF, 0x5AAFD9FF },
-            { 0x3F7088FF, 0x558FABFF, 0x70D0D0FF, 0xA4CEE3FF },
-            { 0x3A82A6FF, 0x4FA6D2FF, 0x6EFFFFFF, 0xB1F1FFFF },
-            { 0x6B92A6FF, 0x8BBBD3FF, 0xB0FFFFFF, 0xECFFFFFF },
-            { 0x7897A6FF, 0x9CC1D3FF, 0xC2FFFFFF, 0xFCFFFFFF },
-            { 0x8B9DA6FF, 0xB4C9D3FF, 0xDCFFFFFF, 0xFFFFFFFF },
-            { 0x102903FF, 0x143205FF, 0x003200FF, 0x1E3413FF },
-            { 0x23500DFF, 0x2D6312FF, 0x0A640AFF, 0x42692EFF },
-            { 0x378C0CFF, 0x46AC13FF, 0x00AA00FF, 0x66B140FF },
-            { 0x519031FF, 0x67B342FF, 0x3EBC3EFF, 0x96CD7AFF },
-            { 0x66C835FF, 0x82F848FF, 0x3CFF3CFF, 0xBDFF92FF },
-            { 0x78BE54FF, 0x99EE6FFF, 0x72FF72FF, 0xDDFFBEFF },
-            { 0x80BA63FF, 0xA4E981FF, 0x8CFF8CFF, 0xEDFFD4FF },
-            { 0x89B572FF, 0xAFE494FF, 0xA6FFA6FF, 0xFDFFE9FF },
-            { 0x9AAC91FF, 0xC5DABAFF, 0xDCFFDCFF, 0xFFFFFFFF },
-            { 0x120020FF, 0x170028FF, 0x380038FF, 0x21082EFF },
-            { 0x22003DFF, 0x2C004BFF, 0x6A006AFF, 0x3F1057FF },
-            { 0x3A104FFF, 0x4A1864FF, 0x843084FF, 0x6C477EFF },
-            { 0x4F007FFF, 0x65009FFF, 0xDA1ADAFF, 0x923EBDFF },
-            { 0x683880FF, 0x854BA1FF, 0xD070D0FF, 0xC096D5FF },
-            { 0x762E9BFF, 0x9740C3FF, 0xFF6EFFFF, 0xDB9BFBFF },
-            { 0x8C64A0FF, 0xB383CAFF, 0xFFB0FFFF, 0xFFE0FFFF },
-            { 0x9273A1FF, 0xBA96CDFF, 0xFFC2FFFF, 0xFFF3FFFF },
-            { 0x9A89A3FF, 0xC5B0D0FF, 0xFFDCFFFF, 0xFFFFFFFF },
-            { 0x00001DFF, 0x000023FF, 0x000032FF, 0x00001DFF },
-            { 0x00003AFF, 0x000047FF, 0x0A0A64FF, 0x000041FF },
-            { 0x000063FF, 0x000077FF, 0x0000AAFF, 0x000064FF },
-            { 0x000071FF, 0x00008CFF, 0x3E3EBCFF, 0x252595FF },
-            { 0x000098FF, 0x0000BBFF, 0x3C3CFFFF, 0x0F0FBBFF },
-            { 0x0F0F9CFF, 0x1818C2FF, 0x7272FFFF, 0x6060DCFF },
-            { 0x2A2A9EFF, 0x3B3BC5FF, 0x8C8CFFFF, 0x8686ECFF },
-            { 0x46469FFF, 0x5D5DC8FF, 0xA6A6FFFF, 0xADADFCFF },
-            { 0x8080A3FF, 0xA5A5CFFF, 0xDCDCFFFF, 0xFEFEFFFF },
-            { 0x3B3B03FF, 0x4A4A07FF, 0x383800FF, 0x535322FF },
-            { 0x717107FF, 0x8C8C0DFF, 0x6A6A00FF, 0x9E9E40FF },
-            { 0x797925FF, 0x979732FF, 0x848430FF, 0xB7B76DFF },
-            { 0xDEDE1EFF, 0xFFFF2DFF, 0xDADA1AFF, 0xFFFF94FF },
-            { 0xAFAF4FFF, 0xDCDC69FF, 0xD0D070FF, 0xFFFFC1FF },
-            { 0xE2E251FF, 0xFFFF6DFF, 0xFFFF6EFF, 0xFFFFDCFF },
-            { 0xC7C778FF, 0xFBFB9CFF, 0xFFFFB0FF, 0xFFFFFFFF },
-            { 0xBFBF82FF, 0xF2F2A9FF, 0xFFFFC2FF, 0xFFFFFFFF },
-            { 0xB4B491FF, 0xE5E5BBFF, 0xFFFFDCFF, 0xFFFFFFFF },
-            { 0x00000000, 0x00000000, 0x00000000, 0x00000000 },
-            { 0x000000FF, 0x000000FF, 0x000000FF, 0x000000FF },
-            { 0x313131FF, 0x3B3B3BFF, 0x3B3B3BFF, 0x3B3B3BFF },
-            { 0x5C5C5CFF, 0x6F6F6FFF, 0x6F6F6FFF, 0x6F6F6FFF },
-            { 0x808080FF, 0x9B9B9BFF, 0x9B9B9BFF, 0x9B9B9BFF },
-            { 0x9E9E9EFF, 0xBFBFBFFF, 0xBFBFBFFF, 0xBFBFBFFF },
-            { 0xB6B6B6FF, 0xDBDBDBFF, 0xDBDBDBFF, 0xDBDBDBFF },
-            { 0xC6C6C6FF, 0xEFEFEFFF, 0xEFEFEFFF, 0xEFEFEFFF },
-            { 0xD0D0D0FF, 0xFBFBFBFF, 0xFBFBFBFF, 0xFBFBFBFF },
-            { 0xD4D4D4FF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF },
-            { 0x2D0F00FF, 0x320000FF, 0x320000FF, 0x320000FF },
-            { 0x5A2409FF, 0x640A0AFF, 0x640A0AFF, 0x640A0AFF },
-            { 0x9B3501FF, 0xAA0000FF, 0xAA0000FF, 0xAA0000FF },
-            { 0xA65A34FF, 0xBC3E3EFF, 0xBC3E3EFF, 0xBC3E3EFF },
-            { 0xE36E34FF, 0xFF3C3CFF, 0xFF3C3CFF, 0xFF3C3CFF },
-            { 0xDF8A60FF, 0xFF7272FF, 0xFF7272FF, 0xFF7272FF },
-            { 0xDD9875FF, 0xFF8C8CFF, 0xFF8C8CFF, 0xFF8C8CFF },
-            { 0xDBA58BFF, 0xFFA6A6FF, 0xFFA6A6FF, 0xFFA6A6FF },
-            { 0xD6C1B7FF, 0xFFDCDCFF, 0xFFDCDCFF, 0xFFDCDCFF },
-            { 0x001D2DFF, 0x003838FF, 0x003838FF, 0x003838FF },
-            { 0x003756FF, 0x006A6AFF, 0x006A6AFF, 0x006A6AFF },
-            { 0x21536CFF, 0x308484FF, 0x308484FF, 0x308484FF },
-            { 0x0579B3FF, 0x1ADADAFF, 0x1ADADAFF, 0x1ADADAFF },
-            { 0x558FABFF, 0x70D0D0FF, 0x70D0D0FF, 0x70D0D0FF },
-            { 0x4FA6D2FF, 0x6EFFFFFF, 0x6EFFFFFF, 0x6EFFFFFF },
-            { 0x8BBBD3FF, 0xB0FFFFFF, 0xB0FFFFFF, 0xB0FFFFFF },
-            { 0x9CC1D3FF, 0xC2FFFFFF, 0xC2FFFFFF, 0xC2FFFFFF },
-            { 0xB4C9D3FF, 0xDCFFFFFF, 0xDCFFFFFF, 0xDCFFFFFF },
-            { 0x143205FF, 0x003200FF, 0x003200FF, 0x003200FF },
-            { 0x2D6312FF, 0x0A640AFF, 0x0A640AFF, 0x0A640AFF },
-            { 0x46AC13FF, 0x00AA00FF, 0x00AA00FF, 0x00AA00FF },
-            { 0x67B342FF, 0x3EBC3EFF, 0x3EBC3EFF, 0x3EBC3EFF },
-            { 0x82F848FF, 0x3CFF3CFF, 0x3CFF3CFF, 0x3CFF3CFF },
-            { 0x99EE6FFF, 0x72FF72FF, 0x72FF72FF, 0x72FF72FF },
-            { 0xA4E981FF, 0x8CFF8CFF, 0x8CFF8CFF, 0x8CFF8CFF },
-            { 0xAFE494FF, 0xA6FFA6FF, 0xA6FFA6FF, 0xA6FFA6FF },
-            { 0xC5DABAFF, 0xDCFFDCFF, 0xDCFFDCFF, 0xDCFFDCFF },
-            { 0x170028FF, 0x380038FF, 0x380038FF, 0x380038FF },
-            { 0x2C004BFF, 0x6A006AFF, 0x6A006AFF, 0x6A006AFF },
-            { 0x4A1864FF, 0x843084FF, 0x843084FF, 0x843084FF },
-            { 0x65009FFF, 0xDA1ADAFF, 0xDA1ADAFF, 0xDA1ADAFF },
-            { 0x854BA1FF, 0xD070D0FF, 0xD070D0FF, 0xD070D0FF },
-            { 0x9740C3FF, 0xFF6EFFFF, 0xFF6EFFFF, 0xFF6EFFFF },
-            { 0xB383CAFF, 0xFFB0FFFF, 0xFFB0FFFF, 0xFFB0FFFF },
-            { 0xBA96CDFF, 0xFFC2FFFF, 0xFFC2FFFF, 0xFFC2FFFF },
-            { 0xC5B0D0FF, 0xFFDCFFFF, 0xFFDCFFFF, 0xFFDCFFFF },
-            { 0x000023FF, 0x000032FF, 0x000032FF, 0x000032FF },
-            { 0x000047FF, 0x0A0A64FF, 0x0A0A64FF, 0x0A0A64FF },
-            { 0x000077FF, 0x0000AAFF, 0x0000AAFF, 0x0000AAFF },
-            { 0x00008CFF, 0x3E3EBCFF, 0x3E3EBCFF, 0x3E3EBCFF },
-            { 0x0000BBFF, 0x3C3CFFFF, 0x3C3CFFFF, 0x3C3CFFFF },
-            { 0x1818C2FF, 0x7272FFFF, 0x7272FFFF, 0x7272FFFF },
-            { 0x3B3BC5FF, 0x8C8CFFFF, 0x8C8CFFFF, 0x8C8CFFFF },
-            { 0x5D5DC8FF, 0xA6A6FFFF, 0xA6A6FFFF, 0xA6A6FFFF },
-            { 0xA5A5CFFF, 0xDCDCFFFF, 0xDCDCFFFF, 0xDCDCFFFF },
-            { 0x4A4A07FF, 0x383800FF, 0x383800FF, 0x383800FF },
-            { 0x8C8C0DFF, 0x6A6A00FF, 0x6A6A00FF, 0x6A6A00FF },
-            { 0x979732FF, 0x848430FF, 0x848430FF, 0x848430FF },
-            { 0xFFFF2DFF, 0xDADA1AFF, 0xDADA1AFF, 0xDADA1AFF },
-            { 0xDCDC69FF, 0xD0D070FF, 0xD0D070FF, 0xD0D070FF },
-            { 0xFFFF6DFF, 0xFFFF6EFF, 0xFFFF6EFF, 0xFFFF6EFF },
-            { 0xFBFB9CFF, 0xFFFFB0FF, 0xFFFFB0FF, 0xFFFFB0FF },
-            { 0xF2F2A9FF, 0xFFFFC2FF, 0xFFFFC2FF, 0xFFFFC2FF },
-            { 0xE5E5BBFF, 0xFFFFDCFF, 0xFFFFDCFF, 0xFFFFDCFF },
-            { 0x00000000, 0x00000000, 0x00000000, 0x00000000 },
-            { 0x000000FF, 0x000000FF, 0x000000FF, 0x000000FF },
-            { 0x262626FF, 0x313131FF, 0x3B3B3BFF, 0x464646FF },
-            { 0x484848FF, 0x5C5C5CFF, 0x6F6F6FFF, 0x858585FF },
-            { 0x646464FF, 0x808080FF, 0x9B9B9BFF, 0xBABABAFF },
-            { 0x7C7C7CFF, 0x9E9E9EFF, 0xBFBFBFFF, 0xE5E5E5FF },
-            { 0x8E8E8EFF, 0xB6B6B6FF, 0xDBDBDBFF, 0xFFFFFFFF },
-            { 0x9B9B9BFF, 0xC6C6C6FF, 0xEFEFEFFF, 0xFFFFFFFF },
-            { 0xA3A3A3FF, 0xD0D0D0FF, 0xFBFBFBFF, 0xFFFFFFFF },
-            { 0xA6A6A6FF, 0xD4D4D4FF, 0xFFFFFFFF, 0xFFFFFFFF },
-            { 0x250C00FF, 0x2D0F00FF, 0x320000FF, 0x2C160BFF },
-            { 0x491C05FF, 0x5A2409FF, 0x640A0AFF, 0x5C3420FF },
-            { 0x7E2900FF, 0x9B3501FF, 0xAA0000FF, 0x974C27FF },
-            { 0x864727FF, 0xA65A34FF, 0xBC3E3EFF, 0xBA8367FF },
-            { 0xB85625FF, 0xE36E34FF, 0xFF3C3CFF, 0xF6A075FF },
-            { 0xB36C49FF, 0xDF8A60FF, 0xFF7272FF, 0xFFC8A9FF },
-            { 0xB0775AFF, 0xDD9875FF, 0xFF8C8CFF, 0xFFDCC2FF },
-            { 0xAE816BFF, 0xDBA58BFF, 0xFFA6A6FF, 0xFFEFDCFF },
-            { 0xA9978FFF, 0xD6C1B7FF, 0xFFDCDCFF, 0xFFFFFFFF },
-            { 0x001624FF, 0x001D2DFF, 0x003838FF, 0x112A36FF },
-            { 0x002B45FF, 0x003756FF, 0x006A6AFF, 0x204F67FF },
-            { 0x174156FF, 0x21536CFF, 0x308484FF, 0x53788BFF },
-            { 0x005F8FFF, 0x0579B3FF, 0x1ADADAFF, 0x5AAFD9FF },
-            { 0x3F7088FF, 0x558FABFF, 0x70D0D0FF, 0xA4CEE3FF },
-            { 0x3A82A6FF, 0x4FA6D2FF, 0x6EFFFFFF, 0xB1F1FFFF },
-            { 0x6B92A6FF, 0x8BBBD3FF, 0xB0FFFFFF, 0xECFFFFFF },
-            { 0x7897A6FF, 0x9CC1D3FF, 0xC2FFFFFF, 0xFCFFFFFF },
-            { 0x8B9DA6FF, 0xB4C9D3FF, 0xDCFFFFFF, 0xFFFFFFFF },
-            { 0x102903FF, 0x143205FF, 0x003200FF, 0x1E3413FF },
-            { 0x23500DFF, 0x2D6312FF, 0x0A640AFF, 0x42692EFF },
-            { 0x378C0CFF, 0x46AC13FF, 0x00AA00FF, 0x66B140FF },
-            { 0x519031FF, 0x67B342FF, 0x3EBC3EFF, 0x96CD7AFF },
-            { 0x66C835FF, 0x82F848FF, 0x3CFF3CFF, 0xBDFF92FF },
-            { 0x78BE54FF, 0x99EE6FFF, 0x72FF72FF, 0xDDFFBEFF },
-            { 0x80BA63FF, 0xA4E981FF, 0x8CFF8CFF, 0xEDFFD4FF },
-            { 0x89B572FF, 0xAFE494FF, 0xA6FFA6FF, 0xFDFFE9FF },
-            { 0x9AAC91FF, 0xC5DABAFF, 0xDCFFDCFF, 0xFFFFFFFF },
-            { 0x120020FF, 0x170028FF, 0x380038FF, 0x21082EFF },
-            { 0x22003DFF, 0x2C004BFF, 0x6A006AFF, 0x3F1057FF },
-            { 0x3A104FFF, 0x4A1864FF, 0x843084FF, 0x6C477EFF },
-            { 0x4F007FFF, 0x65009FFF, 0xDA1ADAFF, 0x923EBDFF },
-            { 0x683880FF, 0x854BA1FF, 0xD070D0FF, 0xC096D5FF },
-            { 0x762E9BFF, 0x9740C3FF, 0xFF6EFFFF, 0xDB9BFBFF },
-            { 0x8C64A0FF, 0xB383CAFF, 0xFFB0FFFF, 0xFFE0FFFF },
-            { 0x9273A1FF, 0xBA96CDFF, 0xFFC2FFFF, 0xFFF3FFFF },
-            { 0x9A89A3FF, 0xC5B0D0FF, 0xFFDCFFFF, 0xFFFFFFFF },
-            { 0x00001DFF, 0x000023FF, 0x000032FF, 0x00001DFF },
-            { 0x00003AFF, 0x000047FF, 0x0A0A64FF, 0x000041FF },
-            { 0x000063FF, 0x000077FF, 0x0000AAFF, 0x000064FF },
-            { 0x000071FF, 0x00008CFF, 0x3E3EBCFF, 0x252595FF },
-            { 0x000098FF, 0x0000BBFF, 0x3C3CFFFF, 0x0F0FBBFF },
-            { 0x0F0F9CFF, 0x1818C2FF, 0x7272FFFF, 0x6060DCFF },
-            { 0x2A2A9EFF, 0x3B3BC5FF, 0x8C8CFFFF, 0x8686ECFF },
-            { 0x46469FFF, 0x5D5DC8FF, 0xA6A6FFFF, 0xADADFCFF },
-            { 0x8080A3FF, 0xA5A5CFFF, 0xDCDCFFFF, 0xFEFEFFFF },
-            { 0x3B3B03FF, 0x4A4A07FF, 0x383800FF, 0x535322FF },
-            { 0x717107FF, 0x8C8C0DFF, 0x6A6A00FF, 0x9E9E40FF },
-            { 0x797925FF, 0x979732FF, 0x848430FF, 0xB7B76DFF },
-            { 0xDEDE1EFF, 0xFFFF2DFF, 0xDADA1AFF, 0xFFFF94FF },
-            { 0xAFAF4FFF, 0xDCDC69FF, 0xD0D070FF, 0xFFFFC1FF },
-            { 0xE2E251FF, 0xFFFF6DFF, 0xFFFF6EFF, 0xFFFFDCFF },
-            { 0xC7C778FF, 0xFBFB9CFF, 0xFFFFB0FF, 0xFFFFFFFF },
-            { 0xBFBF82FF, 0xF2F2A9FF, 0xFFFFC2FF, 0xFFFFFFFF },
-            { 0xB4B491FF, 0xE5E5BBFF, 0xFFFFDCFF, 0xFFFFFFFF },
-            { 0x00000000, 0x00000000, 0x00000000, 0x00000000 },
-            { 0x000000FF, 0x000000FF, 0x000000FF, 0x000000FF },
-            { 0x3B3B3BFF, 0x313131FF, 0x3B3B3BFF, 0x464646FF },
-            { 0x6F6F6FFF, 0x5C5C5CFF, 0x6F6F6FFF, 0x858585FF },
-            { 0x9B9B9BFF, 0x808080FF, 0x9B9B9BFF, 0xBABABAFF },
-            { 0xBFBFBFFF, 0x9E9E9EFF, 0xBFBFBFFF, 0xE5E5E5FF },
-            { 0xDBDBDBFF, 0xB6B6B6FF, 0xDBDBDBFF, 0xFFFFFFFF },
-            { 0xEFEFEFFF, 0xC6C6C6FF, 0xEFEFEFFF, 0xFFFFFFFF },
-            { 0xFBFBFBFF, 0xD0D0D0FF, 0xFBFBFBFF, 0xFFFFFFFF },
-            { 0xFFFFFFFF, 0xD4D4D4FF, 0xFFFFFFFF, 0xFFFFFFFF },
-            { 0x320000FF, 0x2D0F00FF, 0x320000FF, 0x2C160BFF },
-            { 0x640A0AFF, 0x5A2409FF, 0x640A0AFF, 0x5C3420FF },
-            { 0xAA0000FF, 0x9B3501FF, 0xAA0000FF, 0x974C27FF },
-            { 0xBC3E3EFF, 0xA65A34FF, 0xBC3E3EFF, 0xBA8367FF },
-            { 0xFF3C3CFF, 0xE36E34FF, 0xFF3C3CFF, 0xF6A075FF },
-            { 0xFF7272FF, 0xDF8A60FF, 0xFF7272FF, 0xFFC8A9FF },
-            { 0xFF8C8CFF, 0xDD9875FF, 0xFF8C8CFF, 0xFFDCC2FF },
-            { 0xFFA6A6FF, 0xDBA58BFF, 0xFFA6A6FF, 0xFFEFDCFF },
-            { 0xFFDCDCFF, 0xD6C1B7FF, 0xFFDCDCFF, 0xFFFFFFFF },
-            { 0x003838FF, 0x001D2DFF, 0x003838FF, 0x112A36FF },
-            { 0x006A6AFF, 0x003756FF, 0x006A6AFF, 0x204F67FF },
-            { 0x308484FF, 0x21536CFF, 0x308484FF, 0x53788BFF },
-            { 0x1ADADAFF, 0x0579B3FF, 0x1ADADAFF, 0x5AAFD9FF },
-            { 0x70D0D0FF, 0x558FABFF, 0x70D0D0FF, 0xA4CEE3FF },
-            { 0x6EFFFFFF, 0x4FA6D2FF, 0x6EFFFFFF, 0xB1F1FFFF },
-            { 0xB0FFFFFF, 0x8BBBD3FF, 0xB0FFFFFF, 0xECFFFFFF },
-            { 0xC2FFFFFF, 0x9CC1D3FF, 0xC2FFFFFF, 0xFCFFFFFF },
-            { 0xDCFFFFFF, 0xB4C9D3FF, 0xDCFFFFFF, 0xFFFFFFFF },
-            { 0x003200FF, 0x143205FF, 0x003200FF, 0x1E3413FF },
-            { 0x0A640AFF, 0x2D6312FF, 0x0A640AFF, 0x42692EFF },
-            { 0x00AA00FF, 0x46AC13FF, 0x00AA00FF, 0x66B140FF },
-            { 0x3EBC3EFF, 0x67B342FF, 0x3EBC3EFF, 0x96CD7AFF },
-            { 0x3CFF3CFF, 0x82F848FF, 0x3CFF3CFF, 0xBDFF92FF },
-            { 0x72FF72FF, 0x99EE6FFF, 0x72FF72FF, 0xDDFFBEFF },
-            { 0x8CFF8CFF, 0xA4E981FF, 0x8CFF8CFF, 0xEDFFD4FF },
-            { 0xA6FFA6FF, 0xAFE494FF, 0xA6FFA6FF, 0xFDFFE9FF },
-            { 0xDCFFDCFF, 0xC5DABAFF, 0xDCFFDCFF, 0xFFFFFFFF },
-            { 0x380038FF, 0x170028FF, 0x380038FF, 0x21082EFF },
-            { 0x6A006AFF, 0x2C004BFF, 0x6A006AFF, 0x3F1057FF },
-            { 0x843084FF, 0x4A1864FF, 0x843084FF, 0x6C477EFF },
-            { 0xDA1ADAFF, 0x65009FFF, 0xDA1ADAFF, 0x923EBDFF },
-            { 0xD070D0FF, 0x854BA1FF, 0xD070D0FF, 0xC096D5FF },
-            { 0xFF6EFFFF, 0x9740C3FF, 0xFF6EFFFF, 0xDB9BFBFF },
-            { 0xFFB0FFFF, 0xB383CAFF, 0xFFB0FFFF, 0xFFE0FFFF },
-            { 0xFFC2FFFF, 0xBA96CDFF, 0xFFC2FFFF, 0xFFF3FFFF },
-            { 0xFFDCFFFF, 0xC5B0D0FF, 0xFFDCFFFF, 0xFFFFFFFF },
-            { 0x000032FF, 0x000023FF, 0x000032FF, 0x00001DFF },
-            { 0x0A0A64FF, 0x000047FF, 0x0A0A64FF, 0x000041FF },
-            { 0x0000AAFF, 0x000077FF, 0x0000AAFF, 0x000064FF },
-            { 0x3E3EBCFF, 0x00008CFF, 0x3E3EBCFF, 0x252595FF },
-            { 0x3C3CFFFF, 0x0000BBFF, 0x3C3CFFFF, 0x0F0FBBFF },
-            { 0x7272FFFF, 0x1818C2FF, 0x7272FFFF, 0x6060DCFF },
-            { 0x8C8CFFFF, 0x3B3BC5FF, 0x8C8CFFFF, 0x8686ECFF },
-            { 0xA6A6FFFF, 0x5D5DC8FF, 0xA6A6FFFF, 0xADADFCFF },
-            { 0xDCDCFFFF, 0xA5A5CFFF, 0xDCDCFFFF, 0xFEFEFFFF },
-            { 0x383800FF, 0x4A4A07FF, 0x383800FF, 0x535322FF },
-            { 0x6A6A00FF, 0x8C8C0DFF, 0x6A6A00FF, 0x9E9E40FF },
-            { 0x848430FF, 0x979732FF, 0x848430FF, 0xB7B76DFF },
-            { 0xDADA1AFF, 0xFFFF2DFF, 0xDADA1AFF, 0xFFFF94FF },
-            { 0xD0D070FF, 0xDCDC69FF, 0xD0D070FF, 0xFFFFC1FF },
-            { 0xFFFF6EFF, 0xFFFF6DFF, 0xFFFF6EFF, 0xFFFFDCFF },
-            { 0xFFFFB0FF, 0xFBFB9CFF, 0xFFFFB0FF, 0xFFFFFFFF },
-            { 0xFFFFC2FF, 0xF2F2A9FF, 0xFFFFC2FF, 0xFFFFFFFF },
-            { 0xFFFFDCFF, 0xE5E5BBFF, 0xFFFFDCFF, 0xFFFFFFFF },
     };
 
     public static final int[] TwirlBonusPalette = new int[256];
@@ -2279,9 +2361,6 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
             { 0x6FD4CBFF, 0x64ABA5FF, 0x6FD4CBFF, 0xC2FFFEFF },
     };
 
-    public static final int[] ReallyRelaxedRollBonusPalette = new int[256];
-
-
     //        public final int[] ALL_COLORS = new int[256];     
     static {
 //        for (int i = 1; i < 64; i++) {
@@ -2410,76 +2489,14 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
 //            System.out.println(sb.append("};"));
 //
 //        }
-        for (int i = 0; i < 256; i++) {
-            System.arraycopy(TWIRL_BONUS_RAMP_VALUES[i], 0, TOASTY_BONUS_RAMP_VALUES[i], 0, 4);
-            PaletteReducer.hueShiftPalette(TOASTY_BONUS_RAMP_VALUES[i]);
-        }
+
         for (int i = 0; i < 64; i++) {
             System.arraycopy(FLESURRECT_BONUS_RAMP_VALUES[i], 0, FlesurrectBonusPalette, i << 2, 4);
             System.arraycopy(TWIRL_BONUS_RAMP_VALUES[i], 0, TwirlBonusPalette, i << 2, 4);
             System.arraycopy(LAWN_BONUS_RAMP_VALUES[i], 0, LawnBonusPalette, i << 2, 4);
-            System.arraycopy(TOASTY_BONUS_RAMP_VALUES[i], 0, ToastyBonusPalette, i << 2, 4);
-            System.arraycopy(WARD_BONUS_RAMP_VALUES[i], 0, WardBonusPalette, i << 2, 4);
-            System.arraycopy(CUBICLE_BONUS_RAMP_VALUES[i], 0, CubicleBonusPalette, i << 2, 4);
-            System.arraycopy(Coloring.REALLY_RELAXED_ROLL_BONUS_RAMP_VALUES[i], 0, ReallyRelaxedRollBonusPalette, i << 2, 4);
+            System.arraycopy(WARD_BONUS_RAMP_VALUES[i], 0, WardBonusPalette, i << 2, 4); 
         }
     }
-    public static final Colorizer FlesurrectBonusColorizer = new Colorizer(Coloring.FLESURRECT_REDUCER) {
-        private final byte[] primary = {
-                63, 24, 27, 34, 42, 49, 55
-        }, grays = {
-                1, 2, 3, 4, 5, 6, 7, 8, 9
-        };
-
-        @Override
-        public byte[] mainColors() {
-            return primary;
-        }
-
-        /**
-         * @return An array of grayscale or close-to-grayscale color indices, with the darkest first and lightest last.
-         */
-        @Override
-        public byte[] grayscale() {
-            return grays;
-        }
-
-        @Override
-        public byte brighten(byte voxel) {
-            // the second half of voxels (with bit 0x40 set) don't shade visually, but Colorizer uses this method to
-            // denote a structural change to the voxel's makeup, so this uses the first 64 voxel colors to shade both
-            // halves, then marks voxels from the second half back to being an unshaded voxel as the last step.
-            return (byte) (Dimmer.FLESURRECT_RAMPS[voxel & 0x3F][3] | (voxel & 0xC0));
-        }
-
-        @Override
-        public byte darken(byte voxel) {
-            // the second half of voxels (with bit 0x40 set) don't shade visually, but Colorizer uses this method to
-            // denote a structural change to the voxel's makeup, so this uses the first 64 voxel colors to shade both
-            // halves, then marks voxels from the second half back to being an unshaded voxel as the last step.
-            return (byte) (Dimmer.FLESURRECT_RAMPS[voxel & 0x3F][1] | (voxel & 0xC0));
-        }
-
-        @Override
-        public int dimmer(int brightness, byte voxel) {
-            return FLESURRECT_BONUS_RAMP_VALUES[voxel & 0xFF][
-                    brightness <= 0
-                            ? 0
-                            : brightness >= 3
-                            ? 3
-                            : brightness
-                    ];
-        }
-
-        @Override
-        public int getShadeBit() {
-            return 0x40;
-        }
-        @Override
-        public int getWaveBit() {
-            return 0x80;
-        }
-    };
 
     public static final Colorizer AzurestarColorizer = new Colorizer(new PaletteReducer(Coloring.AZURESTAR33)) {
         private final byte[] primary = {
@@ -2648,57 +2665,6 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
         }
     };
 
-    public static final Colorizer CubicleBonusColorizer = new Colorizer(new PaletteReducer(Coloring.CUBICLE64)) {
-        private final byte[] primary = {
-                7, 13, 22, 31, 40, 49, 58
-        }, grays = {
-                1, 2, 3, 4, 6, 5, 7, 8, 9
-        };
-
-        @Override
-        public byte[] mainColors() {
-            return primary;
-        }
-
-        /**
-         * @return An array of grayscale or close-to-grayscale color indices, with the darkest first and lightest last.
-         */
-        @Override
-        public byte[] grayscale() {
-            return grays;
-        }
-
-        @Override
-        public byte brighten(byte voxel) {
-            // the second half of voxels (with bit 0x40 set) don't shade visually, but Colorizer uses this method to
-            // denote a structural change to the voxel's makeup, so this uses the first 64 voxel colors to shade both
-            // halves, then marks voxels from the second half back to being an unshaded voxel as the last step.
-            return (byte) (CUBICLE64_RAMPS[voxel & 0x3F][3] | (voxel & 0xC0));
-        }
-
-        @Override
-        public byte darken(byte voxel) {
-            // the second half of voxels (with bit 0x40 set) don't shade visually, but Colorizer uses this method to
-            // denote a structural change to the voxel's makeup, so this uses the first 64 voxel colors to shade both
-            // halves, then marks voxels from the second half back to being an unshaded voxel as the last step.
-            return (byte) (CUBICLE64_RAMPS[voxel & 0x3F][1] | (voxel & 0xC0));
-        }
-
-        @Override
-        public int dimmer(int brightness, byte voxel) {
-            return CUBICLE_BONUS_RAMP_VALUES[voxel & 0xFF][Math.max(0, Math.min(brightness, 3))];
-        }
-
-        @Override
-        public int getShadeBit() {
-            return 0x40;
-        }
-        @Override
-        public int getWaveBit() {
-            return 0x80;
-        }
-    };
-
     /**
      * One of the better Colorizers here, really. Uses the 63-color-plus-transparent TWIRL64 palette to determine ramps,
      * and can use up to 252-colors-plus-transparent with shading. TWIRL64 should have better distribution across the
@@ -2762,15 +2728,12 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
             return 0x80;
         }
     };
-    public static final Colorizer RollBonusColorizer = new Colorizer(new PaletteReducer(Coloring.REALLY_RELAXED_ROLL)) {
+
+    public static final Colorizer ZigguratColorizer = new Colorizer(new PaletteReducer()) {
         private final byte[] primary = {
-                reducer.reduceIndex(0xFF0000FF),reducer.reduceIndex(0xFFFF00FF),
-                reducer.reduceIndex(0x00FF00FF),reducer.reduceIndex(0x00FFFFFF),
-                reducer.reduceIndex(0x0000FFFF),reducer.reduceIndex(0xFF00FFFF),
+            27, 32, 34, 39, 49, 55,
         }, grays = {
-                reducer.reduceIndex(0x000000FF),reducer.reduceIndex(0x333333FF),
-                reducer.reduceIndex(0x666666FF),reducer.reduceIndex(0x999999FF),
-                reducer.reduceIndex(0xCCCCCCFF),reducer.reduceIndex(0xFFFFFFFF),
+            1, 11, 19, 21, 22, 23
         };
 
         @Override
@@ -2788,10 +2751,7 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
 
         @Override
         public byte brighten(byte voxel) {
-            // the second half of voxels (with bit 0x40 set) don't shade visually, but Colorizer uses this method to
-            // denote a structural change to the voxel's makeup, so this uses the first 64 voxel colors to shade both
-            // halves, then marks voxels from the second half back to being an unshaded voxel as the last step.
-            return (byte) (Coloring.REALLY_RELAXED_ROLL_RAMPS[voxel & 0x3F][3] | (voxel & 0xC0));
+            return Coloring.ZIGGURAT_RAMPS[voxel & 0x3F][3];
         }
 
         @Override
@@ -2799,27 +2759,31 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
             // the second half of voxels (with bit 0x40 set) don't shade visually, but Colorizer uses this method to
             // denote a structural change to the voxel's makeup, so this uses the first 64 voxel colors to shade both
             // halves, then marks voxels from the second half back to being an unshaded voxel as the last step.
-            return (byte) (Coloring.REALLY_RELAXED_ROLL_RAMPS[voxel & 0x3F][1] | (voxel & 0xC0));
+            return Coloring.ZIGGURAT_RAMPS[voxel & 0x3F][1];
         }
 
         @Override
         public int dimmer(int brightness, byte voxel) {
-            return Coloring.REALLY_RELAXED_ROLL_BONUS_RAMP_VALUES[voxel & 0xFF][
-                    brightness <= 0
-                            ? 0
-                            : Math.min(brightness, 3)
-                    ];
+            if(brightness < 0) return Coloring.ZIGGURAT64[1];
+            if(brightness > 3) return Coloring.ZIGGURAT64[23];
+            return Coloring.ZIGGURAT64[Coloring.ZIGGURAT_RAMPS[voxel & 0x3F][brightness] & 0xFF];
         }
 
         @Override
         public int getShadeBit() {
-            return 0x40;
+            return 0;
         }
         @Override
         public int getWaveBit() {
-            return 0x80;
+            return 0;
         }
     };
+
+
+
+
+
+
 
 
     public static Colorizer arbitraryColorizer(final int[] palette) {
@@ -3426,331 +3390,4 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
             }
         };
     }
-    public static final Colorizer RinsedColorizer = new Colorizer(new PaletteReducer(Coloring.RINSED,
-            "\027\027\027\02777·¿¿¿¿¿¾¾ÞÞÝÝÝÝÝÝÝÜÜÜÜÜÜÛÛÛ\027\027\027777·¿¿¿¿¿¾¾¾½ÝÝÝÝÝÝÝÜÜÜÜÜÜÛÛÛ\027\027\02777··¿¿¿¿¿¾¾¾½ÝÝÝÝÝÝÝÜÜÜÜÜÜÛÛÛ7777¯¿¿¿¿¾¾¾¾½½ÝÝÝÝÝÝÜÜÜÜÜÜÛÛÛ"+
-                    "¯¯¿¿¾¾¾¾½½½½ÝÝÝÝÜÜÜÜÜÜÜÛÛÛ¯¯§§¾¾¾¾½½½½ÝÝÝÝÜÜÜÜÜÜÜÛÛÛ¯¯§®¾¾¾¾½½½½½¼¼¼¼ÜÜÜÜÜÜÛÛÛ§§®¦¾¾½½½½½¼¼¼¼¼ÜÜÜÜÜÜÛÛÛ"+
-                    "®®¦¦¾­½½½½½¼¼¼¼¼¼»ÜÜÜÛÛÛÛ¦¦¦¦¦­­­½½½¼¼¼¼¼¼»»»»»»ÛÛÛ¦¦¦¥¥­­½½½¼¼¼¼¼¼»»»»»»ÛÛÛ¥¥¥¥¥¥­½½«¼¼¼¼¼»»»»»»»ºÛÛ"+
-                    "¥¥¥¥¥¥¤¤««¼¼¼¼¼»»»»»»»ººÛ¥¥¥¤¤¤¤¤«««¼¼¼»»»»»»»»ººº¤¤¤¤¤¤¤¤«««¼¼¼»»»»»»»ºººº¤¤¤¤¤¤¤««««£¼¼»»»»»»»ºººº"+
-                    "¤£££££££££££»»»»»»»»ºººº£££££££££££££»»»»»»»ººººº£££££££££££££¢¢»»»»»»ººººº£££££££££¢¢¢¢¢¢¢»»»©©©ºººº"+
-                    "££¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¡©©©©ºººº¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¡¡¡©©©©ººº¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¡¡¡¡¡©©©   ¢¢¢¢¢¢¢¢¢¢¢¢¢¢¡¡¡¡¡¡¡¡¡©    "+
-                    "¢¢¢¢¢¢¢¢¢¢¢¡¡¡¡¡¡¡¡¡¡¡¡¡     ¢¢¢¢¢¢¢¢¢¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡      ¢¢¢¢¢¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡       ¢¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡         "+
-                    "¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡            ¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡              ¡¡¡¡¡¡¡¡¡¡¡¡¡                ¡¡¡¡¡¡¡¡¡¡¡¡                  "+
-                    "\027\027\027\0277çç¿¿¿¿¿ÞÞÞÞÝÝÝÝÝÝÝÜÜÜÜÜÜÛÛÛ\027\027\027777·¿¿¿¿¿¾ÞÞÞÝÝÝÝÝÝÝÜÜÜÜÜÜÛÛÛ\027\027\02777··¿¿¿¿¾¾¾¾½ÝÝÝÝÝÝÝÜÜÜÜÜÜÛÛÛ77777··¿¿¿¿¾¾¾¾½½ÝÝÝÝÝÜÜÜÜÜÜÜÛÛÛ"+
-                    "\1777¯¯¿¿¾¾¾¾½½½ÝÝÝÝÝÜÜÜÜÜÜÜÛÛÛ\177¯¯§§¾¾¾¾½½½½ÝÝÝÝÜÜÜÜÜÜÜÛÛÛ\177¯¯§®¾¾¾¾½½½½¼¼¼¼ÜÜÜÜÜÜÜÛÛÛ§§®¾¾¾½½½½½¼¼¼¼¼ÜÜÜÜÜÛÛÛÛ"+
-                    "®®¦¦¾­½½½½½¼¼¼¼¼¼ÜÜÜÜÛÛÛÛ¦¦¦¦­­½½½½¼¼¼¼¼¼»»»»»ÛÛÛÛ¦¦¦¥­­­½½½¼¼¼¼¼¼»»»»»»ÛÛÛ¥¥¥¥¥­­¬½«¼¼¼¼¼»»»»»»»ºÛÛ"+
-                    "¥¥¥¥¥¥¤¤««¼¼¼¼¼»»»»»»»ººÛ¥¥¤¤¤¤¤««¼¼¼¼»»»»»»»ºººº¤¤¤¤¤¤¤«««¼¼¼»»»»»»»ºººº¤¤¤¤¤¤««««¼¼»»»»»»»»ºººº"+
-                    "¤£££££££££££»»»»»»»ººººº£££££££££££££»»»»»»»ººººº££££££££££££¢¢»»»»»©ººººº££££££££¢¢¢¢¢¢¢»»»©©ººººº"+
-                    "£¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢©©©©©ºººº¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¡¡©©©©©ºº¹¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¡¡¡¡©©©©   ¢¢¢¢¢¢¢¢¢¢¢¢¢¡¡¡¡¡¡¡¡¡©©    "+
-                    "¢¢¢¢¢¢¢¢¢¢¡¡¡¡¡¡¡¡¡¡¡¡¡     ¢¢¢¢¢¢¢¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡      ¢¢¢¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡       ¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡         "+
-                    "¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡            ¡¡¡¡¡¡¡¡¡¡¡¡¡¡              ¡¡¡¡¡¡¡¡¡¡¡¡                ¡¡¡¡¡¡¡¡¡¡                  "+
-                    "\027\027\02777çç·¿¿¿ÏÞÞÞÞÝÝÝÝÝÝÝÜÜÜÜÜÜÛÛÛ\027\027\02777ç··¿¿¿ÏÞÞÞÞÝÝÝÝÝÝÝÜÜÜÜÜÜÛÛÛ\027\027777···¿¿¿Ï¾ÞÞÍÝÝÝÝÝÝÝÜÜÜÜÜÜÛÛÛ77777···¿¿Ï¾¾¾ÍÍÝÝÝÝÝÝÜÜÜÜÜÜÜÛÛÛ"+
-                    "\177777\026\026··¿¿Ç¾¾¾Í½½ÝÝÝÝÝÜÜÜÜÜÜÜÛÛÛ\177\177¯¯§§¾¾¾¾½½½½ÝÝÝÝÜÜÜÜÜÜÜÛÛÛ\177\177¯¯§®¾¾¾¾½½½½ÝÝÝÝÜÜÜÜÜÜÛÛÛÛ\177®®¾¾¾½½½½½¼¼¼¼¼ÜÜÜÜÜÛÛÛÛ"+
-                    "®®®¦¾­½½½½½¼¼¼¼¼ÜÜÜÜÜÛÛÛÛ¦¦¦¦­­½½½½¼¼¼¼¼¼»»»»ÜÛÛÛÛ~¦¦¦­­­½½½¼¼¼¼¼¼»»»»»ÛÛÛÛ~¥¥¥¥­¬¬½½¼¼¼¼¼»»»»»»»ÛÛÛ"+
-                    "¥¥¥¥¥¬¬««¼¼¼¼¼»»»»»»ºººÛ¥¤¤¤¤¤««¼¼¼¼»»»»»»»ºººº¤¤¤¤¤¤¤«««¼¼¼»»»»»»»ºººº¤¤¤¤¤¤««««¼¼»»»»»»»ººººº"+
-                    "¤£££££££«££ª»»»»»»»ººººº£££££££££££ªª»»»»»»ººººº££££££££££££ªª»»»»»ºººººº£££££££¢¢¢¢¢¢»»»»©©ººººº"+
-                    "¢¢¢¢¢¢¢¢¢¢¢¢¢¢»©©©©©ºººº¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¡©©©©©©ºº¹¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¡¡¡©©©©©º¹¹¢¢¢¢¢¢¢¢¢¢¢¢¡¡¡¡¡¡¡¡©©©©   "+
-                    "¢¢¢¢¢¢¢¢¢¡¡¡¡¡¡¡¡¡¡¡¡©     ¢¢¢¢¢¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡      ¢¢¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡       ¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡         "+
-                    "¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡            ¡¡¡¡¡¡¡¡¡¡¡¡¡              ¡¡¡¡¡¡¡¡¡¡¡                ¡¡¡¡¡¡¡¡                   "+
-                    "\027\027777ççç¿¿ÏÏÞÞÞÞÝÝÝÝÝÝÝÜÜÜÜÜÜÛÛÛ\0277777çç·¿¿ÏÏÞÞÞÞÝÝÝÝÝÝÝÜÜÜÜÜÜÛÛÛ77777ç··¿ÏÏÏÞÞÞÍÝÝÝÝÝÝÜÜÜÜÜÜÜÛÛÛ77777···'ÏÏÇÎÞÍÍÝÝÝÝÝÝÜÜÜÜÜÜÜÛÛÛ"+
-                    "\177\17777\026\026··'ÏÇ¾ÎÎÍÍÝÝÝÝÝÝÜÜÜÜÜÜÜÛÛÛ\177\177\177\026\026\026··ÇÇ¾ÎÍÍ½½ÝÝÝÝÝÜÜÜÜÜÜÛÛÛÛ\177\177\177®¶¾¾Í½½½½ÝÝÝÝÜÜÜÜÜÜÛÛÛÛ\177\177®®¾¾¾Í½½½½¼¼¼¼ÜÜÜÜÜÜÛÛÛÛ"+
-                    "~®®¦¾µ½½½½½¼¼¼¼¼ÜÜÜÜÜÛÛÛÛ~®¦¦¦­­µ½½½¼¼¼¼¼¼»»ÜÜÜÛÛÛÛ~~¦¦¦­­µ½½½¼¼¼¼¼¼»»»»»ÛÛÛÛ~~¥¥­­¬¬¬¼¼¼¼¼¼»»»»»»ºÛÛÛ"+
-                    "¥­¬¬¬¬«¼¼¼¼¼»»»»»»ºººÛ¤¬¬¬¬««¼¼¼¼»»»»»»»ºººº¤¤¤¤¤¤«««¼¼¼»»»»»»ººººº¤¤¤¤«««««¼¼»»»»»»»ººººº"+
-                    "£££££££«££ªª»»»»»»ººººº££££££££££ªªª»»»»»ºººººº££££££££££ªªª»»»»»ºººººº£££££££¢¢¢¢ªªª»»©©©ººººº"+
-                    "¢¢¢¢¢¢¢¢¢¢¢¢ª»©©©©©ºººº¢¢¢¢¢¢¢¢¢¢¢¢¢¢©©©©©©ºº¹¹¢¢¢¢¢¢¢¢¢¢¢¢¢¡¡¡©©©©©©¹¹¹¢¢¢¢¢¢¢¢¢¢¢¡¡¡¡¡¡¡©©©©©¹¹¹"+
-                    "¢¢¢¢¢¢¢¢¡¡¡¡¡¡¡¡¡¡¡©©©    ¢¢¢¢¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡©     ¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡       ¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡         "+
-                    "¡¡¡¡¡¡¡¡¡¡¡¡¡¡            ¡¡¡¡¡¡¡¡¡¡¡¡              ¡¡¡¡¡¡¡¡¡¡                ¡¡¡¡¡¡¡                   "+
-                    "77777çççïÏÏÞÞÞÞÞÝÝÝÝÝÝÝÜÜÜÜÜÜÛÛÛ77777çç·'ÏÏÞÞÞÞÞÝÝÝÝÝÝÜÜÜÜÜÜÜÛÛÛ77777çç·'ÏÏÞÞÞÞÞÝÝÝÝÝÝÜÜÜÜÜÜÜÛÛÛ77777\026··'ÏÏÇÞÞÞÍÝÝÝÝÝÝÜÜÜÜÜÜÜÛÛÛ"+
-                    "\177\1777\026\026\026··'ÏÇÎÎÎÍÍÝÝÝÝÝÝÜÜÜÜÜÜÛÛÛÛ\177\177\177\026\026\026·'ÇÇÎÎÍÍÍ½ÝÝÝÝÝÜÜÜÜÜÜÛÛÛÛ\177\177\177\177¶¶ÎÎÍÍÍ½ÝÝÝÝÝÜÜÜÜÜÜÛÛÛÛ\177\177\177¶¶ÎÎÍÍ½½ÌÝÝ¼¼ÜÜÜÜÜÜÛÛÛÛ"+
-                    "~~Îµµ½½½Ì¼¼¼¼ÜÜÜÜÜÜÛÛÛÛ~~µµµ½½½¼¼¼¼¼¼ÜÜÜÜÜÛÛÛÛ~~~­µµ¬½Ì¼¼¼¼¼»»»»»»ÛÛÛÛ~~~­µ¬¬¬´¼¼¼¼¼»»»»»»ºÛÛÛ"+
-                    "¬¬¬¬¬´¼¼¼¼»»»»»»»ººÛÛ¬¬¬¬¬«¼¼¼¼»»»»»»ººººº¤¤¬¬¬««¼¼¼¼»»»»»»ººººº¤¤«««««¼¼»»»»»»»ººººº"+
-                    "££££««£ªªª»»»»»ºººººº££££££££ªªª»»»»»ºººººº££££££ªªªªª»»»©ºººººº££££¢¢ªªªªª»»©©©ººººº"+
-                    "¢¢¢¢¢¢¢¢¢ªªª©©©©©ºººº¹¢¢¢¢¢¢¢¢¢¢¢¢¢ª©©©©©©ºº¹¹¢¢¢¢¢¢¢¢¢¢¢¢¡©©©©©©©©¹¹¹¢¢¢¢¢¢¢¢¢¢¡¡¡¡¡¡©©©©©©¹¹¹"+
-                    "¢¢¢¢¢¢¡¡¡¡¡¡¡¡¡¡¡©©©©   ±¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡©©    ±¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡       ¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡         "+
-                    "¡¡¡¡¡¡¡¡¡¡¡¡            ¡¡¡¡¡¡¡¡¡¡              ¡¡¡¡¡¡¡¡¡                ¡¡¡¡¡¡                   "+
-                    "77ççççççïÏÏÞÞÞÞÞÝÝÝÝÝÝÜÜÜÜÜÜÜÛÛÛ77ççççççßÏÏÞÞÞÞÞÝÝÝÝÝÝÜÜÜÜÜÜÜÛÛÛ777ççççß'ÏÏÞÞÞÞÞÝÝÝÝÝÝÜÜÜÜÜÜÜÛÛÛ\177\1777ççç·ß'ÏÏÞÞÞÞÍÝÝÝÝÝÝÜÜÜÜÜÜÜÛÛÛ"+
-                    "\177\177\177\0266\026Wß'ÏÇÎÞÞÍÍÝÝÝÝÝÝÜÜÜÜÜÜÛÛÛÛ\177\177\177\026\026\026WßÇÇÎÎÍÍÍÝÝÝÝÝÝÜÜÜÜÜÜÛÛÛÛ\177\177\17766¶¶ÎÎÍÍÍÌÝÝÝÝÝÜÜÜÜÜÜÛÛÛÛ\177\177\177¶ÎÎÍÍÍÌÌÝÝÝÜÜÜÜÜÜÜÛÛÛÛ"+
-                    "~~~ÎµÍÍ½ÌÌÌ¼¼¼ÜÜÜÜÜÜÛÛÛÛ~~~µµµ½½ÌÌ¼¼¼¼ËÜÜÜÜÜÛÛÛÛ~~~~µµµ¬¬ÌÌ¼¼¼¼»»»»ÜÜÛÛÛÛ~~~~µ¬¬¬´¼¼¼¼¼»»»»»»ÛÛÛÛ"+
-                    "¬¬¬¬´¼¼¼¼»»»»»»ºººÛÛ¬¬¬¬¬´´¼¼¼»»»»»»ººººº¬¬¬«´´¼¼»»»»»»»ººººº«««´´ªªª»»»»»ºººººº"+
-                    "£«««ªªªª»»»»»ºººººº££££ªªªª»»»»»ºººººº££ªªªªªª»»»ººººººº£ªªªªªªª»©©©ºººººº"+
-                    "¢¢¢¢¢¢ªªªª©©©©©ºººº¹¢¢¢¢¢¢¢¢¢¢¢ªª©©©©©©º¹¹¹¢¢¢¢¢¢¢¢¢¢¢¢©©©©©©©©¹¹¹¹¢¢¢¢¢¢¢¢¢¡¡¡¡¡©©©©©©¹¹¹¹"+
-                    "¡¡¡¡¡¡¡¡¡©©©©©¹¹¹±¡¡¡¡¡¡¡¡¡¡¡¡©©©©  ±±¡¡¡¡¡¡¡¡¡¡¡¡¡¡©©    ±¡¡¡¡¡¡¡¡¡¡¡¡¡        ±"+
-                    "¡¡¡¡¡¡¡¡¡¡¡           ±¡¡¡¡¡¡¡¡¡              ¡¡¡¡¡¡¡¡                ¡¡¡¡¡                   "+
-                    "ççççççççïÏÏÞÞÞÞÞÝÝÝÝÝÝÜÜÜÜÜÜÜÛÛÛçççççççïïÏÏÞÞÞÞÞÝÝÝÝÝÝÜÜÜÜÜÜÜÛÛÛ\177ççççççß'ÏÏÞÞÞÞÞÝÝÝÝÝÝÜÜÜÜÜÜÜÛÛÛ\177\177ççççWß'ÏÏÞÞÞÞÍÝÝÝÝÝÝÜÜÜÜÜÜÛÛÛÛ"+
-                    "\177\177\17766WWß'ÏÏÞÞÞÍÍÝÝÝÝÝÝÜÜÜÜÜÜÛÛÛÛ\177\177\177666Wß'ÏÇ×ÎÍÍÍÝÝÝÝÝÝÜÜÜÜÜÜÛÛÛÛ\177\177\177666¶××ÎÍÍÍÌÝÝÝÝÝÜÜÜÜÜÜÛÛÛÛ\177\177\177&×ÎÍÍÍÌÌÝÝÝÜÜÜÜÜÜÜÛÛÛÛ"+
-                    "~~~~ÆµÍÍÌÌÌÌ¼¼ËÜÜÜÜÜÜÛÛÛÛ~~~~µµµÍÌÌÌÌ¼¼ËËÜÜÜÜÜÛÛÛÛ~~~~~µµ¬ÌÌÌ¼¼¼ËË»ÊÜÜÜÛÛÛÛ~~~~µ¬¬¬´´¼¼¼Ë»»»»ÊÊÛÛÛÛ"+
-                    "}}¬¬´´´¼¼¼Ë»»»»»ºººÛÛ}¬¬¬´´´¼¼¼»»»»»»ººººÛ¬¬´´´¼¼»»»»»»ºººººº´´´´ªªª»»»»»ºººººº"+
-                    "´´ªªªª»»»»»ººººººªªªªª³»»»ºººººººªªªªªª»»©ºººººººªªªªªªª³©©©ººººº¹"+
-                    "¢¢¢ªªªªªª©©©©©ººº¹¹¢¢¢¢¢¢¢ªªªª©©©©©©º¹¹¹¢¢¢¢¢¢¢¢¢¢¢©©©©©©©©¹¹¹¹¡¡¡©©©©©©©©¹¹¹¹"+
-                    "¡¡¡¡¡¡©©©©©©¹¹¹±¡¡¡¡¡¡¡¡©©©©©¹¹±±¡¡¡¡¡¡¡¡¡¡¡©©©   ±±¡¡¡¡¡¡¡¡¡¡¡       ±±"+
-                    "¡¡¡¡¡¡¡¡¡          ±±¡¡¡¡¡¡¡¡             ±¡¡¡¡¡¡               ±                  "+
-                    "ççççççïïï?ÞÞÞÞÞÝÝÝÝÝÝÝÜÜÜÜÜÜÜÛÛÛççççïïïïïÏÏÞÞÞÞÝÝÝÝÝÝÝÜÜÜÜÜÜÜÛÛÛçççïïïïïïÏÏÞÞÞÞÝÝÝÝÝÝÝÜÜÜÜÜÜÛÛÛÛ\177\177ïïïïïß'ÏÏÞÞÞÞÝÝÝÝÝÝÝÜÜÜÜÜÜÛÛÛÛ"+
-                    "\177\1776////ßæÏÏÞÞÞÞÍÝÝÝÝÝÝÜÜÜÜÜÜÛÛÛÛ\177\1776////ßæÏ××ÞÞÍÍÝÝÝÝÝÝÜÜÜÜÜÜÛÛÛÛ\177\177\177///555&&×ÎÍÍÍÌÝÝÝÝÜÜÜÜÜÜÜÛÛÛÛ\177\177\17755555&×ÆÍÍÍÌÌÝÝÝÜÜÜÜÜÜÜÛÛÛÛ"+
-                    "~~~g55ÆÆÍÍÌÌÌÌÌËËÜÜÜÜÜÜÛÛÛÛ~~~~~ÆÆµÍÌÌÌÌËËËËÜÜÜÜÜÛÛÛÛ~~~~~µµÖÌÌÌÌËËËËÊÊÊÜÜÛÛÛÛ~~~~~¬¬´´Ì¼ËËËËÊÊÊÊÊÛÛÛÛ"+
-                    "}}}¬¬´´´¼ËËË»»ÊÊÊººÛÛÛ}}¬´´´´ËË»»»»ÊÊººººÚ¬´´´´ËË»»»»»ºººººº´´´´ªª³»»»»»ºººººº"+
-                    "´´ªªªª³»»»ºººººººªªªªª³³»»ºººººººªªªªª³³»©ºººººººªªªªªª³³©©©ººººº¹"+
-                    "ªªªªªªª©©©©©ººº¹¹¢¢¢ªªªªªª©©©©©º¹¹¹¹ª©©©©©©©©¹¹¹¹©©©©©©©©¹¹¹±"+
-                    "¡¡¡©©©©©©©¹¹±±¡¡¡¡¡©©©©©©¹¹±±¡¡¡¡¡¡¡©©©©²¹±±±¡¡¡¡¡¡¡¡      ±±±"+
-                    "¡¡¡¡¡¡¡         ±±±¡¡¡¡¡¡            ±±              ±±               ±±"+
-                    "ÿÿÿÿïïïïï??ÞÞÞÞÝÝÝÝÝÝÝÜÜÜÜÜÜÜÛÛÛÿÿÿïïïïïïæÞÞÞÞÞÝÝÝÝÝÝÝÜÜÜÜÜÜÛÛÛÛÿÿïïïïïïïæÞÞÞÞÞÝÝÝÝÝÝÝÜÜÜÜÜÜÛÛÛÛÿ÷÷÷÷÷÷ïææÞÞÞÞÞÝÝÝÝÝÝÝÜÜÜÜÜÜÛÛÛÛ"+
-                    "o\037\037\037\037÷÷æææÞÞÞÞÞÍÝÝÝÝÝÝÜÜÜÜÜÜÛÛÛÛo\037\037\037\037ggæææ&ÞÞÞÍÍÝÝÝÝÝÜÜÜÜÜÜÜÛÛÛÛoggggg55VV&×ÆÍÍÍÌÝÝÝÝÜÜÜÜÜÜÜÛÛÛÛogggg5555&&&ÆÍÍÖÌÌÝÝÝÜÜÜÜÜÜÜÛÛÛÛ"+
-                    "~~gg555\025&ÆÆÆÍÖÌÌÌËËËÜÜÜÜÜÜÛÛÛÛ~~~~~444\025\025\025ÆÆÆÖÖÌÌÌËËËËÜÜÜÜÜÛÛÛÛ~~~~~%%ÖÖÌÌÌËËËËÊÊÊÜÜÛÛÛÛ}}}~~ÖÖÌÌËËËËËÊÊÊÊÊÛÛÛÛ"+
-                    "}}}}´´´´´ËËËÊÊÊÊÊÊºÛÛÚ}}}}´´´´´ËËËÊÊÊÊÊºººÚÚ´´´´´ËË³»ÊÊÊºººººÚ´´´´ªª³³»»ÊÊºººººº"+
-                    "´ªªª³³³»»ºººººººªªª³³³»»ºººººººªªªªª³³³©ºººººººªªªªª³³©©ººººº¹¹"+
-                    "ªªªªªª³³©©©ººº¹¹¹ªªªªª³©©©©©²¹¹¹¹©©©©©©©²¹¹¹¹©©©©©©©²¹¹¹±"+
-                    "©©©©©©©²¹¹±±©©©©©©©²¹±±±¡¡¡©©©©©²±±±±¡¡¡¡¡¡     ±±±±"+
-                    "¡¡¡¡        ±±±±         ±±±±          ±±±±          ±±±±"+
-                    "ÿÿÿÿ???????ÞÞÞÞÝÝÝÝÝÝÝÜÜÜÜÜÜÛÛÛÛÿÿÿÿÿ?????ÞÞÞÞÞÝÝÝÝÝÝÝÜÜÜÜÜÜÛÛÛÛÿÿÿÿÿïïïææÞÞÞÞÞÝÝÝÝÝÝÝÜÜÜÜÜÜÛÛÛÛooÿ\037\037÷÷æææÞÞÞÞÞÝÝÝÝÝÝÝÜÜÜÜÜÜÛÛÛÛ"+
-                    "ooo\037\037\037\037ææææÞÞÞÞÝÝÝÝÝÝÜÜÜÜÜÜÜÛÛÛÛooo\037\037ggVææ&ÞÞÞÍÍÝÝÝÝÝÜÜÜÜÜÜÜÛÛÛÛoooggggVVV&&ÆGÍÖÌÝÝÝÝÜÜÜÜÜÜÜÛÛÛÛooogggg4V.&&GGÍÖÌÌÝÝÝÜÜÜÜÜÜÜÛÛÛÛ"+
-                    "~~~gg4444\025\025ÆGGÖÖÌÌÌËËËÜÜÜÜÜÜÛÛÛÛ~~~~4444\025\025\025ÆG%ÖÖÌÌÌËËËËÜÜÜÜÜÛÛÛÛ~~~~~\025%%%ÖÖÌÌÌËËËËÊÊÊÊÛÛÛÛÛ}}}}}ÖÖÌÌËËËËËÊÊÊÊÊÛÛÛÛ"+
-                    "}}}}}Å´´´ËËËËÊÊÊÊÊÊºÚÚÚ}}}}}´´´´ËËËËÊÊÊÊÊºººÚÚ}´´´´ËË³ÊÊÊÊºººººÚ´´ªª³³ÊÊÊÊºººººº"+
-                    "|ªªª³³³ÊÊººººººº||ªªª³³³³ººººººººªªªª³³³³ººººººº¹ªªªªª³³©©ººººº¹¹"+
-                    "ªªªªªª³³©©©ºº¹¹¹¹ªªª³³©©©©²²¹¹¹¹©©©©©²²¹¹¹¹©©©©©²²¹¹¹±"+
-                    "©©©©©²²¹¹±±©©©©©²²¹±±±©©©²²²²±±±±¡¡©²²²²²±±±±"+
-                    "    ±±±±±±     ±±±±±±      ±±±±±±      ±±±±±±"+
-                    "ÿÿÿÿ???????ÞÞÞÞÝÝÝÝÝÝÝÜÜÜÜÜÜÛÛÛÛÿÿÿÿÿ?????ÞÞÞÞÞÝÝÝÝÝÝÝÜÜÜÜÜÜÛÛÛÛÿÿÿÿÿ????æÞÞÞÞÞÝÝÝÝÝÝÝÜÜÜÜÜÜÛÛÛÛoooÿÿ\037\037æææÞÞÞÞÞÝÝÝÝÝÝÜÜÜÜÜÜÜÛÛÛÛ"+
-                    "ooooo\037æææææÞÞÞÞÝÝÝÝÝÝÜÜÜÜÜÜÜÛÛÛÛoooooggVVæ&ÞÞÞÞÍÝÝÝÝÝÜÜÜÜÜÜÜÛÛÛÛoooogg....öååGGÖÌÝÝÝÝÜÜÜÜÜÜÜÛÛÛÛoooog....öööGGGÖÌÌÝÝÝÜÜÜÜÜÜÜÛÛÛÛ"+
-                    "oooo44444\025ööGGÖÖÌÌÌËËËÜÜÜÜÜÜÛÛÛÛ~~~~4444\025\025\025U%%ÖÖÖÌÌËËËÜÜÜÜÜÛÛÛÛÛ}}~~444\025\025_%%ÖÖÖÌÕËËËËÊÊÊÊÛÛÛÛÛ}}}}}___%ÅÅÅÌÕËËËËÊÊÊÊÊÛÛÛÚ"+
-                    "}}}}}ÅÅ´´ËËËËÊÊÊÊÊÉÚÚÚÚ}}}}}Å´´´ËËËËÊÊÊÊÊÉººÚÚ|||||´´ËËËËÊÊÊÊÉººººÚ|||||´ª³³³ÊÊÊÉºººººº"+
-                    "|||||ª³³³³ÊÊÉºººººº||ªª³³³³Éºººººººªªª³³³³ººººººº¹ªªª³³³©©ºººº¹¹¹"+
-                    "ªªª³³³©©²²º¹¹¹¹³³³©©©²²²¹¹¹¹©©©©²²²¹¹¹¹©©©©²²²¹¹¹±"+
-                    "©©©©²²²¹¹±±©©©²²²²¹±±±©²²²²²²±±±±²²²²²²±±±±"+
-                    " ±±±±±±±  ±±±±±±±   ±±±±±±±   ±±±±±±±"+
-                    "ÿÿÿÿ???????ÞÞÞÞÝÝÝÝÝÝÝÜÜÜÜÜÜÛÛÛÛwÿÿÿÿ?????ÞÞÞÞÞÝÝÝÝÝÝÝÜÜÜÜÜÜÛÛÛÛwwÿÿÿ???>>ÞÞÞÞÞÝÝÝÝÝÝÝÜÜÜÜÜÜÛÛÛÛwwooOOOO>>ÞÞÞÞÞÝÝÝÝÝÝÜÜÜÜÜÜÜÛÛÛÛ"+
-                    "ooooOOOO>îååÞÞÞÝÝÝÝÝÝÜÜÜÜÜÜÜÛÛÛÛoooooOO\036\036åååååGÖÝÝÝÝÝÜÜÜÜÜÜÜÛÛÛÛoooo\036\036\036\036\036öåååGGÖÖÝÝÝÝÜÜÜÜÜÜÜÛÛÛÛoooo\036\036\036\036ööööGGGÖÖÌÝÝÝÜÜÜÜÜÜÜÛÛÛÛ"+
-                    "nnnnfffföUUUGGÖÖÖÌÌÕËËÜÜÜÜÜÛÛÛÛÛnnnnffffUUUU%%ÖÖÖÌÕÕËËÜÜÜÜÜÛÛÛÛÛ}}}}ffffUUU_%%ÅÅÅÌÕÕËËËÊÊÊÊÛÛÛÛÛ}}}}}___\024\024ÅÅÅÅÕËËËÊÊÊÊÊÊÛÚÚÚ"+
-                    "}}}}}__\024\024\024ÅÅÅ´ÕËËËÊÊÊÊÊÉÚÚÚÚ}}}||\024\024ÅÅ´´ÕËËËÊÊÊÊÉÉºÚÚÚ|||||´ÕËËÊÊÊÊÊÉÉººÚÚ||||||Ä³³³ÊÊÊÉÉººººÙ"+
-                    "|||||ª³³³³ÊÉÉºººººº||ª³³³³ÊÉÉººººº¹ª³³³³Éººººº¹¹ª³³³³²ºººº¹¹¹"+
-                    "³³³³©²²²²¹¹¹¹³³©©²²²²¹¹¹¹©©²²²²¹¹¹¹©©²²²²¹¹¹±"+
-                    "©©²²²¹¹¹±±²²²²²¹¹±±±²²²²²¹±±±±²²²²±±±±±"+
-                    "±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±"+
-                    "wwww?????>>ÞÞÞÞÝÝÝÝÝÝÝÜÜÜÜÜÜÛÛÛÛwwwww?>>>>>îÞÞÞÝÝÝÝÝÝÝÜÜÜÜÜÜÛÛÛÛwwwwwO>>>>îîÞÞÞÝÝÝÝÝÝÜÜÜÜÜÜÜÛÛÛÛwwwwOO>>>îîååÞÞÝÝÝÝÝÝÜÜÜÜÜÜÜÛÛÛÛ"+
-                    "wwwwOOO>îîåååååÝÝÝÝÝÝÜÜÜÜÜÜÜÛÛÛÛwoooOOO>îååååååÖÝÝÝÝÝÜÜÜÜÜÜÜÛÛÛÛnnnn\036\036\036\036\036åååååGÖÖÝÝÝÝÜÜÜÜÜÜÜÛÛÛÛnnnnn\036\036\036\036ååååGGÖÖÌÝÝÝÜÜÜÜÜÜÛÛÛÛÛ"+
-                    "nnnnnffffUUUG%%ÖÖÖÕÕÕËÜÜÜÜÜÛÛÛÛÛnnnnnffffUUU%%%ÅÅÅÕÕÕËÜÜÜÜÜÛÛÛÛÛ}nnnfffffU__%%ÅÅÅÅÕÕËËËÊÊÊÊÛÛÛÚÚ}}}}____\024\024ÅÅÅÅÕÕËËÊÊÊÊÊÉÚÚÚÚ"+
-                    "}}}}__\024\024\024$ÅÅÕÕÕËËÊÊÊÊÉÉÚÚÚÚ}||||_\024\024\024$ÅÅÄÕÕËÔÊÊÊÊÉÉÉÚÚÚ|||||\023\023\023ÄÄÕËÔÊÊÊÉÉÉºÙÙÙ||||||ÄÄ³ÔÊÊÉÉÉÉººÙÙ"+
-                    "||||Ä³³³ÊÊÉÉÉººººÙ||³³³³ÉÉÉººººº¹³³³ÈÉÉººº¹¹¹³³³ÈÈ²ºº¹¹¹¹"+
-                    "³³³È²²²¹¹¹¹¹³³³©²²²¹¹¹¹¹©©²²²¹¹¹¹¹©²²²²¹¹¹¹±"+
-                    "²²²²²¹¹¹±±²²²²²¹¹±±±²²²²²¹±±±±²²²±±±±±"+
-                    "±±±±±±±±±±±±±±±±±±±±±±°°°°°°±±"+
-                    "wwwwwþþþ>>>îîÞÞÝÝÝÝÝÝÝÜÜÜÜÜÜÛÛÛÛwwwwþþþ>>>îîîÞÞÝÝÝÝÝÝÜÜÜÜÜÜÜÛÛÛÛwwwwþþþ>>îîîîÞÞÝÝÝÝÝÝÜÜÜÜÜÜÜÛÛÛÛwwwwþþ>>îîîîåååÝÝÝÝÝÝÜÜÜÜÜÜÜÛÛÛÛ"+
-                    "wwwwþþ>îîîîåååååÝÝÝÝÝÜÜÜÜÜÜÜÛÛÛÛwwnnOO>îîîåååååÖÝÝÝÝÝÜÜÜÜÜÜÜÛÛÛÛnnnnn\036\036îîååååååÖÖÝÝÝÝÜÜÜÜÜÜÛÛÛÛÛnnnnnn\036\036-åååååGÖÖÖÝÕÕÜÜÜÜÜÜÛÛÛÛÛ"+
-                    "nnnnnnff---õõ%%ÖÖÖÕÕÕÕÜÜÜÜÜÛÛÛÛÛnnnnnfff--õõõ%FÅÅÅÕÕÕÕÜÜÜÜÜÛÛÛÛÛnnnnmfffTTTTõõFFÅÅÕÕÕËÔÊÊÊÊÛÚÚÚÚ}}}mmmf3333TT$$FFÕÕÕÕËÔÊÊÊÊÉÚÚÚÚ"+
-                    "}}|||3333\024$$FFÕÕÕÕÔÔÊÊÊÉÉÚÚÚÚ|||||33\024\024$$\023FÄÄÕÕÔÔÊÊÉÉÉÉÙÙÙ||||||S\023\023\023\023ÄÄÄÔÔÔÊÊÉÉÉÉÙÙÙ||||||S\023ÄÄÄÔÔÔÊÉÉÉÉººÙÙ"+
-                    "||||ÄÄ³ÔÔÉÉÉÉÉººÙÙ||{³ÃÃÈÉÉÉººº¹¹{{{³ÃÈÈÈÉººº¹¹¹³ÃÈÈÈ²²º¹¹¹¹"+
-                    "ÃÈÈ²²²¹¹¹¹¹ÈÈ²²²¹¹¹¹¹²²²²¹¹¹¹¸²²²²¹¹¹¹¸"+
-                    "²²²²¹¹¹¸¸²²²²¹¹¸±±²²²²¹±±±±²²±±±±±"+
-                    "±±±±±±±±±±±±±±°°±±±±±°°°°°°°°"+
-                    "wwwwþþþþþþîîîîÞÝÝÝÝÝÝÜÜÜÜÜÜÜÛÛÛÛwwwþþþþþþîîîîîîÝÝÝÝÝÝÜÜÜÜÜÜÜÛÛÛÛwwwþþþþþþîîîîîåÝÝÝÝÝÝÜÜÜÜÜÜÜÛÛÛÛwwwþþþþþîîîîîåååÝÝÝÝÝÜÜÜÜÜÜÜÛÛÛÛ"+
-                    "wwþþþþþþîîîîååååÝÝÝÝÝÜÜÜÜÜÜÜÛÛÛÛwnnþþþþNNNNåååååÝÝÝÝÝÜÜÜÜÜÜÛÛÛÛÛnnnnnþNNNNN\035åååÖäÝÝÝÝÜÜÜÜÜÜÛÛÛÛÛnnnnnnNN\035\035\035\035\035\035õFÖääÕÕÜÜÜÜÜÜÛÛÛÛÛ"+
-                    "nnnnmm----\035\035õõõFFäÕÕÕÕÜÜÜÜÜÛÛÛÛÛnnnmmmm----õõõFFFFÕÕÕÕÜÜÜÜÜÛÛÚÚÚnmmmmmm---õõõõFFFFÕÕÕÕÔÔÊÊÊÚÚÚÚÚmmmmmmmee333$$$FFFÕÕÕÔÔÔÊÊÉÉÚÚÚÚ"+
-                    "||||mmeeee33$$$FFÄÕÕÕÔÔÔÊÉÉÉÚÚÚÚ||||||eeeS$$$\023FÄÄÄÕÔÔÔÊÉÉÉÙÙÙÙ||||||SS\023\023\023\023\023ÄÄÄÔÔÔÔÉÉÉÉÓÙÙÙ||||||SSS\023\023\023\023\023ÄÄÄÔÔÔÔÉÉÉÉÓÙÙÙ"+
-                    "||||{ÄÄÄÃÃÔÉÉÉÉÉÓÒÙÙ|{{{{{ÃÃÃÈÉÉÉÓÓÒ¹Ø{{{{{{ÃÃÈÈÈÉÉº¹¹¹¹{{ÃÃÈÈÈÈ²¹¹¹¹¹"+
-                    "ÃÈÈÈ²²¹¹¹¹¹ÈÈ²²²¹¹¹¹¹²²²²¹¹¹¹¸²²²²¹¹¹¸¸"+
-                    "²²²¹¹¸¸¸²²²¹¸¸¸¸²²²¹¸¸¸±¸¸±±±"+
-                    "±±±±±±±±±±±±±°°°°°°°°°°°°°°°"+
-                    "wwþþþþþþþþþþîîîÝÝÝÝÝÝÜÜÜÜÜÜÜÛÛÛÛwwþþþþþþþþþîîîîÝÝÝÝÝÝÜÜÜÜÜÜÜÛÛÛÛwwþþþþþþþþNNNNNíÝÝÝÝÝÜÜÜÜÜÜÜÛÛÛÛwþþþþþþþþNNNNNNíÝÝÝÝÝÜÜÜÜÜÜÜÛÛÛÛ"+
-                    "wþþþþþþNNNNNNNííÝÝÝÝÝÜÜÜÜÜÜÛÛÛÛÛwþþþþþNNNNNN====äÝÝÝÝÜÜÜÜÜÜÛÛÛÛÛnnnvvNNNNNN====ääääÝÜÜÜÜÜÜÜÛÛÛÛÛnnnmmNNN======\035FäääÕÕÜÜÜÜÜÜÛÛÛÛÛ"+
-                    "nmmmmmm==\035\035\035\035\035FFäääÕÕÕÜÜÜÜÜÛÛÛÛÚmmmmmmm\035\035\035\035\035õFFFFäÕÕÕÕÔÜÜÜÜÚÚÚÚÚmmmmmmmmeeeõõFFFFFÕÕÕÕÔÔÊÊÉÚÚÚÚÚmmmmmmmeeeee$$FFFFÕÕÕÔÔÔÊÊÉÚÚÚÚÚ"+
-                    "|mmmmmeeeeeSS$$FFÄÄÄÕÔÔÔÊÉÉÉÙÙÙÙ||||||eeeeSSS^$\023FÄÄÄÔÔÔÔÉÉÉÉÙÙÙÙ||||||eeSSS^^\023\023\023ÄÄÄÔÔÔÔÉÉÉÓÓÙÙÙ||||||{{SSSS^\023\023\023\023ÄÄÄÔÔÔÔÉÉÉÓÓÙÙÙ"+
-                    "|||{{{{{^222\023##ÄÄÃÃÃÈÉÉÉÓÓÒØØ{{{{{{{{{222ÃÃÃÈÈÉÓÓÓÒÒØ{{{{{{{{{ÃÃÃÈÈÈÓÓÒÒÒ¹{{{ÃÃÈÈÈÈÓÓ¹¹¹¹"+
-                    "\022ÃÈÈÈÈ²¹¹¹¹¹ÈÈÈ²²¹¹¹¹¸È²²²¹¹¹¸¸²²²¹¹¹¸¸"+
-                    "²²²¹¹¸¸¸²²¹¸¸¸¸¸¸¸¸¸¸¸¸¸¸"+
-                    "¸¸¸¸±±°°°°°°°°°°°°°°°°°°°°°°"+
-                    "wþþþþþþþþþþþííííÝÝÝÝÝÜÜÜÜÜÜÜÛÛÛÛwþþþþþþþþþNNííííÝÝÝÝÝÜÜÜÜÜÜÜÛÛÛÛþþþþþþþþþNNNíííííÝÝÝÝÜÜÜÜÜÜÜÛÛÛÛþþþþvvvvNNNííííííÝÝÝÝÜÜÜÜÜÜÛÛÛÛÛ"+
-                    "vvvvvvvvNNNííííííäÝÝÝÜÜÜÜÜÜÛÛÛÛÛvvvvvvvNNNNíííííääääÜÜÜÜÜÜÜÛÛÛÛÛvvvvvvvNNN==íííääääääÜÜÜÜÜÜÛÛÛÛÛmmvvvvvN======ääääääÕÜÜÜÜÜÜÛÛÛÛÛ"+
-                    "mmmmmm=======äääääääÕÕÜÜÜÜÜÛÚÚÚÚmmmmmmm=====\034ääääääÕÕÕÔÔÜÜÜÚÚÚÚÚmmmmmmmmeee\034ôôôôFääÕÕÔÔÔÔÊÉÚÚÚÚÚmmmmmmmeeee,ôôôôFôÄÕÕÔÔÔÔÉÉÚÚÚÚÚ"+
-                    "mmmmllleeeSSSôôôFÄÄÄÔÔÔÔÔÉÉÓÙÙÙÙ||lllllleSSS^^^^#ÄÄÄÔÔÔÔÉÉÉÓÙÙÙÙ|||lllllSSSS^^22##ÄÄÔÔÔÔÉÉÓÓÓÙÙÙ|||{{{{{{SS^2222##ÄÄÃÔÔÔÉÉÓÓÓÙÙÙ"+
-                    "|{{{{{{{{{d2222###ÄÄÃÃÃÈÈÉÓÓÓÒØØ{{{{{{{{{{dd22####ÃÃÃÃÈÈÈÓÓÒÒÒØ{{{{{{{{{{zd\022ÃÃÃÈÈÈÓÓÒÒÒØ{{{zzzzzzzz\022ÃÃÃÈÈÈÓÒÒÒÒÒ"+
-                    "\022\022\022ÃÈÈÈÈÂÂÒ¹¹¹ÈÈÈÂÂÂ¹¹¹¸ÈÂÂÂÂ¹¹¸¸ÂÂÂÂ¹¸¸¸"+
-                    "ÂÂÂ¸¸¸¸¸¸¸¸¸¸¸¸¸¨¸¸¸"+
-                    "¨¨¨¸¸°°°°°°°°°°°°°°°°°°°°°"+
-                    "þþþþþþþvvvíííííííÝÝÝÝÜÜÜÜÜÜÜÛÛÛÛvvvvvvvvvvíííííííÝÝÝÝÜÜÜÜÜÜÜÛÛÛÛvvvvvvvvvíííííííííÝÝÝÜÜÜÜÜÜÛÛÛÛÛvvvvvvvvvíííííííííÝÝÝÜÜÜÜÜÜÛÛÛÛÛ"+
-                    "vvvvvvvvvííííííííäääÜÜÜÜÜÜÜÛÛÛÛÛvvvvvvvvvíííííííäääääÜÜÜÜÜÜÛÛÛÛÛvvvvvvvvíííííííääääääÜÜÜÜÜÜÛÛÛÛÛvvvvvvvv=íííííäääääääÜÜÜÜÜÜÛÛÛÚÚ"+
-                    "mmmmmvv====íääääääääÕÕÜÜÜÜÜÚÚÚÚÚmmmmmmm===\034\034\034äääääääÕÔÔÔÔÜÚÚÚÚÚÚmmmmmmll,,,\034\034\034äääääÕÕÔÔÔÔÔÉÚÚÚÚÚmmmlllll,,,,\034ôôôôôEÄÕÔÔÔÔÉÓÙÙÙÙÙ"+
-                    "lllllllll,,,ôôôôEEEÄÔÔÔÔÔÉÓÓÙÙÙÙlllllllll,,,2222EEEÄÔÔÔÔÔÉÓÓÙÙÙÙlllllllllddd222###EÄÔÔÔÔÉÓÓÓÓÙÙÙ{{{{{{{{dddd222###EÄÃÃÔÔÉÓÓÓÓØØØ"+
-                    "{{{{{{{{{ddd22#####ÄÃÃÃÈÈÓÓÓÒÒØØ{{{{{{{{{{ddd]]###\022\022ÃÃÃÈÈÓÓÓÒÒÒØ{{{{{{{{zzzdR]]]\022\022ÃÃÃÈÈÓÓÒÒÒÒØ{zzzzzzzzzzzRR\022\022\022\022ÃÃÈÈÈÓÒÒÒÒÑ"+
-                    "z\022\022\022\022ÃÈÈÈÂÂÂÒÒÒÑÈÂÂÂÂÂÒÑ¸ÂÂÂÂÂ¸¸¸ÂÂÂÂÂ¸¸¸"+
-                    "ÂÂÂ¨¸¸¸¨¨¸¸¨¨¨¨¨¨¨¨"+
-                    "¨¨¨¨¨°°°°°°°°°°°°°°°°°°°°°°"+
-                    "vvvvvvvvvíííííííííÝÝÝÜÜÜÜÜÜÜÛÛÛÛvvvvvvvvvííííííííííÝÝÜÜÜÜÜÜÛÛÛÛÛvvvvvvvvýííííííííííÝÝÜÜÜÜÜÜÛÛÛÛÛvvvvvvvvýííííííííííäÜÜÜÜÜÜÜÛÛÛÛÛ"+
-                    "vvvvvvvvýííííííííääääÜÜÜÜÜÜÛÛÛÛÛvvvvvvvýýíííííííäääääÜÜÜÜÜÜÛÛÛÛÛvvvvvvvýýííííííääääääÜÜÜÜÜÜÛÛÛÛÚvvvvvvýýííííííäääääääãÜÜÜÜÜÛÚÚÚÚ"+
-                    "mvvvvvýýMíííääääääääãããÜÜÜÜÚÚÚÚÚmmmmllMMM<<\034ääääääääãããÔÔÔÚÚÚÚÚÚmlllllll<<<\034\034\034ääääääããÔÔÔÔÓÚÚÚÚÚllllllll<<<,\034\034ôääEEEãÔÔÔÔÓÓÙÙÙÙÙ"+
-                    "lllllllll<,,,ôôEEEEEãÔÔÔÔÓÓÓÙÙÙÙllllllllldddd2EEEEEEÔÔÔÔÔÓÓÓÙÙÙÙlllllllldddddd##EEEEÔÔÔÔÓÓÓÓÓØØØlllllllldddddd###EEEÃÃÃÔÓÓÓÓÓØØØ"+
-                    "{{{{{{{{ddddd]]]]]#\022ÃÃÃÈÈÓÓÓÒÒØØ{{{{{{{{zdddR]]]]]\022\022ÃÃÃÈÈÓÓÓÒÒÒØ{{{{{zzzzzzRR]]]]\022\022\022\022ÃÃÈÈÓÓÒÒÒÒØzzzzzzzzzzzzRRR]\022\022\022\022\022ÃÃÈÈÓÓÒÒÒÒÑ"+
-                    "zzzzzzzzzzzzRR\\\\\\\\\022\022\022\022ÃÈÈÂÂÂÒÒÑÑÈÂÂÂÂÂÒÑÑÂÂÂÂÂÂ¸¸ÂÂÂÂÂ¨¨¸"+
-                    "ÂÂÂ¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨"+
-                    "¨¨¨¨°°°°°°°°°°°°°°°°°°°°°°"+
-                    "vvvvvvýýýýýííííííííÝÝÜÜÜÜÜÜÛÛÛÛÛvvvvvýýýýýýíííííííííÝÜÜÜÜÜÜÛÛÛÛÛvvvvvýýýýýííííííííííÜÜÜÜÜÜÜÛÛÛÛÛvvvvýýýýýýíííííííííääÜÜÜÜÜÜÛÛÛÛÛ"+
-                    "vvvvýýýýýýíííííííääääÜÜÜÜÜÜÛÛÛÛÛvvvýýýýýýýííííííäääääÜÜÜÜÜÜÛÛÛÛÛvvvýýýýýýýíííííääääääãÜÜÜÜÜÛÛÚÚÚvvýýýýýýýýííííäääääääããÜÜÜÜÚÚÚÚÚ"+
-                    "vvýýýýMMMMMMääääääääããããâÜÚÚÚÚÚÚllllMMMMMMM<<äääääääããããââÚÚÚÚÚÚllllllMMM<<<<ääääääããããâââÓÙÙÙÙÙllllllll<<<<<<\033ääEEEãããâââÓÙÙÙÙÙ"+
-                    "llllllll<<<+++\033\033EEEEããÔââÓÓÓÙÙÙÙlllllllll+++++\033óóEEEãÔÔââÓÓÓØØØØlllllllldddd+\033óóóóEEóÔÔâÓÓÓÓÓØØØlllllllldddddRóóóóóóÃÃÃÈÓÓÓÓÓØØØ"+
-                    "{{{{{zzzddddRRR]]]]\022ÃÃÃÈÓÓÓÓÒÒØØ{zzzzzzzzzdRRRR]]]\022\022\022ÃÃÈÈÓÓÒÒÒÒØzzzzzzzzzzzRRRR]]\022\022\022\022ÃÃÈÈÓÓÒÒÒÒÑzzzzzzzzzzzzRRR]\022\022\022\022\022\022ÃÈÈÂÒÒÒÒÑÑ"+
-                    "zzzzzzzzzzzzcc\\\\\\\\\\\022\022\022[ÈÂÂÂÂÒÒÑÑzzzzzzzzyyyyy\\\\[[ÂÂÂÂÂÑÑÑyyyyyy[[ÂÂÂÂÂÑÑÑyyÂÂÂÂÂ¨¨¨"+
-                    "\021ÂÂÂ¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨"+
-                    "¨¨¨¨°°°°°°°°°°°°°°°°°°°°"+
-                    "vvýýýýýýýýýýíííííííííÜÜÜÜÜÜÛÛÛÛÛvýýýýýýýýýýýíííííííííÜÜÜÜÜÜÛÛÛÛÛvýýýýýýýýýýýííííííííäÜÜÜÜÜÜÛÛÛÛÛýýýýýýýýýýýýíííííííääÜÜÜÜÜÜÛÛÛÛÛ"+
-                    "ýýýýýýýýýýýýííííííäääìÜÜÜÜÜÛÛÛÛÛýýýýýýýýýýýýííííäääääãÜÜÜÜÜÛÛÛÚÚýýýýýýýýýýýMíííääääääããÜÜÜÜÚÚÚÚÚýýýýýýýýMMMMMMääääääããããâÜÚÚÚÚÚÚ"+
-                    "ýýýýýMMMMMMMMMääääããããããââÚÚÚÚÚÚýýMMMMMMMMMMMäääãããããããââââÙÙÙÙÙlllMMMMMMMM<<<\033ããããããããâââÓÙÙÙÙÙllllluuuu<<<+\033\033\033ããããããââââÓÙÙÙÙÙ"+
-                    "lllllllu<++++\033\033\033\033ãããããââââÓÓØØØØllllllll+++++\033\033\033\033óãããââââÓÓÓØØØØllllllkk+++++\033\033\033óóóóãââââÓÓÓØØØØlllkkkkkkk+++R\033óóóóóòòââÓÓÓÓÒØØØ"+
-                    "kkkkkkkkkkkRRRRR]]òòòòòÈÓÓÓÓÒÒØØzzzzkkkkkkkRRRRRR11\022\022òòÈÓÓÓÒÒÒÒØzzzzzzzzzzzccRRR11\022\022\022òòÈÈÓÒÒÒÒÒÑzzzzzzzzzzzcccc\\\\\\\\\022\022\\[[ÂÂÂÒÒÒÑÑ"+
-                    "zzzzzzzzzzzycc\\\\\\\\\\\\\022\\[[ÂÂÂÂÒÑÑÑzzzzzzyyyyyyyy\\\\\\\\\\\\\\[[[ÂÂÂÂÂÑÑÑzzyyyyyyyyyyyy[[[[ÂÂÂÂÂÑÑÑyyyyyyyyyyyy[[[\021ÂÂÂÂÑÑÑ"+
-                    "\021\021ÂÂÂ¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨"+
-                    "¨¨¨¨°°°°°°°°°°°°°°°°°°°°"+
-                    "ýýýýýýýýýýýýýýííììììììÜÜÜÜÜÛÛÛÛÛýýýýýýýýýýýýýýíìììììììÜÜÜÜÜÛÛÛÛÛýýýýýýýýýýýýýíìììììììììÜÜÜÜÛÛÛÛÛýýýýýýýýýýýýýììììììììììÜÜÜÜÛÛÛÛÛ"+
-                    "ýýýýýýýýýýýýýììììììììììÜÜÜÜÛÛÛÛÚýýýýýýýýýýýýìììììììììãããÜÜÜÛÚÚÚÚýýýýýýýýýýMMMììììììãããããâÜÚÚÚÚÚÚýýýýýýýMMMMMMìììììããããããââÚÚÚÚÚÚ"+
-                    "ýýýMMMMMMMMMMMììãããããããââââÚÚÚÚÚuuuuuuuuuuuuuLãããããããããââââÙÙÙÙÙuuuuuuuuuuuuLLãããããããããââââÙÙÙÙÙuuuuuuuuuuuLL\033\033ãããããããââââÓÙÙÙÙÙ"+
-                    "lluuuuuuuuL++\033\033ãããããããââââÓÓØØØØlllkuuuuu+++\033\033\033\033ãããããâââââÓÓØØØØkkkkkkkkkk+;;;\032\032\032ãããâââââÓÓÓØØØØkkkkkkkkkkk;;\032\032\032\032\032DDDââââÓÓÓÒØØØ"+
-                    "kkkkkkkkkkkccc\032\032\032òòòòòDâÓÓÓÒÒÒØØkkkkkkkkkkkccccc11òòòòòDÓÓÓÒÒÒØØkkkkkkkkkkccccc111\"\"òòòòÓÓÒÒÒÒÑÑzzzzzkkkkkccccc111\\\\\\\\[[ÂÂÂÒÒÒÑÑ"+
-                    "zzzzzzzyyyyyccc\\\\\\\\\\\\[[[ÂÂÂÂÒÑÑÑzzzzyyyyyyyyyy\\\\\\\\\\\\[[[[ÂÂÂÂÂÑÑÑyyyyyyyyyyyyyy000[[[[[\021ÂÂÂÂÑÑÑyyyyyyyyyyyyyyb00000[[[[\021ÂÂÂÂÑÑÑ"+
-                    "b\021\021\021\021ÂÂÂ¨¨¨\021¨¨¨¨¨¨¨¨¨¨¨¨"+
-                    "¨¨¨°°°°°°°°°°qqqqq°°°°°°°°"+
-                    "ýýýýýýýýýýýýìììììììììììÜÜÜÜÛÛÛÛÛýýýýýýýýýýýýììììììììììììÜÜÜÛÛÛÛÛýýýýýýýýýýýìììììììììììììÜÜÜÛÛÛÛÛýýýýýýýýýýýìììììììììììììÜÜÜÛÛÛÛÛ"+
-                    "ýýýýýýýýýýìììììììììììììììÜÜÛÛÚÚÚýýýýýýýýýýìììììììììììììììÜÚÚÚÚÚÚýýýýýýýýýMìììììììììììãããââÚÚÚÚÚÚýýýýuuuuuuììììììììììããããâââÚÚÚÚÚ"+
-                    "uuuuuuuuuuuLììììììãããããââââÙÙÙÙÙuuuuuuuuuuLLLìììãããããããââââÙÙÙÙÙuuuuuuuuuLLLLüüãããããããâââââÙÙÙÙÙuuuuuuuuLLLLLüãããããããââââââØØØØØ"+
-                    "uuuuuuuLLLLL;;;ãããããââââââÓÓØØØØkkkkuuLLLLL;;;;;ãããâââââââÓÓØØØØkkkkkkkkkk;;;;;\032\032\032ââââââââÓÓØØØØkkkkkkkkkk****\032\032\032\032DDâââââÓÓÓÒØØØ"+
-                    "kkkkkkkkkkk***\032\032\032DDDDDDââÓÓÒÒÒØØkkkkkkkkkkkccccc1òòòòòòDáÓÒÒÒÒÑØkkkkkkkkkkccccc111\"òòòòòááÒÒÒÒÑÑkkkkkkkkkkccccc11\"\"\"\"[[[[ÂÂÒÒÑÑÑ"+
-                    "kkkkyyyyyyyyccc1\"\"\"0[[[[[ÂÂÂÒÑÑÑyyyyyyyyyyyyyyQQQ000[[[[[ÂÂÂÑÑÑÑyyyyyyyyyyyyyyb0000[[[[[\021ÂÂÂÑÑÑÑyyyyyyyyyyyyybbb0000[[[\021\021\021ÂÂÂÑÑÑ"+
-                    "bbb000\021\021\021\021\021\021ÂÂÑÑÁZZ\021\021\021\021¨¨ÁÁ¨ÁÁ¨ÁÁ"+
-                    "ÀÀÀÀÀÀÀÀrriÀÀÀÀÀÀqqqqqqqqqqqHHhÀÀÀÀÀÀÀÀ"+
-                    "ýýýýýýýýýýìììììììììììììììÜÜÛÛÛÛÛýýýýýýýýýììììììììììììììììÜÜÛÛÛÛÛýýýýýýýýýìììììììììììììììììÜÛÛÛÛÛýýýýýýýýììììììììììììììììììÜÛÛÛÛÚ"+
-                    "ýýýýýýýýììììììììììììììììììëÚÚÚÚÚýýýýýýýìììììììììììììììììììëÚÚÚÚÚýýýuuuuuìììììììììììììììãâââÚÚÚÚÚuuuuuuuuLììììììììììììããââââÙÙÙÙÙ"+
-                    "uuuuuuuLLLìììììììììãããâââââÙÙÙÙÙuuuuuuuLLLLüüüììììãããââââââÙÙÙÙÙuuuuuuLLLLLüüüüüãããããââââââØØØØØuuuuuLLLLLLüüüüüããããâââââââØØØØØ"+
-                    "uuuuLLLLLLLLüü;;ãããââââââââÓØØØØkKKKKKKKKKK;;;;;\032ãââââââââÓÓØØØØkkkkkkKKKK***;;;\032\032ââââââââÓÓØØØØkkkkkkkkkk*****\032\032DDDâââââááÒÒØØØ"+
-                    "kkkkkkkkkk****\031\031\031DDDDDDâáááÒÒÒØØkkkkkkkkkkkcc\031\031\031\031DDDDDDDáááÒÒÒÑÑkkkkkkkkkkkccc\031\031\031\"DDDDDDáááÒÒÑÑÑkkkkkkkkkkcccccQQQQQC[[[ñááÒÒÑÑÑ"+
-                    "kkkkyyyyyyyybbbQQQQ0[[[[[ÂÂÂÑÑÑÑyyyyyyyyyyyybbbbQ000[[[[\021\021ÂÂÑÑÑÑyyyyyyyyyyyyybbb0000[[[[\021\021ÂÂÑÑÑÑyyyyyyyyyyyyybbb0000[[[\021\021\021\021ÂÑÑÑÑ"+
-                    "xxxxxxxbbbb000Z\021\021\021\021\021\021\021ÑÁÁÁxxxxxxxx!!!ZZZZ\021\021\021\021ÁÁÁÁxxxxxxxaaZZÁÁÁÁxxxxaaaÁÁÁÁ"+
-                    "rxiaÀÀÀÀrrriiiÀÀÀÀÀrrqqqqqqiiiiiÀÀÀÀÀÀÀqqqqqqqqqqqHHhhhh@@pÀÀÀÀÀÀÀÀ"+
-                    "ýýýýýýýììììììììììììììììììììÛÛÛÛÛýýýýýýììììììììììììììììììììëÛÛÛÛÛýýýýýýììììììììììììììììììììëÛÛÛÛÛýýýýýìììììììììììììììììììììëÛÚÚÚÚ"+
-                    "ýýýýýìììììììììììììììììììììëÚÚÚÚÚýuuuuììììììììììììììììììììëëÚÚÚÚÚuuuuuLììììììììììììììììììââëÚÚÚÚÚuuuuLLLììììììììììììììììââââÙÙÙÙÙ"+
-                    "uuuuLLLLLììììììììììììââââââÙÙÙÙÙuuuLLLLLLüüüüüüüììììâââââââØØØØØuuLLLLLLLüüüüüüüüüüââââââââØØØØØKKKKLLLLLüüüüüüüüüâââââââââØØØØØ"+
-                    "KKKKKKKKKKKüüüüüüââââââââââáØØØØKKKKKKKKKKKKKü;;\031âââââââââááØØØØtKKKKKKKKKKKK*\031\031\031\031âââââââáááØØØØttttKKKKKKKK*\031\031\031\031\031\031ââââââááááØØØ"+
-                    "tttttttKKKK\031\031\031\031\031\031\031\031DDDâááááááÒØØttttttttttK\031\031\031\031\031\031\031)CCCCáááááÒÑÑÑtttttttttjj\031\031:::::CCCCCáááááÒÑÑÑttttttjjjjjjj::::QCCCCCñááááÑÑÑÑ"+
-                    "ttjjjjjjjjjjjbbbQQQCCCññññááÑÑÑÑjjjjjjjjjjjjjbbbbQ00!ññññññÂÑÑÑÑyyjjjjjjjjjjjbbbb0!!![\021\021\021\021\021ÂÑÑÑÑyyyjjjjjjjjjjbbbb!!!!Z\021\021\021\021\021ZÑÑÑÑ"+
-                    "xxxxxxxxxxxxxbbbb!!!ZZ\021\021\021\021\021ZÁÁÁÁxxxxxxxxxxxxxxxx!!!ZZZZZZ\021ZZÁÁÁÁxxxxxxxxxxxxxxxaaaaZZZZZZZZÁÁÁÁrxxxxxxxxxxxxxaaaaaÁÁÁÁ"+
-                    "rrrxxxxxxxxiiiaaaa8YYÀÀÀÀrrrrrxxxiiiiiiiaa888YYÀÀÀÀÀÀrrqqqqqqqqiiiiihh@8888YYÀÀÀÀÀÀÀqqqqqqqqqqqHHhhhh@@@@ppÀÀÀÀÀ"+
-                    "ýýýýììììììììììììììììììììììëëÛÛÛÛýýýìììììììììììììììììììììììëëÛÛÛÛýýýìììììììììììììììììììììììëëÛÚÚÚýýììììììììììììììììììììììììëëÚÚÚÚ"+
-                    "uuììììììììììììììììììììììëëëëÚÚÚÚuuuLìììììììììììììììììììëëëëëÚÚÚÚuuLLLìììììììììììììììììëëëëëëÙÙÙÙuLLLLLìììììììììììììììëëëââëëÙÙÙÙ"+
-                    "LLLLLLLüüüüìììììììììëëâââââØØØØØLLLLLLLüüüüüüüüüüììëëââââââØØØØØKKKKKKKKüüüüüüüüüüüââââââââØØØØØKKKKKKKKKKüüüüüüüüüââââââââáØØØØ"+
-                    "KKKKKKKKKKKKüüüüüüââââââââááØØØØtKKKKKKKKKKKKKüü\031\031ââââââââááØØØØttttKKKKKKKKKK\031\031\031\031\031âââââáááááØØØtttttttKKKKKK\031\031\031\031\031))ââáááááááØØØ"+
-                    "tttttttttttK\031\031\031)))))CáááááááááØØtttttttttttt)))))))CCááááááááÑÑÑttttttttttjj::::)))CCCáááááááÑÑÑtttttttjjjjjj:::::CCCCññáááááÑÑÑ"+
-                    "ttttjjjjjjjjjbbbbCCCCñññññááÑÑÑÑtjjjjjjjjjjjjbbbb!!!!ññññññáÑÑÑÑsjjjjjjjjjjjjbbbb!!!!ñññZ\021ZZÑÑÑÑsjjjjjjjjjjjjbbb!!!!!ZZZZ\021ZZÑÑÑÑ"+
-                    "xxxxxxxxxxxxxxbb!!!!ZZZZZZZZÁÁÁÁxxxxxxxxxxxxxxxaa!!ZZZZZZZZYYÁÁÁxxxxxxxxxxxxxxxaaaaZZZZZZZZYYÁÁÁrrxxxxxxxxxxxxiaaaaa8ZZZYYYYYÁÁÁ"+
-                    "rrrrrxxxxxiiiiiaaaa888YYYYYYYÀÀÀrrrrrqqqiiiiiiiia88888YYYYYÀÀÀÀÀrrqqqqqqqqqiHHhhh@@@@ppYYÀÀÀÀÀÀqqqqqqqqqqqHhhhhh@@@@pppÀÀÀ"+
-                    "ýììììììììììììììììììììììëëëëëëÛÛÛììììììììììììììììììììììëëëëëëëÛÛÚìììììììììììììììììììììëëëëëëëëÚÚÚììììììììììììììììììììëëëëëëëëëÚÚÚ"+
-                    "LììììììììììììììììììëëëëëëëëëëÚÚÚLLìììììììììììììììëëëëëëëëëëëëÚÚÚLLLìììììììììììììëëëëëëëëëëëëÙÙÙÙLLLLLììììììììììëëëëëëëëëëëëëÙÙÙÙ"+
-                    "KKKKKüüüüüüüììëëëëëëëëëëëëâëØØØØKKKKKKKüüüüüüüëëëëëëëëëëââââØØØØKKKKKKKKüüüüüüüëëëëëëëëââââáØØØØKKKKKKKKKKüüüüüëëëëëëââââââáØØØØ"+
-                    "ttKKKKKKKKKKüüüüëëëëâââââáááØØØØttttKKKKKKKKKKüü\031\031âââââááááááØØØtttttttKKKKKKK\031)))))âááááááááØØØttttttttttKKK))))))\030ááááááááááØØ"+
-                    "tttttttttttt))))))\030\030ááááááááááÑØtttttttttttt)))))\030\030\030\030áááááááááÑÑtttttttttttt))))\030\030\030\030\030ááááááááÑÑÑtttttttttjjjj:\030\030\030\030\030\030ññáááááááÑÑÑ"+
-                    "sttttjjjjjjjjbb\030\030\030\030!ñññññáááÑÑÑÑssssjjjjjjjjjbbb!!!!ñññññññáÑÑÑÑssssjjjjjjjjjbbb!!!!PññññZZZàÑÑÑssssjjjjjjjjjbbb!!PPPPZZZZZZàÐÐÐ"+
-                    "sssxxxxxxxxxxxaaaaPPPZZZZZZZYÐÐÐsxxxxxxxxxxxxxaaaaaPZZZZZZZYYÐÐÐrxxxxxxxxxxxxxaaaaaaZZZZZZYYYÁÁÁrrrrxxxxxxxxiiiaaaaa88YYYYYYYÁÁÁ"+
-                    "rrrrrrxxiiiiiiiiaa8888YYYYYYYÀÀÀrrrrrqqqiiiiiiiia88888YYYYYYÀÀÀÀrrqqqqqqqqqHHHhhh@@@@pppYÀÀÀqqqqqqqqqqqHhhhhh@@@@pppÀ"+
-                    "ìììììììììììììììììëëëëëëëëëëëëÛÛÛììììììììììììììììëëëëëëëëëëëëëëÚÚìììììììììììììììëëëëëëëëëëëëëëÚÚÚìììììììììììììëëëëëëëëëëëëëëëëÚÚÚ"+
-                    "ììììììììììììëëëëëëëëëëëëëëëëëÚÚÚLììììììììììëëëëëëëëëëëëëëëëëëÙÙÙLLìììììììëëëëëëëëëëëëëëëëëëëëÙÙÙKKKKüüììëëëëëëëëëëëëëëëëëëëëëØØØ"+
-                    "KKKKKKüüëëëëëëëëëëëëëëëëëëëëêØØØKKKKKKKüüëëëëëëëëëëëëëëëëëëêêØØØKKKKKKKKKüëëëëëëëëëëëëëëëêêêêØØØtKKKKKKKKKKëëëëëëëëëëëëêêêêáêØØØ"+
-                    "tttttKKKKKKKëëëëëëëëëêêêáááááØØØttttttttKKKKKûûûûûûûêêáááááááØØØtttttttttttKKûûûûûûûááááááááááØØttttttttttttt)))\030\030\030\030ááááááááááØØ"+
-                    "ttttttttttttt)\030\030\030\030\030\030ááááááááááÑÑttttttttttttJ\030\030\030\030\030\030\030\030áááááááááÑÑtttttttttttJJ\030\030\030\030\030\030\030\030ááááááááÑÑÑsstttttttJJJJ\030\030\030\030\030\030\030\030ááááááááÑÑÑ"+
-                    "sssssstjjjjjJ\030\030\030\030\030((ññññáááááÑÑÑsssssssjjjjjj999999PPPññññááààÑÑsssssssjjjjjj99999PPPPPPPñZZàààÐsssssssxjjjjiaa999PPPPPPZZZZààÐÐ"+
-                    "sssssxxxxxxiiaaaaaaPPPPZZZZYàÐÐÐrrrrxxxxxxiiiiaaaaaaPPPZZYYYYÐÐÐrrrrrxxxxxiiiiaaaaaa888YYYYYYÐÐÐrrrrrxxxxiiiiiiaaaa888YYYYYYYÐÐÐ"+
-                    "rrrrrrriiiiiiiiiaa8888YYYYYYYÀÀÀrrrrrqqqqiiiiiii888888YYYYYYYÀÀÀrrqqqqqqqqqHHHhhh@@@`ppppÀqqqqqqqqqqqHhhhhh@@@@pppp"+
-                    "ììììììììììëëëëëëëëëëëëëëëëëëëëÚÚììììììììëëëëëëëëëëëëëëëëëëëëëëÚÚìììììììëëëëëëëëëëëëëëëëëëëëëëëÚÚìììììëëëëëëëëëëëëëëëëëëëëëëëëëÚÚ"+
-                    "ììììëëëëëëëëëëëëëëëëëëëëëëëëëëÙÙììëëëëëëëëëëëëëëëëëëëëëëëëëëëëÙÙKKëëëëëëëëëëëëëëëëëëëëëëëëëëëêØØKKKëëëëëëëëëëëëëëëëëëëëëëëëëêêØØ"+
-                    "KKKKKëëëëëëëëëëëëëëëëëëëëëêêêêØØKKKKKKëëëëëëëëëëëëëëëëëëëêêêêêØØttKKKKKKëëëëëëëëëëëëëëëêêêêêêêØØtttttKKKKëëëëëëëëëëëëêêêêêêêêêØØ"+
-                    "ttttttttKKûûûûûûûûûûêêêêêêêêêêØØttttttttttûûûûûûûûûûêêêêêêêááêØØtttttttttttûûûûûûûûûêêêêêáááááØØtttttttttttJûûûûûûûûêêêáááááááéØ"+
-                    "ttttttttttJJJJûû\030\030\030((áááááááááéétttttttttJJJJJJ((((((ááááááááééésssttttJJJJJJJJ(((((((áááááááééÑsssssssJJJJJJJ((((((((áááááááééÑ"+
-                    "ssssssssJJJJJJ(((((((BBBááááààààssssssssJJJJJ9999999BBBBBùààààààsssssssssJJJ9999999BBBBBBBàààààèsssssssssiiiia99999BBBBBBààààààÐ"+
-                    "ssssssssiiiiiiaaaaaBBBBBYYYàààÐÐrrrrrrriiiiiiiaaaaa8888YYYYYYÐÐÐrrrrrrriiiiiiiiaaa88888YYYYYYÐÐÐrrrrrrriiiiiiiiaaa88888YYYYYYYÐÐ"+
-                    "rrrrrrriiiiiiiiia888888YYYYYYY\020ÀrrrrrqqqqqiiiHHHh88888 YYYYYY\020\020\020rrqqqqqqqqqHHHhhh@@@`ppppXqqqqqqqqqqqHhhhhh@@@@pppp"+
-                    "ììëëëëëëëëëëëëëëëëëëëëëëëëëëëëëÚëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëÚëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëÚëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëÚ"+
-                    "ëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëêÙëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëêØëëëëëëëëëëëëëëëëëëëëëëëëëëëëêêêØKëëëëëëëëëëëëëëëëëëëëëëëëëëêêêêØ"+
-                    "KKKëëëëëëëëëëëëëëëëëëëëëëêêêêêêØttKKëëëëëëëëëëëëëëëëëëëêêêêêêêêØtttttKëëëëëëëëëëëëëëëêêêêêêêêêêØtttttttûûûûûûûûëëûûêêêêêêêêêêêêØ"+
-                    "ttttttttûûûûûûûûûûûêêêêêêêêêêêêØtttttttttûûûûûûûûûûêêêêêêêêêêêêØtttttttttûûûûûûûûûûêêêêêêêêêêêêéttttttttJJJûûûûûûûûêêêêêêêêêááéé"+
-                    "sttttttJJJJJJJûûûûûêêêêêééééééééssssttJJJJJJJJJ(((((úúúúééééééééssssssJJJJJJJJJ(((((úúúééééééééésssssssJJJJJJJJ((((((úéééééééééà"+
-                    "ssssssssJJJJJJ(((((((úééééééààààsssssssssJJJJJ999999BBBùùùùàààààsssssssssIIIII99999BBBBBùùàààààèsssssssssIIIII9999BBBBBBùùàààààè"+
-                    "sssssssssIiiiiaaaaBBBBBBùàààààèèrrrrrrrriiiiiiiaaa88888 YYYàààÐÐrrrrrrrriiiiiiiaa888888 YYYYYøøÐrrrrrrrriiiiiiii888888  YYYYYøøø"+
-                    "rrrrrrrrqiiiiiii888888  YYYYYYøørrrrrqqqqqHHHHHHh88```` YYYY\020\020\020\020rqqqqqqqqqqHHHhhh@@@`ppppXXX\020\020\020qqqqqqqqqqqHhhhhh@@@@pppppX\020"+
-                    "ëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëê"+
-                    "ëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëêêëëëëëëëëëëëëëëëëëëëëëëëëëëëëêêêêëëëëëëëëëëëëëëëëëëëëëëëëëëëêêêêêëëëëëëëëëëëëëëëëëëëëëëëëëêêêêêêê"+
-                    "tëëëëëëëëëëëëëëëëëëëëëëêêêêêêêêêtttëëëëëëëëëëëëëëëëëëêêêêêêêêêêêtttttëëëëëëëëëëëëëëêêêêêêêêêêêêêttttttûûûûûûûûûûûûûêêêêêêêêêêêêê"+
-                    "ttttttûûûûûûûûûûûûûêêêêêêêêêêêêêtttttttûûûûûûûûûûûûêêêêêêêêêêêêêtttttttJJûûûûûûûûûêêêêêêêêêêêêêésttttJJJJJJûûûûûûûêêêêêêêêêêéééé"+
-                    "sssssJJJJJJJJûûûûûêêêêêêéééééééésssssJJJJJJJJJJJ(úúúúúúúééééééééssssssJJJJJJJJJ(((úúúúúééééééééésssssssJJJJJJJJ(((úúúúúééééééééé"+
-                    "ssssssssJJJJJJJ((((úúúéééééééàààsssssssssIIIIII(((((úùùùùùùààààèsssssssssIIIIIII999BBùùùùùùààààèssssssssIIIIIIII99BBBBùùùùàààààè"+
-                    "rrrrrrrrIIIIIIIII88AAAAùùùààààèèrrrrrrrrrIIIIIII888AAA   ððààèèèrrrrrrrrrriiiiii888AAA   ððððøøørrrrrrrrriiHHHHH8888A    ððððøøø"+
-                    "rrrrrrrqqqHHHHHHH````    ððððøøørrrrqqqqqqHHHHHHh@`````ppXXXX\020\020\020rqqqqqqqqqqHHHhhh@@@``pppXXXX\020\020\020qqqqqqqqqqqHhhhhh@@@@pppppXXX\020\020\020"+
-                    "ëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëêê"+
-                    "ëëëëëëëëëëëëëëëëëëëëëëëëëëëëêêêêëëëëëëëëëëëëëëëëëëëëëëëëëëêêêêêêëëëëëëëëëëëëëëëëëëëëëëëëëêêêêêêêëëëëëëëëëëëëëëëëëëëëëëëêêêêêêêêê"+
-                    "ëëëëëëëëëëëëëëëëëëëëëêêêêêêêêêêêttëëëëëëëëëëëëëëëëëêêêêêêêêêêêêêtttûûûûûûûûûûûûûûûêêêêêêêêêêêêêêttttûûûûûûûûûûûûûûêêêêêêêêêêêêêê"+
-                    "tttttûûûûûûûûûûûûûêêêêêêêêêêêêêêtttttJûûûûûûûûûûûûêêêêêêêêêêêêêêssttJJJJûûûûûûûûûûêêêêêêêêêêêêêéssssJJJJJJûûûûûûûûêêêêêêêêêêéééé"+
-                    "sssssJJJJJJJJûûûûêúúúúúúééééééééssssssJJJJJJJJJûúúúúúúúúéééééééésssssssJJJJJJJJJúúúúúúúéééééééééssssssssJJJJJJJ(úúúúúúúééééééééé"+
-                    "sssssssssJJJIIIIúúúúúúééééééééàèsssssssssIIIIIIIIúúúúùùùùùùùàààèssssssssIIIIIIIIIIBùùùùùùùùùààèèssssssssIIIIIIIIIIAAùùùùùùùàààèè"+
-                    "rrrrrrrrIIIIIIIIIAAAAAAùùùàààèèèrrrrrrrrrIIIIIIIAAAAAAAA ðððèèèèrrrrrrrrrrIIIIIHAAAAAAA  ððððøøørrrrrrrrrHHHHHHHHAAAAA   ððððøøø"+
-                    "rrrrrrrqqqHHHHHHH``````  ððððøøørrrrqqqqqqHHHHHhh@`````ppXXXXX\020\020rqqqqqqqqqqHHHhhh@@@``pppXXXXX\020\020qqqqqqqqqqqHhhhhh@@@@pppppXXX\020\020\020"
-    )) {
-        private final byte[] primary = {
-                28, 36, 44, 52, 60, 68, 76, 84, 92, 100, 108, 116, 124, -124, -116, -108, -100, -92, -84, -76, -68, -52, -44, -36, -28, -20, -12, -4
-        }, grays = {
-                23, 22, 21, 20, 19, 18, 17, 16
-        };
-
-        @Override
-        public byte[] mainColors() {
-            return primary;
-        }
-
-        /**
-         * @return An array of grayscale or close-to-grayscale color indices, with the darkest first and lightest last.
-         */
-        @Override
-        public byte[] grayscale() {
-            return grays;
-        }
-
-        @Override
-        public byte brighten(byte voxel) {
-            if((voxel & 7) == 0)
-                return 16;
-            return (byte) ((voxel & 248) + (voxel & 7) - 1);
-        }
-
-        @Override
-        public byte darken(byte voxel) {
-            if((voxel & 7) >= 6)
-                return 23;
-            return (byte)((voxel & 248) + (voxel & 7) + 2);
-        }
-
-        @Override
-        public int bright(byte voxel) {
-            if((voxel & 7) == 0)
-                return Coloring.RINSED[16];
-            return Coloring.RINSED[(voxel & 248) + (voxel & 7) - 1];
-        }
-
-        @Override
-        public int medium(byte voxel) {
-            return Coloring.RINSED[(voxel & 255)];
-        }
-
-        @Override
-        public int dim(byte voxel) {
-            if((voxel & 7) == 7)
-                return Coloring.RINSED[23];
-            return Coloring.RINSED[(voxel & 248) + (voxel & 7) + 1];
-        }
-
-        @Override
-        public int dark(byte voxel)
-        {
-            if((voxel & 7) >= 6)
-                return Coloring.RINSED[23];
-            return Coloring.RINSED[(voxel & 248) + (voxel & 7) + 2];
-        }
-
-        @Override
-        public int getShadeBit() {
-            return 0;
-        }
-        @Override
-        public int getWaveBit() {
-            return 0;
-        }
-    };
 }

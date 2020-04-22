@@ -60,7 +60,8 @@ public class SlopeBoxTest extends ApplicationAdapter {
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.GB_GREEN);
 //        colorizer = Colorizer.FlesurrectColorizer;
 //        colorizer = Colorizer.AzurestarColorizer;
-        colorizer = Colorizer.SplayColorizer;
+//        colorizer = Colorizer.SplayColorizer;
+        colorizer = Colorizer.ZigguratColorizer;
         voxelColor = new VoxelColor().colorizer(colorizer);
         pixmapRenderer = new VoxelPixmapRenderer().set(new Pixmap(512, 512, Pixmap.Format.RGBA8888)).set(voxelColor);
         pixmapRenderer.easing = false;
@@ -189,13 +190,13 @@ public class SlopeBoxTest extends ApplicationAdapter {
                     case Input.Keys.S: // smaller palette, 64 colors
                         if (UIUtils.shift())
                         {
-                            pixmapRenderer.color().colorizer(Colorizer.FlesurrectBonusColorizer);
-                            maker.setColorizer(Colorizer.FlesurrectBonusColorizer);
+                            pixmapRenderer.color().colorizer(Colorizer.AzurestarColorizer);
+                            maker.setColorizer(Colorizer.AzurestarColorizer);
                         }
                         else 
                         {
-                            pixmapRenderer.color().colorizer(Colorizer.FlesurrectColorizer);
-                            maker.setColorizer(Colorizer.FlesurrectColorizer);
+                            pixmapRenderer.color().colorizer(Colorizer.SplayColorizer);
+                            maker.setColorizer(Colorizer.SplayColorizer);
                         }
                         break;
 //                    case Input.Keys.W: // write

@@ -1287,7 +1287,7 @@ public class ModelMaker {
 
     /**
      * Takes an array of arrays of RGBA8888 ints representing colors, such as
-     * {@link isonomicon.view.color.Dimmer#AURORA_RAMP_VALUES}, and gets a random ramp from it to attempt to construct
+     * {@link Colorizer#AURORA_RAMP_VALUES}, and gets a random ramp from it to attempt to construct
      * a fire range.
      * @param rampValues a 2D array of RGBA8888 ints, where each interior array must have at least 4 elements and first
      *                   interior array is ignored (expected to be transparent)
