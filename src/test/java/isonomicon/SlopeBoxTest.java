@@ -1,6 +1,10 @@
 package isonomicon;
 
-import com.badlogic.gdx.*;
+import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
@@ -15,7 +19,6 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import isonomicon.model.SlopeBox;
 import isonomicon.model.color.Colorizer;
-import isonomicon.view.color.VoxelColor;
 import isonomicon.view.render.VoxelPixmapRenderer;
 
 public class SlopeBoxTest extends ApplicationAdapter {
@@ -32,7 +35,6 @@ public class SlopeBoxTest extends ApplicationAdapter {
     protected TextureRegion screenRegion;
     protected ModelMaker maker;
     private VoxelPixmapRenderer pixmapRenderer;
-    protected VoxelColor voxelColor;
     private byte[][][] voxels;
     private SlopeBox seq;
     private Colorizer colorizer;
@@ -152,12 +154,6 @@ public class SlopeBoxTest extends ApplicationAdapter {
                         Tools3D.deepCopyInto(voxels, seq.data[0]);
                         Tools3D.fill(seq.data[1], -1);
                         seq.putSlopes();
-                        break;
-                    case Input.Keys.G:
-                        voxelColor.direction(voxelColor.direction().counter());
-                        break;
-                    case Input.Keys.H:
-                        voxelColor.direction(voxelColor.direction().clock());
                         break;
                     case Input.Keys.E: // easing
                         pixmapRenderer.easing = !pixmapRenderer.easing;

@@ -140,7 +140,7 @@ public class Tools3D {
         for (int x = 0; x < xs; x++) {
             for (int y = 0; y < ys; y++) {
                 for (int z = 0; z < zs; z++) {
-                    c += (voxels[x][y][z] != avoid) ? 1 : 0;
+                    if(voxels[x][y][z] != avoid) ++c;
                 }
             }
         }
@@ -157,7 +157,7 @@ public class Tools3D {
         for (int x = 0; x < xs; x++) {
             for (int y = 0; y < ys; y++) {
                 for (int z = 0; z < zs; z++) {
-                    c+= (voxels[x][y][z] == match) ? 1 : 0;
+                    if(voxels[x][y][z] == match) ++c;
                 }
             }
         }
