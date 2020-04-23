@@ -52,7 +52,8 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
      * Uses {@link #colorize(byte, int)} to figure out what index has the correct brightness, then looks that index up
      * in the {@link #reducer}'s stored palette array to get an RGBA8888 int.
      *
-     * @param brightness 0 for dark, 1 for dim, 2 for medium and 3 for bright. Negative numbers are expected to normally be interpreted as black and numbers higher than 3 as white.
+     * @param brightness 0 for dark, 1 for dim, 2 for medium and 3 for bright. Negative numbers are expected to normally 
+     *                   be interpreted as black and numbers higher than 3 as white.
      * @param voxel      The color index of a voxel
      * @return An rgba8888 color
      */

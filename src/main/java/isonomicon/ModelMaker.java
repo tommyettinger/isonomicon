@@ -1,8 +1,6 @@
 package isonomicon;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.math.MathUtils;
 import squidpony.squidmath.*;
 import isonomicon.model.color.Colorizer;
 
@@ -17,8 +15,6 @@ import static squidpony.squidmath.IntPointHash.hashAll;
  * Created by Tommy Ettinger on 11/4/2017.
  */
 public class ModelMaker {
-    public final boolean RINSED_PALETTE = true;
-    public final byte EYE_DARK = RINSED_PALETTE ? 22 : 30;
     public GWTRNG rng;
     private byte[][][] ship, shipLarge;
     private int xSize, ySize, zSize;
@@ -261,7 +257,8 @@ public class ModelMaker {
         int ctr;
         int current;
         final byte mainColor = colorizer.getReducer().randomColorIndex(rng),
-                highlightColor = colorizer.colorize(colorizer.getReducer().randomColorIndex(rng), ~rng.next(1) * (-rng.next(1) | 1));
+                highlightColor = colorizer.colorize(colorizer.getReducer().randomColorIndex(rng), ~rng.next(1) * (-rng.next(1) | 1)),
+            eyeDark = colorizer.reduce(255), eyeBright = colorizer.reduce(-1);
         do {
             final int seed = rng.nextInt();
             ctr = 0;
@@ -292,10 +289,10 @@ public class ModelMaker {
                 for (int y = 1; y < 5; y++) {
                     if(voxels[x][y - 1][z] != 0) break;
                     if (voxels[x][y][z] != 0) {
-                        voxels[x][12 - y][z] = voxels[x][y - 1][z] = EYE_DARK;
-                        voxels[x][11 - y][z] = voxels[x][y    ][z] = EYE_DARK;
-                        voxels[x + 1][12 - y][z] = voxels[x + 1][y    ][z] = EYE_DARK;     // intentionally asymmetrical
-                        voxels[x + 1][11 - y][z] = voxels[x + 1][y - 1][z] = 4; // intentionally asymmetrical
+                        voxels[x][12 - y][z] = voxels[x][y - 1][z] = eyeDark;
+                        voxels[x][11 - y][z] = voxels[x][y    ][z] = eyeDark;
+                        voxels[x + 1][12 - y][z] = voxels[x + 1][y    ][z] = eyeDark;     // intentionally asymmetrical
+                        voxels[x + 1][11 - y][z] = voxels[x + 1][y - 1][z] = eyeBright; // intentionally asymmetrical
                         if(x <= 9) {
                             voxels[x + 2][12 - y][z] = voxels[x + 2][y - 1][z] = 0;
                             voxels[x + 2][11 - y][z] = voxels[x + 2][y    ][z] = 0;
@@ -342,130 +339,16 @@ public class ModelMaker {
         }
         return frames;
     }
-    private static final int[] RINSED_COCKPIT_COLORS = {19, 20, 21, 22, 23, 24, 25, 26, 27};
+
     public byte[][][] shipRandom()
     {
         return shipSmoothColorized();
-//        xSize = ship.length;
-//        ySize = ship[0].length;
-//        zSize = ship[0][0].length;
-//        byte[][][] nextShip = new byte[xSize][ySize][zSize];
-//        final int halfY = ySize >> 1, smallYSize = ySize - 1;
-//        int seed = rng.nextInt(), current;
-//        final byte mainColor = (byte)((RINSED_PALETTE)
-//                ? determineBounded(seed + 1, 30) * 8 + determineBounded(seed + 22, 4) + 18
-//                : determineBounded(seed + 1, 18) * 6 +  + determineBounded(seed + 22, 3) + 22),
-//                highlightColor = (byte)((RINSED_PALETTE)
-//                        ? ((determineBounded(seed + 333, 30))) * 8 + determineBounded(seed + 4444, 4) + 17
-//                        : ((determineBounded(seed + 333, 18))) * 6 + determineBounded(seed + 4444, 3) + 21),
-//                cockpitColor = (byte)((RINSED_PALETTE) 
-//                        ? RINSED_COCKPIT_COLORS[determineBounded(seed + 55555, 6)] * 8 + 19 
-//                        : 84 + (determineBounded(seed + 55555, 6) * 6));
-//        byte color;
-////        final byte mainColor = (byte)((determineBounded(seed + 1L, 18) * 6) + determineBounded(seed + 22L, 3) + 22),
-////                highlightColor = (byte)((determineBounded(seed + 333L, 18) * 6) + determineBounded(seed + 4444L, 3) + 21),
-////                cockpitColor = (byte)(84 + (determineBounded(seed + 55555L, 6) * 6));
-//        int xx, yy;
-//        for (int x = 0; x < xSize; x++) {
-//            for (int y = 0; y < halfY; y++) {
-//                for (int z = 0; z < zSize; z++) {
-//                    color = ship[x][y][z];
-//                    if (color != 0) {
-//                        // this 4-input-plus-state hash is really a slight modification on LightRNG.determine(), but
-//                        // it mixes the x, y, and z inputs more thoroughly than other techniques do, and we then use
-//                        // different sections of the random bits for different purposes. This helps reduce the possible
-//                        // issues from using rng.next(5) and rng.next(6) all over if the bits those use have a pattern.
-//                        // In the original model, all voxels of the same color will be hashed with similar behavior but
-//                        // any with different colors will get unrelated values.
-//                        xx = x + 1;
-//                        yy = y + 1;
-//                        current = hashAll(xx + (xx | z) >> 2, yy + (yy | z) >> 1, z, color, seed);
-//                        if (color > 0 && color < 8 && z >= 2) {
-//                            nextShip[x][smallYSize - y][z] = nextShip[x][y][z] = (byte) (cockpitColor - (z - 2 >> 1));//9;
-//                        } else {
-//                            nextShip[x][smallYSize - y][z] = nextShip[x][y][z] =
-//                                    // checks bottom 6 bits
-//                                    ((current & 0x3F) < 45)
-//                                            ? 0
-//                                            // checks another 6 bits, starting after discarding 6 bits from the bottom
-//                                            : ((current >>> 6 & 0x3F) < 40) ? (byte)(
-//                                            (RINSED_PALETTE) ? 18 + (current & 3) : 18 + (current & 7))
-//                                            // checks another 6 bits, starting after discarding 12 bits from the bottom
-//                                            : ((current >>> 12 & 0x3F) < 8) ? highlightColor : mainColor;
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        return nextShip;
-//        //return Tools3D.runCA(nextShip, 1);
     }
 
     public byte[][][] shipLargeRandom()
     {
         return shipLargeSmoothColorized();
-//        xSize = shipLarge.length;
-//        ySize = shipLarge[0].length;
-//        zSize = shipLarge[0][0].length;
-//        byte[][][] nextShip = new byte[xSize][ySize][zSize];
-//        final int halfY = ySize >> 1, smallYSize = ySize - 1;
-//        int color;
-//        int seed = rng.nextInt(), current, paint;
-//        final byte mainColor = (byte)((RINSED_PALETTE)
-//                ? determineBounded(seed + 1, 30) * 8 + determineBounded(seed + 22, 4) + 18
-//                : determineBounded(seed + 1, 18) * 6 +  + determineBounded(seed + 22, 3) + 22),
-//                highlightColor = (byte)((RINSED_PALETTE)
-//                        ? ((determineBounded(seed + 333, 30))) * 8 + determineBounded(seed + 4444, 4) + 17
-//                        : ((determineBounded(seed + 333, 18))) * 6 + determineBounded(seed + 4444, 3) + 21),
-//                cockpitColor = (byte)((RINSED_PALETTE)
-//                        ? RINSED_COCKPIT_COLORS[determineBounded(seed + 55555, 6)] * 8 + 22
-//                        : 84 + (determineBounded(seed + 55555, 6) * 6));
-//        int xx, yy, zz;
-//        for (int x = 0; x < xSize; x++) {
-//            for (int y = 0; y < halfY; y++) {
-//                for (int z = 0; z < zSize; z++) {
-//                    color = (shipLarge[x][y][z] & 255);
-//                    if (color != 0) {
-//                        // this 4-input-plus-state hash is really a slight modification on LightRNG.determine(), but
-//                        // it mixes the x, y, and z inputs more thoroughly than other techniques do, and we then use
-//                        // different sections of the random bits for different purposes. This helps reduce the possible
-//                        // issues from using rng.next(5) and rng.next(6) all over if the bits those use have a pattern.
-//                        // In the original model, all voxels of the same color will be hashed with similar behavior but
-//                        // any with different colors will get unrelated values.
-//                        xx = x + 1;
-//                        yy = y + 1;
-//                        zz = z / 3;
-//                        current = hashAll(xx + (xx | zz) >> 3, (yy + (yy | zz)) / 3, zz, color, seed);
-//                        paint = hashAll((xx + (xx | z)) / 7, (yy + (yy | z)) / 5, z, color, seed);
-//                        if (color < 8) { // checks bottom 6 bits
-//                            if((current >>> 6 & 0x7L) != 0)
-//                                nextShip[x][smallYSize - y][z] = nextShip[x][y][z] = (byte) (cockpitColor - (z + 6 >> 3));//9;
-//                        } else {
-//                            nextShip[x][smallYSize - y][z] = nextShip[x][y][z] =
-//                                    // checks 9 bits
-//                                    ((current & 0x1FFL) < color * 6)
-//                                            ? 0
-//                                            // checks another 6 bits, starting after discarding 9 bits from the bottom
-//                                            : ((paint >>> 9 & 0x3F) < 40) ? (byte)(
-//                                            (RINSED_PALETTE) ? 18 + (paint & 3) : 18 + (paint & 7))
-//                                            // checks another 6 bits, starting after discarding 15 bits from the bottom
-//                                            : ((paint >>> 15 & 0x3F) < 8) ? highlightColor : mainColor;
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        return Tools3D.largestPart(nextShip);
-//        //return nextShip;
-//        //return Tools3D.runCA(nextShip, 1);
     }
-//    /**
-//     * Use <a href="https://i.imgur.com/CrI1LyU.png">This image with Aurora hex codes</a> for reference.
-//     */
-//    private static final byte[] AURORA_COCKPIT_COLORS = {0x69, 0x6A, 0x6B, 0x6C, 0x6D, 0x6E, 0x6F, 0x70, 0x71, 0x72,
-//            0x71, 0x72, 0x73, 0x78, 0x79, 0x7A, 0x7B,
-//            (byte) 0xBC, (byte) 0xBE, (byte) 0xBF, (byte) 0xC1, (byte) 0xC3, (byte) 0xC4, (byte) 0xC5,
-//            (byte) 0xC6, (byte) 0xC7, (byte) 0xCC, (byte) 0xCD, (byte) 0xCF };
 
     /**
      * Uses the {@link #getColorizer() colorizer} this was constructed with, with the default
@@ -564,14 +447,13 @@ public class ModelMaker {
         final int halfY = ySize >> 1, smallYSize = ySize - 1;
         int color;
         int seed = rng.nextInt(), current = seed, paint = seed;
-        int thrust = Coloring.RINSED[randomMainColor(seed ^ 0x44444) & 0xFF];
-        byte[] grays = colorizer.grayscale();
+        byte[] grays = colorizer.grayscale(), mains = colorizer.mainColors();
         byte mainColor = colorizer.getReducer().paletteMapping[seed & 0x7FFF], // bottom 15 bits
                 highlightColor = colorizer.brighten(colorizer.getReducer().paletteMapping[seed >>> 17]), // top 15 bits
                 cockpitColor = colorizer.darken(colorizer.reduce((0x20 + determineBounded(seed ^ 0x11111, 0x60) << 24)
                         | (0xA0 + determineBounded(seed ^ 0x22222, 0x60) << 16)
                         | (0xC8 + determineBounded(seed ^ 0x33333, 0x38) << 8) | 0xFF)),
-                thrustColor = colorizer.reduce(thrust),
+                thrustColor = mains[determineBounded(seed ^ 0x44444, mains.length)],
                 lightColor = (byte) (colorizer.brighten(colorizer.getReducer().paletteMapping[(seed ^ seed >>> 4 ^ seed >>> 13) & 0x7FFF]) | colorizer.getShadeBit() | colorizer.getWaveBit());
         thrustColor = (byte) (colorizer.brighten(thrustColor) | colorizer.getWaveBit() | colorizer.getShadeBit());
         for (int i = 0; i < grays.length; i++) {
@@ -684,14 +566,13 @@ public class ModelMaker {
         final int halfY = ySize >> 1, smallYSize = ySize - 1;
         int color;
         int seed = rng.nextInt(), current = seed;
-        int thrust = Coloring.RINSED[randomMainColor(seed ^ 0x44444) & 0xFF];
-        byte[] grays = colorizer.grayscale();
+        byte[] grays = colorizer.grayscale(), mains = colorizer.mainColors();
         byte mainColor = colorizer.getReducer().paletteMapping[seed & 0x7FFF], // bottom 15 bits
                 //highlightColor = colorizer.brighten(colorizer.getReducer().paletteMapping[seed >>> 17]), // top 15 bits
                 cockpitColor = colorizer.reduce((0x10 + determineBounded(seed ^ 0x11111, 0x30) << 24)
                         | (0x90 + determineBounded(seed ^ 0x22222, 0x40) << 16)
                         | (0xB0 + determineBounded(seed ^ 0x33333, 0x40) << 8) | 0xFF),
-                thrustColor = colorizer.reduce(thrust);
+            thrustColor = mains[determineBounded(seed ^ 0x44444, mains.length)];
 //        byte lightColor = (byte) (colorizer.brighten(colorizer.getReducer().paletteMapping[(seed ^ seed >>> 4 ^ seed >>> 13) & 0x7FFF]) | colorizer.getShadeBit() | colorizer.getWaveBit());
         thrustColor = (byte) (colorizer.brighten(thrustColor) | colorizer.getWaveBit() | colorizer.getShadeBit());
 //        for (int i = 0; i < grays.length; i++) {
@@ -701,13 +582,13 @@ public class ModelMaker {
 //                break;
 //            }
 //        }
-        final FastNoise noise = new FastNoise(seed ^ seed >>> 21 ^ seed << 6, 0xBp-2f / xSize);
+        final FastNoise noise = new FastNoise(seed ^ seed >>> 21 ^ seed << 6, 0x9p-2f / xSize, FastNoise.FOAM_FRACTAL, 2);
         for (int x = 0; x < xSize; x++) {
             for (int y = 0; y < halfY; y++) {
                 for (int z = 0; z < zSize; z++) {
                     color = (ship[x][y][z] & 255);
                     if (color != 0) {
-                        current = (int) (noise.getFoam(x * 0.5f, y * 0.75f, z * 0.666f) * 0x1.5p27f) + 0x8000000;
+                        current = (int) (noise.getFoamFractal(x * 0.55f, y * 0.75f, z * 0.666f) * 0x1.5p28f) + 0x8000000;
                         if (color < 8) {
                             // checks sorta-top 4 bits
                             if((current >>> 21 & 15) != 0)
@@ -984,12 +865,8 @@ public class ModelMaker {
             hashes[rx][halfY-7][rz] |= 0xFFFFFFFFFFFFL | hashes[rx][halfY-7][rz] << 16;
             hashes[rx][halfY-8][rz] |= 0xFFFFFFFFFFFFL | hashes[rx][halfY-8][rz] << 16;
         }
-        final byte mainColor = (byte)((RINSED_PALETTE)
-                ? DiverRNG.determineBounded(seed + 1L, 30) * 8 + DiverRNG.determineBounded(seed + 22L, 4) + 18
-                : DiverRNG.determineBounded(seed + 1L, 18) * 6 + DiverRNG.determineBounded(seed + 22L, 3) + 22),
-                highlightColor = (byte)((RINSED_PALETTE)
-                        ? ((DiverRNG.determineBounded(seed + 333L, 30))) * 8 + DiverRNG.determineBounded(seed + 4444L, 4) + 17
-                        : ((DiverRNG.determineBounded(seed + 333L, 18))) * 6 + DiverRNG.determineBounded(seed + 4444L, 3) + 21);
+        final byte mainColor = colorizer.getReducer().paletteMapping[DiverRNG.determineBounded(seed, 0x8000)],
+                highlightColor = colorizer.getReducer().paletteMapping[DiverRNG.determineBounded(seed, 0x8000) | 0xC63];
         for (int x = 0; x < xSize; x++) {
             for (int y = 0; y < halfY; y++) {
                 for (int z = 0; z < zSize; z++) {
@@ -1127,13 +1004,9 @@ public class ModelMaker {
             hashes[rx][halfY-7][rz] |= 0xFFFFFFFFFFFFL | hashes[rx][halfY-7][rz] << 16;
             hashes[rx][halfY-8][rz] |= 0xFFFFFFFFFFFFL | hashes[rx][halfY-8][rz] << 16;
         }
-        final byte mainColor = (byte)((RINSED_PALETTE)
-                ? DiverRNG.determineBounded(seed + 1L, 30) * 8 + DiverRNG.determineBounded(seed + 22L, 4) + 18
-                : DiverRNG.determineBounded(seed + 1L, 18) * 6 + DiverRNG.determineBounded(seed + 22L, 3) + 22),
-                highlightColor = (byte)((RINSED_PALETTE)
-                        ? ((DiverRNG.determineBounded(seed + 333L, 30))) * 8 + DiverRNG.determineBounded(seed + 4444L, 4) + 17
-                        : ((DiverRNG.determineBounded(seed + 333L, 18))) * 6 + DiverRNG.determineBounded(seed + 4444L, 3) + 21);
-        float edit = 0f;
+        final byte mainColor = colorizer.getReducer().paletteMapping[DiverRNG.determineBounded(seed, 0x8000)],
+            highlightColor = colorizer.getReducer().paletteMapping[DiverRNG.determineBounded(seed, 0x8000) | 0xC63];
+        float edit;
         byte color;
         for (int x = 0; x < xSize; x++) {
             for (int y = 0; y < halfY; y++) {
@@ -1175,209 +1048,6 @@ public class ModelMaker {
         return blob;
         //return blob;
         //return Tools3D.runCA(nextShip, 1);
-    }
-
-    /**
-     * Gets a random color palette index, adapted for whether this uses {@link Coloring#RINSED} or
-     * a Colorizer. It will always be in the middle of the color range, but can lean towards darker
-     * colors more often than lighter ones.
-     * @return a byte representing a color palette index, randomly chosen
-     */
-    public byte randomMainColor() {
-        return (byte)(RINSED_PALETTE
-                ? rng.nextSignedInt(30) * 8 + rng.between(18, 22)
-                : colorizer.mainColors()[rng.nextSignedInt(colorizer.mainColors().length)]);
-    }
-
-    /**
-     * Gets 5 colors from lightest to darkest, with the same hue chosen randomly from the RINSED palette.
-     * @return a 5-element byte array, with the first item having the lightest color and the last having the darkest
-     */
-    public byte[] randomColorRange()
-    {
-        byte idx = (byte) ((rng.nextSignedInt(30) << 3) + 17);
-        return new byte[]{idx, (byte) (idx+1), (byte) (idx+2), (byte) (idx+3), (byte) (idx+4)};
-    }
-    /**
-     * Gets 5 colors from lightest to darkest, with the same hue drawn from the given mainColor.
-     * @param mainColor the color to mimic the hue of
-     * @return a 5-element byte array, with the first item having the lightest color and the last having the darkest
-     */
-    public static byte[] colorRange(byte mainColor)
-    {
-        byte idx = (byte) (((mainColor >>> 3) << 3)+1);
-        return new byte[]{idx, (byte) (idx+1), (byte) (idx+2), (byte) (idx+3), (byte) (idx+4)};
-    }
-
-    /**
-     * Gets a random color palette index, always using {@link Coloring#RINSED}. It will always be in the middle of the
-     * color range, but can lean towards darker colors more often than lighter ones.
-     * @param seed a long seed that should be different every time this is called
-     * @return a byte representing a color palette index, randomly chosen
-     */
-    public static byte randomMainColor(long seed) {
-        return (byte)((DiverRNG.determineBounded(seed, 240) & 0xFB) + 18);
-    }
-
-    /**
-     * Gets 5 colors from lightest to darkest, with the same hue chosen randomly from the RINSED palette.
-     * @param seed a long seed that should be different every time this is called
-     * @return a 5-element byte array, with the first item having the lightest color and the last having the darkest
-     */
-    public static byte[] randomColorRange(long seed)
-    {
-        byte idx = (byte) ((DiverRNG.determineBounded(seed, 30) << 3) + 17);
-        return new byte[]{idx, (byte) (idx+1), (byte) (idx+2), (byte) (idx+3), (byte) (idx+4)};
-    }
-    /**
-     * Gets a random color palette index, always using {@link Coloring#RINSED}. It will always be in the middle of the
-     * color range, leaning toward lighter colors (but never the lightest color in a group of similar Rinsed colors).
-     * @param seed a long seed that should be different every time this is called
-     * @return a byte representing a color palette index, randomly chosen
-     */
-    public static byte randomMainColor(int seed) {
-        return (byte)((determineBounded(seed, 29) << 3) + 25);
-    }
-
-    /**
-     * Gets 5 colors from lightest to darkest, with the same hue chosen randomly from the RINSED palette.
-     * @param seed a long seed that should be different every time this is called
-     * @return a 5-element byte array, with the first item having the lightest color and the last having the darkest
-     */
-    public static byte[] randomColorRange(int seed)
-    {
-        byte idx = (byte) ((determineBounded(seed, 30) << 3) + 17);
-        return new byte[]{idx, (byte) (idx+1), (byte) (idx+2), (byte) (idx+3), (byte) (idx+4)};
-    }
-
-    /**
-     * Gets a range of fire colors given four RGBA8888 ints as targets for this to try to produce. Goes from
-     * {@code early} (which could be bold orange, for the start of a fire) to {@code mid} (which could be light orange,
-     * for the middle of a fire), to {@code bright} (which could be light yellow, for sparks) to {@code smoke} (which
-     * could be gray or brown) to clear (which this always appends as the fifth item, so the fire fades out).
-     * @param early the color for the start of a fire, such as for embers
-     * @param mid the color for the middle of a fire, often lighter than {@code early}
-     * @param bright the color for sparks, often very light
-     * @param smoke the color for smoke near the end of a fire
-     * @return a 5-item array of byte color indices for fire colors
-     */
-    public byte[] fireRange(int early, int mid, int bright, int smoke)
-    {
-        return new byte[] {
-                (byte)(colorizer.reduce(early) | colorizer.getShadeBit()),
-                (byte)(colorizer.reduce(mid) | colorizer.getShadeBit()),
-                (byte)(colorizer.reduce(bright) | colorizer.getShadeBit()),
-                (byte)(colorizer.reduce(smoke) | colorizer.getShadeBit()),
-                0
-        };
-    }
-    
-    /**
-     * Gets a range of fire colors, going from bold orange to light orange to light yellow to brown for smoke to clear.
-     * @return a 5-item array of byte color indices for fire colors
-     */
-    public byte[] fireRange() {
-        return fireRange(0xFB6B1DFF, 0xFF9E17FF, 0xFBFF86FF, 0x5C3A41FF);
-    }
-    public byte[] randomFireRange()
-    {
-        int idx = rng.nextSignedInt(30) * 8 + 16;
-        return fireRange(Coloring.RINSED[idx + 4], Coloring.RINSED[idx + 2], Coloring.RINSED[idx], Coloring.RINSED[idx + 6]);
-    }
-
-    /**
-     * Takes an array of arrays of RGBA8888 ints representing colors, such as
-     * {@link Colorizer#AURORA_RAMP_VALUES}, and gets a random ramp from it to attempt to construct
-     * a fire range.
-     * @param rampValues a 2D array of RGBA8888 ints, where each interior array must have at least 4 elements and first
-     *                   interior array is ignored (expected to be transparent)
-     * @return a 5-item array of byte color indices for fire colors
-     */
-    public byte[] randomFireRange(int[][] rampValues)
-    {
-        int idx = rng.nextSignedInt(rampValues.length - 1) + 1;
-        if(rampValues[idx][3] == 0)
-            idx >>>= 1;
-        return fireRange(rampValues[idx][2], rampValues[idx][1], rampValues[idx][0], rampValues[idx][3]);
-    }
-    public byte[][][][] animateExplosion(int frames, int xSize, int ySize, int zSize)
-    {
-        return animateExplosion(frames, xSize, ySize, zSize, fireRange());
-    }
-    public byte[][][][] animateExplosion(int frames, int xSize, int ySize, int zSize, byte[] fireColors)
-    {
-        final int sa = rng.nextInt(), sb = rng.nextInt();
-        FastNoise noise = new FastNoise(sa ^ sb, 0x1.2p-3f, FastNoise.SIMPLEX_FRACTAL, 2);
-        noise.setFractalType(FastNoise.FBM);
-        final byte[][][][] boom = new byte[frames][xSize][ySize][zSize];
-        int centerX = xSize >> 1, centerY = ySize >> 1;
-        int expandLength = Math.round(frames * 0.2f);
-        int riseLength = Math.round(frames * 0.3f);
-        int smokeLength = frames - riseLength - expandLength;
-        float maxRadius = Math.min(centerX, centerY);
-        float startRadius = maxRadius * 0.375f;
-        float currentRadius = startRadius;
-        float rad2 = currentRadius * currentRadius * 0.875f;
-        float w = 0f;
-        for (int i = 0; i < expandLength && i < frames; i++, w += 0.125f) {
-            currentRadius = Interpolation.pow2InInverse.apply(startRadius, maxRadius, (float) i / expandLength);
-            rad2 = currentRadius * currentRadius * 0.825f;
-            for (float x = -currentRadius; x <= currentRadius; x++) {
-                for (float y = -currentRadius; y <= currentRadius; y++) {
-                    if(x * x + y * y > rad2 + 7)
-                        continue;
-                    for (float z = 0; z < currentRadius; z++) {
-                        float ns = noise.getSimplexFractal(x, y, z, w);
-                        if(x * x + y * y + z * z <= rad2 + rng.next(4) - 16 * (ns + 1.5f) && ns * 16 + 12 < i) {
-                                boom[i][Math.round(centerX + x)][Math.round(centerY + y)][Math.round(z)] = fireColors[minIntOf(7, 1 + expandLength - i) >> 1];
-                        }
-                    }
-                }
-            }
-        }
-        float startLift = zSize * 0.125f;
-        float currentLift = startLift;
-        startRadius = currentRadius;
-        maxRadius = Math.min(centerX, centerY) * 1.1f - 1;
-        for (int j = 0, i = expandLength; j < riseLength && i < frames; j++, i++, w += 0.125f) {
-            currentRadius = MathUtils.lerp(startRadius, maxRadius, (float) j / riseLength);
-            rad2 = currentRadius * currentRadius * 0.875f;
-            currentLift = MathUtils.lerp(startLift, zSize * 0.4f, (float) j / riseLength);
-            for (float x = -currentRadius; x <= currentRadius; x++) {
-                for (float y = -currentRadius; y <= currentRadius; y++) {
-                    for (float z = currentRadius * -0.875f; z < currentRadius && z + 0.5f + currentLift < zSize; z++) {
-                        float ns = noise.getSimplexFractal(x, y, z, w);
-                        if(z + currentLift >= 0 && x * x + y * y + z * z <= rad2 + rng.next(4) - 16 * (ns + 1.5f) && ns * 16 + 11 < i)
-                        {
-                            boom[i][Math.round(centerX + x)][Math.round(centerY + y)][Math.round(z + currentLift)] = fireColors[Math.round(NumberTools.formCurvedFloat(rng.nextInt()) * 1.6f + 1.5f + 0.1f * j)];
-                        }
-                    }
-                }
-            }
-        }
-        startLift = currentLift;
-        //startRadius = currentRadius;
-        for (int j = 0, i = expandLength + riseLength; i < frames; j++, i++, w += 0.125f) {
-            currentLift = MathUtils.lerp(startLift, zSize * 0.7f, (float) j / smokeLength);
-            currentRadius = maxRadius;//MathUtils.lerp(startRadius, maxRadius, (j + 1f) / smokeLength);
-            rad2 = currentRadius * currentRadius * 0.875f;
-            for (float x = -currentRadius; x <= currentRadius; x++) {
-                for (float y = -currentRadius; y <= currentRadius; y++) {
-                    for (float z = -currentRadius + 0.15f * j * (float) Math.sqrt(x * x + y * y); z + 0.5f + currentLift < zSize; z++) {
-                        float ns = noise.getSimplexFractal(x, y, z, w);
-                        if(z + currentLift >= 0 && x * x + y * y + z * z * 0.9f <= rad2 + rng.next(4) - 16 * (ns + 1.5f) && ns * 512 + 230 < 11 * smokeLength - i * 7)
-                        {
-                            boom[i][MathUtils.clamp(Math.round(centerX + x), 0, xSize-1)][MathUtils.clamp(Math.round(centerY + y), 0, ySize-1)][MathUtils.clamp(Math.round(z + currentLift), 0, zSize-1)] = fireColors[
-                                    Math.min(4, Math.round(NumberTools.formCurvedFloat(rng.nextInt()) * 1.4f + 3.45f + 0.2f * (j - smokeLength)))
-                                    //maxIntOf(4, 5 + j)
-                                    ];
-                        }
-                    }
-                }
-            }
-        }
-        rng.setState(sa, sb);
-        return boom;
     }
 
 }

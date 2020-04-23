@@ -79,16 +79,9 @@ public class SlopeBoxTest extends ApplicationAdapter {
 //        } catch (FileNotFoundException e) {
 //            voxels = maker.shipLargeNoiseColorized();
 //        }
+//        voxels = maker.blobLargeRandom();
         voxels = maker.shipLargeSmoothColorized();
         seq = new SlopeBox(voxels);
-//        chaos = new ChaoticFetch(maker.rng.nextLong(), (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 1);
-//        ship = new TurnModel().set(
-////                new ReplaceFetch(ColorFetch.color((byte) 0), (byte) 1)
-////                .add(new PaintFetch(chaos, true)).model(
-//                new ArrayModel(voxels));
-////        model = new TurnModel().set(model());
-//        model = new TurnModel().set(ship);
-//        model.setDuration(16);
         Gdx.input.setInputProcessor(inputProcessor());
     }
 
@@ -155,6 +148,7 @@ public class SlopeBoxTest extends ApplicationAdapter {
             public boolean keyDown(int keycode) {
                 switch (keycode) {
                     case Input.Keys.P:
+//                        Tools3D.deepCopyInto(maker.blobLargeRandom(), voxels);
                         Tools3D.deepCopyInto(maker.shipLargeSmoothColorized(), voxels);
                         Tools3D.deepCopyInto(voxels, seq.data[0]);
                         Tools3D.fill(seq.data[1], -1);
