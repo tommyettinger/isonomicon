@@ -198,7 +198,16 @@ public class SlopeBox {
     }
     
     public static final double[][] SHAPES = new double[256][16];
+    public static final byte[] CW = new byte[256];
+    ///////////////////////////////////////  0    1    2    3    4    5    6    7    8    9    A    B    C    D    E    F
+    private static final int[] CW_SMALL = {0x0, 0x2, 0x8, 0xA, 0x1, 0x3, 0x9, 0xB, 0x4, 0x6, 0xC, 0xE, 0x5, 0x7, 0xD, 0xF};
     static {
+        for (int outer = 0, i = 0, o; outer < 16; outer++) {
+            o = CW_SMALL[outer] << 4;
+            for (int inner = 0; inner < 16; inner++) {
+                CW[i++] = (byte)(o | CW_SMALL[inner]);
+            }
+        }
 //                5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,
         Arrays.fill(SHAPES, new double[]{ // all default to being empty
                 7.0,7.0,7.0,7.0,
@@ -360,14 +369,36 @@ public class SlopeBox {
                 2.0,2.0,1.0,1.0,
                 2.0,2.0,1.0,1.0};
     }
-
+    
+    public SlopeBox clockwise(){
+        final int sizeX = sizeX()-1, sizeY = sizeY()-1, sizeZ = sizeZ()-1, halfSizeX = sizeX+1 >> 1, halfSizeY = sizeY+1 >> 1;
+        byte c, s;
+        for (int x = 0; x < halfSizeX; x++) {
+            for (int y = 0; y < halfSizeY; y++) {
+                for (int z = 0; z < sizeZ; z++) {
+                    c = data[0][x][y][z];
+                    data[0][x][y][z] = data[0][y][sizeX - x][z];
+                    data[0][y][sizeX - x][z] = data[0][sizeX - x][sizeY - y][z];
+                    data[0][sizeX - x][sizeY - y][z] = data[0][sizeY - y][x][z];
+                    data[0][sizeY - y][x][z] = c;
+                    s = data[1][x][y][z];
+                    data[1][x][y][z] = CW[255&data[1][y][sizeX - x][z]];
+                    data[1][y][sizeX - x][z] = CW[255&data[1][sizeX - x][sizeY - y][z]];
+                    data[1][sizeX - x][sizeY - y][z] = CW[255&data[1][sizeY - y][x][z]];
+                    data[1][sizeY - y][x][z] = CW[255&s];
+                }
+            }
+        }
+        return this;
+    }
+    
     public static Pixmap drawIso(SlopeBox seq, VoxelPixmapRenderer renderer) {
-        // To move one x+ in voxels is x + 2, y - 2 in pixels.
-        // To move one x- in voxels is x - 2, y + 2 in pixels.
-        // To move one y+ in voxels is x + 2, y + 2 in pixels.
-        // To move one y- in voxels is x - 2, y - 2 in pixels.
-        // To move one z+ in voxels is y + 4 in pixels.
-        // To move one z- in voxels is y - 4 in pixels.
+        // To move one x+ in voxels is x + 2, y - 1 in pixels.
+        // To move one x- in voxels is x - 2, y + 1 in pixels.
+        // To move one y+ in voxels is x - 2, y - 1 in pixels.
+        // To move one y- in voxels is x + 2, y + 1 in pixels.
+        // To move one z+ in voxels is y + 3 in pixels.
+        // To move one z- in voxels is y - 3 in pixels.
         final int sizeX = seq.sizeX(), sizeY = seq.sizeY(), sizeZ = seq.sizeZ(),
                 pixelWidth = (Math.max(seq.sizeX(), Math.max(seq.sizeY(), seq.sizeZ()))) * 4 + 2,
                 pixelHeight = (Math.max(seq.sizeX(), seq.sizeY()) + seq.sizeZ() * 3) + 2;

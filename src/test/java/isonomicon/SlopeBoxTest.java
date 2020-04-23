@@ -161,8 +161,8 @@ public class SlopeBoxTest extends ApplicationAdapter {
                     case Input.Keys.F: // fringe, affects outline/edge
                         pixmapRenderer.outline = !pixmapRenderer.outline;
                         break;
-                    case Input.Keys.T: // try again
-
+                    case Input.Keys.R: // rotate
+                        seq.clockwise();
                         break;
                     case Input.Keys.A:
                         if (UIUtils.shift())
