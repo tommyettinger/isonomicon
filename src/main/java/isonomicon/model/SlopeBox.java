@@ -368,9 +368,6 @@ public class SlopeBox {
         // To move one y- in voxels is x - 2, y - 2 in pixels.
         // To move one z+ in voxels is y + 4 in pixels.
         // To move one z- in voxels is y - 4 in pixels.
-        if(seq instanceof ITemporal) {
-            renderer.color().time(((ITemporal) seq).frame());
-        }
         final int sizeX = seq.sizeX(), sizeY = seq.sizeY(), sizeZ = seq.sizeZ(),
                 pixelWidth = (Math.max(seq.sizeX(), Math.max(seq.sizeY(), seq.sizeZ()))) * 4 + 2,
                 pixelHeight = (Math.max(seq.sizeX(), seq.sizeY()) + seq.sizeZ() * 3) + 2;

@@ -185,7 +185,7 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
             return AURORA_RAMPS[voxel & 0xFF][2];
         }
 
-        private int[][] RAMP_VALUES = new int[][]{
+        private final int[][] RAMP_VALUES = new int[][]{
                 {0x00000000, 0x00000000, 0x00000000, 0x00000000},
                 {0x000000FF, 0x000000FF, 0x010101FF, 0x010101FF},
                 {0x070707FF, 0x0D0D0DFF, 0x131313FF, 0x1B1B1BFF},

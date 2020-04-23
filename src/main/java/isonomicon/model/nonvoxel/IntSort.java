@@ -135,9 +135,9 @@ public final class IntSort {
 		} while (nRemaining != 0);
 
 		// Merge all remaining runs to complete sort
-		if (DEBUG) assert lo == hi;
+		assert !DEBUG || lo == hi;
 		mergeForceCollapse();
-		if (DEBUG) assert stackSize == 1;
+		assert !DEBUG || stackSize == 1;
 
 		this.a = null;
 		this.c = null;
@@ -222,9 +222,9 @@ public final class IntSort {
 		} while (nRemaining != 0);
 
 		// Merge all remaining runs to complete sort
-		if (DEBUG) assert lo == hi;
+		assert !DEBUG || lo == hi;
 		ts.mergeForceCollapse();
-		if (DEBUG) assert ts.stackSize == 1;
+		assert !DEBUG || ts.stackSize == 1;
 	}
 
 	/** Sorts the specified portion of the specified array using a binary insertion sort. This is the best method for sorting small
@@ -240,7 +240,7 @@ public final class IntSort {
 	 * @param c comparator to used for the sort */
 	@SuppressWarnings("fallthrough")
 	private static void binarySort (int[] a, int lo, int hi, int start, IntComparator c) {
-		if (DEBUG) assert lo <= start && start <= hi;
+		assert !DEBUG || lo <= start && start <= hi;
 		if (start == lo) start++;
 		for (; start < hi; start++) {
 			int pivot = a[start];
@@ -248,7 +248,7 @@ public final class IntSort {
 			// Set left (and right) to the index where a[start] (pivot) belongs
 			int left = lo;
 			int right = start;
-			if (DEBUG) assert left <= right;
+			assert !DEBUG || left <= right;
 			/*
 			 * Invariants: pivot >= all in [lo, left). pivot < all in [right, start).
 			 */
@@ -259,7 +259,7 @@ public final class IntSort {
 				else
 					left = mid + 1;
 			}
-			if (DEBUG) assert left == right;
+			assert !DEBUG || left == right;
 
 			/*
 			 * The invariants still hold: pivot >= all in [lo, left) and pivot < all in [left, start), so pivot belongs at left. Note
@@ -301,7 +301,7 @@ public final class IntSort {
 	 * @param c the comparator to used for the sort
 	 * @return the length of the run beginning at the specified position in the specified array */
 	private static int countRunAndMakeAscending (int[] a, int lo, int hi, IntComparator c) {
-		if (DEBUG) assert lo < hi;
+		assert !DEBUG || lo < hi;
 		int runHi = lo + 1;
 		if (runHi == hi) return 1;
 
@@ -346,7 +346,7 @@ public final class IntSort {
 	 * @param n the length of the array to be sorted
 	 * @return the length of the minimum run to be merged */
 	private static int minRunLength (int n) {
-		if (DEBUG) assert n >= 0;
+		assert !DEBUG || n >= 0;
 		int r = 0; // Becomes 1 if any 1 bits are shifted off
 		while (n >= MIN_MERGE) {
 			r |= (n & 1);
@@ -411,16 +411,16 @@ public final class IntSort {
 	 * 
 	 * @param i stack index of the first of the two runs to merge */
 	private void mergeAt (int i) {
-		if (DEBUG) assert stackSize >= 2;
-		if (DEBUG) assert i >= 0;
-		if (DEBUG) assert i == stackSize - 2 || i == stackSize - 3;
+		assert !DEBUG || stackSize >= 2;
+		assert !DEBUG || i >= 0;
+		assert !DEBUG || i == stackSize - 2 || i == stackSize - 3;
 
 		int base1 = runBase[i];
 		int len1 = runLen[i];
 		int base2 = runBase[i + 1];
 		int len2 = runLen[i + 1];
-		if (DEBUG) assert len1 > 0 && len2 > 0;
-		if (DEBUG) assert base1 + len1 == base2;
+		assert !DEBUG || len1 > 0 && len2 > 0;
+		assert !DEBUG || base1 + len1 == base2;
 
 		/*
 		 * Record the length of the combined runs; if i is the 3rd-last run now, also slide over the last run (which isn't involved
@@ -438,7 +438,7 @@ public final class IntSort {
 		 * place).
 		 */
 		int k = gallopRight(a[base2], a, base1, len1, 0, c);
-		if (DEBUG) assert k >= 0;
+		assert !DEBUG || k >= 0;
 		base1 += k;
 		len1 -= k;
 		if (len1 == 0) return;
@@ -448,7 +448,7 @@ public final class IntSort {
 		 * place).
 		 */
 		len2 = gallopLeft(a[base1 + len1 - 1], a, base2, len2, len2 - 1, c);
-		if (DEBUG) assert len2 >= 0;
+		assert !DEBUG || len2 >= 0;
 		if (len2 == 0) return;
 
 		// Merge remaining runs, using tmp array with min(len1, len2) elements
@@ -472,7 +472,7 @@ public final class IntSort {
 	 *         + n] is infinity. In other words, key belongs at index b + k; or in other words, the first k elements of a should
 	 *         precede key, and the last n - k should follow it. */
 	private static int gallopLeft (int key, int[] a, int base, int len, int hint, IntComparator c) {
-		if (DEBUG) assert hint >= 0 && hint < len;
+		assert !DEBUG || hint >= 0 && hint < len;
 		int lastOfs = 0;
 		int ofs = 1;
 		if (c.compare(key, a[base + hint]) > 0) {
@@ -505,7 +505,7 @@ public final class IntSort {
 			lastOfs = hint - ofs;
 			ofs = hint - tmp;
 		}
-		if (DEBUG) assert -1 <= lastOfs && lastOfs < ofs && ofs <= len;
+		assert !DEBUG || -1 <= lastOfs && lastOfs < ofs && ofs <= len;
 
 		/*
 		 * Now a[base+lastOfs] < key <= a[base+ofs], so key belongs somewhere to the right of lastOfs but no farther right than ofs.
@@ -520,7 +520,7 @@ public final class IntSort {
 			else
 				ofs = m; // key <= a[base + m]
 		}
-		if (DEBUG) assert lastOfs == ofs; // so a[base + ofs - 1] < key <= a[base + ofs]
+		assert !DEBUG || lastOfs == ofs; // so a[base + ofs - 1] < key <= a[base + ofs]
 		return ofs;
 	}
 
@@ -536,7 +536,7 @@ public final class IntSort {
 	 * @param c the comparator used to order the range, and to search
 	 * @return the int k, 0 <= k <= n such that a[b + k - 1] <= key < a[b + k] */
 	private static int gallopRight (int key, int[] a, int base, int len, int hint, IntComparator c) {
-		if (DEBUG) assert hint >= 0 && hint < len;
+		assert !DEBUG || hint >= 0 && hint < len;
 
 		int ofs = 1;
 		int lastOfs = 0;
@@ -570,7 +570,7 @@ public final class IntSort {
 			lastOfs += hint;
 			ofs += hint;
 		}
-		if (DEBUG) assert -1 <= lastOfs && lastOfs < ofs && ofs <= len;
+		assert !DEBUG || -1 <= lastOfs && lastOfs < ofs && ofs <= len;
 
 		/*
 		 * Now a[b + lastOfs] <= key < a[b + ofs], so key belongs somewhere to the right of lastOfs but no farther right than ofs.
@@ -585,7 +585,7 @@ public final class IntSort {
 			else
 				lastOfs = m + 1; // a[b + m] <= key
 		}
-		if (DEBUG) assert lastOfs == ofs; // so a[b + ofs - 1] <= key < a[b + ofs]
+		assert !DEBUG || lastOfs == ofs; // so a[b + ofs - 1] <= key < a[b + ofs]
 		return ofs;
 	}
 
@@ -601,7 +601,7 @@ public final class IntSort {
 	 * @param base2 index of first element in second run to be merged (must be aBase + aLen)
 	 * @param len2 length of second run to be merged (must be > 0) */
 	private void mergeLo (int base1, int len1, int base2, int len2) {
-		if (DEBUG) assert len1 > 0 && len2 > 0 && base1 + len1 == base2;
+		assert !DEBUG || len1 > 0 && len2 > 0 && base1 + len1 == base2;
 
 		// Copy first run into temp array
 		int[] a = this.a; // For performance
@@ -635,7 +635,7 @@ public final class IntSort {
 			 * Do the straightforward thing until (if ever) one run starts winning consistently.
 			 */
 			do {
-				if (DEBUG) assert len1 > 1 && len2 > 0;
+				assert !DEBUG || len1 > 1 && len2 > 0;
 				if (c.compare(a[cursor2], tmp[cursor1]) < 0) {
 					a[dest++] = a[cursor2++];
 					count2++;
@@ -654,7 +654,7 @@ public final class IntSort {
 			 * ever) neither run appears to be winning consistently anymore.
 			 */
 			do {
-				if (DEBUG) assert len1 > 1 && len2 > 0;
+				assert !DEBUG || len1 > 1 && len2 > 0;
 				count1 = gallopRight(a[cursor2], tmp, cursor1, len1, 0, c);
 				if (count1 != 0) {
 					System.arraycopy(tmp, cursor1, a, dest, count1);
@@ -685,14 +685,14 @@ public final class IntSort {
 		this.minGallop = minGallop < 1 ? 1 : minGallop; // Write back to field
 
 		if (len1 == 1) {
-			if (DEBUG) assert len2 > 0;
+			assert !DEBUG || len2 > 0;
 			System.arraycopy(a, cursor2, a, dest, len2);
 			a[dest + len2] = tmp[cursor1]; // Last elt of run 1 to end of merge
 		} else if (len1 == 0) {
 			throw new IllegalArgumentException("Comparison method violates its general contract!");
 		} else {
-			if (DEBUG) assert len2 == 0;
-			if (DEBUG) assert len1 > 1;
+			assert !DEBUG || len2 == 0;
+			assert !DEBUG || len1 > 1;
 			System.arraycopy(tmp, cursor1, a, dest, len1);
 		}
 	}
@@ -705,7 +705,7 @@ public final class IntSort {
 	 * @param base2 index of first element in second run to be merged (must be aBase + aLen)
 	 * @param len2 length of second run to be merged (must be > 0) */
 	private void mergeHi (int base1, int len1, int base2, int len2) {
-		if (DEBUG) assert len1 > 0 && len2 > 0 && base1 + len1 == base2;
+		assert !DEBUG || len1 > 0 && len2 > 0 && base1 + len1 == base2;
 
 		// Copy second run into temp array
 		int[] a = this.a; // For performance
@@ -741,7 +741,7 @@ public final class IntSort {
 			 * Do the straightforward thing until (if ever) one run appears to win consistently.
 			 */
 			do {
-				if (DEBUG) assert len1 > 0 && len2 > 1;
+				assert !DEBUG || len1 > 0 && len2 > 1;
 				if (c.compare(tmp[cursor2], a[cursor1]) < 0) {
 					a[dest--] = a[cursor1--];
 					count1++;
@@ -760,7 +760,7 @@ public final class IntSort {
 			 * ever) neither run appears to be winning consistently anymore.
 			 */
 			do {
-				if (DEBUG) assert len1 > 0 && len2 > 1;
+				assert !DEBUG || len1 > 0 && len2 > 1;
 				count1 = len1 - gallopRight(tmp[cursor2], a, base1, len1, len1 - 1, c);
 				if (count1 != 0) {
 					dest -= count1;
@@ -791,7 +791,7 @@ public final class IntSort {
 		this.minGallop = minGallop < 1 ? 1 : minGallop; // Write back to field
 
 		if (len2 == 1) {
-			if (DEBUG) assert len1 > 0;
+			assert !DEBUG || len1 > 0;
 			dest -= len1;
 			cursor1 -= len1;
 			System.arraycopy(a, cursor1 + 1, a, dest + 1, len1);
@@ -799,8 +799,8 @@ public final class IntSort {
 		} else if (len2 == 0) {
 			throw new IllegalArgumentException("Comparison method violates its general contract!");
 		} else {
-			if (DEBUG) assert len1 == 0;
-			if (DEBUG) assert len2 > 0;
+			assert !DEBUG || len1 == 0;
+			assert !DEBUG || len2 > 0;
 			System.arraycopy(tmp, 0, a, dest - (len2 - 1), len2);
 		}
 	}

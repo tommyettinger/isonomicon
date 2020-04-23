@@ -19,8 +19,8 @@ import java.io.Serializable;
  */
 public class TurnQuaternion implements Serializable {
     private static final long serialVersionUID = 1L;
-    private static TurnQuaternion tmp1 = new TurnQuaternion(0, 0, 0, 0);
-    private static TurnQuaternion tmp2 = new TurnQuaternion(0, 0, 0, 0);
+    private static final TurnQuaternion tmp1 = new TurnQuaternion(0, 0, 0, 0);
+    private static final TurnQuaternion tmp2 = new TurnQuaternion(0, 0, 0, 0);
     
     public float x;
     public float y;

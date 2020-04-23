@@ -149,10 +149,10 @@ public class LittleEndianDataInputStream extends InputStream implements DataInpu
         d.close();
     }
 
-    private DataInputStream d; // to get at high level readFully methods of
+    private final DataInputStream d; // to get at high level readFully methods of
     // DataInputStream
-    private InputStream in; // to get at the low-level read methods of
+    private final InputStream in; // to get at the low-level read methods of
     // InputStream
-    private byte[] w; // work array for buffering input
+    private final byte[] w; // work array for buffering input
 }
 

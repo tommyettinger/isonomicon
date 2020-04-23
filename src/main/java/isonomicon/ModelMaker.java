@@ -6,8 +6,8 @@ import isonomicon.model.color.Colorizer;
 
 import java.io.InputStream;
 
-import static squidpony.squidmath.GWTRNG.determineBounded;
-import static squidpony.squidmath.GWTRNG.determineInt;
+import static squidpony.squidmath.SilkRNG.determineBounded;
+import static squidpony.squidmath.SilkRNG.determineInt;
 import static squidpony.squidmath.MathExtras.clamp;
 import static squidpony.squidmath.IntPointHash.hash32;
 import static squidpony.squidmath.IntPointHash.hashAll;
@@ -15,7 +15,7 @@ import static squidpony.squidmath.IntPointHash.hashAll;
  * Created by Tommy Ettinger on 11/4/2017.
  */
 public class ModelMaker {
-    public GWTRNG rng;
+    public SilkRNG rng;
     private byte[][][] ship, shipLarge;
     private int xSize, ySize, zSize;
 
@@ -23,15 +23,19 @@ public class ModelMaker {
 
     public ModelMaker()
     {
-        this((long)((Math.random() - 0.5) * 4.503599627370496E15) ^ (long)((Math.random() - 0.5) * 2.0 * -9.223372036854776E18), Colorizer.SplayColorizer);
+        this((int)((Math.random() - 0.5) * 0x1p32), (int)((Math.random() - 0.5) * 0x1p32), Colorizer.ZigguratColorizer);
     }
     public ModelMaker(long seed)
     {
-        this(seed, Colorizer.SplayColorizer);
+        this(seed, Colorizer.ZigguratColorizer);
     }
     public ModelMaker(long seed, Colorizer colorizer)
     {
-        rng = new GWTRNG(seed);
+        this((int)seed, (int)(seed >>> 32), colorizer);
+    }
+    public ModelMaker(int seedA, int seedB, Colorizer colorizer)
+    {
+        rng = new SilkRNG(seedA, seedB);
         InputStream is = Gdx.files.internal("vox/ship.vox").read();
         ship = VoxIO.readVox(is);
         if(ship == null) ship = new byte[12][12][8];
@@ -364,8 +368,8 @@ public class ModelMaker {
         final int halfY = ySize >> 1, smallYSize = ySize - 1;
         int color;
         int seed = rng.nextInt(), current, paint;
-        final byte mainColor = colorizer.darken(colorizer.getReducer().paletteMapping[(int) seed & 0x7FFF]), // bottom 15 bits
-                highlightColor = colorizer.brighten(colorizer.getReducer().paletteMapping[(int) seed >>> 17]), // top 15 of 32 bits
+        final byte mainColor = colorizer.darken(colorizer.getReducer().paletteMapping[seed & 0x7FFF]), // bottom 15 bits
+                highlightColor = colorizer.brighten(colorizer.getReducer().paletteMapping[seed >>> 17]), // top 15 of 32 bits
                 cockpitColor = colorizer.darken(colorizer.reduce((0x20 + determineBounded(seed + 0x11111, 0x60) << 24)
                         | (0xA0 + determineBounded(seed + 0x22222, 0x60) << 16)
                         | (0xC8 + determineBounded(seed + 0x33333, 0x38) << 8) | 0xFF));

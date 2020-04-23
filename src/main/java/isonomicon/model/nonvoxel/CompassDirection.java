@@ -259,7 +259,7 @@ public enum CompassDirection {
         }
     }
 
-    private CompassDirection(int x, int y) {
+    CompassDirection (int x, int y) {
         this.deltaX = x;
         this.deltaY = y;
     }

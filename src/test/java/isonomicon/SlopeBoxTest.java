@@ -62,11 +62,10 @@ public class SlopeBoxTest extends ApplicationAdapter {
 //        colorizer = Colorizer.AzurestarColorizer;
 //        colorizer = Colorizer.SplayColorizer;
         colorizer = Colorizer.ZigguratColorizer;
-        voxelColor = new VoxelColor().colorizer(colorizer);
-        pixmapRenderer = new VoxelPixmapRenderer().set(new Pixmap(512, 512, Pixmap.Format.RGBA8888)).set(voxelColor);
+        pixmapRenderer = new VoxelPixmapRenderer().pixmap(new Pixmap(512, 512, Pixmap.Format.RGBA8888)).colorizer(colorizer);
         pixmapRenderer.easing = false;
         pmTexture = new Texture(512, 512, Pixmap.Format.RGBA8888);
-        maker = new ModelMaker(-123456789, colorizer);
+        maker = new ModelMaker(-123456789, 1234567890, colorizer);
 //        try {
 //            box = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("Aurora/dumbcube.vox")));
 //        } catch (Exception e) {
@@ -172,24 +171,24 @@ public class SlopeBoxTest extends ApplicationAdapter {
                     case Input.Keys.A:
                         if (UIUtils.shift())
                         {
-                            pixmapRenderer.color().colorizer(Colorizer.AuroraBonusColorizer);
+                            pixmapRenderer.colorizer(Colorizer.AuroraBonusColorizer);
                             maker.setColorizer(Colorizer.AuroraBonusColorizer);
                         }
                         else
                         {
-                            pixmapRenderer.voxelColor().colorizer(Colorizer.AuroraColorizer);
+                            pixmapRenderer.colorizer(Colorizer.AuroraColorizer);
                             maker.setColorizer(Colorizer.AuroraColorizer);
                         }
                         break;
                     case Input.Keys.S: // smaller palette, 64 colors
                         if (UIUtils.shift())
                         {
-                            pixmapRenderer.color().colorizer(Colorizer.AzurestarColorizer);
+                            pixmapRenderer.colorizer(Colorizer.AzurestarColorizer);
                             maker.setColorizer(Colorizer.AzurestarColorizer);
                         }
                         else 
                         {
-                            pixmapRenderer.color().colorizer(Colorizer.SplayColorizer);
+                            pixmapRenderer.colorizer(Colorizer.SplayColorizer);
                             maker.setColorizer(Colorizer.SplayColorizer);
                         }
                         break;
