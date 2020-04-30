@@ -1,7 +1,6 @@
-package isonomicon;
+package isonomicon.io;
 
 import squidpony.annotation.GwtIncompatible;
-import isonomicon.model.nonvoxel.LittleEndianDataInputStream;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;

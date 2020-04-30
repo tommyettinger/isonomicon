@@ -1,8 +1,7 @@
-package isonomicon.model;
+package isonomicon.physical;
 
 import com.badlogic.gdx.graphics.Pixmap;
-import isonomicon.Tools3D;
-import isonomicon.view.render.VoxelPixmapRenderer;
+import isonomicon.visual.VoxelPixmapRenderer;
 
 import java.util.Arrays;
 
@@ -139,7 +138,7 @@ public class SlopeBox {
 //            System.out.printf("%02X, ", i);
 //            if((++w & 7) == 0) System.out.println();
 //        }
-        System.out.println("\n");
+//        System.out.println("\n");
         for (int x = 0; x <= limitX; x++) {
             for (int y = 0; y <= limitY; y++) {
                 PER_CELL:
@@ -197,6 +196,24 @@ public class SlopeBox {
         return this;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SlopeBox slopeBox = (SlopeBox) o;
+
+        return Arrays.deepEquals(data, slopeBox.data);
+    }
+
+    @Override
+    public int hashCode() {
+        return Tools3D.hash(data[0]) * 421 ^ Tools3D.hash(data[1]) * 307;
+    }
+    public long hash64() {
+        return Tools3D.hash64(data[0]) * 0xBBE0563303A4615FL ^ Tools3D.hash64(data[1]) * 0xC6D1D6C8ED0C9631L;
+    }
+
     /**
      * One shape per slope type, where a shape is a 4x4 grid of doubles ranging from 0.0 (dark) to 4.0 (white) or 7+ for transparent.
      * Cells in a shape can be between integer values, like 1.5, which will dither between 1 (dim) and 2 (normal).
@@ -204,8 +221,8 @@ public class SlopeBox {
     public static final double[][] SHAPES = new double[256][16];
     /**
      * One side per slope type, where a side is a 4x4 grid of ints that denote what side information part of a shape has (see {@link #SHAPES}).
-     * 0 denotes non-facing, 1 denotes outline or very hard-to-see non-facing, 2 denotes the brightly-lit side (the left of the image, before
-     * flipping), and 3 denotes the dimly-lit side (the right, before flipping). 7 denotes transparent.
+     * 0 denotes transparent, 1 denotes non-facing (whatever the color is, flipping doesn't change it), 2 denotes the brightly-lit side
+     * (the left of the image, before flipping), and 3 denotes the dimly-lit side (the right, before flipping).
      */
     public static final int[][] SIDES = new int[256][16];
     public static final byte[] CW = new byte[256];
@@ -293,8 +310,7 @@ public class SlopeBox {
                 7.3,7.3,7.3,7.3,
                 7.3,2.4,2.4,7.3,
                 2.4,2.4,2.4,2.4,
-                2.4,2.4,2.4,2.4
-        };
+                2.4,2.4,2.4,2.4};
         SHAPES[0x2B] = new double[]{ // small slope centered on bottom right corner
                 7.3,7.3,7.3,7.3,
                 7.3,7.3,7.3,1.0,
@@ -379,162 +395,162 @@ public class SlopeBox {
                 2.0,2.0,1.0,1.0};
 
         // side info for flip-rotation (to save on atlas space)
-        Arrays.fill(SIDES, new int[]{ // all default to being empty
-            7,7,7,7,
-            7,7,7,7,
-            7,7,7,7,
-            7,7,7,7});
+//        Arrays.fill(SIDES, new int[]{ // all default to being empty
+//            0,0,0,0,
+//            0,0,0,0,
+//            0,0,0,0,
+//            0,0,0,0});
         // wedges with two sides solid
         SIDES[0x77] = new int[]{ //wedge facing camera
-            0,0,0,0,
-            0,0,0,0,
-            0,0,0,0,
-            0,0,0,0};
+            1,1,1,1,
+            1,1,1,1,
+            1,1,1,1,
+            1,1,1,1};
         SIDES[0xBB] = new int[]{ //wedge missing left half
-            7,7,0,0,
-            7,7,3,3,
-            7,7,3,3,
-            7,7,3,3};
+            0,0,1,1,
+            0,0,3,3,
+            0,0,3,3,
+            0,0,3,3};
         SIDES[0xDD] = new int[]{ //wedge missing right half
-            0,0,7,7,
-            2,2,7,7,
-            2,2,7,7,
-            2,2,7,7};
+            1,1,0,0,
+            2,2,0,0,
+            2,2,0,0,
+            2,2,0,0};
         SIDES[0xEE] = new int[]{ //wedge missing back; usually doesn't render
-            7,7,7,7,
+            0,0,0,0,
             2,2,3,3,
             2,2,3,3,
             2,2,3,3};
 
         // ramps with the bottom solid
         SIDES[0x3F] = new int[]{ // ramp from front left up to back right
-            7,7,2,2,
-            7,2,2,2,
+            0,0,2,2,
+            0,2,2,2,
             2,2,2,3,
             2,2,2,3};
         SIDES[0x5F] = new int[]{ // ramp from front right up to back left
-            3,3,7,7,
-            3,3,3,7,
+            3,3,0,0,
+            3,3,3,0,
             2,3,3,3,
             2,3,3,3};
         SIDES[0xAF] = new int[]{ // ramp from back left up to front right
-            7,7,7,7,
-            7,2,3,3,
+            0,0,0,0,
+            0,2,3,3,
             2,2,3,3,
-            7,2,3,3};
+            0,2,3,3};
         SIDES[0xCF] = new int[]{ // ramp from back right up to front left
-            7,7,7,7,
-            2,2,3,7,
+            0,0,0,0,
+            2,2,3,0,
             2,2,3,3,
-            2,2,3,7};
+            2,2,3,0};
 
         // ramps with the top solid
         SIDES[0xF3] = new int[]{ // ramp from front left down to back right
-            0,0,0,0,
-            7,7,3,3,
-            7,7,7,3,
-            7,7,7,7};
+            1,1,1,1,
+            0,0,3,3,
+            0,0,0,3,
+            0,0,0,0};
         SIDES[0xF5] = new int[]{ // ramp from front right down to back left
-            0,0,0,0,
-            2,2,7,7,
-            2,7,7,7,
-            7,7,7,7};
+            1,1,1,1,
+            2,2,0,0,
+            2,0,0,0,
+            0,0,0,0};
         SIDES[0xFA] = new int[]{ // ramp from back left down to front right
-            0,0,0,0,
+            1,1,1,1,
             2,2,3,3,
-            7,2,3,3,
-            7,7,3,3};
+            0,2,3,3,
+            0,0,3,3};
         SIDES[0xFC] = new int[]{ // ramp from back right down to front left
-            0,0,0,0,
+            1,1,1,1,
             2,2,3,3,
-            2,2,3,7,
-            2,2,7,7};
+            2,2,3,0,
+            2,2,0,0};
         // small slopes with four vertices truncated
         SIDES[0x17] = new int[]{ // small slope centered on back bottom center corner
-            7,7,7,7,
-            7,0,0,7,
             0,0,0,0,
-            0,0,0,0
+            0,1,1,0,
+            1,1,1,1,
+            1,1,1,1
         };
         SIDES[0x2B] = new int[]{ // small slope centered on bottom right corner
-            7,7,7,7,
-            7,7,7,3,
-            7,7,3,3,
-            7,7,3,3};
+            0,0,0,0,
+            0,0,0,3,
+            0,0,3,3,
+            0,0,3,3};
         SIDES[0x4D] = new int[]{ // small slope centered on bottom left corner
-            7,7,7,7,
-            2,7,7,7,
-            2,2,7,7,
-            2,2,7,7};
+            0,0,0,0,
+            2,0,0,0,
+            2,2,0,0,
+            2,2,0,0};
         SIDES[0x8E] = new int[]{ // small slope centered on front bottom center corner
-            7,7,7,7,
-            7,7,7,7,
-            7,2,3,7,
+            0,0,0,0,
+            0,0,0,0,
+            0,2,3,0,
             2,2,3,3};
         SIDES[0x71] = new int[]{ // small slope centered on back top center corner
+            1,1,1,1,
+            0,1,1,0,
             0,0,0,0,
-            7,1,1,7,
-            7,7,7,7,
-            7,7,7,7};
+            0,0,0,0};
         SIDES[0xB2] = new int[]{ // small slope centered on top right corner
-            7,7,0,0,
-            7,7,7,1,
-            7,7,7,7,
-            7,7,7,7};
-        SIDES[0xD4] = new int[]{ // small slope centered on top left corner
-            0,0,7,7,
-            1,7,7,7,
-            7,7,7,7,
-            7,7,7,7};
-        SIDES[0xE8] = new int[]{ // small slope centered on front top center corner
+            0,0,1,1,
+            0,0,0,1,
             0,0,0,0,
-            7,2,3,7,
-            7,7,7,7,
-            7,7,7,7};
+            0,0,0,0};
+        SIDES[0xD4] = new int[]{ // small slope centered on top left corner
+            1,1,0,0,
+            1,0,0,0,
+            0,0,0,0,
+            0,0,0,0};
+        SIDES[0xE8] = new int[]{ // small slope centered on front top center corner
+            1,1,1,1,
+            0,2,3,0,
+            0,0,0,0,
+            0,0,0,0};
         // big slopes with one vertex truncated
         SIDES[0x7F] = new int[]{ // full block minus top front center corner
-            0,0,0,0,
-            0,0,0,0,
-            2,0,0,3,
+            1,1,1,1,
+            1,1,1,1,
+            2,1,1,3,
             2,2,3,3};
         SIDES[0xBF] = new int[]{ // full block minus top left corner
-            7,0,0,0,
-            7,2,3,3,
+            0,1,1,1,
+            0,2,3,3,
             2,2,3,3,
             2,2,3,3};
         SIDES[0xDF] = new int[]{ // full block minus top right corner
-            0,0,0,7,
-            2,2,3,7,
+            1,1,1,0,
+            2,2,3,0,
             2,2,3,3,
             2,2,3,3};
         SIDES[0xEF] = new int[]{ // full block minus top back center corner
-            7,7,7,7,
+            0,0,0,0,
             2,2,3,3,
             2,2,3,3,
             2,2,3,3};
         SIDES[0xF7] = new int[]{ // full block minus bottom front center corner
-            0,0,0,0,
+            1,1,1,1,
             2,2,3,3,
             2,2,3,3,
             1,1,1,1};
         SIDES[0xFB] = new int[]{ // full block minus bottom left corner
-            0,0,0,0,
+            1,1,1,1,
             2,2,3,3,
             1,2,3,3,
-            7,1,3,3};
+            0,1,3,3};
         SIDES[0xFD] = new int[]{ // full block minus bottom right corner
-            0,0,0,0,
+            1,1,1,1,
             2,2,3,3,
             2,2,3,1,
-            2,2,1,7};
+            2,2,1,0};
         SIDES[0xFE] = new int[]{ // full block minus bottom back center corner; the same as full
-            0,0,0,0,
+            1,1,1,1,
             2,2,3,3,
             2,2,3,3,
             2,2,3,3};
         // the biggest one
         SIDES[0xFF] = new int[]{ // standard full block
-            0,0,0,0,
+            1,1,1,1,
             2,2,3,3,
             2,2,3,3,
             2,2,3,3};

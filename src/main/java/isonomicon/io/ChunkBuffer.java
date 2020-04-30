@@ -1,4 +1,4 @@
-package isonomicon;
+package isonomicon.io;
 
 import squidpony.annotation.GwtIncompatible;
 

@@ -1,4 +1,4 @@
-package isonomicon;
+package isonomicon.physical;
 
 import squidpony.squidmath.FastNoise;
 import squidpony.squidmath.GWTRNG;

@@ -1,4 +1,4 @@
-package isonomicon.model.nonvoxel;
+package isonomicon.io;
 
 import java.io.DataInput;
 import java.io.DataInputStream;
@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Like DataInputStream, but little-endian.
+ * Like DataInputStream, but little-endian, which matches the expected .vox format.
  * Thanks to Peter Franza for this class: https://www.peterfranza.com/2008/09/26/little-endian-input-stream/
  */
 public class LittleEndianDataInputStream extends InputStream implements DataInput {

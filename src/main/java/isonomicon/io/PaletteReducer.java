@@ -1,4 +1,4 @@
-package isonomicon;
+package isonomicon.io;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ByteArray;
 import com.badlogic.gdx.utils.IntIntMap;
 import com.badlogic.gdx.utils.NumberUtils;
+import isonomicon.visual.Coloring;
 import squidpony.squidmath.BlueNoise;
 import squidpony.squidmath.IRNG;
 

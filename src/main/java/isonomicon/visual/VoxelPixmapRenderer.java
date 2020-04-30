@@ -1,8 +1,7 @@
-package isonomicon.view.render;
+package isonomicon.visual;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.utils.IntIntMap;
-import isonomicon.model.color.Colorizer;
 import squidpony.ArrayTools;
 
 /**

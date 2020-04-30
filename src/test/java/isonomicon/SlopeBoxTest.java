@@ -1,10 +1,6 @@
 package isonomicon;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
@@ -17,9 +13,11 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.scenes.scene2d.utils.UIUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import isonomicon.model.SlopeBox;
-import isonomicon.model.color.Colorizer;
-import isonomicon.view.render.VoxelPixmapRenderer;
+import isonomicon.physical.ModelMaker;
+import isonomicon.physical.SlopeBox;
+import isonomicon.physical.Tools3D;
+import isonomicon.visual.Colorizer;
+import isonomicon.visual.VoxelPixmapRenderer;
 
 public class SlopeBoxTest extends ApplicationAdapter {
     public static final int SCREEN_WIDTH = 320;//640;
@@ -57,7 +55,7 @@ public class SlopeBoxTest extends ApplicationAdapter {
 //        colorizer = Colorizer.arbitraryColorizer(Coloring.BLK36);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.UNSEVEN);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.CW_PALETTE);
-//        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.VGA256);
+//        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.JAPANESE_WOODBLOCK);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.FLESURRECT);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.GB_GREEN);
 //        colorizer = Colorizer.FlesurrectColorizer;

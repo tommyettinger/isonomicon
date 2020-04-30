@@ -1,4 +1,4 @@
-package isonomicon.view.render;
+package isonomicon.visual;
 
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 

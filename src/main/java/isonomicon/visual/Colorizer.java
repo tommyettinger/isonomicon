@@ -1,14 +1,13 @@
-package isonomicon.model.color;
+package isonomicon.visual;
 
 import com.badlogic.gdx.math.MathUtils;
 import squidpony.squidmath.IRNG;
-import isonomicon.Coloring;
-import isonomicon.PaletteReducer;
+import isonomicon.io.PaletteReducer;
 
 /**
  * Created by Tommy Ettinger on 1/13/2019.
  */
-public abstract class Colorizer implements IColorizer {
+public abstract class Colorizer {
     private Colorizer() {
 
     }
@@ -80,13 +79,33 @@ public abstract class Colorizer implements IColorizer {
     public int getWaveBit() {
         return 0;
     }
+    /**
+     * @param voxel A color index
+     * @return A brighter version of the voxel color, or the lightest color index in the palette if none is available.
+     */
+    public abstract byte brighten(byte voxel);
+
+    /**
+     * @param voxel A color index
+     * @return A darker version of the same color, or the darkest color index in the palette if none is available.
+     */
+    public abstract byte darken(byte voxel);
+
+    /**
+     * @return An array of main colors as byte indices, chosen for aesthetic reasons as the primary colors to use.
+     */
+    public abstract byte[] mainColors();
+
+    /**
+     * @return An array of grayscale or close-to-grayscale color indices, with the darkest first and lightest last.
+     */
+    public abstract byte[] grayscale();
 
     /**
      * @param voxel      A color index
      * @param brightness An integer representing how many shades brighter (if positive) or darker (if negative) the result should be
      * @return A different shade of the same color
      */
-    @Override
     public byte colorize(byte voxel, int brightness) {
         if (brightness > 0) {
             for (int i = 0; i < brightness; i++) {
@@ -104,7 +123,6 @@ public abstract class Colorizer implements IColorizer {
      * @param color An RGBA8888 color
      * @return The nearest available color index in the palette
      */
-    @Override
     public byte reduce(int color) {
         return reducer.reduceIndex(color);
     }

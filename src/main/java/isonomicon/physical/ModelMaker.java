@@ -1,8 +1,9 @@
-package isonomicon;
+package isonomicon.physical;
 
 import com.badlogic.gdx.Gdx;
+import isonomicon.io.VoxIO;
 import squidpony.squidmath.*;
-import isonomicon.model.color.Colorizer;
+import isonomicon.visual.Colorizer;
 
 import java.io.InputStream;
 

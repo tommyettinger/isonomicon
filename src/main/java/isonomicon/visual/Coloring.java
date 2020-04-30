@@ -1,4 +1,6 @@
-package isonomicon;
+package isonomicon.visual;
+
+import isonomicon.io.PaletteReducer;
 
 import java.nio.charset.StandardCharsets;
 
@@ -883,6 +885,11 @@ public class Coloring {
             0x3C7373FF, 0x558DDEFF, 0x74BAEAFF, 0xF0FAFFFF,
             0xCFB690FF, 0xB67C74FF, 0x845A78FF, 0x555461FF,
             0x746658FF, 0x6B7B89FF, 0x939388FF
+    };
+    
+    public static final int[] JAPANESE_WOODBLOCK = {
+            0x00000000, 0x2B2821FF, 0x624C3CFF, 0xD9AC8BFF, 0xE3CFB4FF, 0x243D5CFF, 0x5D7275FF, 0x5C8B93FF,
+            0xB1A58DFF, 0xB03A48FF, 0xD4804DFF, 0xE0C872FF, 0x3E6958FF,
     };
     
     /**

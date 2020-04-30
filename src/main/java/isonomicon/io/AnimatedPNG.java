@@ -1,4 +1,4 @@
-package isonomicon;
+package isonomicon.io;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;

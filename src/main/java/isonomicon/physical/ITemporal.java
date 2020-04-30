@@ -1,4 +1,4 @@
-package isonomicon.model;
+package isonomicon.physical;
 
 /**
  * An interface to merge the APIs for things that change over time in discrete frames, and have a limited duration.
