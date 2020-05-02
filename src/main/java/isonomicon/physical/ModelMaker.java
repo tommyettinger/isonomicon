@@ -24,11 +24,11 @@ public class ModelMaker {
 
     public ModelMaker()
     {
-        this((int)((Math.random() - 0.5) * 0x1p32), (int)((Math.random() - 0.5) * 0x1p32), Colorizer.ZigguratColorizer);
+        this((int)((Math.random() - 0.5) * 0x1p32), (int)((Math.random() - 0.5) * 0x1p32), Colorizer.ManosColorizer);
     }
     public ModelMaker(long seed)
     {
-        this(seed, Colorizer.ZigguratColorizer);
+        this(seed, Colorizer.ManosColorizer);
     }
     public ModelMaker(long seed, Colorizer colorizer)
     {

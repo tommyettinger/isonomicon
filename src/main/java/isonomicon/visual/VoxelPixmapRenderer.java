@@ -10,7 +10,7 @@ import squidpony.ArrayTools;
 public class VoxelPixmapRenderer {
     protected Pixmap pixmap;
     public int[][] depths, working, render, outlines;
-    protected Colorizer color = Colorizer.ZigguratColorizer;
+    protected Colorizer color = Colorizer.ManosColorizer;
     public boolean easing = false, outline = true;
 
     public Pixmap pixmap() {

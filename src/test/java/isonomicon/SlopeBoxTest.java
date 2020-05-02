@@ -18,6 +18,7 @@ import isonomicon.physical.SlopeBox;
 import isonomicon.physical.Tools3D;
 import isonomicon.visual.Colorizer;
 import isonomicon.visual.VoxelPixmapRenderer;
+import squidpony.squidmath.DiverRNG;
 
 public class SlopeBoxTest extends ApplicationAdapter {
     public static final int SCREEN_WIDTH = 320;//640;
@@ -61,11 +62,11 @@ public class SlopeBoxTest extends ApplicationAdapter {
 //        colorizer = Colorizer.FlesurrectColorizer;
 //        colorizer = Colorizer.AzurestarColorizer;
 //        colorizer = Colorizer.SplayColorizer;
-        colorizer = Colorizer.ZigguratColorizer;
+        colorizer = Colorizer.ManosColorizer;
         pixmapRenderer = new VoxelPixmapRenderer().pixmap(new Pixmap(512, 512, Pixmap.Format.RGBA8888)).colorizer(colorizer);
         pixmapRenderer.easing = false;
         pmTexture = new Texture(512, 512, Pixmap.Format.RGBA8888);
-        maker = new ModelMaker(-123456789, 1234567890, colorizer);
+        maker = new ModelMaker(DiverRNG.randomize(System.currentTimeMillis() >>> 16), colorizer);
 //        try {
 //            box = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("Aurora/dumbcube.vox")));
 //        } catch (Exception e) {
