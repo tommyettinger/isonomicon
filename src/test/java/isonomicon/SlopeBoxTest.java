@@ -64,9 +64,8 @@ public class SlopeBoxTest extends ApplicationAdapter {
 //        colorizer = Colorizer.SplayColorizer;
         colorizer = Colorizer.ManosColorizer;
         pixmapRenderer = new VoxelPixmapRenderer().pixmap(new Pixmap(512, 512, Pixmap.Format.RGBA8888)).colorizer(colorizer);
-        pixmapRenderer.easing = false;
         pmTexture = new Texture(512, 512, Pixmap.Format.RGBA8888);
-        maker = new ModelMaker(DiverRNG.randomize(System.currentTimeMillis() >>> 16), colorizer);
+        maker = new ModelMaker(DiverRNG.randomize(System.currentTimeMillis() >>> 23), colorizer);
 //        try {
 //            box = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("Aurora/dumbcube.vox")));
 //        } catch (Exception e) {
@@ -163,11 +162,11 @@ public class SlopeBoxTest extends ApplicationAdapter {
                     case Input.Keys.R: // rotate
                         seq.clockwise();
                         break;
-                    case Input.Keys.A:
+                    case Input.Keys.A: //  a-z, aurora and ziggurat colorizers
                         if (UIUtils.shift())
                         {
-                            pixmapRenderer.colorizer(Colorizer.AuroraBonusColorizer);
-                            maker.setColorizer(Colorizer.AuroraBonusColorizer);
+                            pixmapRenderer.colorizer(Colorizer.ZigguratColorizer);
+                            maker.setColorizer(Colorizer.ZigguratColorizer);
                         }
                         else
                         {
@@ -183,8 +182,8 @@ public class SlopeBoxTest extends ApplicationAdapter {
                         }
                         else 
                         {
-                            pixmapRenderer.colorizer(Colorizer.SplayColorizer);
-                            maker.setColorizer(Colorizer.SplayColorizer);
+                            pixmapRenderer.colorizer(Colorizer.ManosColorizer);
+                            maker.setColorizer(Colorizer.ManosColorizer);
                         }
                         break;
 //                    case Input.Keys.W: // write

@@ -18,7 +18,6 @@ public class SlopeBox {
         data = new byte[2][][][];
         data[0] = colors;
         data[1] = new byte[colors.length][colors[0].length][colors[0][0].length];
-        Tools3D.fill(data[1], -1);
         putSlopes();
     }
 
@@ -77,13 +76,19 @@ public class SlopeBox {
         return this;
     }
     
+    public SlopeBox clear(){
+        Tools3D.fill(data[0], 0);
+        Tools3D.fill(data[1], 0);
+        return this;
+    }
+    
     public SlopeBox putSlopes(){
 //        BitSet usedSlopes = new BitSet(256);
         final int limitX = sizeX() - 1;
         final int limitY = sizeY() - 1;
         final int limitZ = sizeZ() - 1;
         byte[][][] nextColors = new byte[limitX+1][limitY+1][limitZ+1];
-        byte[][][] nextData = new byte[limitX+1][limitY+1][limitZ+1];
+        byte[][][] nextSlopes = new byte[limitX+1][limitY+1][limitZ+1];
         final int[] neighbors = new int[6];
         for (int x = 0; x <= limitX; x++) {
             for (int y = 0; y <= limitY; y++) {
@@ -100,7 +105,7 @@ public class SlopeBox {
                         if((neighbors[5] = z == limitZ ? 0 : (data[0][x][y][z+1] & 255)) != 0) slope |= 0xF0;
                         if(Integer.bitCount(slope) < 5) // surrounded by empty or next to only one voxel
                         {
-                            nextData[x][y][z] = 0;
+                            nextSlopes[x][y][z] = 0;
                             continue;
                         }
                         int bestIndex = -1;
@@ -111,7 +116,7 @@ public class SlopeBox {
                                 if(neighbors[i] == neighbors[j]){
                                     if((i == bestIndex || j == bestIndex) && neighbors[bestIndex] != 0) {
                                         nextColors[x][y][z] = (byte) neighbors[bestIndex];
-                                        nextData[x][y][z] = (byte) slope;
+                                        nextSlopes[x][y][z] = (byte) slope;
 //                                        usedSlopes.set(slope);
                                         continue PER_CELL;
                                     }
@@ -122,13 +127,13 @@ public class SlopeBox {
                             }
                         }
                         nextColors[x][y][z] = (byte) neighbors[bestIndex];
-                        nextData[x][y][z] = (byte) slope;
+                        nextSlopes[x][y][z] = (byte) slope;
 //                        usedSlopes.set(slope);
                     }
                     else
                     {
                         nextColors[x][y][z] = data[0][x][y][z];
-                        nextData[x][y][z] = -1;
+                        nextSlopes[x][y][z] = -1;
 //                        usedSlopes.set(255);
                     }
                 }
@@ -146,12 +151,12 @@ public class SlopeBox {
                     if(nextColors[x][y][z] == 0)
                     {
                         int slope = 0;
-                        if((neighbors[0] = x == 0 ? 0 : (nextColors[x-1][y][z] & 255)) != 0 && (nextData[x-1][y][z] & 0xAA) != 0xAA) slope      |= (data[1][x-1][y][z] & 0xAA) >>> 1;
-                        if((neighbors[1] = y == 0 ? 0 : (nextColors[x][y-1][z] & 255)) != 0 && (nextData[x][y-1][z] & 0xCC) != 0xCC) slope      |= (data[1][x][y-1][z] & 0xCC) >>> 2;
-                        if((neighbors[2] = z == 0 ? 0 : (nextColors[x][y][z-1] & 255)) != 0 && (nextData[x][y][z-1] & 0xF0) != 0xF0) slope      |= (data[1][x][y][z-1] & 0xF0) >>> 4;
-                        if((neighbors[3] = x == limitX ? 0 : (nextColors[x+1][y][z] & 255)) != 0 && (nextData[x+1][y][z] & 0x55) != 0x55) slope |= (data[1][x+1][y][z] & 0x55) >>> 1;
-                        if((neighbors[4] = y == limitY ? 0 : (nextColors[x][y+1][z] & 255)) != 0 && (nextData[x][y+1][z] & 0x33) != 0x33) slope |= (data[1][x][y+1][z] & 0x33) >>> 2;
-                        if((neighbors[5] = z == limitZ ? 0 : (nextColors[x][y][z+1] & 255)) != 0 && (nextData[x][y][z+1] & 0x0F) != 0x0F) slope |= (data[1][x][y][z+1] & 0x0F) >>> 4;
+                        if((neighbors[0] = x == 0 ? 0 : (nextColors[x-1][y][z] & 255)) != 0 && (nextSlopes[x-1][y][z] & 0xAA) != 0xAA) slope      |= (data[1][x-1][y][z] & 0xAA) >>> 1;
+                        if((neighbors[1] = y == 0 ? 0 : (nextColors[x][y-1][z] & 255)) != 0 && (nextSlopes[x][y-1][z] & 0xCC) != 0xCC) slope      |= (data[1][x][y-1][z] & 0xCC) >>> 2;
+                        if((neighbors[2] = z == 0 ? 0 : (nextColors[x][y][z-1] & 255)) != 0 && (nextSlopes[x][y][z-1] & 0xF0) != 0xF0) slope      |= (data[1][x][y][z-1] & 0xF0) >>> 4;
+                        if((neighbors[3] = x == limitX ? 0 : (nextColors[x+1][y][z] & 255)) != 0 && (nextSlopes[x+1][y][z] & 0x55) != 0x55) slope |= (data[1][x+1][y][z] & 0x55) >>> 1;
+                        if((neighbors[4] = y == limitY ? 0 : (nextColors[x][y+1][z] & 255)) != 0 && (nextSlopes[x][y+1][z] & 0x33) != 0x33) slope |= (data[1][x][y+1][z] & 0x33) >>> 2;
+                        if((neighbors[5] = z == limitZ ? 0 : (nextColors[x][y][z+1] & 255)) != 0 && (nextSlopes[x][y][z+1] & 0x0F) != 0x0F) slope |= (data[1][x][y][z+1] & 0x0F) >>> 4;
                         if(Integer.bitCount(slope) < 4) // surrounded by empty or only one partial face
                         {
                             data[1][x][y][z] = 0;
@@ -182,7 +187,7 @@ public class SlopeBox {
                     else
                     {
                         data[0][x][y][z] = nextColors[x][y][z];
-                        data[1][x][y][z] = nextData[x][y][z];
+                        data[1][x][y][z] = nextSlopes[x][y][z];
                     }
                 }
             }
