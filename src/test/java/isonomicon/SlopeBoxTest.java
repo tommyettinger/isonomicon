@@ -3,6 +3,7 @@ package isonomicon;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3WindowAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -13,12 +14,17 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.scenes.scene2d.utils.UIUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import isonomicon.io.LittleEndianDataInputStream;
+import isonomicon.io.VoxIO;
 import isonomicon.physical.ModelMaker;
 import isonomicon.physical.SlopeBox;
 import isonomicon.physical.Tools3D;
 import isonomicon.visual.Colorizer;
 import isonomicon.visual.VoxelPixmapRenderer;
 import squidpony.squidmath.DiverRNG;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 public class SlopeBoxTest extends ApplicationAdapter {
     public static final int SCREEN_WIDTH = 320;//640;
@@ -101,7 +107,9 @@ public class SlopeBoxTest extends ApplicationAdapter {
         batch.setProjectionMatrix(screenView.getCamera().combined);
         batch.begin();         
         pmTexture.draw(SlopeBox.drawIso(seq, pixmapRenderer), 0, 0);
-        batch.draw(pmTexture, 64, 64);
+        batch.draw(pmTexture,
+                0,
+                0);
         //batch.setColor(-0x1.fffffep126f); // white as a packed float, resets any color changes that the renderer made
         batch.end();
         buffer.end();
@@ -138,6 +146,17 @@ public class SlopeBoxTest extends ApplicationAdapter {
         config.useVsync(false);
         config.setResizable(false);
         final SlopeBoxTest app = new SlopeBoxTest();
+        config.setWindowListener(new Lwjgl3WindowAdapter() {
+            @Override
+            public void filesDropped(String[] files) {
+                if (files != null && files.length > 0) {
+                    if (files[0].endsWith(".vox"))
+                        app.load(files[0]);
+//                    else if (files[0].endsWith(".hex"))
+//                        app.loadPalette(files[0]);
+                }
+            }
+        });
         new Lwjgl3Application(app, config);
     }
 
@@ -197,5 +216,26 @@ public class SlopeBoxTest extends ApplicationAdapter {
             }
         };
     }
-
+    public void load(String name) {
+        try {
+            //// loads a file by its full path, which we get via drag+drop
+            final byte[][][] arr = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream(name)));
+            pixmapRenderer.colorizer(Colorizer.arbitraryColorizer(VoxIO.lastPalette));
+//            Tools3D.fill(voxels, 0);
+//            Tools3D.deepCopyInto(arr, voxels);
+//            Tools3D.translateCopyInto(arr, voxels, 15, 15, 15);
+            seq = new SlopeBox(arr);
+//            for (int x = 0; x < arr.length; x++) {
+//                for (int y = 0; y < arr[0].length; y++) {
+//                    for (int z = 0; z < arr[0][0].length; z++) {
+//                        if(seq.data[1][x][y][z] != -1) seq.data[1][x][y][z] = 0;
+//                    }
+//                }
+//            }
+        } catch (FileNotFoundException e) {
+            final byte[][][] arr = maker.shipNoiseColorized();
+            pixmapRenderer.colorizer(colorizer);
+            seq = new SlopeBox(arr);
+        }
+    }
 }
