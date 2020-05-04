@@ -1,5 +1,6 @@
 package isonomicon.physical;
 
+import squidpony.StringKit;
 import squidpony.squidmath.CrossHash;
 
 import java.util.Arrays;
@@ -154,10 +155,11 @@ public class Tools3D {
     {
         final int xs = voxels.length, ys = voxels[0].length, zs = voxels[0][0].length;
         int c = 0;
+        byte m = (byte)match;
         for (int x = 0; x < xs; x++) {
             for (int y = 0; y < ys; y++) {
                 for (int z = 0; z < zs; z++) {
-                    if(voxels[x][y][z] == match) ++c;
+                    if(voxels[x][y][z] == m) ++c;
                 }
             }
         }
@@ -528,6 +530,21 @@ public class Tools3D {
     public static int determineSmallBounded(final int state, final int bound)
     {
         return ((bound * (state & 0xFFFF)) >> 16);
+    }
+    
+    public static StringBuilder show(byte[][][] data){
+        final int sizeX = data.length, sizeY = data[0].length, sizeZ = data[0][0].length;
+        StringBuilder sb = new StringBuilder(sizeX * (1+sizeY) * (1+sizeZ) << 2);
+        for (int z = 0; z < sizeZ; z++) {
+            for (int y = 0; y < sizeY; y++) {
+                for (int x = 0; x < sizeX; x++) {
+                    StringKit.appendHex(sb, data[x][y][z]).append(", ");
+                }
+                sb.append('\n');
+            }
+            sb.append("...\n");
+        }
+        return sb;
     }
 
 }

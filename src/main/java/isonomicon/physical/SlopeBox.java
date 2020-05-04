@@ -18,6 +18,13 @@ public class SlopeBox {
         data = new byte[2][][][];
         data[0] = colors;
         data[1] = new byte[colors.length][colors[0].length][colors[0][0].length];
+        for (int x = 0; x < colors.length; x++) {
+            for (int y = 0; y < colors[0].length; y++) {
+                for (int z = 0; z < colors[0][0].length; z++) {
+                    if(data[0][x][y][z] != 0) data[1][x][y][z] = -1;
+                }
+            }
+        }
         putSlopes();
     }
 
@@ -240,6 +247,7 @@ public class SlopeBox {
                 CW[i++] = (byte)(o | CW_SMALL[inner]);
             }
         }
+        //System.out.printf("0x%02X", CW[0x7F]);
         Arrays.fill(SHAPES, new double[]{ // all default to being empty
             7.0,7.0,7.0,7.0,
             7.0,7.0,7.0,7.0,
@@ -322,7 +330,7 @@ public class SlopeBox {
                 7.3,7.3,1.0,1.0,
                 7.3,7.3,1.0,1.0};
         SHAPES[0x4D] = new double[]{ // small slope centered on bottom left corner
-                7.3,7.3,7.3,7.3, 
+                7.3,7.3,7.3,7.3,
                 2.0,7.3,7.3,7.3,
                 2.0,2.0,7.3,7.3,
                 2.0,2.0,7.3,7.3};
@@ -347,6 +355,48 @@ public class SlopeBox {
                 7.3,7.3,7.3,7.3,
                 7.3,7.3,7.3,7.3};
         SHAPES[0xE8] = new double[]{ // small slope centered on front top center corner
+                3.0,3.0,3.0,3.0,
+                7.3,2.0,1.0,7.3,
+                7.3,7.3,7.3,7.3,
+                7.3,7.3,7.3,7.3};
+        // lopsided pyramids with 4 vertices on the bottom and one on top
+        SHAPES[0x1F] = new double[]{ // all of bottom to top back center corner
+                7.3,7.3,7.3,7.3,
+                7.3,2.4,2.4,7.3,
+                2.4,2.4,2.4,2.4,
+                2.4,2.4,2.4,2.4};
+        SHAPES[0x2F] = new double[]{ // all of bottom to top right corner
+                7.3,7.3,7.3,7.3,
+                7.3,7.3,7.3,1.0,
+                7.3,7.3,1.0,1.0,
+                7.3,7.3,1.0,1.0};
+        SHAPES[0x4F] = new double[]{ // all of bottom to top left corner
+                7.3,7.3,7.3,7.3,
+                2.0,7.3,7.3,7.3,
+                2.0,2.0,7.3,7.3,
+                2.0,2.0,7.3,7.3};
+        SHAPES[0x8F] = new double[]{ // all of bottom to top front center corner
+                7.3,7.3,7.3,7.3,
+                7.3,7.3,7.3,7.3,
+                7.3,2.0,1.0,7.3,
+                2.0,2.0,1.0,1.0};
+        // lopsided pyramids with 4 vertices on the top and one on the bottom
+        SHAPES[0xF1] = new double[]{ // all of top to bottom back center corner
+                3.0,3.0,3.0,3.0,
+                7.3,0.6,0.6,7.3,
+                7.3,7.3,7.3,7.3,
+                7.3,7.3,7.3,7.3};
+        SHAPES[0xF2] = new double[]{ // all of top to bottom right corner
+                3.0,3.0,3.0,3.0,
+                7.3,7.3,0.6,0.6,
+                7.3,7.3,7.3,7.3,
+                7.3,7.3,7.3,7.3};
+        SHAPES[0xF4] = new double[]{ // all of top to bottom left corner
+                3.0,3.0,3.0,3.0,
+                0.6,0.6,7.3,7.3,
+                7.3,7.3,7.3,7.3,
+                7.3,7.3,7.3,7.3};
+        SHAPES[0xF8] = new double[]{ // all of top to bottom front center corner
                 3.0,3.0,3.0,3.0,
                 7.3,2.0,1.0,7.3,
                 7.3,7.3,7.3,7.3,
@@ -565,9 +615,10 @@ public class SlopeBox {
     public SlopeBox clockwise(){
         final int sizeX = sizeX()-1, sizeY = sizeY()-1, sizeZ = sizeZ()-1, halfSizeX = sizeX+1 >> 1, halfSizeY = sizeY+1 >> 1;
         byte c, s;
+//        System.out.println("BEFORE:\n"+Tools3D.show(data[1]));
         for (int x = 0; x < halfSizeX; x++) {
             for (int y = 0; y < halfSizeY; y++) {
-                for (int z = 0; z < sizeZ; z++) {
+                for (int z = 0; z <= sizeZ; z++) {
                     c = data[0][x][y][z];
                     data[0][x][y][z] = data[0][y][sizeX - x][z];
                     data[0][y][sizeX - x][z] = data[0][sizeX - x][sizeY - y][z];
@@ -581,6 +632,7 @@ public class SlopeBox {
                 }
             }
         }
+//        System.out.println("AFTER:\n"+Tools3D.show(data[1]));
         return this;
     }
     

@@ -85,7 +85,7 @@ public class SlopeBoxTest extends ApplicationAdapter {
 //            voxels = maker.shipLargeNoiseColorized();
 //        }
 //        voxels = maker.blobLargeRandom();
-        voxels = maker.shipLargeSmoothColorized();
+        voxels = maker.shipSmoothColorized();
         seq = new SlopeBox(voxels);
         Gdx.input.setInputProcessor(inputProcessor());
     }
@@ -123,13 +123,8 @@ public class SlopeBoxTest extends ApplicationAdapter {
         screenRegion.setRegion(screenTexture);
         screenRegion.flip(false, true);
         batch.draw(screenRegion, 0, 0);
-        //// for GB_GREEN
-        //font.setColor(0x34 / 255f, 0x68 / 255f, 0x56 / 255f, 1f);
-        font.setColor(1f, 1f, 1f, 1f);
-        //font.draw(batch, model.voxels.length + ", " + model.voxels[0].length + ", " + model.voxels[0][0].length + ", " + " (original)", 0, 80);
-//        font.draw(batch, model.sizeX() + ", " + model.sizeY() + ", " + model.sizeZ() + " (sizes)", 0, 60);
-//        font.draw(batch, StringKit.join(", ", model.rotation().rotation()) + " (rotation)", 0, 40);
-        font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, 20);
+//        font.setColor(1f, 1f, 1f, 1f);
+//        font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, 20);
         batch.end();
     }
 
@@ -167,10 +162,28 @@ public class SlopeBoxTest extends ApplicationAdapter {
                 switch (keycode) {
                     case Input.Keys.P:
 //                        Tools3D.deepCopyInto(maker.blobLargeRandom(), voxels);
-                        Tools3D.deepCopyInto(maker.shipLargeSmoothColorized(), voxels);
+                        Tools3D.fill(seq.data[0], 0);
+                        Tools3D.fill(seq.data[1], 0);
+                        Tools3D.deepCopyInto(maker.shipSmoothColorized(), voxels);
                         Tools3D.deepCopyInto(voxels, seq.data[0]);
-                        Tools3D.fill(seq.data[1], -1);
                         seq.putSlopes();
+                        break;
+                    case Input.Keys.C: // cubes
+                        if(UIUtils.shift())
+                        {
+                            seq.putSlopes();
+                        }
+                        else {
+                            for (int x = 0; x < seq.sizeX(); x++) {
+                                for (int y = 0; y < seq.sizeY(); y++) {
+                                    for (int z = 0; z < seq.sizeZ(); z++) {
+                                        if (seq.data[1][x][y][z] != -1) {
+                                            seq.data[0][x][y][z] = seq.data[1][x][y][z] = 0;
+                                        }
+                                    }
+                                }
+                            }
+                        }
                         break;
                     case Input.Keys.E: // easing
                         pixmapRenderer.easing = !pixmapRenderer.easing;
@@ -179,7 +192,9 @@ public class SlopeBoxTest extends ApplicationAdapter {
                         pixmapRenderer.outline = !pixmapRenderer.outline;
                         break;
                     case Input.Keys.R: // rotate
+//                        System.out.println("(0x7F) before: " + Tools3D.count(seq.data[1], 0x7F));
                         seq.clockwise();
+//                        System.out.println("(0xBF) after : " + Tools3D.count(seq.data[1], 0xBF));
                         break;
                     case Input.Keys.A: //  a-z, aurora and ziggurat colorizers
                         if (UIUtils.shift())
@@ -220,20 +235,14 @@ public class SlopeBoxTest extends ApplicationAdapter {
         try {
             //// loads a file by its full path, which we get via drag+drop
             final byte[][][] arr = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream(name)));
+            if(arr == null) return;
             pixmapRenderer.colorizer(Colorizer.arbitraryColorizer(VoxIO.lastPalette));
 //            Tools3D.fill(voxels, 0);
 //            Tools3D.deepCopyInto(arr, voxels);
 //            Tools3D.translateCopyInto(arr, voxels, 15, 15, 15);
             seq = new SlopeBox(arr);
-//            for (int x = 0; x < arr.length; x++) {
-//                for (int y = 0; y < arr[0].length; y++) {
-//                    for (int z = 0; z < arr[0][0].length; z++) {
-//                        if(seq.data[1][x][y][z] != -1) seq.data[1][x][y][z] = 0;
-//                    }
-//                }
-//            }
         } catch (FileNotFoundException e) {
-            final byte[][][] arr = maker.shipNoiseColorized();
+            final byte[][][] arr = maker.shipSmoothColorized();
             pixmapRenderer.colorizer(colorizer);
             seq = new SlopeBox(arr);
         }

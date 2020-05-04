@@ -631,7 +631,7 @@ public class ModelMaker {
                 }
             }             
             for (int z = 1; z < zSize; z++) {
-                for (int x = 0; x < xSize; x++) {
+                for (int x = 1; x < xSize; x++) {
                     if (hash32(z * 3 >>> 2, y * 5 + (z >>> 1) >>> 3, current) < 15) {
                         if (nextShip[x][y][z] != 0 && nextShip[x][y][z] != cockpitColor) {
                             nextShip[x - 1][smallYSize - y][z] = nextShip[x - 1][y][z] = thrustColor;
