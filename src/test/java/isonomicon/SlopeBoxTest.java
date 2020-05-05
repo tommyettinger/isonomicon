@@ -76,16 +76,16 @@ public class SlopeBoxTest extends ApplicationAdapter {
 //            box = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("Aurora/dumbcube.vox")));
 //        } catch (Exception e) {
 //            e.printStackTrace();
-//            box = maker.shipNoiseColorized();
+//            box = maker.shipLargeSmoothColorized();
 //        }
 //        makeBoom(maker.fireRange());
 //        try {
 //            voxels = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("FlesurrectBonus/Damned.vox")));
 //        } catch (FileNotFoundException e) {
-//            voxels = maker.shipLargeNoiseColorized();
+//            voxels = maker.shipLargeSmoothColorized();
 //        }
 //        voxels = maker.blobLargeRandom();
-        voxels = maker.shipSmoothColorized();
+        voxels = maker.shipLargeSmoothColorized();
         seq = new SlopeBox(voxels);
         Gdx.input.setInputProcessor(inputProcessor());
     }
@@ -164,7 +164,7 @@ public class SlopeBoxTest extends ApplicationAdapter {
 //                        Tools3D.deepCopyInto(maker.blobLargeRandom(), voxels);
                         Tools3D.fill(seq.data[0], 0);
                         Tools3D.fill(seq.data[1], 0);
-                        Tools3D.deepCopyInto(maker.shipSmoothColorized(), voxels);
+                        Tools3D.deepCopyInto(maker.shipLargeSmoothColorized(), voxels);
                         Tools3D.deepCopyInto(voxels, seq.data[0]);
                         seq.putSlopes();
                         break;
@@ -242,7 +242,7 @@ public class SlopeBoxTest extends ApplicationAdapter {
 //            Tools3D.translateCopyInto(arr, voxels, 15, 15, 15);
             seq = new SlopeBox(arr);
         } catch (FileNotFoundException e) {
-            final byte[][][] arr = maker.shipSmoothColorized();
+            final byte[][][] arr = maker.shipLargeSmoothColorized();
             pixmapRenderer.colorizer(colorizer);
             seq = new SlopeBox(arr);
         }

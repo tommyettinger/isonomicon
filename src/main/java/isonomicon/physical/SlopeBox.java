@@ -127,9 +127,8 @@ public class SlopeBox {
 //                                        usedSlopes.set(slope);
                                         continue PER_CELL;
                                     }
-                                    else {
-                                        bestIndex = i;
-                                    }
+                                } else if(neighbors[bestIndex] < neighbors[i]) {
+                                    bestIndex = i;
                                 }
                             }
                         }
@@ -158,12 +157,12 @@ public class SlopeBox {
                     if(nextColors[x][y][z] == 0)
                     {
                         int slope = 0;
-                        if((neighbors[0] = x == 0 ? 0 : (nextColors[x-1][y][z] & 255)) != 0 && (nextSlopes[x-1][y][z] & 0xAA) != 0xAA) slope      |= (data[1][x-1][y][z] & 0xAA) >>> 1;
-                        if((neighbors[1] = y == 0 ? 0 : (nextColors[x][y-1][z] & 255)) != 0 && (nextSlopes[x][y-1][z] & 0xCC) != 0xCC) slope      |= (data[1][x][y-1][z] & 0xCC) >>> 2;
-                        if((neighbors[2] = z == 0 ? 0 : (nextColors[x][y][z-1] & 255)) != 0 && (nextSlopes[x][y][z-1] & 0xF0) != 0xF0) slope      |= (data[1][x][y][z-1] & 0xF0) >>> 4;
-                        if((neighbors[3] = x == limitX ? 0 : (nextColors[x+1][y][z] & 255)) != 0 && (nextSlopes[x+1][y][z] & 0x55) != 0x55) slope |= (data[1][x+1][y][z] & 0x55) >>> 1;
-                        if((neighbors[4] = y == limitY ? 0 : (nextColors[x][y+1][z] & 255)) != 0 && (nextSlopes[x][y+1][z] & 0x33) != 0x33) slope |= (data[1][x][y+1][z] & 0x33) >>> 2;
-                        if((neighbors[5] = z == limitZ ? 0 : (nextColors[x][y][z+1] & 255)) != 0 && (nextSlopes[x][y][z+1] & 0x0F) != 0x0F) slope |= (data[1][x][y][z+1] & 0x0F) >>> 4;
+                        if((neighbors[0] = x == 0 ? 0 : (nextColors[x-1][y][z] & 255)) != 0 && (nextSlopes[x-1][y][z] & 0xAA) != 0xAA) slope      |= (nextSlopes[x-1][y][z] & 0xAA) >>> 1;
+                        if((neighbors[1] = y == 0 ? 0 : (nextColors[x][y-1][z] & 255)) != 0 && (nextSlopes[x][y-1][z] & 0xCC) != 0xCC) slope      |= (nextSlopes[x][y-1][z] & 0xCC) >>> 2;
+                        if((neighbors[2] = z == 0 ? 0 : (nextColors[x][y][z-1] & 255)) != 0 && (nextSlopes[x][y][z-1] & 0xF0) != 0xF0) slope      |= (nextSlopes[x][y][z-1] & 0xF0) >>> 4;
+                        if((neighbors[3] = x == limitX ? 0 : (nextColors[x+1][y][z] & 255)) != 0 && (nextSlopes[x+1][y][z] & 0x55) != 0x55) slope |= (nextSlopes[x+1][y][z] & 0x55) << 1;
+                        if((neighbors[4] = y == limitY ? 0 : (nextColors[x][y+1][z] & 255)) != 0 && (nextSlopes[x][y+1][z] & 0x33) != 0x33) slope |= (nextSlopes[x][y+1][z] & 0x33) << 2;
+                        if((neighbors[5] = z == limitZ ? 0 : (nextColors[x][y][z+1] & 255)) != 0 && (nextSlopes[x][y][z+1] & 0x0F) != 0x0F) slope |= (nextSlopes[x][y][z+1] & 0x0F) << 4;
                         if(Integer.bitCount(slope) < 4) // surrounded by empty or only one partial face
                         {
                             data[1][x][y][z] = 0;
@@ -178,27 +177,28 @@ public class SlopeBox {
                                     if((i == bestIndex || j == bestIndex) && neighbors[bestIndex] != 0) {
                                         data[0][x][y][z] = (byte) neighbors[bestIndex];
                                         data[1][x][y][z] = (byte) slope;
-//                                        usedSlopes.set(slope);
+//                                        usedSlopes.set(slope & 255);
                                         continue PER_CELL;
                                     }
-                                    else {
-                                        bestIndex = i;
-                                    }
+                                } else if(neighbors[bestIndex] < neighbors[i]) {
+                                    bestIndex = i;
                                 }
                             }
                         }
                         data[0][x][y][z] = (byte) neighbors[bestIndex];
                         data[1][x][y][z] = (byte) slope;
-//                        usedSlopes.set(slope);
+//                        usedSlopes.set(slope & 255);
                     }
                     else
                     {
-                        data[0][x][y][z] = nextColors[x][y][z];
-                        data[1][x][y][z] = nextSlopes[x][y][z];
+                        data[1][x][y][z] = (data[0][x][y][z] = nextColors[x][y][z]) == 0 ? 0 : nextSlopes[x][y][z];
+//                        usedSlopes.set(nextSlopes[x][y][z] & 255);
                     }
                 }
             }
         }
+//        System.out.println(Tools3D.show(data[1]));
+//        System.out.println(usedSlopes.get(0x8E));
 //        for (int i = usedSlopes.nextSetBit(0), w = 0; i < 256 && i >= 0; i = usedSlopes.nextSetBit(i+1)) {
 //            System.out.printf("%02X, ", i);
 //            if((++w & 7) == 0) System.out.println();
