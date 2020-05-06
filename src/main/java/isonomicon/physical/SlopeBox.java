@@ -613,22 +613,22 @@ public class SlopeBox {
     }
     
     public SlopeBox clockwise(){
-        final int sizeX = sizeX()-1, sizeY = sizeY()-1, sizeZ = sizeZ()-1, halfSizeX = sizeX+1 >> 1, halfSizeY = sizeY+1 >> 1;
+        final int sizeXY = sizeX()-1, sizeZ = sizeZ()-1, halfSizeXYOdd = sizeXY+2>> 1, halfSizeXYEven = sizeXY+1>>1;
         byte c, s;
 //        System.out.println("BEFORE:\n"+Tools3D.show(data[1]));
-        for (int x = 0; x < halfSizeX; x++) {
-            for (int y = 0; y < halfSizeY; y++) {
-                for (int z = 0; z <= sizeZ; z++) {
+        for (int z = 0; z <= sizeZ; z++) {
+            for (int x = 0; x < halfSizeXYOdd; x++) {
+                for (int y = 0; y < halfSizeXYEven; y++) {
                     c = data[0][x][y][z];
-                    data[0][x][y][z] = data[0][y][sizeX - x][z];
-                    data[0][y][sizeX - x][z] = data[0][sizeX - x][sizeY - y][z];
-                    data[0][sizeX - x][sizeY - y][z] = data[0][sizeY - y][x][z];
-                    data[0][sizeY - y][x][z] = c;
+                    data[0][x][y][z] = data[0][y][sizeXY - x][z];
+                    data[0][y][sizeXY - x][z] = data[0][sizeXY - x][sizeXY - y][z];
+                    data[0][sizeXY - x][sizeXY - y][z] = data[0][sizeXY - y][x][z];
+                    data[0][sizeXY - y][x][z] = c;
                     s = data[1][x][y][z];
-                    data[1][x][y][z] = CW[255&data[1][y][sizeX - x][z]];
-                    data[1][y][sizeX - x][z] = CW[255&data[1][sizeX - x][sizeY - y][z]];
-                    data[1][sizeX - x][sizeY - y][z] = CW[255&data[1][sizeY - y][x][z]];
-                    data[1][sizeY - y][x][z] = CW[255&s];
+                    data[1][x][y][z] = CW[255 & data[1][y][sizeXY - x][z]];
+                    data[1][y][sizeXY - x][z] = CW[255 & data[1][sizeXY - x][sizeXY - y][z]];
+                    data[1][sizeXY - x][sizeXY - y][z] = CW[255 & data[1][sizeXY - y][x][z]];
+                    data[1][sizeXY - y][x][z] = CW[255 & s];
                 }
             }
         }
@@ -643,16 +643,16 @@ public class SlopeBox {
         // To move one y- in voxels is x + 2, y + 1 in pixels.
         // To move one z+ in voxels is y + 3 in pixels.
         // To move one z- in voxels is y - 3 in pixels.
-        final int sizeX = seq.sizeX(), sizeY = seq.sizeY(), sizeZ = seq.sizeZ(),
-                pixelWidth = (Math.max(seq.sizeX(), Math.max(seq.sizeY(), seq.sizeZ()))) * 4 + 2,
-                pixelHeight = (Math.max(seq.sizeX(), seq.sizeY()) + seq.sizeZ() * 3) + 2;
+        final int sizeXY = seq.sizeX(), sizeZ = seq.sizeZ(),
+                pixelWidth = Math.max(sizeXY, sizeZ) * 4 + 2,
+                pixelHeight = sizeXY * 2 + seq.sizeZ() * 3 + 2;
         for (int z = 0; z < sizeZ; z++) {
-            for (int x = 0; x < sizeX; x++) {
-                for (int y = 0; y < sizeY; y++) {
+            for (int x = 0; x < sizeXY; x++) {
+                for (int y = 0; y < sizeXY; y++) {
                     final byte v = seq.color(x, y, z);
                     if(v == 0) continue;
-                    final int xPos = (sizeY - y + x) * 2 - 1,
-                            yPos = (z * 3 + sizeX + sizeY - x - y) - 1,
+                    final int xPos = (sizeXY - x + y) * 2 - 1,
+                            yPos = (z * 3 + sizeXY + sizeXY - x - y) - 1,
                             dep = (x + y + z * 2) * 2 + 256;
                     renderer.select(xPos, yPos, v, SHAPES[seq.slope(x, y, z) & 255], dep);
                 }
