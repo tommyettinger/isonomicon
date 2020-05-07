@@ -72,7 +72,7 @@ public class Material {
             new Material("polished metal", 7, 7, 1L),
             new Material("cloud", 8, 0, 256L),
             new Material("inert crystal", 9, 9, 2L),
-            new Material("brightest cloth", 10, 10, 24L),
+            new Material("bone", 10, 10, 8L),
             new Material("blood", 11, 0, 8L),
             new Material("guts", 12, 12, 12L),
             new Material("meat", 13, 11, 12L),
