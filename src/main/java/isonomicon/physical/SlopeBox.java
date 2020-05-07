@@ -6,6 +6,10 @@ import isonomicon.visual.VoxelPixmapRenderer;
 import java.util.Arrays;
 
 public class SlopeBox {
+    public static final byte[] CW = new byte[256];
+    public static final byte[] FLIP = new byte[256];
+    public static final byte[] CCW = new byte[256];
+
     public byte[][][][] data;
 
     public SlopeBox()
@@ -176,7 +180,7 @@ public class SlopeBox {
                                 if(neighbors[i] == neighbors[j]){
                                     if((i == bestIndex || j == bestIndex) && neighbors[bestIndex] != 0) {
                                         data[0][x][y][z] = (byte) neighbors[bestIndex];
-                                        data[1][x][y][z] = (byte) slope;
+                                        data[1][x][y][z] = (byte)slope;
 //                                        usedSlopes.set(slope & 255);
                                         continue PER_CELL;
                                     }
@@ -186,7 +190,7 @@ public class SlopeBox {
                             }
                         }
                         data[0][x][y][z] = (byte) neighbors[bestIndex];
-                        data[1][x][y][z] = (byte) slope;
+                        data[1][x][y][z] = (byte)slope;
 //                        usedSlopes.set(slope & 255);
                     }
                     else
@@ -237,7 +241,6 @@ public class SlopeBox {
      * (the left of the image, before flipping), and 3 denotes the dimly-lit side (the right, before flipping).
      */
     public static final int[][] SIDES = new int[256][16];
-    public static final byte[] CW = new byte[256];
     ///////////////////////////////////////  0    1    2    3    4    5    6    7    8    9    A    B    C    D    E    F
     private static final int[] CW_SMALL = {0x0, 0x2, 0x8, 0xA, 0x1, 0x3, 0x9, 0xB, 0x4, 0x6, 0xC, 0xE, 0x5, 0x7, 0xD, 0xF};
     static {
@@ -246,6 +249,10 @@ public class SlopeBox {
             for (int inner = 0; inner < 16; inner++) {
                 CW[i++] = (byte)(o | CW_SMALL[inner]);
             }
+        }
+        for (int i = 0; i < 256; i++) {
+            FLIP[i] = CW[CW[i]&255];
+            CCW[i] = CW[CW[CW[i]&255]&255];
         }
         //System.out.printf("0x%02X", CW[0x7F]);
         Arrays.fill(SHAPES, new double[]{ // all default to being empty
@@ -619,6 +626,7 @@ public class SlopeBox {
         for (int z = 0; z <= sizeZ; z++) {
             for (int x = 0; x < halfSizeXYOdd; x++) {
                 for (int y = 0; y < halfSizeXYEven; y++) {
+
                     c = data[0][x][y][z];
                     data[0][x][y][z] = data[0][y][sizeXY - x][z];
                     data[0][y][sizeXY - x][z] = data[0][sizeXY - x][sizeXY - y][z];
@@ -644,17 +652,17 @@ public class SlopeBox {
         // To move one z+ in voxels is y + 3 in pixels.
         // To move one z- in voxels is y - 3 in pixels.
         final int sizeXY = seq.sizeX(), sizeZ = seq.sizeZ(),
-                pixelWidth = Math.max(sizeXY, sizeZ) * 4 + 2,
+                pixelWidth = sizeXY * 4 + 2,
                 pixelHeight = sizeXY * 2 + seq.sizeZ() * 3 + 2;
         for (int z = 0; z < sizeZ; z++) {
             for (int x = 0; x < sizeXY; x++) {
                 for (int y = 0; y < sizeXY; y++) {
                     final byte v = seq.color(x, y, z);
                     if(v == 0) continue;
-                    final int xPos = (sizeXY - x + y) * 2 - 1,
+                    final int xPos = (sizeXY + y - x) * 2 - 1,
                             yPos = (z * 3 + sizeXY + sizeXY - x - y) - 1,
                             dep = (x + y + z * 2) * 2 + 256;
-                    renderer.select(xPos, yPos, v, SHAPES[seq.slope(x, y, z) & 255], dep);
+                    renderer.select(xPos, yPos, v, SHAPES[CW[255&seq.data[1][x][y][z]] & 255], dep);
                 }
             }
         }
