@@ -1825,7 +1825,7 @@ public abstract class Colorizer {
     
     public static final Colorizer ManosColorizer = new Colorizer(new PaletteReducer()) {
         private final byte[] primary = {
-                11, 17, 23, 31, 45, 53
+                11, 17, 23, 32, 45, 53
         }, grays = {
                 1, 2, 4, 5, 6, 7, 10
         };

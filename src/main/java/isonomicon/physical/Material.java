@@ -93,6 +93,10 @@ public class Material {
             new Material("accented scales", 28, 28, 12L),
             new Material("mold", 29, 29, -1L),
             new Material("jungle mud", 30, 30, -1L),
-            new Material("vibrant leaf", 31, 31, 32L)
+            new Material("gas", 31, 31, 256L),
+            new Material("vibrant leaf", 32, 32, 32L),
+            new Material("moss", 33, 33, 32L),
+            new Material("fine scales", 34, 34, 12L),
+            new Material("old leaf", 35, 35, 32L),
     };
 }
