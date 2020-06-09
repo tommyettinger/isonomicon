@@ -643,7 +643,7 @@ public class SlopeBox {
 //        System.out.println("AFTER:\n"+Tools3D.show(data[1]));
         return this;
     }
-    
+
     public static Pixmap drawIso(SlopeBox seq, VoxelPixmapRenderer renderer) {
         // To move one x+ in voxels is x + 2, y - 1 in pixels.
         // To move one x- in voxels is x - 2, y + 1 in pixels.
@@ -668,5 +668,35 @@ public class SlopeBox {
         }
         return renderer.blit(12, pixelWidth, pixelHeight);
     }
+    
+    public static final double[] SPLAT = new double[]{ // standard full block
+           7.3,7.3,7.3,7.3,
+           7.3,2.0,2.0,7.3,
+           7.3,2.0,2.0,7.3,
+           7.3,2.0,2.0,7.3};
 
+    public static Pixmap drawSplats(SlopeBox seq, VoxelPixmapRenderer renderer) {
+        // To move one x+ in voxels is x + 2, y - 1 in pixels.
+        // To move one x- in voxels is x - 2, y + 1 in pixels.
+        // To move one y+ in voxels is x - 2, y - 1 in pixels.
+        // To move one y- in voxels is x + 2, y + 1 in pixels.
+        // To move one z+ in voxels is y + 2 in pixels.
+        // To move one z- in voxels is y - 2 in pixels.
+        final int sizeXY = seq.sizeX(), sizeZ = seq.sizeZ(),
+                pixelWidth = sizeXY * 4,
+                pixelHeight = sizeXY * 2 + seq.sizeZ() * 3;
+        for (int z = 0; z < sizeZ; z++) {
+            for (int x = 0; x < sizeXY; x++) {
+                for (int y = 0; y < sizeXY; y++) {
+                    final byte v = seq.color(x, y, z);
+                    if(v == 0) continue;
+                    final int xPos = (sizeXY + y - x) * 2 - 1,
+                            yPos = (z * 3 + sizeXY + sizeXY - x - y) - 1,
+                            dep = (x + y + z * 3) * 2 + 256;
+                    renderer.select(xPos, yPos, v, SPLAT, dep);
+                }
+            }
+        }
+        return renderer.blit(12, pixelWidth, pixelHeight);
+    }
 }

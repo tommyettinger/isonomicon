@@ -21,6 +21,7 @@ import isonomicon.physical.SlopeBox;
 import isonomicon.physical.Tools3D;
 import isonomicon.visual.Colorizer;
 import isonomicon.visual.VoxelPixmapRenderer;
+import squidpony.FakeLanguageGen;
 import squidpony.squidmath.DiverRNG;
 
 import java.io.FileInputStream;
@@ -106,7 +107,7 @@ public class SlopeBoxTest extends ApplicationAdapter {
         worldView.update(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         batch.setProjectionMatrix(screenView.getCamera().combined);
         batch.begin();         
-        pmTexture.draw(SlopeBox.drawIso(seq, pixmapRenderer), 0, 0);
+        pmTexture.draw(SlopeBox.drawSplats(seq, pixmapRenderer), 0, 0);
         batch.draw(pmTexture,
                 0,
                 0);
@@ -135,7 +136,7 @@ public class SlopeBoxTest extends ApplicationAdapter {
 
     public static void main(String[] arg) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-        config.setTitle("Warp Tester");
+        config.setTitle("Isonomicon Test: SlopeBox");
         config.setWindowedMode(SCREEN_WIDTH, SCREEN_HEIGHT);
         config.setIdleFPS(10);
         config.useVsync(false);
@@ -220,9 +221,9 @@ public class SlopeBoxTest extends ApplicationAdapter {
                             maker.setColorizer(Colorizer.ManosColorizer);
                         }
                         break;
-//                    case Input.Keys.W: // write
-//                        VoxIO.writeVOX(FakeLanguageGen.SIMPLISH.word(Tools3D.hash64(voxels), true) + ".vox", voxels, maker.getColorizer().getReducer().paletteArray);
-//                        break;
+                    case Input.Keys.W: // write
+                        VoxIO.writeVOX(FakeLanguageGen.MALAY.word(Tools3D.hash64(voxels), true) + ".vox", voxels, maker.getColorizer().getReducer().paletteArray);
+                        break;
                     case Input.Keys.ESCAPE:
                         Gdx.app.exit();
                         break;
