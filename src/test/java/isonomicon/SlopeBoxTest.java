@@ -167,7 +167,7 @@ public class SlopeBoxTest extends ApplicationAdapter {
                         Tools3D.fill(seq.data[1], 0);
                         Tools3D.deepCopyInto(maker.shipLargeSmoothColorized(), voxels);
                         Tools3D.deepCopyInto(voxels, seq.data[0]);
-                        seq.putSlopes();
+//                        seq.putSlopes();
                         break;
                     case Input.Keys.C: // cubes
                         if(UIUtils.shift())
