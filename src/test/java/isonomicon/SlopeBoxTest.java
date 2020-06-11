@@ -20,7 +20,7 @@ import isonomicon.physical.ModelMaker;
 import isonomicon.physical.SlopeBox;
 import isonomicon.physical.Tools3D;
 import isonomicon.visual.Colorizer;
-import isonomicon.visual.VoxelPixmapRenderer;
+import isonomicon.visual.SplatRenderer;
 import squidpony.FakeLanguageGen;
 import squidpony.squidmath.DiverRNG;
 
@@ -40,7 +40,7 @@ public class SlopeBoxTest extends ApplicationAdapter {
     protected Texture screenTexture, pmTexture;
     protected TextureRegion screenRegion;
     protected ModelMaker maker;
-    private VoxelPixmapRenderer pixmapRenderer;
+    private SplatRenderer renderer;
     private byte[][][] voxels;
     private SlopeBox seq;
     private Colorizer colorizer;
@@ -70,7 +70,7 @@ public class SlopeBoxTest extends ApplicationAdapter {
 //        colorizer = Colorizer.AzurestarColorizer;
 //        colorizer = Colorizer.SplayColorizer;
         colorizer = Colorizer.ManosColorizer;
-        pixmapRenderer = new VoxelPixmapRenderer().pixmap(new Pixmap(512, 512, Pixmap.Format.RGBA8888)).colorizer(colorizer);
+        renderer = new SplatRenderer().pixmap(new Pixmap(512, 512, Pixmap.Format.RGBA8888), 80).colorizer(colorizer);
         pmTexture = new Texture(512, 512, Pixmap.Format.RGBA8888);
         maker = new ModelMaker(DiverRNG.randomize(System.currentTimeMillis() >>> 23), colorizer);
 //        try {
@@ -107,7 +107,7 @@ public class SlopeBoxTest extends ApplicationAdapter {
         worldView.update(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         batch.setProjectionMatrix(screenView.getCamera().combined);
         batch.begin();         
-        pmTexture.draw(SlopeBox.drawSplats(seq, pixmapRenderer), 0, 0);
+        pmTexture.draw(SlopeBox.drawSplats(seq, renderer), 0, 0);
         batch.draw(pmTexture,
                 0,
                 0);
@@ -187,10 +187,10 @@ public class SlopeBoxTest extends ApplicationAdapter {
                         }
                         break;
                     case Input.Keys.E: // easing
-                        pixmapRenderer.easing = !pixmapRenderer.easing;
+                        renderer.easing = !renderer.easing;
                         break;
                     case Input.Keys.F: // fringe, affects outline/edge
-                        pixmapRenderer.outline = !pixmapRenderer.outline;
+                        renderer.outline = !renderer.outline;
                         break;
                     case Input.Keys.R: // rotate
 //                        System.out.println("(0x7F) before: " + Tools3D.count(seq.data[1], 0x7F));
@@ -200,24 +200,24 @@ public class SlopeBoxTest extends ApplicationAdapter {
                     case Input.Keys.A: //  a-z, aurora and ziggurat colorizers
                         if (UIUtils.shift())
                         {
-                            pixmapRenderer.colorizer(Colorizer.ZigguratColorizer);
+                            renderer.colorizer(Colorizer.ZigguratColorizer);
                             maker.setColorizer(Colorizer.ZigguratColorizer);
                         }
                         else
                         {
-                            pixmapRenderer.colorizer(Colorizer.AuroraColorizer);
+                            renderer.colorizer(Colorizer.AuroraColorizer);
                             maker.setColorizer(Colorizer.AuroraColorizer);
                         }
                         break;
                     case Input.Keys.S: // smaller palette, 64 colors
                         if (UIUtils.shift())
                         {
-                            pixmapRenderer.colorizer(Colorizer.AzurestarColorizer);
+                            renderer.colorizer(Colorizer.AzurestarColorizer);
                             maker.setColorizer(Colorizer.AzurestarColorizer);
                         }
                         else 
                         {
-                            pixmapRenderer.colorizer(Colorizer.ManosColorizer);
+                            renderer.colorizer(Colorizer.ManosColorizer);
                             maker.setColorizer(Colorizer.ManosColorizer);
                         }
                         break;
@@ -237,14 +237,14 @@ public class SlopeBoxTest extends ApplicationAdapter {
             //// loads a file by its full path, which we get via drag+drop
             final byte[][][] arr = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream(name)));
             if(arr == null) return;
-            pixmapRenderer.colorizer(Colorizer.arbitraryColorizer(VoxIO.lastPalette));
+            renderer.colorizer(Colorizer.arbitraryColorizer(VoxIO.lastPalette));
 //            Tools3D.fill(voxels, 0);
 //            Tools3D.deepCopyInto(arr, voxels);
 //            Tools3D.translateCopyInto(arr, voxels, 15, 15, 15);
             seq = new SlopeBox(arr);
         } catch (FileNotFoundException e) {
             final byte[][][] arr = maker.shipLargeSmoothColorized();
-            pixmapRenderer.colorizer(colorizer);
+            renderer.colorizer(colorizer);
             seq = new SlopeBox(arr);
         }
     }

@@ -1,6 +1,7 @@
 package isonomicon.physical;
 
 import com.badlogic.gdx.graphics.Pixmap;
+import isonomicon.visual.SplatRenderer;
 import isonomicon.visual.VoxelPixmapRenderer;
 
 import java.util.Arrays;
@@ -688,29 +689,26 @@ public class SlopeBox {
     };
 //           7.3,2.0,2.0,7.3};
 
-    public static Pixmap drawSplats(SlopeBox seq, VoxelPixmapRenderer renderer) {
+    private static final int H_STRETCH = 2;
+    private static final int V_STRETCH = 3;
+
+    public static Pixmap drawSplats(SlopeBox seq, SplatRenderer renderer) {
         // To move one x+ in voxels is x + 2, y - 1 in pixels.
         // To move one x- in voxels is x - 2, y + 1 in pixels.
         // To move one y+ in voxels is x - 2, y - 1 in pixels.
         // To move one y- in voxels is x + 2, y + 1 in pixels.
-        // To move one z+ in voxels is y + 2 in pixels.
-        // To move one z- in voxels is y - 2 in pixels.
-        final int vStretch = 3;
-        final int sizeXY = seq.sizeX(), sizeZ = seq.sizeZ(),
-                pixelWidth = sizeXY * 4,
-                pixelHeight = sizeXY * 2 + seq.sizeZ() * vStretch;
+        // To move one z+ in voxels is y + 3 in pixels.
+        // To move one z- in voxels is y - 3 in pixels.
+        final int sizeXY = seq.sizeX(), sizeZ = seq.sizeZ();
         for (int z = 0; z < sizeZ; z++) {
             for (int x = 0; x < sizeXY; x++) {
                 for (int y = 0; y < sizeXY; y++) {
                     final byte v = seq.color(x, y, z);
                     if(v == 0) continue;
-                    final int xPos = (sizeXY + y - x) * 2 - 1,
-                            yPos = (z * vStretch + sizeXY + sizeXY - x - y) - 1,
-                            dep = (x + y) * 2 + z * vStretch;
-                    renderer.select(xPos, yPos, v, SPLAT, dep);
+                    renderer.splat(x, y, z, v);
                 }
             }
         }
-        return renderer.blit(12, pixelWidth, pixelHeight);
+        return renderer.blit();
     }
 }
