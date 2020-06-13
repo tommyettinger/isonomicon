@@ -43,19 +43,19 @@ public class SplatRenderer {
     
     public void splat(int xPos, int yPos, int zPos, byte voxel) {
         final int size = v2sx.length,
-                xx = Math.max(1, (size + yPos - xPos) * 2 - 1),
-                yy = Math.max(1, (zPos * 3 + size + size - xPos - yPos) - 1),
+                xx = Math.max(0, (size + yPos - xPos) * 2 - 1),
+                yy = Math.max(0, (zPos * 3 + size + size - xPos - yPos) - 1),
                 depth = (xPos + yPos) * 2 + zPos * 3;
 
-        for (int x = -1, ax = xx; x < 3 && ax < working.length; x++, ax++) {
-            for (int y = -1, ay = yy; y < 3 && ay < working[0].length; y++, ay++) {
+        for (int x = 0, ax = xx; x < 4 && ax < working.length; x++, ax++) {
+            for (int y = 0, ay = yy; y < 4 && ay < working[0].length; y++, ay++) {
                 working[ax][ay] = color.medium(voxel);
                 depths[ax][ay] = depth;
                 outlines[ax][ay] = color.dark(voxel);
-                v2sx[xPos][yPos][zPos] = ax;
-                v2sy[xPos][yPos][zPos] = ay;
             }
         }
+        v2sx[xPos][yPos][zPos] = xx;
+        v2sy[xPos][yPos][zPos] = yy;
     }
     
     public SplatRenderer clear() {
@@ -81,7 +81,38 @@ public class SplatRenderer {
         for (int x = 0; x <= xSize; x++) {
             System.arraycopy(working[x], 0, render[x], 0, ySize);
         }
-        
+        int sx, sy;
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                for (int z = size - 1; z >= 0; z--) {
+                    if((sx = v2sx[x][y][z]) != -1)
+                    {
+                        sy = v2sy[x][y][z];
+                        for (int i = 0; i < 4 && sx + i <= xSize; i++) {
+                            for (int j = 3; j < 4 && sy + j <= ySize; j++) {
+                                render[sx+i][sy+j] = Coloring.lighten(working[sx+i][sy+j], 0.2f);
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+        for (int x = 0; x < size; x++) {
+            for (int z = size - 1; z >= 0; z--) {
+                for (int y = size - 1; y >= 0; y--) {
+                    if ((sx = v2sx[x][y][z]) != -1) {
+                        sy = v2sy[x][y][z];
+                        for (int i = 2; i < 4 && sx + i <= xSize; i++) {
+                            for (int j = 0; j < 3 && sy + j <= ySize; j++) {
+                                render[sx + i][sy + j] = Coloring.darken(working[sx + i][sy + j], 0.3f);
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+        }
         for (int x = 0; x <= xSize; x++) {
             for (int y = 0; y <= ySize; y++) {
                 if (render[x][y] != 0) {
@@ -89,7 +120,6 @@ public class SplatRenderer {
                 }
             }
         }
-
         if (outline) {
             int o;
             for (int x = 1; x < xSize; x++) {
@@ -130,6 +160,8 @@ public class SplatRenderer {
                 }
             }
         }
+        Colorizer.AuroraColorizer.reducer.setDitherStrength(0.25f);
+        Colorizer.AuroraColorizer.reducer.reduceKnollRoberts(pixmap);
 
         ArrayTools.fill(render, 0);
         ArrayTools.fill(working, 0);
