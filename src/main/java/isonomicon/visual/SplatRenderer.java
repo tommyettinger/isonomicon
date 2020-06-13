@@ -7,19 +7,19 @@ import squidpony.ArrayTools;
  * Created by Tommy Ettinger on 12/16/2018.
  */
 public class SplatRenderer {
-    protected Pixmap pixmap;
+    public Pixmap pixmap;
     public int[][] depths, working, render, outlines;
     public int[][][] v2sx, v2sy;
-    protected Colorizer color = Colorizer.ManosColorizer;
+    public Colorizer color = Colorizer.ManosColorizer;
     public boolean easing = false, outline = true;
 
     public Pixmap pixmap() {
         return pixmap;
     }
 
-    public SplatRenderer pixmap (Pixmap pixmap, final int size) {
-        this.pixmap = pixmap;
-        final int w = pixmap.getWidth(), h = pixmap.getHeight();
+    public SplatRenderer (final int size) {
+        final int w = size * 4, h = size * 5;
+        pixmap = new Pixmap(w, h, Pixmap.Format.RGBA8888);
         working =  new int[w][h];
         render =   new int[w][h];
         depths =   new int[w][h];
@@ -30,7 +30,6 @@ public class SplatRenderer {
             ArrayTools.fill(v2sx[i], -1);
             ArrayTools.fill(v2sy[i], -1);
         }
-        return this;
     }
 
     public Colorizer colorizer () {
@@ -44,12 +43,12 @@ public class SplatRenderer {
     
     public void splat(int xPos, int yPos, int zPos, byte voxel) {
         final int size = v2sx.length,
-                xx = (size + yPos - xPos) * 2 - 1,
-                yy = (zPos * 3 + size + size - xPos - yPos) - 1,
+                xx = Math.max(1, (size + yPos - xPos) * 2 - 1),
+                yy = Math.max(1, (zPos * 3 + size + size - xPos - yPos) - 1),
                 depth = (xPos + yPos) * 2 + zPos * 3;
 
-        for (int x = 0, ax = xx; x < 4 && ax < working.length; x++, ax++) {
-            for (int y = 0, ay = yy; y < 4 && ay < working[0].length; y++, ay++) {
+        for (int x = -1, ax = xx; x < 3 && ax < working.length; x++, ax++) {
+            for (int y = -1, ay = yy; y < 3 && ay < working[0].length; y++, ay++) {
                 working[ax][ay] = color.medium(voxel);
                 depths[ax][ay] = depth;
                 outlines[ax][ay] = color.dark(voxel);
@@ -75,14 +74,22 @@ public class SplatRenderer {
     public Pixmap blit() {
         final int threshold = 9;
         final int size = v2sx.length;
-        final int pixelWidth = size * 4, pixelHeight = size * 5;
-        
+
         pixmap.setColor(0);
         pixmap.fill();
-        int xSize = Math.min(pixelWidth, working.length) - 1, ySize = Math.min(pixelHeight, working[0].length) - 1, depth;
+        int xSize = Math.min(pixmap.getWidth(), working.length) - 1, ySize = Math.min(pixmap.getHeight(), working[0].length) - 1, depth;
         for (int x = 0; x <= xSize; x++) {
             System.arraycopy(working[x], 0, render[x], 0, ySize);
         }
+        
+        for (int x = 0; x <= xSize; x++) {
+            for (int y = 0; y <= ySize; y++) {
+                if (render[x][y] != 0) {
+                    pixmap.drawPixel(x, y, render[x][y]);
+                }
+            }
+        }
+
         if (outline) {
             int o;
             for (int x = 1; x < xSize; x++) {
@@ -90,45 +97,36 @@ public class SplatRenderer {
                     if ((o = outlines[x][y]) != 0) {
                         depth = depths[x][y];
                         if (outlines[x - 1][y] == 0 && outlines[x][y - 1] == 0) {
-                            render[x - 1][y] = o;
-                            render[x][y - 1] = o;
-                            render[x][y] = o;
+                            pixmap.drawPixel(x - 1, y    , o);
+                            pixmap.drawPixel(x    , y - 1, o);
+                            pixmap.drawPixel(x    , y    , o);
                         } else if (outlines[x + 1][y] == 0 && outlines[x][y - 1] == 0) {
-                            render[x + 1][y] = o;
-                            render[x][y - 1] = o;
-                            render[x][y] = o;
+                            pixmap.drawPixel(x + 1, y    , o);
+                            pixmap.drawPixel(x    , y - 1, o);
+                            pixmap.drawPixel(x    , y    , o); 
                         } else if (outlines[x - 1][y] == 0 && outlines[x][y + 1] == 0) {
-                            render[x - 1][y] = o;
-                            render[x][y + 1] = o;
-                            render[x][y] = o;
+                            pixmap.drawPixel(x - 1, y    , o);
+                            pixmap.drawPixel(x    , y + 1, o);
+                            pixmap.drawPixel(x    , y    , o);
                         } else if (outlines[x + 1][y] == 0 && outlines[x][y + 1] == 0) {
-                            render[x + 1][y] = o;
-                            render[x][y + 1] = o;
-                            render[x][y] = o;
+                            pixmap.drawPixel(x + 1, y    , o);
+                            pixmap.drawPixel(x    , y + 1, o);
+                            pixmap.drawPixel(x    , y    , o);
                         } else {
                             if (outlines[x - 1][y] == 0 || depths[x - 1][y] < depth - threshold) {
-                                render[x - 1][y] = o;
+                                pixmap.drawPixel(x - 1, y    , o);
                             }
                             if (outlines[x + 1][y] == 0 || depths[x + 1][y] < depth - threshold) {
-                                render[x + 1][y] = o;
+                                pixmap.drawPixel(x + 1, y    , o);
                             }
                             if (outlines[x][y - 1] == 0 || depths[x][y - 1] < depth - threshold) {
-                                render[x][y - 1] = o;
+                                pixmap.drawPixel(x    , y - 1, o);
                             }
                             if (outlines[x][y + 1] == 0 || depths[x][y + 1] < depth - threshold) {
-                                render[x][y + 1] = o;
+                                pixmap.drawPixel(x    , y + 1, o);
                             }
                         }
                     }
-                }
-            }
-        }
-
-        final int pmh = pixmap.getHeight() - 1;
-        for (int x = 0; x <= xSize; x++) {
-            for (int y = 0; y <= ySize; y++) {
-                if (render[x][y] != 0) {
-                    pixmap.drawPixel(x, pmh - y, render[x][y]);
                 }
             }
         }

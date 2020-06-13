@@ -60,15 +60,16 @@
 	</repositories>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.version>3.8.0</maven.compiler.version>
-        <maven.javadoc.version>3.1.1</maven.javadoc.version>
+        <maven.compiler.version>3.8.1</maven.compiler.version>
+        <maven.javadoc.version>3.2.0</maven.javadoc.version>
         <maven.resources.version>3.1.0</maven.resources.version>
-        <maven.source.version>3.0.1</maven.source.version>
+        <maven.source.version>3.2.1</maven.source.version>
         <maven.gpg.version>1.6</maven.gpg.version>
         <jdk.version>1.8</jdk.version>
         <junit.version>4.11</junit.version>
-        <squidlib.version>97e4c6d153</squidlib.version>
+        <squidlib.version>5398d7c429</squidlib.version>
         <gdx.version>1.9.10</gdx.version>
+        <anim8.version>0.1.2</anim8.version>
     </properties>
 
 
@@ -77,6 +78,11 @@
             <groupId>com.github.SquidPony.SquidLib</groupId>
             <artifactId>squidlib-util</artifactId>
             <version>${squidlib.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.tommyettinger</groupId>
+            <artifactId>anim8-gdx</artifactId>
+            <version>${anim8.version}</version>
         </dependency>
         <dependency>
             <groupId>com.badlogicgames.gdx</groupId>
@@ -216,7 +222,7 @@
                     <encoding>${project.build.sourceEncoding}</encoding>
                     <javadocVersion>${jdk.version}</javadocVersion>
                     <links>
-                        <link>http://docs.oracle.com/javase/8/docs/api/</link>
+                        <link>https://docs.oracle.com/javase/8/docs/api/</link>
                     </links>
                     <linksource>true</linksource>
                     <detectOfflineLinks>false</detectOfflineLinks>

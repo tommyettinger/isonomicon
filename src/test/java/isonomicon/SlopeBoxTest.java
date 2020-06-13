@@ -28,10 +28,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 public class SlopeBoxTest extends ApplicationAdapter {
-    public static final int SCREEN_WIDTH = 320;//640;
-    public static final int SCREEN_HEIGHT = 360;//720;
-    public static final int VIRTUAL_WIDTH = 320;
-    public static final int VIRTUAL_HEIGHT = 360;
+    public static final int SCREEN_WIDTH = 512;//640;
+    public static final int SCREEN_HEIGHT = 512;//720;
+    public static final int VIRTUAL_WIDTH = SCREEN_WIDTH;
+    public static final int VIRTUAL_HEIGHT = SCREEN_HEIGHT;
     protected SpriteBatch batch;
     protected Viewport worldView;
     protected Viewport screenView;
@@ -70,7 +70,7 @@ public class SlopeBoxTest extends ApplicationAdapter {
 //        colorizer = Colorizer.AzurestarColorizer;
 //        colorizer = Colorizer.SplayColorizer;
         colorizer = Colorizer.ManosColorizer;
-        renderer = new SplatRenderer().pixmap(new Pixmap(512, 512, Pixmap.Format.RGBA8888), 80).colorizer(colorizer);
+        renderer = new SplatRenderer(80).colorizer(colorizer);
         pmTexture = new Texture(512, 512, Pixmap.Format.RGBA8888);
         maker = new ModelMaker(DiverRNG.randomize(System.currentTimeMillis() >>> 23), colorizer);
 //        try {
@@ -106,7 +106,7 @@ public class SlopeBoxTest extends ApplicationAdapter {
         worldView.getCamera().position.set(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT / 2, 0);
         worldView.update(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         batch.setProjectionMatrix(screenView.getCamera().combined);
-        batch.begin();         
+        batch.begin();
         pmTexture.draw(SlopeBox.drawSplats(seq, renderer), 0, 0);
         batch.draw(pmTexture,
                 0,
@@ -122,7 +122,6 @@ public class SlopeBoxTest extends ApplicationAdapter {
         screenTexture = buffer.getColorBufferTexture();
         screenTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         screenRegion.setRegion(screenTexture);
-        screenRegion.flip(false, true);
         batch.draw(screenRegion, 0, 0);
 //        font.setColor(1f, 1f, 1f, 1f);
 //        font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, 20);

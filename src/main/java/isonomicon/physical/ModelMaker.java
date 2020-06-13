@@ -245,8 +245,8 @@ public class ModelMaker {
         final int side = large ? shipLarge.length : ship.length,
                 high = large ? shipLarge[0][0].length : ship[0][0].length;
         byte[][][] voxels = new byte[side][side][high];
-        byte mainColor = colorizer.getReducer().randomColorIndex(rng),
-                highlightColor = colorizer.brighten(colorizer.getReducer().randomColorIndex(rng));
+        byte mainColor = colorizer.randomColorIndex(rng),
+                highlightColor = colorizer.brighten(colorizer.randomColorIndex(rng));
         for (int x = 0; x < side; x++) {
             for (int y = 0; y < side; y++) {
                 for (int z = 0; z < high; z++) {
@@ -261,8 +261,8 @@ public class ModelMaker {
         byte[][][] voxels = new byte[12][12][8];
         int ctr;
         int current;
-        final byte mainColor = colorizer.getReducer().randomColorIndex(rng),
-                highlightColor = colorizer.colorize(colorizer.getReducer().randomColorIndex(rng), ~rng.next(1) * (-rng.next(1) | 1)),
+        final byte mainColor = colorizer.randomColorIndex(rng),
+                highlightColor = colorizer.colorize(colorizer.randomColorIndex(rng), ~rng.next(1) * (-rng.next(1) | 1)),
             eyeDark = colorizer.reduce(255), eyeBright = colorizer.reduce(-1);
         do {
             final int seed = rng.nextInt();
