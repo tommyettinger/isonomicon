@@ -11,7 +11,7 @@ public class SplatRenderer {
     public int[][] depths, working, render, outlines, voxels;
     public int[][] shadeX, shadeZ;
     public Colorizer color = Colorizer.ManosColorizer;
-    public boolean easing = false, outline = true;
+    public boolean dither = false, outline = true;
 
     public Pixmap pixmap() {
         return pixmap;
@@ -87,9 +87,9 @@ public class SplatRenderer {
                     vy = v >>> 10 & 0x3FF;
                     vz = v >>> 20 & 0x3FF;
                     if(shadeX[vy][vz] != vx)
-                        render[sx][sy] = Coloring.darken(render[sx][sy], 0.15f);
+                        render[sx][sy] = Coloring.darken(working[sx][sy], 0.15f);
                     if(shadeZ[vx][vy] == vz)
-                        render[sx][sy] = Coloring.lighten(render[sx][sy], 0.2f);
+                        render[sx][sy] = Coloring.lighten(working[sx][sy], 0.2f);
                 }
             }
         }
@@ -141,8 +141,12 @@ public class SplatRenderer {
                 }
             }
         }
+        if(dither) {
 //        Colorizer.AuroraColorizer.reducer.setDitherStrength(0.375f);
 //        Colorizer.AuroraColorizer.reducer.reduceKnollRoberts(pixmap);
+            color.reducer.setDitherStrength(1.5f);
+            color.reducer.reduceKnollRoberts(pixmap);
+        }
 
         ArrayTools.fill(render, 0);
         ArrayTools.fill(working, 0);

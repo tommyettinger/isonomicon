@@ -185,8 +185,8 @@ public class SlopeBoxTest extends ApplicationAdapter {
                             }
                         }
                         break;
-                    case Input.Keys.E: // easing
-                        renderer.easing = !renderer.easing;
+                    case Input.Keys.D: // dither
+                        renderer.dither = !renderer.dither;
                         break;
                     case Input.Keys.F: // fringe, affects outline/edge
                         renderer.outline = !renderer.outline;

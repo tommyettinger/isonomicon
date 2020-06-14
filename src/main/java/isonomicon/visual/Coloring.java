@@ -1,7 +1,5 @@
 package isonomicon.visual;
 
-import com.badlogic.gdx.math.MathUtils;
-
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -9,11 +7,20 @@ import java.nio.charset.StandardCharsets;
  */
 public class Coloring {
 
-    public static int lighten(final int rgba, final float amount){
-        return (int)MathUtils.lerp(rgba >>> 24, 255.5f, amount) << 24 |
-                (int)MathUtils.lerp(rgba >>> 16 & 255, 255.5f, amount) << 16 |
-                (int)MathUtils.lerp(rgba >>> 8 & 255, 255.5f, amount) << 8 |
+    public static int lighten(final int rgba, float amount){
+        final int r = rgba >>> 24      ;
+        final int g = rgba >>> 16 & 255;
+        final int b = rgba >>> 8 & 255 ;
+        
+        amount *= 255.5f - Math.max(r, Math.max(g, b));
+        return  (int)(r + amount) << 24 |
+                (int)(g + amount) << 16 |
+                (int)(b + amount) << 8 |
                 (rgba & 255);
+//        return (int)MathUtils.lerp(rgba >>> 24, 255.5f, amount) << 24 |
+//                (int)MathUtils.lerp(rgba >>> 16 & 255, 255.5f, amount) << 16 |
+//                (int)MathUtils.lerp(rgba >>> 8 & 255, 255.5f, amount) << 8 |
+//                (rgba & 255);
     }
     public static int darken(final int rgba, float amount){
         amount = 1f - amount;
