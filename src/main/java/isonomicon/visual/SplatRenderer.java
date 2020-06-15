@@ -8,8 +8,9 @@ import squidpony.ArrayTools;
  */
 public class SplatRenderer {
     public Pixmap pixmap;
-    public int[][] depths, working, render, outlines, voxels;
+    public int[][] depths, voxels;
     public int[][] shadeX, shadeZ;
+    public byte[][] working, render, outlines;
     public Colorizer color = Colorizer.ManosColorizer;
     public boolean dither = false, outline = true;
 
@@ -20,10 +21,10 @@ public class SplatRenderer {
     public SplatRenderer (final int size) {
         final int w = size * 4, h = size * 5;
         pixmap = new Pixmap(w, h, Pixmap.Format.RGBA8888);
-        working =  new int[w][h];
-        render =   new int[w][h];
+        working =  new byte[w][h];
+        render =   new byte[w][h];
+        outlines = new byte[w][h];
         depths =   new int[w][h];
-        outlines = new int[w][h];
         voxels   = new int[w][h];
         shadeX = ArrayTools.fill(-1, size, size);
         shadeZ = ArrayTools.fill(-1, size, size);
@@ -46,9 +47,9 @@ public class SplatRenderer {
 
         for (int x = 0, ax = xx; x < 4 && ax < working.length; x++, ax++) {
             for (int y = 0, ay = yy; y < 4 && ay < working[0].length; y++, ay++) {
-                working[ax][ay] = color.medium(voxel);
+                working[ax][ay] = voxel;
                 depths[ax][ay] = depth;
-                outlines[ax][ay] = color.dark(voxel);
+                outlines[ax][ay] = color.colorize(voxel, -2);
                 voxels[ax][ay] = xPos | yPos << 10 | zPos << 20; 
             }
         }
@@ -59,9 +60,9 @@ public class SplatRenderer {
     public SplatRenderer clear() {
         pixmap.setColor(0);
         pixmap.fill();
-        ArrayTools.fill(working, 0);
+        ArrayTools.fill(working, (byte) 0);
         ArrayTools.fill(depths, 0);
-        ArrayTools.fill(outlines, 0);
+        ArrayTools.fill(outlines, (byte) 0);
         ArrayTools.fill(voxels, -1);
         ArrayTools.fill(shadeX, -1);
         ArrayTools.fill(shadeZ, -1);
@@ -70,7 +71,6 @@ public class SplatRenderer {
     
     public Pixmap blit() {
         final int threshold = 9;
-        final int size = shadeZ.length;
 
         pixmap.setColor(0);
         pixmap.fill();
@@ -86,10 +86,10 @@ public class SplatRenderer {
                     vx = v & 0x3FF;
                     vy = v >>> 10 & 0x3FF;
                     vz = v >>> 20 & 0x3FF;
-                    if(shadeX[vy][vz] != vx)
-                        render[sx][sy] = Coloring.darken(working[sx][sy], 0.15f);
                     if(shadeZ[vx][vy] == vz)
-                        render[sx][sy] = Coloring.lighten(working[sx][sy], 0.2f);
+                        render[sx][sy] = color.colorize(working[sx][sy], 1);
+                    else if(shadeX[vy][vz] != vx)
+                        render[sx][sy] = color.colorize(working[sx][sy], -1);
                 }
             }
         }
@@ -97,15 +97,17 @@ public class SplatRenderer {
         for (int x = 0; x <= xSize; x++) {
             for (int y = 0; y <= ySize; y++) {
                 if (render[x][y] != 0) {
-                    pixmap.drawPixel(x, y, render[x][y]);
+                    pixmap.drawPixel(x, y, color.medium(render[x][y]));
                 }
             }
         }
         if (outline) {
+            byte ob;
             int o;
             for (int x = 1; x < xSize; x++) {
                 for (int y = 1; y < ySize; y++) {
-                    if ((o = outlines[x][y]) != 0) {
+                    if ((ob = outlines[x][y]) != 0) {
+                        o = color.medium(ob);
                         depth = depths[x][y];
                         if (outlines[x - 1][y] == 0 && outlines[x][y - 1] == 0) {
                             pixmap.drawPixel(x - 1, y    , o);
@@ -148,10 +150,10 @@ public class SplatRenderer {
             color.reducer.reduceKnollRoberts(pixmap);
         }
 
-        ArrayTools.fill(render, 0);
-        ArrayTools.fill(working, 0);
+        ArrayTools.fill(render, (byte) 0);
+        ArrayTools.fill(working, (byte) 0);
         ArrayTools.fill(depths, 0);
-        ArrayTools.fill(outlines, 0);
+        ArrayTools.fill(outlines, (byte) 0);
         ArrayTools.fill(voxels, -1);
         ArrayTools.fill(shadeX, -1);
         ArrayTools.fill(shadeZ, -1);
