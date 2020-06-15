@@ -11,7 +11,7 @@ public class SplatRenderer {
     public int[][] depths, voxels;
     public int[][] shadeX, shadeZ;
     public byte[][] working, render, outlines;
-    public Colorizer color = Colorizer.ManosColorizer, alternate = Colorizer.FullGrayColorizer;
+    public Colorizer color = Colorizer.ManosColorizer, alternate = Colorizer.FancyManosColorizer;
     public boolean dither = false, outline = true, useAlternate = false;
 
     public Pixmap pixmap() {
@@ -87,7 +87,7 @@ public class SplatRenderer {
                     vy = v >>> 10 & 0x3FF;
                     vz = v >>> 20 & 0x3FF;
                     if(shadeZ[vx][vy] == vz)
-                        render[sx][sy] = (byte) (64 | color.brighten((byte) (0x3F & working[sx][sy])));
+                        render[sx][sy] = color.brighten((byte) (0x3F & working[sx][sy]));
                     else if(shadeX[vy][vz] != vx)
                         render[sx][sy] = (byte) (128 | color.darken((byte) (0x3F & working[sx][sy])));
                 }
