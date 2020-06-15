@@ -188,6 +188,9 @@ public class SlopeBoxTest extends ApplicationAdapter {
                     case Input.Keys.D: // dither
                         renderer.dither = !renderer.dither;
                         break;
+                    case Input.Keys.U: // useAlternate
+                        renderer.useAlternate = !renderer.useAlternate;
+                        break;
                     case Input.Keys.F: // fringe, affects outline/edge
                         renderer.outline = !renderer.outline;
                         break;
@@ -236,7 +239,7 @@ public class SlopeBoxTest extends ApplicationAdapter {
             //// loads a file by its full path, which we get via drag+drop
             final byte[][][] arr = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream(name)));
             if(arr == null) return;
-            renderer.colorizer(Colorizer.arbitraryColorizer(VoxIO.lastPalette));
+//            renderer.colorizer(Colorizer.arbitraryColorizer(VoxIO.lastPalette));
 //            Tools3D.fill(voxels, 0);
 //            Tools3D.deepCopyInto(arr, voxels);
 //            Tools3D.translateCopyInto(arr, voxels, 15, 15, 15);

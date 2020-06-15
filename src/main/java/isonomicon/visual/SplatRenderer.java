@@ -11,8 +11,8 @@ public class SplatRenderer {
     public int[][] depths, voxels;
     public int[][] shadeX, shadeZ;
     public byte[][] working, render, outlines;
-    public Colorizer color = Colorizer.ManosColorizer;
-    public boolean dither = false, outline = true;
+    public Colorizer color = Colorizer.ManosColorizer, alternate = Colorizer.FullGrayColorizer;
+    public boolean dither = false, outline = true, useAlternate = false;
 
     public Pixmap pixmap() {
         return pixmap;
@@ -47,9 +47,9 @@ public class SplatRenderer {
 
         for (int x = 0, ax = xx; x < 4 && ax < working.length; x++, ax++) {
             for (int y = 0, ay = yy; y < 4 && ay < working[0].length; y++, ay++) {
-                working[ax][ay] = voxel;
+                working[ax][ay] = (byte) ((voxel & 0x3F) | 0xC0);
                 depths[ax][ay] = depth;
-                outlines[ax][ay] = color.colorize(voxel, -2);
+                outlines[ax][ay] = color.blacken((byte)(voxel & 0x3F));
                 voxels[ax][ay] = xPos | yPos << 10 | zPos << 20; 
             }
         }
@@ -71,7 +71,7 @@ public class SplatRenderer {
     
     public Pixmap blit() {
         final int threshold = 9;
-
+        final Colorizer finisher = useAlternate ? alternate : color;
         pixmap.setColor(0);
         pixmap.fill();
         int xSize = Math.min(pixmap.getWidth(), working.length) - 1, ySize = Math.min(pixmap.getHeight(), working[0].length) - 1, depth;
@@ -87,9 +87,9 @@ public class SplatRenderer {
                     vy = v >>> 10 & 0x3FF;
                     vz = v >>> 20 & 0x3FF;
                     if(shadeZ[vx][vy] == vz)
-                        render[sx][sy] = color.colorize(working[sx][sy], 1);
+                        render[sx][sy] = (byte) (64 | color.brighten((byte) (0x3F & working[sx][sy])));
                     else if(shadeX[vy][vz] != vx)
-                        render[sx][sy] = color.colorize(working[sx][sy], -1);
+                        render[sx][sy] = (byte) (128 | color.darken((byte) (0x3F & working[sx][sy])));
                 }
             }
         }
@@ -97,7 +97,7 @@ public class SplatRenderer {
         for (int x = 0; x <= xSize; x++) {
             for (int y = 0; y <= ySize; y++) {
                 if (render[x][y] != 0) {
-                    pixmap.drawPixel(x, y, color.medium(render[x][y]));
+                    pixmap.drawPixel(x, y, finisher.medium(render[x][y]));
                 }
             }
         }
@@ -107,7 +107,7 @@ public class SplatRenderer {
             for (int x = 1; x < xSize; x++) {
                 for (int y = 1; y < ySize; y++) {
                     if ((ob = outlines[x][y]) != 0) {
-                        o = color.medium(ob);
+                        o = finisher.medium(ob);
                         depth = depths[x][y];
                         if (outlines[x - 1][y] == 0 && outlines[x][y - 1] == 0) {
                             pixmap.drawPixel(x - 1, y    , o);
@@ -146,8 +146,8 @@ public class SplatRenderer {
         if(dither) {
 //        Colorizer.AuroraColorizer.reducer.setDitherStrength(0.375f);
 //        Colorizer.AuroraColorizer.reducer.reduceKnollRoberts(pixmap);
-            color.reducer.setDitherStrength(1.5f);
-            color.reducer.reduceKnollRoberts(pixmap);
+            finisher.reducer.setDitherStrength(1.5f);
+            finisher.reducer.reduceKnollRoberts(pixmap);
         }
 
         ArrayTools.fill(render, (byte) 0);

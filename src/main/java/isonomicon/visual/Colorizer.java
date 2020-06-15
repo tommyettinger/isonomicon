@@ -92,6 +92,12 @@ public abstract class Colorizer {
     public abstract byte darken(byte voxel);
 
     /**
+     * @param voxel A color index
+     * @return A much darker version of the same color, or the darkest color index in the palette if none is available.
+     */
+    public abstract byte blacken(byte voxel);
+
+    /**
      * @return An array of main colors as byte indices, chosen for aesthetic reasons as the primary colors to use.
      */
     public abstract byte[] mainColors();
@@ -136,9 +142,7 @@ public abstract class Colorizer {
      * @param voxel      The color index of a voxel
      * @return An rgba8888 color
      */
-    public int dimmer(int brightness, byte voxel) {
-        return reducer.paletteArray[colorize(voxel, brightness - 2) & 0xFF];
-    }
+    public abstract int dimmer(int brightness, byte voxel);
     
     public int randomColor(IRNG random){
         return reducer.paletteArray[reducer.paletteMapping[random.next(15)]];
@@ -233,6 +237,19 @@ public abstract class Colorizer {
         public byte darken(byte voxel) {
             return AURORA_RAMPS[voxel & 0xFF][2];
         }
+
+        @Override
+        public byte blacken(byte voxel) {
+            return AURORA_RAMPS[voxel & 0xFF][3];
+        }
+
+        @Override
+        public int dimmer(int brightness, byte voxel) {
+            if(brightness < 0) return Coloring.AURORA[1];
+            if(brightness > 3) return Coloring.AURORA[15];
+            return Coloring.AURORA[AURORA_RAMPS[voxel & 0xFF][3 - brightness] & 0xFF];
+        }
+
     };
     public static final Colorizer AuroraBonusColorizer = new Colorizer(new PaletteReducer()) {
         private final byte[] primary = {
@@ -269,6 +286,11 @@ public abstract class Colorizer {
         @Override
         public byte darken(byte voxel) {
             return AURORA_RAMPS[voxel & 0xFF][2];
+        }
+
+        @Override
+        public byte blacken(byte voxel) {
+            return AURORA_RAMPS[voxel & 0xFF][3];
         }
 
         private final int[][] RAMP_VALUES = new int[][]{
@@ -1443,6 +1465,11 @@ public abstract class Colorizer {
         }
 
         @Override
+        public byte blacken(byte voxel) {
+            return Coloring.AZURESTAR_RAMPS[(voxel & 0x3F) % 33][0];
+        }
+
+        @Override
         public int dimmer(int brightness, byte voxel) {
             if(brightness < 0) return Coloring.AZURESTAR33[1];
             if(brightness > 3) return Coloring.AZURESTAR33[13];
@@ -1497,6 +1524,11 @@ public abstract class Colorizer {
         }
 
         @Override
+        public byte blacken(byte voxel) {
+            return Coloring.SPLAY_RAMPS[voxel & 0x1F][0];
+        }
+
+        @Override
         public int dimmer(int brightness, byte voxel) {
             if(brightness < 0) return Coloring.SPLAY32[1];
             if(brightness > 3) return Coloring.SPLAY32[13];
@@ -1547,6 +1579,11 @@ public abstract class Colorizer {
         }
 
         @Override
+        public byte blacken(byte voxel) {
+            return Coloring.ZIGGURAT_RAMPS[voxel & 0x3F][0];
+        }
+
+        @Override
         public int dimmer(int brightness, byte voxel) {
             if(brightness < 0) return Coloring.ZIGGURAT64[1];
             if(brightness > 3) return Coloring.ZIGGURAT64[23];
@@ -1563,9 +1600,6 @@ public abstract class Colorizer {
         }
     };
 
-    
-    
-    
     public static final Colorizer ManosColorizer = new Colorizer(new PaletteReducer(Coloring.MANOS64, Coloring.ENCODED_MANOS)) {
         private final byte[] primary = {
                 11, 17, 23, 32, 45, 53
@@ -1593,17 +1627,80 @@ public abstract class Colorizer {
 
         @Override
         public byte darken(byte voxel) {
-            // the second half of voxels (with bit 0x40 set) don't shade visually, but Colorizer uses this method to
-            // denote a structural change to the voxel's makeup, so this uses the first 64 voxel colors to shade both
-            // halves, then marks voxels from the second half back to being an unshaded voxel as the last step.
             return Coloring.MANOS_RAMPS[voxel & 0x3F][1];
+        }
+
+        @Override
+        public byte blacken(byte voxel) {
+            return Coloring.MANOS_RAMPS[voxel & 0x3F][0];
         }
 
         @Override
         public int dimmer(int brightness, byte voxel) {
             if(brightness < 0) return Coloring.MANOS64[1];
             if(brightness > 3) return Coloring.MANOS64[10];
-            return Coloring.MANOS64[Coloring.MANOS_RAMPS[voxel & 0x3F][brightness] & 0xFF];
+            return Coloring.MANOS64[Coloring.MANOS_RAMPS[voxel & 0x3F][brightness] & 0x3F];
+        }
+
+        @Override
+        public int getShadeBit() {
+            return 0;
+        }
+        @Override
+        public int getWaveBit() {
+            return 0;
+        }
+    };
+
+
+    /**
+     * 255 shades of gray, from almost-completely-black to pure white; also has fully-transparent.
+     */
+    public static final Colorizer FullGrayColorizer = new Colorizer(new PaletteReducer(Coloring.FULL_GRAY)) {
+        private final byte[] primary = {
+                40, 81, 122, (byte) 163, (byte)204, (byte)245 
+        }, grays = {
+                9, 50, 91, (byte) 132, (byte) 173, (byte)214, (byte)255
+        };
+
+        @Override
+        public byte[] mainColors() {
+            return primary;
+        }
+
+        /**
+         * @return An array of grayscale or close-to-grayscale color indices, with the darkest first and lightest last.
+         */
+        @Override
+        public byte[] grayscale() {
+            return grays;
+        }
+
+        @Override
+        public byte brighten(byte voxel) {
+            return (byte)(Math.min(voxel & 255, 254) + 1);
+        }
+
+        @Override
+        public byte darken(byte voxel) {
+            return (byte)(Math.max(voxel & 255, 2) - 1);
+        }
+
+        @Override
+        public byte blacken(byte voxel) {
+            return (byte)(Math.max(voxel & 255, 3) - 2);
+        }
+
+        @Override
+        public int dimmer(int brightness, byte voxel) {
+            if(brightness < 0) return Coloring.FULL_GRAY[1];
+            if(brightness > 3) return Coloring.FULL_GRAY[255];
+            switch (brightness){
+                case 0: return (byte)(Math.max(voxel & 255, 3) - 2);
+                case 1: return (byte)(Math.max(voxel & 255, 2) - 1);
+                case 3: return (byte)(Math.min(voxel & 255, 254) + 1);
+                default: return Coloring.FULL_GRAY[voxel & 255];
+            }
         }
 
         @Override
@@ -1782,6 +1879,11 @@ public abstract class Colorizer {
             @Override
             public byte darken(byte voxel) {
                 return ramps[(voxel & 0xFF) % COUNT][1];
+            }
+
+            @Override
+            public byte blacken(byte voxel) {
+                return ramps[(voxel & 0xFF) % COUNT][0];
             }
 
             @Override
@@ -1987,6 +2089,11 @@ public abstract class Colorizer {
             @Override
             public byte darken(byte voxel) {
                 return ramps[(voxel & 0xFF) % COUNT][1];
+            }
+
+            @Override
+            public byte blacken(byte voxel) {
+                return ramps[(voxel & 0xFF) % COUNT][0];
             }
 
             @Override
