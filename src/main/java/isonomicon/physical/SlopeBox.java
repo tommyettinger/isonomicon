@@ -689,9 +689,6 @@ public class SlopeBox {
     };
 //           7.3,2.0,2.0,7.3};
 
-    private static final int H_STRETCH = 2;
-    private static final int V_STRETCH = 3;
-
     public static Pixmap drawSplats(SlopeBox seq, SplatRenderer renderer) {
         // To move one x+ in voxels is x + 2, y - 1 in pixels.
         // To move one x- in voxels is x - 2, y + 1 in pixels.
@@ -699,10 +696,10 @@ public class SlopeBox {
         // To move one y- in voxels is x + 2, y + 1 in pixels.
         // To move one z+ in voxels is y + 3 in pixels.
         // To move one z- in voxels is y - 3 in pixels.
-        final int sizeXY = seq.sizeX(), sizeZ = seq.sizeZ();
-        for (int z = 0; z < sizeZ; z++) {
-            for (int x = 0; x < sizeXY; x++) {
-                for (int y = 0; y < sizeXY; y++) {
+        final int size = seq.sizeX();
+        for (int z = 0; z < size; z++) {
+            for (int x = 0; x < size; x++) {
+                for (int y = 0; y < size; y++) {
                     final byte v = seq.color(x, y, z);
                     if(v == 0) continue;
                     renderer.splat(x, y, z, v);

@@ -52,7 +52,6 @@ public class Tools3D {
         }
     }
 
-
     public static byte[][][] rotate(byte[][][] voxels, int turns)
     {
         int xs, ys, zs;
@@ -92,6 +91,24 @@ public class Tools3D {
         return next;
     }
 
+    public static byte[][][] clockwiseInPlace(byte[][][] data) {
+        final int size = data.length - 1, halfSizeXYOdd = size + 2 >>> 1, halfSizeXYEven = size + 1 >>> 1;
+        byte c;
+        for (int z = 0; z <= size; z++) {
+            for (int x = 0; x < halfSizeXYOdd; x++) {
+                for (int y = 0; y < halfSizeXYEven; y++) {
+
+                    c = data[x][y][z];
+                    data[x][y][z] = data[y][size - x][z];
+                    data[y][size - x][z] = data[size - x][size - y][z];
+                    data[size - x][size - y][z] = data[size - y][x][z];
+                    data[size - y][x][z] = c;
+                }
+            }
+        }
+        return data;
+    }
+    
     public static byte[][][] mirrorX(byte[][][] voxels)
     {
         int xs, ys, zs;

@@ -11,7 +11,7 @@ public class SplatRenderer {
     public int[][] depths, voxels;
     public int[][] shadeX, shadeZ;
     public byte[][] working, render, outlines;
-    public Colorizer color = Colorizer.ManosColorizer, alternate = Colorizer.FancyManosColorizer;
+    public Colorizer color = Colorizer.ManosColorizer, alternate = Colorizer.FullGrayColorizer;
     public boolean dither = false, outline = true, useAlternate = false;
 
     public Pixmap pixmap() {
@@ -87,7 +87,7 @@ public class SplatRenderer {
                     vy = v >>> 10 & 0x3FF;
                     vz = v >>> 20 & 0x3FF;
                     if(shadeZ[vx][vy] == vz)
-                        render[sx][sy] = color.brighten((byte) (0x3F & working[sx][sy]));
+                        render[sx][sy] = (byte) (64 |  color.brighten((byte) (0x3F & working[sx][sy])));
                     else if(shadeX[vy][vz] != vx)
                         render[sx][sy] = (byte) (128 | color.darken((byte) (0x3F & working[sx][sy])));
                 }
@@ -159,4 +159,25 @@ public class SplatRenderer {
         ArrayTools.fill(shadeZ, -1);
         return pixmap;
     }
+
+    public Pixmap drawSplats(byte[][][] colors) {
+        // To move one x+ in voxels is x + 2, y - 1 in pixels.
+        // To move one x- in voxels is x - 2, y + 1 in pixels.
+        // To move one y+ in voxels is x - 2, y - 1 in pixels.
+        // To move one y- in voxels is x + 2, y + 1 in pixels.
+        // To move one z+ in voxels is y + 3 in pixels.
+        // To move one z- in voxels is y - 3 in pixels.
+        final int size = colors.length;
+        for (int z = 0; z < size; z++) {
+            for (int x = 0; x < size; x++) {
+                for (int y = 0; y < size; y++) {
+                    final byte v = colors[x][y][z];
+                    if(v != 0) 
+                        splat(x, y, z, v);
+                }
+            }
+        }
+        return blit();
+    }
+
 }

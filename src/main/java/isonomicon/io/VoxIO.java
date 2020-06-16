@@ -59,7 +59,7 @@ public class VoxIO {
                 return null;
             //int version = 
             stream.readInt();
-            int sizeX = 16, sizeY = 16, sizeXY = 16, sizeZ = 16, offX = 0, offY = 0;
+            int sizeX = 16, sizeY = 16, size = 16, sizeZ = 16, offX = 0, offY = 0;
             // a MagicaVoxel .vox file starts with a 'magic' 4 character 'VOX ' identifier
             if (chunkId[0] == 'V' && chunkId[1] == 'O' && chunkId[2] == 'X' && chunkId[3] == ' ') {
                 while (stream.available() > 0) {
@@ -74,10 +74,11 @@ public class VoxIO {
                     if (chunkName.equals("SIZE")) {
                         sizeX = stream.readInt();
                         sizeY = stream.readInt();
-                        sizeXY = Math.max(sizeX, sizeY);
-                        offX = sizeXY - sizeX >> 1;
-                        offY = sizeXY - sizeY >> 1;
-                        voxelData = new byte[sizeXY][sizeXY][sizeZ = stream.readInt()];
+                        sizeZ = stream.readInt();
+                        size = Math.max(sizeZ, Math.max(sizeX, sizeY));
+                        offX = size - sizeX >> 1;
+                        offY = size - sizeY >> 1;
+                        voxelData = new byte[size][size][size];
                         stream.skipBytes(chunkSize - 4 * 3);
                     } else if (chunkName.equals("XYZI") && voxelData != null) {
                         // XYZI contains n voxels
