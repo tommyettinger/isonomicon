@@ -126,5 +126,17 @@ public class Material {
             new Material("decorated cloth", 61, 61, 24L),
             new Material("attachment", 62, 62, 128L),
             new Material("beak or claw", 63, 63, 64L),
+            
+            new Material("spark spawner", 64, 0, 0L, 118, 1, 64, 14),
+            new Material("dark eye", 65, 0, 0L),
+            new Material("smoke", 66, 66, 0L, 0, 2, 66, 5),
+            new Material("shadow", 67, 0, 0L),
+            new Material("ember spawner", 68, 0, 0L, 81, 1, 68, 9),
+            new Material("dull aura", 69, 0, 0L),
+            new Material("dead eye", 70, 0, 0L),
+            new Material("steam", 71, 71, 0L, 0, 3, 71, 5),
+            new Material("light eye", 72, 0, 0L),
+            new Material("ember", 81, 0, 0L, 81, 8, 68, 7, 66, 1),
+            new Material("spark", 118, 0, 0L, 118, 2, 64, 3),
     };
 }
