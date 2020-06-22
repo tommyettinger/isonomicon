@@ -50,7 +50,6 @@ public class SplatTest extends ApplicationAdapter {
         worldView = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         screenView = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         buffer = new FrameBuffer(Pixmap.Format.RGBA8888, VIRTUAL_WIDTH, VIRTUAL_HEIGHT, false, false);
-        screenRegion = new TextureRegion();
         screenView.getCamera().position.set(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT / 2, 0);
         screenView.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.enableBlending();
@@ -104,7 +103,7 @@ public class SplatTest extends ApplicationAdapter {
         worldView.update(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         batch.setProjectionMatrix(screenView.getCamera().combined);
         batch.begin();
-        pmTexture.draw(renderer.drawSplats(voxels), 0, 0);
+        pmTexture.draw(renderer.drawSplatsHalf(voxels), 0, 0);
         batch.draw(pmTexture,
                 0,
                 0);
@@ -118,8 +117,7 @@ public class SplatTest extends ApplicationAdapter {
         batch.begin();
         screenTexture = buffer.getColorBufferTexture();
         screenTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
-        screenRegion.setRegion(screenTexture);
-        batch.draw(screenRegion, 0, 0);
+        batch.draw(screenTexture, 0, 0);
 //        font.setColor(1f, 1f, 1f, 1f);
 //        font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, 20);
         batch.end();
@@ -136,7 +134,7 @@ public class SplatTest extends ApplicationAdapter {
         config.setWindowedMode(SCREEN_WIDTH, SCREEN_HEIGHT);
         config.setIdleFPS(10);
         config.useVsync(false);
-        config.setResizable(false);
+        config.setResizable(true);
         final SplatTest app = new SplatTest();
         config.setWindowListener(new Lwjgl3WindowAdapter() {
             @Override
