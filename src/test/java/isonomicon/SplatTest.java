@@ -27,8 +27,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 public class SplatTest extends ApplicationAdapter {
-    public static final int SCREEN_WIDTH = 512;//640;
-    public static final int SCREEN_HEIGHT = 512;//720;
+    public static final int SCREEN_WIDTH = 256;//640;
+    public static final int SCREEN_HEIGHT = 256;//720;
     public static final int VIRTUAL_WIDTH = SCREEN_WIDTH;
     public static final int VIRTUAL_HEIGHT = SCREEN_HEIGHT;
     protected SpriteBatch batch;
@@ -68,7 +68,7 @@ public class SplatTest extends ApplicationAdapter {
 //        colorizer = Colorizer.SplayColorizer;
         colorizer = Colorizer.ManosColorizer;
         renderer = new SplatRenderer(80).colorizer(colorizer);
-        pmTexture = new Texture(512, 512, Pixmap.Format.RGBA8888);
+        pmTexture = new Texture(256, 256, Pixmap.Format.RGBA8888);
         maker = new ModelMaker(DiverRNG.randomize(System.currentTimeMillis() >>> 23), colorizer);
 //        try {
 //            box = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("Aurora/dumbcube.vox")));

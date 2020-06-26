@@ -7,20 +7,17 @@ import squidpony.ArrayTools;
  * Created by Tommy Ettinger on 12/16/2018.
  */
 public class SplatRenderer {
-    public Pixmap pixmap;
+    public Pixmap pixmap, pixmapHalf;
     public int[][] depths, voxels;
     public int[][] shadeX, shadeZ;
     public byte[][] working, render, outlines;
     public Colorizer color = Colorizer.ManosColorizer, alternate = Colorizer.FullGrayColorizer;
     public boolean dither = false, outline = true, useAlternate = false;
 
-    public Pixmap pixmap() {
-        return pixmap;
-    }
-
     public SplatRenderer (final int size) {
-        final int w = size * 4, h = size * 5;
+        final int w = size * 4 + 4, h = size * 5 + 4;
         pixmap = new Pixmap(w, h, Pixmap.Format.RGBA8888);
+        pixmapHalf = new Pixmap(w>>>1, h>>>1, Pixmap.Format.RGBA8888);
         working =  new byte[w][h];
         render =   new byte[w][h];
         outlines = new byte[w][h];
@@ -163,9 +160,9 @@ public class SplatRenderer {
     public Pixmap blitHalf() {
         final int threshold = 9;
         final Colorizer finisher = useAlternate ? alternate : color;
-        pixmap.setColor(0);
-        pixmap.fill();
-        int xSize = Math.min(pixmap.getWidth() << 1, working.length) - 1, ySize = Math.min(pixmap.getHeight() << 1, working[0].length) - 1, depth;
+        pixmapHalf.setColor(0);
+        pixmapHalf.fill();
+        int xSize = working.length - 1, ySize = working[0].length - 1, depth;
         for (int x = 0; x <= xSize; x++) {
             System.arraycopy(working[x], 0, render[x], 0, ySize);
         }
@@ -190,7 +187,7 @@ public class SplatRenderer {
             for (int y = 0; y <= ySize; y++) {
 //                if((y & 3) != choice) continue;
                 if (render[x][y] != 0) {
-                    pixmap.drawPixel(x >>> 1, y >>> 1, finisher.medium(render[x][y]));
+                    pixmapHalf.drawPixel(x >>> 1, y >>> 1, finisher.medium(render[x][y]));
                 }
             }
         }
@@ -207,33 +204,33 @@ public class SplatRenderer {
                         o = finisher.medium(ob);
                         depth = depths[x][y];
 //                        if (outlines[x - 1][y] == 0 && outlines[x][y - 1] == 0) {
-//                            pixmap.drawPixel(hx - 1, hy    , o);
-//                            pixmap.drawPixel(hx    , hy - 1, o);
-//                            pixmap.drawPixel(hx    , hy    , o);
+//                            pixmapHalf.drawPixel(hx - 1, hy    , o);
+//                            pixmapHalf.drawPixel(hx    , hy - 1, o);
+//                            pixmapHalf.drawPixel(hx    , hy    , o);
 //                        } else if (outlines[x + 1][y] == 0 && outlines[x][y - 1] == 0) {
-//                            pixmap.drawPixel(hx + 1, hy    , o);
-//                            pixmap.drawPixel(hx    , hy - 1, o);
-//                            pixmap.drawPixel(hx    , hy    , o); 
+//                            pixmapHalf.drawPixel(hx + 1, hy    , o);
+//                            pixmapHalf.drawPixel(hx    , hy - 1, o);
+//                            pixmapHalf.drawPixel(hx    , hy    , o); 
 //                        } else if (outlines[x - 1][y] == 0 && outlines[x][y + 1] == 0) {
-//                            pixmap.drawPixel(hx - 1, hy    , o);
-//                            pixmap.drawPixel(hx    , hy + 1, o);
-//                            pixmap.drawPixel(hx    , hy    , o);
+//                            pixmapHalf.drawPixel(hx - 1, hy    , o);
+//                            pixmapHalf.drawPixel(hx    , hy + 1, o);
+//                            pixmapHalf.drawPixel(hx    , hy    , o);
 //                        } else if (outlines[x + 1][y] == 0 && outlines[x][y + 1] == 0) {
-//                            pixmap.drawPixel(hx + 1, hy    , o);
-//                            pixmap.drawPixel(hx    , hy + 1, o);
-//                            pixmap.drawPixel(hx    , hy    , o);
+//                            pixmapHalf.drawPixel(hx + 1, hy    , o);
+//                            pixmapHalf.drawPixel(hx    , hy + 1, o);
+//                            pixmapHalf.drawPixel(hx    , hy    , o);
 //                        } else {
                             if (outlines[x - 1][y] == 0 || depths[x - 1][y] < depth - threshold) {
-                                pixmap.drawPixel(hx - 1, hy    , o);
+                                pixmapHalf.drawPixel(hx - 1, hy    , o);
                             }
                             if (outlines[x + 1][y] == 0 || depths[x + 1][y] < depth - threshold) {
-                                pixmap.drawPixel(hx + 1, hy    , o);
+                                pixmapHalf.drawPixel(hx + 1, hy    , o);
                             }
                             if (outlines[x][y - 1] == 0 || depths[x][y - 1] < depth - threshold) {
-                                pixmap.drawPixel(hx    , hy - 1, o);
+                                pixmapHalf.drawPixel(hx    , hy - 1, o);
                             }
                             if (outlines[x][y + 1] == 0 || depths[x][y + 1] < depth - threshold) {
-                                pixmap.drawPixel(hx    , hy + 1, o);
+                                pixmapHalf.drawPixel(hx    , hy + 1, o);
                             }
 //                        }
                     }
@@ -241,10 +238,8 @@ public class SplatRenderer {
             }
         }
         if(dither) {
-//        Colorizer.AuroraColorizer.reducer.setDitherStrength(0.375f);
-//        Colorizer.AuroraColorizer.reducer.reduceKnollRoberts(pixmap);
             finisher.reducer.setDitherStrength(1.5f);
-            finisher.reducer.reduceKnollRoberts(pixmap);
+            finisher.reducer.reduceKnollRoberts(pixmapHalf);
         }
 
         ArrayTools.fill(render, (byte) 0);
@@ -254,7 +249,7 @@ public class SplatRenderer {
         ArrayTools.fill(voxels, -1);
         ArrayTools.fill(shadeX, -1);
         ArrayTools.fill(shadeZ, -1);
-        return pixmap;
+        return pixmapHalf;
     }
 
     public Pixmap drawSplats(byte[][][] colors) {
