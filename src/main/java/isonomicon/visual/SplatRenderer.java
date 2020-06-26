@@ -206,23 +206,23 @@ public class SplatRenderer {
                     if ((ob = outlines[x][y]) != 0) {
                         o = finisher.medium(ob);
                         depth = depths[x][y];
-                        if (outlines[x - 1][y] == 0 && outlines[x][y - 1] == 0) {
-                            pixmap.drawPixel(hx - 1, hy    , o);
-                            pixmap.drawPixel(hx    , hy - 1, o);
-                            pixmap.drawPixel(hx    , hy    , o);
-                        } else if (outlines[x + 1][y] == 0 && outlines[x][y - 1] == 0) {
-                            pixmap.drawPixel(hx + 1, hy    , o);
-                            pixmap.drawPixel(hx    , hy - 1, o);
-                            pixmap.drawPixel(hx    , hy    , o); 
-                        } else if (outlines[x - 1][y] == 0 && outlines[x][y + 1] == 0) {
-                            pixmap.drawPixel(hx - 1, hy    , o);
-                            pixmap.drawPixel(hx    , hy + 1, o);
-                            pixmap.drawPixel(hx    , hy    , o);
-                        } else if (outlines[x + 1][y] == 0 && outlines[x][y + 1] == 0) {
-                            pixmap.drawPixel(hx + 1, hy    , o);
-                            pixmap.drawPixel(hx    , hy + 1, o);
-                            pixmap.drawPixel(hx    , hy    , o);
-                        } else {
+//                        if (outlines[x - 1][y] == 0 && outlines[x][y - 1] == 0) {
+//                            pixmap.drawPixel(hx - 1, hy    , o);
+//                            pixmap.drawPixel(hx    , hy - 1, o);
+//                            pixmap.drawPixel(hx    , hy    , o);
+//                        } else if (outlines[x + 1][y] == 0 && outlines[x][y - 1] == 0) {
+//                            pixmap.drawPixel(hx + 1, hy    , o);
+//                            pixmap.drawPixel(hx    , hy - 1, o);
+//                            pixmap.drawPixel(hx    , hy    , o); 
+//                        } else if (outlines[x - 1][y] == 0 && outlines[x][y + 1] == 0) {
+//                            pixmap.drawPixel(hx - 1, hy    , o);
+//                            pixmap.drawPixel(hx    , hy + 1, o);
+//                            pixmap.drawPixel(hx    , hy    , o);
+//                        } else if (outlines[x + 1][y] == 0 && outlines[x][y + 1] == 0) {
+//                            pixmap.drawPixel(hx + 1, hy    , o);
+//                            pixmap.drawPixel(hx    , hy + 1, o);
+//                            pixmap.drawPixel(hx    , hy    , o);
+//                        } else {
                             if (outlines[x - 1][y] == 0 || depths[x - 1][y] < depth - threshold) {
                                 pixmap.drawPixel(hx - 1, hy    , o);
                             }
@@ -235,7 +235,7 @@ public class SplatRenderer {
                             if (outlines[x][y + 1] == 0 || depths[x][y + 1] < depth - threshold) {
                                 pixmap.drawPixel(hx    , hy + 1, o);
                             }
-                        }
+//                        }
                     }
                 }
             }
