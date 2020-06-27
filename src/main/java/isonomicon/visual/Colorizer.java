@@ -1652,7 +1652,7 @@ public abstract class Colorizer {
         }
     };
 
-    public static final Colorizer FancyManosColorizer = new Colorizer(new PaletteReducer(Coloring.FANCY_MANOS64, Coloring.ENCODED_MANOS)) {
+    public static final Colorizer ManossusColorizer = new Colorizer(new PaletteReducer(Coloring.MANOSSUS256, Coloring.ENCODED_MANOS)) {
         private final byte[] primary = {
                 11, 17, 23, 32, 45, 53
         }, grays = {
@@ -1674,24 +1674,24 @@ public abstract class Colorizer {
 
         @Override
         public byte brighten(byte voxel) {
-            return (byte) (Coloring.MANOS_RAMPS[voxel & 0x3F][3] | (voxel & 0xC0));
+            return Coloring.MANOSSUS_RAMPS[voxel & 0x3F][3];
         }
 
         @Override
         public byte darken(byte voxel) {
-            return (byte) (Coloring.MANOS_RAMPS[voxel & 0x3F][1] | (voxel & 0xC0));
+            return Coloring.MANOSSUS_RAMPS[voxel & 0x3F][1];
         }
 
         @Override
         public byte blacken(byte voxel) {
-            return (byte) (Coloring.MANOS_RAMPS[voxel & 0x3F][0] | (voxel & 0xC0));
+            return Coloring.MANOSSUS_RAMPS[voxel & 0x3F][0];
         }
 
         @Override
         public int dimmer(int brightness, byte voxel) {
-            if(brightness < 0) return Coloring.MANOS64[1];
-            if(brightness > 3) return Coloring.MANOS64[74];
-            return Coloring.FANCY_MANOS64[(Coloring.MANOS_RAMPS[voxel & 0x3F][brightness] & 0x3F) | (voxel & 0xC0)];
+            if(brightness < 0) return Coloring.MANOSSUS256[1];
+            if(brightness > 3) return Coloring.MANOSSUS256[80];
+            return Coloring.MANOSSUS256[(Coloring.MANOSSUS_RAMPS[voxel & 0x3F][brightness] & 0xFF)];
         }
 
         @Override
