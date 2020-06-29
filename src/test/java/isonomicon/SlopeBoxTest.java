@@ -20,7 +20,7 @@ import isonomicon.physical.ModelMaker;
 import isonomicon.physical.SlopeBox;
 import isonomicon.physical.Tools3D;
 import isonomicon.visual.Colorizer;
-import isonomicon.visual.SplatRenderer;
+import isonomicon.visual.VoxelPixmapRenderer;
 import squidpony.FakeLanguageGen;
 import squidpony.squidmath.DiverRNG;
 
@@ -40,7 +40,7 @@ public class SlopeBoxTest extends ApplicationAdapter {
     protected Texture screenTexture, pmTexture;
     protected TextureRegion screenRegion;
     protected ModelMaker maker;
-    private SplatRenderer renderer;
+    private VoxelPixmapRenderer renderer;
     private byte[][][] voxels;
     private SlopeBox seq;
     private Colorizer colorizer;
@@ -70,7 +70,7 @@ public class SlopeBoxTest extends ApplicationAdapter {
 //        colorizer = Colorizer.AzurestarColorizer;
 //        colorizer = Colorizer.SplayColorizer;
         colorizer = Colorizer.ManosColorizer;
-        renderer = new SplatRenderer(80).colorizer(colorizer);
+        renderer = new VoxelPixmapRenderer().pixmap(new Pixmap(512, 512, Pixmap.Format.RGBA8888)).colorizer(colorizer);
         pmTexture = new Texture(512, 512, Pixmap.Format.RGBA8888);
         maker = new ModelMaker(DiverRNG.randomize(System.currentTimeMillis() >>> 23), colorizer);
 //        try {
@@ -107,7 +107,7 @@ public class SlopeBoxTest extends ApplicationAdapter {
         worldView.update(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         batch.setProjectionMatrix(screenView.getCamera().combined);
         batch.begin();
-        pmTexture.draw(SlopeBox.drawSplats(seq, renderer), 0, 0);
+        pmTexture.draw(SlopeBox.drawIso(seq, renderer), 0, 0);
         batch.draw(pmTexture,
                 0,
                 0);
@@ -122,6 +122,7 @@ public class SlopeBoxTest extends ApplicationAdapter {
         screenTexture = buffer.getColorBufferTexture();
         screenTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         screenRegion.setRegion(screenTexture);
+        screenRegion.flip(false, true);
         batch.draw(screenRegion, 0, 0);
 //        font.setColor(1f, 1f, 1f, 1f);
 //        font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, 20);
@@ -184,12 +185,6 @@ public class SlopeBoxTest extends ApplicationAdapter {
                                 }
                             }
                         }
-                        break;
-                    case Input.Keys.D: // dither
-                        renderer.dither = !renderer.dither;
-                        break;
-                    case Input.Keys.U: // useAlternate
-                        renderer.useAlternate = !renderer.useAlternate;
                         break;
                     case Input.Keys.F: // fringe, affects outline/edge
                         renderer.outline = !renderer.outline;

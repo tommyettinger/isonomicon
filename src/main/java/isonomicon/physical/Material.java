@@ -158,9 +158,9 @@ public class Material {
             new Material("green glass", 92, 74, 0L),
             new Material("miasma", 93, 0, 0L, 90, 2, 93, 5),
             new Material("wood shrapnel", 94, 94, 0L, 94, 8, 0, 1),
-            new Material("energy active", 95, 0, 0L, 95, 9, 76, 4, 0, 1),
-            new Material("energy spawner", 96, 0, 0L, 95, 1, 96, 6),
-            new Material("energy fading", 97, 0, 0L, 0, 3, 97, 7, 95, 1),
+            new Material("vigor active", 95, 0, 0L, 95, 9, 76, 4, 0, 1),
+            new Material("vigor spawner", 96, 0, 0L, 95, 1, 96, 6),
+            new Material("vigor fading", 97, 0, 0L, 0, 3, 97, 7, 95, 1),
             new Material("spark", 118, 0, 0L, 118, 2, 64, 3),
     };
 }
