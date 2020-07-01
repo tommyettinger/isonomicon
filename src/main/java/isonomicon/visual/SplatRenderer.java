@@ -279,10 +279,9 @@ public class SplatRenderer {
         }
 
         for (int x = 0; x <= xSize; x++) {
-//            final int choice = (x & 2) >>> 1 | (x & 1) << 1;
+            final int choice = (0xC >>> (x >>> 2 & 3) & 3);
             for (int y = 0; y <= ySize; y++) {
-//                if((y & 3) != choice) continue;
-                if (render[x][y] != 0) {
+                if((y & 3) != choice || (x & 3) != (0xC >>> (y >>> 2 & 3) & 3) && render[x][y] != 0) {
                     pixmapQuarter.drawPixel(x >>> 2, y >>> 2, finisher.medium(render[x][y]));
                 }
             }
