@@ -30,7 +30,7 @@ public class SlopeBox {
                 }
             }
         }
-//        putSlopes();
+        putSlopes();
     }
 
     public int sizeX(){

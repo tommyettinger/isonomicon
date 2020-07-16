@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.scenes.scene2d.utils.UIUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -21,7 +20,7 @@ import isonomicon.physical.Tools3D;
 import isonomicon.visual.Colorizer;
 import isonomicon.visual.SplatRenderer;
 import squidpony.FakeLanguageGen;
-import squidpony.squidmath.DiverRNG;
+import squidpony.squidmath.CrossHash;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -37,7 +36,6 @@ public class SplatTest extends ApplicationAdapter {
     protected BitmapFont font;
     protected FrameBuffer buffer;
     protected Texture screenTexture, pmTexture;
-    protected TextureRegion screenRegion;
     protected ModelMaker maker;
     private SplatRenderer renderer;
     private byte[][][] voxels;
@@ -69,7 +67,7 @@ public class SplatTest extends ApplicationAdapter {
         colorizer = Colorizer.ManosColorizer;
         renderer = new SplatRenderer(80).colorizer(colorizer);
         pmTexture = new Texture(256, 256, Pixmap.Format.RGBA8888);
-        maker = new ModelMaker(DiverRNG.randomize(System.currentTimeMillis() >>> 23), colorizer);
+        maker = new ModelMaker(-1L, colorizer);
 //        try {
 //            box = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("Aurora/dumbcube.vox")));
 //        } catch (Exception e) {
@@ -83,7 +81,7 @@ public class SplatTest extends ApplicationAdapter {
 //            voxels = maker.shipLargeSmoothColorized();
 //        }
 //        voxels = maker.blobLargeRandom();
-        voxels = maker.shipLargeSmoothColorized();
+        voxels = maker.shipSmoothColorized();
         Gdx.input.setInputProcessor(inputProcessor());
     }
 
@@ -144,6 +142,7 @@ public class SplatTest extends ApplicationAdapter {
                         app.load(files[0]);
 //                    else if (files[0].endsWith(".hex"))
 //                        app.loadPalette(files[0]);
+                    app.maker.rng.setState(CrossHash.hash64(files[0]));
                 }
             }
         });
@@ -156,7 +155,7 @@ public class SplatTest extends ApplicationAdapter {
             public boolean keyDown(int keycode) {
                 switch (keycode) {
                     case Input.Keys.P:
-                        Tools3D.deepCopyInto(maker.shipLargeSmoothColorized(), voxels);
+                        Tools3D.deepCopyInto(maker.shipSmoothColorized(), voxels);
                         break;
                     case Input.Keys.D: // dither
                         renderer.dither = !renderer.dither;
@@ -213,7 +212,7 @@ public class SplatTest extends ApplicationAdapter {
             voxels = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream(name)));
 //            renderer.colorizer(Colorizer.arbitraryColorizer(VoxIO.lastPalette));
         } catch (FileNotFoundException e) {
-            voxels = maker.shipLargeSmoothColorized();
+            voxels = maker.shipSmoothColorized();
             renderer.colorizer(colorizer);
         }
     }

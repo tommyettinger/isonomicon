@@ -22,14 +22,14 @@ import isonomicon.physical.Tools3D;
 import isonomicon.visual.Colorizer;
 import isonomicon.visual.VoxelPixmapRenderer;
 import squidpony.FakeLanguageGen;
-import squidpony.squidmath.DiverRNG;
+import squidpony.squidmath.CrossHash;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 public class SlopeBoxTest extends ApplicationAdapter {
-    public static final int SCREEN_WIDTH = 512;//640;
-    public static final int SCREEN_HEIGHT = 512;//720;
+    public static final int SCREEN_WIDTH = 128;//640;
+    public static final int SCREEN_HEIGHT = 128;//720;
     public static final int VIRTUAL_WIDTH = SCREEN_WIDTH;
     public static final int VIRTUAL_HEIGHT = SCREEN_HEIGHT;
     protected SpriteBatch batch;
@@ -72,7 +72,7 @@ public class SlopeBoxTest extends ApplicationAdapter {
         colorizer = Colorizer.ManosColorizer;
         renderer = new VoxelPixmapRenderer().pixmap(new Pixmap(512, 512, Pixmap.Format.RGBA8888)).colorizer(colorizer);
         pmTexture = new Texture(512, 512, Pixmap.Format.RGBA8888);
-        maker = new ModelMaker(DiverRNG.randomize(System.currentTimeMillis() >>> 23), colorizer);
+        maker = new ModelMaker(-1L, colorizer);
 //        try {
 //            box = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("Aurora/dumbcube.vox")));
 //        } catch (Exception e) {
@@ -86,7 +86,7 @@ public class SlopeBoxTest extends ApplicationAdapter {
 //            voxels = maker.shipLargeSmoothColorized();
 //        }
 //        voxels = maker.blobLargeRandom();
-        voxels = maker.shipLargeSmoothColorized();
+        voxels = maker.shipSmoothColorized();
         seq = new SlopeBox(voxels);
         Gdx.input.setInputProcessor(inputProcessor());
     }
@@ -150,6 +150,7 @@ public class SlopeBoxTest extends ApplicationAdapter {
                         app.load(files[0]);
 //                    else if (files[0].endsWith(".hex"))
 //                        app.loadPalette(files[0]);
+                    app.maker.rng.setState(CrossHash.hash64(files[0]));
                 }
             }
         });
@@ -165,9 +166,9 @@ public class SlopeBoxTest extends ApplicationAdapter {
 //                        Tools3D.deepCopyInto(maker.blobLargeRandom(), voxels);
                         Tools3D.fill(seq.data[0], 0);
                         Tools3D.fill(seq.data[1], 0);
-                        Tools3D.deepCopyInto(maker.shipLargeSmoothColorized(), voxels);
+                        Tools3D.deepCopyInto(maker.shipSmoothColorized(), voxels);
                         Tools3D.deepCopyInto(voxels, seq.data[0]);
-//                        seq.putSlopes();
+                        seq.putSlopes();
                         break;
                     case Input.Keys.C: // cubes
                         if(UIUtils.shift())
@@ -240,7 +241,7 @@ public class SlopeBoxTest extends ApplicationAdapter {
 //            Tools3D.translateCopyInto(arr, voxels, 15, 15, 15);
             seq = new SlopeBox(arr);
         } catch (FileNotFoundException e) {
-            final byte[][][] arr = maker.shipLargeSmoothColorized();
+            final byte[][][] arr = maker.shipSmoothColorized();
             renderer.colorizer(colorizer);
             seq = new SlopeBox(arr);
         }
