@@ -81,7 +81,7 @@ public class SplatTest extends ApplicationAdapter {
 //            voxels = maker.shipLargeSmoothColorized();
 //        }
 //        voxels = maker.blobLargeRandom();
-        voxels = maker.shipSmoothColorized();
+        voxels = Tools3D.smoothScale(maker.shipSmoothColorized());
         Gdx.input.setInputProcessor(inputProcessor());
     }
 
@@ -155,7 +155,7 @@ public class SplatTest extends ApplicationAdapter {
             public boolean keyDown(int keycode) {
                 switch (keycode) {
                     case Input.Keys.P:
-                        Tools3D.deepCopyInto(maker.shipSmoothColorized(), voxels);
+                        Tools3D.deepCopyInto(Tools3D.smoothScale(maker.shipSmoothColorized()), voxels);
                         break;
                     case Input.Keys.D: // dither
                         renderer.dither = !renderer.dither;
@@ -212,7 +212,7 @@ public class SplatTest extends ApplicationAdapter {
             voxels = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream(name)));
 //            renderer.colorizer(Colorizer.arbitraryColorizer(VoxIO.lastPalette));
         } catch (FileNotFoundException e) {
-            voxels = maker.shipSmoothColorized();
+            voxels = Tools3D.smoothScale(maker.shipSmoothColorized());
             renderer.colorizer(colorizer);
         }
     }
