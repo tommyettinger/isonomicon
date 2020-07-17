@@ -1652,11 +1652,11 @@ public abstract class Colorizer {
         }
     };
 
-    public static final Colorizer ManossusColorizer = new Colorizer(new PaletteReducer(Coloring.MANOSSUS256, Coloring.ENCODED_MANOS)) {
+    public static final Colorizer ManossusColorizer = new Colorizer(new PaletteReducer(Coloring.MANOSSUS256, Coloring.ENCODED_MANOSSUS)) {
         private final byte[] primary = {
-                11, 17, 23, 32, 45, 53
+                11, 117, 17, 23, 32, (byte)150, 45, (byte) 186, 53, 57
         }, grays = {
-                1, 2, 4, 5, 6, 7, 10
+                1, 2, 71, 73, 4, 5, 6, 77, 78, 7, 79, 10, 80
         };
 
         @Override

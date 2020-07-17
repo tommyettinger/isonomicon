@@ -64,8 +64,11 @@ public class SplatTest extends ApplicationAdapter {
 //        colorizer = Colorizer.FlesurrectColorizer;
 //        colorizer = Colorizer.AzurestarColorizer;
 //        colorizer = Colorizer.SplayColorizer;
+        
         colorizer = Colorizer.ManosColorizer;
+//        colorizer = Colorizer.ManossusColorizer;
         renderer = new SplatRenderer(80).colorizer(colorizer);
+//        renderer.alternate = Colorizer.ManossusColorizer;
         pmTexture = new Texture(256, 256, Pixmap.Format.RGBA8888);
         maker = new ModelMaker(-1L, colorizer);
 //        try {
