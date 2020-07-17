@@ -178,14 +178,18 @@ public class Material {
             new Material("subtle mote", 112, 0, 0L, 112, 5, 110, 3),
             new Material("dread spawner", 113, 0, 0L, 114, 1, 113, 11),
             new Material("dread", 114, 120, 0L, 114, 4, 113, 3),
+            new Material("unknown energy", 115, 0, 0L, 115, 5, 117, 1, 0, 1),
             new Material("purple glass", 116, 73, 0L),
             new Material("spark spawner", 117, 0, 0L, 118, 1, 117, 14),
             new Material("spark", 118, 0, 0L, 118, 2, 117, 3),
+            new Material("sludge bubble", 119, 119, -1L, 120, 1),
+            new Material("sludge", 120, 119, -1L, 120, 6, 119, 1),
             new Material("deny spawner", 121, 0, 0L, 125, 1, 121, 4),
             new Material("love spawner", 122, 0, 0L, 125, 1, 122, 5),
             new Material("powerful mote", 123, 0, 0L, 123, 5, 110, 3),
             new Material("love", 124, 0, 0L, 124, 2, 122, 1),
             new Material("deny particle", 125, 0, 0L, 125, 1, 121, 1, 0, 1),
             new Material("ember spawner", 126, 0, 0L, 81, 1, 126, 9),
+            new Material("violent flash", 127, 0, 0L, 127, 1, 0, 5),
     };
 }
