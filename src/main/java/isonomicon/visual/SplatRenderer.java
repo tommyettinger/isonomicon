@@ -45,9 +45,9 @@ public class SplatRenderer {
 
         for (int x = 0, ax = xx; x < 4 && ax < working.length; x++, ax++) {
             for (int y = 0, ay = yy; y < 4 && ay < working[0].length; y++, ay++) {
-                working[ax][ay] = (byte) ((voxel & 0x3F) | 0xC0);
+                working[ax][ay] = voxel;
                 depths[ax][ay] = depth;
-                outlines[ax][ay] = color.blacken((byte)(voxel & 0x3F));
+                outlines[ax][ay] = color.blacken(voxel);
                 voxels[ax][ay] = xPos | yPos << 10 | zPos << 20; 
             }
         }
@@ -79,15 +79,16 @@ public class SplatRenderer {
         int v, vx, vy, vz;
         for (int sx = 0; sx <= xSize; sx++) {
             for (int sy = 0; sy <= ySize; sy++) {
-                if((v = voxels[sx][sy]) != -1)
-                {
+                if((working[sx][sy] < 64) && (v = voxels[sx][sy]) != -1) {
                     vx = v & 0x3FF;
                     vy = v >>> 10 & 0x3FF;
                     vz = v >>> 20 & 0x3FF;
-                    if(shadeZ[vx][vy] == vz)
-                        render[sx][sy] = (byte) (64 |  color.brighten((byte) (0x3F & working[sx][sy])));
-                    else if(shadeX[vy][vz] != vx)
-                        render[sx][sy] = (byte) (128 | color.darken((byte) (0x3F & working[sx][sy])));
+                    if (shadeZ[vx][vy] == vz)
+                        render[sx][sy] = color.brighten(working[sx][sy]);
+                    else if (shadeX[vy][vz] != vx)
+                        render[sx][sy] = (byte) (0x80 | color.darken(working[sx][sy]));
+                    else
+                        render[sx][sy] = (byte) (0xC0 | working[sx][sy]);
                 }
             }
         }

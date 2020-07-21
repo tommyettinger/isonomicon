@@ -1622,21 +1622,22 @@ public abstract class Colorizer {
 
         @Override
         public byte brighten(byte voxel) {
-            return Coloring.MANOS_RAMPS[voxel & 0x3F][3];
+            return voxel >= 64 ? voxel : Coloring.MANOS_RAMPS[voxel & 0x3F][3];
         }
 
         @Override
         public byte darken(byte voxel) {
-            return Coloring.MANOS_RAMPS[voxel & 0x3F][1];
+            return voxel >= 64 ? voxel : (byte) (Coloring.MANOS_RAMPS[voxel & 0x3F][1] | 0x80);
         }
 
         @Override
         public byte blacken(byte voxel) {
-            return Coloring.MANOS_RAMPS[voxel & 0x3F][0];
+            return voxel >= 64 ? voxel : Coloring.MANOS_RAMPS[voxel & 0x3F][0];
         }
 
         @Override
         public int dimmer(int brightness, byte voxel) {
+            if(voxel >= 64) return Coloring.MANOS64[voxel];
             if(brightness < 0) return Coloring.MANOS64[1];
             if(brightness > 3) return Coloring.MANOS64[10];
             return Coloring.MANOS64[Coloring.MANOS_RAMPS[voxel & 0x3F][brightness] & 0x3F];
