@@ -26,8 +26,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 public class SplatTest extends ApplicationAdapter {
-    public static final int SCREEN_WIDTH = 256;//640;
-    public static final int SCREEN_HEIGHT = 256;//720;
+    public static final int SCREEN_WIDTH = 512;//640;
+    public static final int SCREEN_HEIGHT = 512;//720;
     public static final int VIRTUAL_WIDTH = SCREEN_WIDTH;
     public static final int VIRTUAL_HEIGHT = SCREEN_HEIGHT;
     protected SpriteBatch batch;
@@ -69,7 +69,7 @@ public class SplatTest extends ApplicationAdapter {
 //        colorizer = Colorizer.ManossusColorizer;
         renderer = new SplatRenderer(80).colorizer(colorizer);
 //        renderer.alternate = Colorizer.ManossusColorizer;
-        pmTexture = new Texture(256, 256, Pixmap.Format.RGBA8888);
+        pmTexture = new Texture(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, Pixmap.Format.RGBA8888);
         maker = new ModelMaker(-1L, colorizer);
 //        try {
 //            box = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("Aurora/dumbcube.vox")));
@@ -84,7 +84,7 @@ public class SplatTest extends ApplicationAdapter {
 //            voxels = maker.shipLargeSmoothColorized();
 //        }
 //        voxels = maker.blobLargeRandom();
-        voxels = Tools3D.smoothScale(maker.shipSmoothColorized());
+        voxels = maker.shipSmoothColorized();
         Gdx.input.setInputProcessor(inputProcessor());
     }
 
@@ -104,7 +104,7 @@ public class SplatTest extends ApplicationAdapter {
         worldView.update(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         batch.setProjectionMatrix(screenView.getCamera().combined);
         batch.begin();
-        pmTexture.draw(renderer.drawSplatsHalf(voxels), 0, 0);
+        pmTexture.draw(renderer.drawSplats(voxels), 0, 0);
         batch.draw(pmTexture,
                 0,
                 0);
@@ -158,7 +158,7 @@ public class SplatTest extends ApplicationAdapter {
             public boolean keyDown(int keycode) {
                 switch (keycode) {
                     case Input.Keys.P:
-                        Tools3D.deepCopyInto(Tools3D.smoothScale(maker.shipSmoothColorized()), voxels);
+                        Tools3D.deepCopyInto(maker.shipSmoothColorized(), voxels);
                         break;
                     case Input.Keys.D: // dither
                         renderer.dither = !renderer.dither;
@@ -215,7 +215,7 @@ public class SplatTest extends ApplicationAdapter {
             voxels = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream(name)));
 //            renderer.colorizer(Colorizer.arbitraryColorizer(VoxIO.lastPalette));
         } catch (FileNotFoundException e) {
-            voxels = Tools3D.smoothScale(maker.shipSmoothColorized());
+            voxels = maker.shipSmoothColorized();
             renderer.colorizer(colorizer);
         }
     }
