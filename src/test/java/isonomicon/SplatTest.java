@@ -71,20 +71,13 @@ public class SplatTest extends ApplicationAdapter {
 //        renderer.alternate = Colorizer.ManossusColorizer;
         pmTexture = new Texture(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, Pixmap.Format.RGBA8888);
         maker = new ModelMaker(-1L, colorizer);
-//        try {
-//            box = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("Aurora/dumbcube.vox")));
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            box = maker.shipLargeSmoothColorized();
-//        }
-//        makeBoom(maker.fireRange());
-//        try {
-//            voxels = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("FlesurrectBonus/Damned.vox")));
-//        } catch (FileNotFoundException e) {
-//            voxels = maker.shipLargeSmoothColorized();
-//        }
-//        voxels = maker.blobLargeRandom();
-        voxels = maker.shipSmoothColorized();
+        try {
+            voxels = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("assets/vox/Materials.vox")));
+        } catch (Exception e) {
+            e.printStackTrace();
+            voxels = maker.shipSmoothColorized();
+        }
+//        voxels = maker.shipSmoothColorized();
         Gdx.input.setInputProcessor(inputProcessor());
     }
 
