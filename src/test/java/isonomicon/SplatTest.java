@@ -71,12 +71,7 @@ public class SplatTest extends ApplicationAdapter {
 //        renderer.alternate = Colorizer.ManossusColorizer;
         pmTexture = new Texture(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, Pixmap.Format.RGBA8888);
         maker = new ModelMaker(-1L, colorizer);
-        try {
-            voxels = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("assets/vox/Materials.vox")));
-        } catch (Exception e) {
-            e.printStackTrace();
-            voxels = maker.shipSmoothColorized();
-        }
+        load("assets/vox/Materials.vox");
 //        voxels = maker.shipSmoothColorized();
         Gdx.input.setInputProcessor(inputProcessor());
     }
@@ -127,7 +122,7 @@ public class SplatTest extends ApplicationAdapter {
         config.setTitle("Isonomicon Test: SlopeBox");
         config.setWindowedMode(SCREEN_WIDTH, SCREEN_HEIGHT);
         config.setIdleFPS(10);
-        config.useVsync(false);
+        config.useVsync(true);
         config.setResizable(true);
         final SplatTest app = new SplatTest();
         config.setWindowListener(new Lwjgl3WindowAdapter() {
@@ -151,7 +146,9 @@ public class SplatTest extends ApplicationAdapter {
             public boolean keyDown(int keycode) {
                 switch (keycode) {
                     case Input.Keys.P:
-                        Tools3D.deepCopyInto(maker.shipSmoothColorized(), voxels);
+                        Tools3D.fill(voxels, 0);
+                        Tools3D.translateCopyInto(maker.shipSmoothColorized(), voxels,
+                                voxels.length - 12 >> 1, voxels[0].length - 12 >> 1, voxels[0][0].length - 8 >> 1);
                         break;
                     case Input.Keys.D: // dither
                         renderer.dither = !renderer.dither;
@@ -206,7 +203,7 @@ public class SplatTest extends ApplicationAdapter {
         try {
             //// loads a file by its full path, which we get via drag+drop
             voxels = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream(name)));
-//            renderer.colorizer(Colorizer.arbitraryColorizer(VoxIO.lastPalette));
+            renderer.colorizer(Colorizer.arbitraryColorizer(VoxIO.lastPalette));
         } catch (FileNotFoundException e) {
             voxels = maker.shipSmoothColorized();
             renderer.colorizer(colorizer);
