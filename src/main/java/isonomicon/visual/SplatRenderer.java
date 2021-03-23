@@ -11,7 +11,7 @@ public class SplatRenderer {
     public int[][] depths, voxels;
     public int[][] shadeX, shadeZ;
     public byte[][] working, render, outlines;
-    public Colorizer color = Colorizer.ManosColorizer, alternate = Colorizer.FullGrayColorizer;
+    public Colorizer color = Colorizer.ManossusColorizer, alternate = Colorizer.FullGrayColorizer;
     public boolean dither = false, outline = true, useAlternate = false;
 
     public SplatRenderer (final int size) {

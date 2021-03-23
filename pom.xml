@@ -70,10 +70,17 @@
         <squidlib.version>3.0.3</squidlib.version>
         <gdx.version>1.9.13</gdx.version>
         <anim8.version>0.2.8</anim8.version>
+        <colorful.version>8b62b61252</colorful.version>
+        <!--        <colorful.version>0.5.1</colorful.version>-->
     </properties>
 
 
     <dependencies>
+        <dependency>
+            <groupId>com.badlogicgames.gdx</groupId>
+            <artifactId>gdx</artifactId>
+            <version>${gdx.version}</version>
+        </dependency>
         <dependency>
             <groupId>com.github.SquidPony.SquidLib</groupId>
             <artifactId>squidlib-util</artifactId>
@@ -84,11 +91,18 @@
             <artifactId>anim8-gdx</artifactId>
             <version>${anim8.version}</version>
         </dependency>
+        <!-- JitPack -->
         <dependency>
-            <groupId>com.badlogicgames.gdx</groupId>
-            <artifactId>gdx</artifactId>
-            <version>${gdx.version}</version>
+            <groupId>com.github.tommyettinger.colorful-gdx</groupId>
+            <artifactId>colorful</artifactId>
+            <version>${colorful.version}</version>
         </dependency>
+        <!-- Maven Central -->
+        <!--        <dependency>-->
+        <!--            <groupId>com.github.tommyettinger</groupId>-->
+        <!--            <artifactId>colorful</artifactId>-->
+        <!--            <version>${colorful.version}</version>-->
+        <!--        </dependency>-->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

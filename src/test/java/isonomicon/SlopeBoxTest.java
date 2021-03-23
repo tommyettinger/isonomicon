@@ -28,8 +28,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 public class SlopeBoxTest extends ApplicationAdapter {
-    public static final int SCREEN_WIDTH = 128;//640;
-    public static final int SCREEN_HEIGHT = 128;//720;
+    public static final int SCREEN_WIDTH = 256;//640;
+    public static final int SCREEN_HEIGHT = 256;//720;
     public static final int VIRTUAL_WIDTH = SCREEN_WIDTH;
     public static final int VIRTUAL_HEIGHT = SCREEN_HEIGHT;
     protected SpriteBatch batch;
@@ -69,7 +69,7 @@ public class SlopeBoxTest extends ApplicationAdapter {
 //        colorizer = Colorizer.FlesurrectColorizer;
 //        colorizer = Colorizer.AzurestarColorizer;
 //        colorizer = Colorizer.SplayColorizer;
-        colorizer = Colorizer.ManosColorizer;
+        colorizer = Colorizer.ManossusColorizer;
         renderer = new VoxelPixmapRenderer().pixmap(new Pixmap(512, 512, Pixmap.Format.RGBA8888)).colorizer(colorizer);
         pmTexture = new Texture(512, 512, Pixmap.Format.RGBA8888);
         maker = new ModelMaker(-1L, colorizer);
@@ -86,7 +86,7 @@ public class SlopeBoxTest extends ApplicationAdapter {
 //            voxels = maker.shipLargeSmoothColorized();
 //        }
 //        voxels = maker.blobLargeRandom();
-        voxels = maker.shipSmoothColorized();
+        voxels = maker.shipLargeSmoothColorized();
         seq = new SlopeBox(voxels);
         Gdx.input.setInputProcessor(inputProcessor());
     }
@@ -166,7 +166,7 @@ public class SlopeBoxTest extends ApplicationAdapter {
 //                        Tools3D.deepCopyInto(maker.blobLargeRandom(), voxels);
                         Tools3D.fill(seq.data[0], 0);
                         Tools3D.fill(seq.data[1], 0);
-                        Tools3D.deepCopyInto(maker.shipSmoothColorized(), voxels);
+                        Tools3D.deepCopyInto(maker.shipLargeSmoothColorized(), voxels);
                         Tools3D.deepCopyInto(voxels, seq.data[0]);
                         seq.putSlopes();
                         break;
@@ -241,7 +241,7 @@ public class SlopeBoxTest extends ApplicationAdapter {
 //            Tools3D.translateCopyInto(arr, voxels, 15, 15, 15);
             seq = new SlopeBox(arr);
         } catch (FileNotFoundException e) {
-            final byte[][][] arr = maker.shipSmoothColorized();
+            final byte[][][] arr = maker.shipLargeSmoothColorized();
             renderer.colorizer(colorizer);
             seq = new SlopeBox(arr);
         }
