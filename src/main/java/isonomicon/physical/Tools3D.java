@@ -1,5 +1,6 @@
 package isonomicon.physical;
 
+import com.github.tommyettinger.anim8.PaletteReducer;
 import squidpony.StringKit;
 import squidpony.squidmath.CrossHash;
 
@@ -41,6 +42,22 @@ public class Tools3D {
         final int height = breadth == 0 ? 0 : array3d[0][0].length;
         if(depth > 0 && breadth > 0) {
             Arrays.fill(array3d[0][0], (byte)value);
+        }
+        for (int y = 1; y < breadth; y++) {
+            System.arraycopy(array3d[0][0], 0, array3d[0][y], 0, height);
+        }
+        for (int x = 1; x < depth; x++) {
+            for (int y = 0; y < breadth; y++) {
+                System.arraycopy(array3d[0][0], 0, array3d[x][y], 0, height);
+            }
+        }
+    }
+    public static void fill(float[][][] array3d, float value) {
+        final int depth = array3d.length;
+        final int breadth = depth == 0 ? 0 : array3d[0].length;
+        final int height = breadth == 0 ? 0 : array3d[0][0].length;
+        if(depth > 0 && breadth > 0) {
+            Arrays.fill(array3d[0][0], value);
         }
         for (int y = 1; y < breadth; y++) {
             System.arraycopy(array3d[0][0], 0, array3d[0][y], 0, height);
@@ -108,7 +125,7 @@ public class Tools3D {
         }
         return data;
     }
-    
+
     public static byte[][][] mirrorX(byte[][][] voxels)
     {
         int xs, ys, zs;
@@ -248,7 +265,7 @@ public class Tools3D {
         }
         return vs1;
     }
-    
+
     private static void writeSlope(byte[][][] voxels, int x, int y, int z, int slope, byte color){
         voxels[x<<1][y<<1][z<<1] = ((slope & 1) != 0) ? color : 0;
         voxels[x<<1|1][y<<1][z<<1] = ((slope & 2) != 0) ? color : 0;
@@ -259,7 +276,7 @@ public class Tools3D {
         voxels[x<<1][y<<1|1][z<<1|1] = ((slope & 64) != 0) ? color : 0;
         voxels[x<<1|1][y<<1|1][z<<1|1] = ((slope & 128) != 0) ? color : 0;
     }
-    
+
     public static byte[][][] smoothScale(byte[][][] voxels){
         final int limitX = voxels.length - 1;
         final int limitY = voxels[0].length - 1;
@@ -348,6 +365,108 @@ public class Tools3D {
                             }
                         }
                         writeSlope(result, x, y, z, slope, (byte) neighbors[bestIndex]);
+                    }
+                    else
+                    {
+                        writeSlope(result, x, y, z, nextSlopes[x][y][z], nextColors[x][y][z]);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+
+    public static byte[][][] simpleScale(byte[][][] voxels) {
+        final int limitX = voxels.length - 1;
+        final int limitY = voxels[0].length - 1;
+        final int limitZ = voxels[0][0].length - 1;
+        byte[][][] nextColors = new byte[limitX+1][limitY+1][limitZ+1];
+        byte[][][] nextSlopes = new byte[limitX+1][limitY+1][limitZ+1];
+        byte[][][] result = new byte[limitX+1<<1][limitY+1<<1][limitZ+1<<1];
+        final int[] neighbors = new int[6];
+        for (int x = 0; x <= limitX; x++) {
+            for (int y = 0; y <= limitY; y++) {
+                PER_CELL:
+                for (int z = 0; z <= limitZ; z++) {
+                    if(voxels[x][y][z] == 0)
+                    {
+                        int slope = 0;
+                        if((neighbors[0] = x == 0 ? 0 : (voxels[x-1][y][z] & 255)) != 0) slope      |= 0x55;
+                        if((neighbors[1] = y == 0 ? 0 : (voxels[x][y-1][z] & 255)) != 0) slope      |= 0x33;
+                        if((neighbors[2] = z == 0 ? 0 : (voxels[x][y][z-1] & 255)) != 0) slope      |= 0x0F;
+                        if((neighbors[3] = x == limitX ? 0 : (voxels[x+1][y][z] & 255)) != 0) slope |= 0xAA;
+                        if((neighbors[4] = y == limitY ? 0 : (voxels[x][y+1][z] & 255)) != 0) slope |= 0xCC;
+                        if((neighbors[5] = z == limitZ ? 0 : (voxels[x][y][z+1] & 255)) != 0) slope |= 0xF0;
+                        if(Integer.bitCount(slope) < 5) // surrounded by empty or next to only one voxel
+                        {
+                            nextSlopes[x][y][z] = 0;
+                            continue;
+                        }
+                        int bestIndex = -1;
+                        for (int i = 0; i < 6; i++) {
+                            if(neighbors[i] == 0) continue;
+                            if(bestIndex == -1) bestIndex = i;
+                            for (int j = i + 1; j < 6; j++) {
+                                if(i + 3 != j && neighbors[i] == neighbors[j]){
+                                    if((i == bestIndex || j == bestIndex) && neighbors[bestIndex] != 0) {
+                                        nextColors[x][y][z] = (byte) neighbors[bestIndex];
+                                        nextSlopes[x][y][z] = (byte) slope;
+                                        continue PER_CELL;
+                                    }
+                                } else if(neighbors[bestIndex] < neighbors[i]) {
+                                    bestIndex = i;
+                                }
+                            }
+                        }
+                        nextColors[x][y][z] = (byte) 0;
+                        nextSlopes[x][y][z] = (byte) 0;
+//                        nextColors[x][y][z] = (byte) neighbors[bestIndex];
+//                        nextSlopes[x][y][z] = (byte) slope;
+                    }
+                    else
+                    {
+                        nextColors[x][y][z] = voxels[x][y][z];
+                        nextSlopes[x][y][z] = -1;
+                    }
+                }
+            }
+        }
+
+        for (int x = 0; x <= limitX; x++) {
+            for (int y = 0; y <= limitY; y++) {
+                PER_CELL:
+                for (int z = 0; z <= limitZ; z++) {
+                    if(nextColors[x][y][z] == 0)
+                    {
+                        int slope = 0;
+                        if((neighbors[0] = x == 0 ? 0 : (nextColors[x-1][y][z] & 255)) != 0 && (nextSlopes[x-1][y][z] & 0xAA) != 0xAA) slope      |= (nextSlopes[x-1][y][z] & 0xAA) >>> 1;
+                        if((neighbors[1] = y == 0 ? 0 : (nextColors[x][y-1][z] & 255)) != 0 && (nextSlopes[x][y-1][z] & 0xCC) != 0xCC) slope      |= (nextSlopes[x][y-1][z] & 0xCC) >>> 2;
+                        if((neighbors[2] = z == 0 ? 0 : (nextColors[x][y][z-1] & 255)) != 0 && (nextSlopes[x][y][z-1] & 0xF0) != 0xF0) slope      |= (nextSlopes[x][y][z-1] & 0xF0) >>> 4;
+                        if((neighbors[3] = x == limitX ? 0 : (nextColors[x+1][y][z] & 255)) != 0 && (nextSlopes[x+1][y][z] & 0x55) != 0x55) slope |= (nextSlopes[x+1][y][z] & 0x55) << 1;
+                        if((neighbors[4] = y == limitY ? 0 : (nextColors[x][y+1][z] & 255)) != 0 && (nextSlopes[x][y+1][z] & 0x33) != 0x33) slope |= (nextSlopes[x][y+1][z] & 0x33) << 2;
+                        if((neighbors[5] = z == limitZ ? 0 : (nextColors[x][y][z+1] & 255)) != 0 && (nextSlopes[x][y][z+1] & 0x0F) != 0x0F) slope |= (nextSlopes[x][y][z+1] & 0x0F) << 4;
+                        if(Integer.bitCount(slope) < 4) // surrounded by empty or only one partial face
+                        {
+                            writeSlope(result, x, y, z, -1, (byte) 0);
+                            continue;
+                        }
+                        int bestIndex = -1;
+                        for (int i = 0; i < 6; i++) {
+                            if(neighbors[i] == 0) continue;
+                            if(bestIndex == -1) bestIndex = i;
+                            for (int j = i + 1; j < 6; j++) {
+                                if(i + 3 != j && neighbors[i] == neighbors[j]){
+                                    if((i == bestIndex || j == bestIndex) && neighbors[bestIndex] != 0) {
+                                        writeSlope(result, x, y, z, slope, (byte) neighbors[bestIndex]);
+                                        continue PER_CELL;
+                                    }
+                                } else if(neighbors[bestIndex] < neighbors[i]) {
+                                    bestIndex = i;
+                                }
+                            }
+                        }
+//                        writeSlope(result, x, y, z, slope, (byte) neighbors[bestIndex]);
                     }
                     else
                     {
@@ -500,51 +619,91 @@ public class Tools3D {
 
     }
 
-    public static void translateCopyInto(byte[][][] voxels, byte[][][] into, int xMove, int yMove, int zMove)
-    {
+    public static void translateCopyInto(byte[][][] voxels, byte[][][] into, int xMove, int yMove, int zMove) {
         int xs, ys, zs;
         xs = into.length;
         ys = into[0].length;
         zs = into[0][0].length;
-        final int xLimit = voxels.length, xStart = Math.max(0, xMove);
-        final int yLimit = voxels[0].length, yStart = Math.max(0, yMove);
-        final int zLimit = voxels[0][0].length, zStart = Math.max(0, zMove);
-        for (int x = xStart, xx = 0; x < xs && xx < xLimit && xx < xs; x++, xx++) {
-            for (int y = yStart, yy = 0; y < ys && yy < yLimit && yy < ys; y++, yy++) {
-                for (int z = zStart, zz = 0; z < zs && zz < zLimit && zz < zs; z++, zz++) {
-                    if(into[x][y][z] == 0 && voxels[xx][yy][zz] != 0)
+        final int xLimit = voxels.length;
+        final int yLimit = voxels[0].length;
+        final int zLimit = voxels[0][0].length;
+        for (int x = xMove, xx = 0; x < xs && xx < xLimit && xx < xs; x++, xx++) {
+            if(x < 0) continue;
+            for (int y = yMove, yy = 0; y < ys && yy < yLimit && yy < ys; y++, yy++) {
+                if(y < 0) continue;
+                for (int z = zMove, zz = 0; z < zs && zz < zLimit && zz < zs; z++, zz++) {
+                    if(z < 0) continue;
+                    if (into[x][y][z] == 0 && voxels[xx][yy][zz] != 0)
                         into[x][y][z] = voxels[xx][yy][zz];
                 }
             }
         }
     }
 
-//    private static long hash64(final byte[] data) {
-//        long result = 0x1A976FDF6BF60B8EL, z = 0x60642E2A34326F15L;
-//        final int len = data.length;
-//        for (int i = 0; i < len; i++) {
-//            result ^= (z += (data[i] ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L);
-//        }
-//        result += (z ^ z >>> 26) * 0x632BE59BD9B4E019L;
-//        result ^= result >>> 25 ^ z ^ z >>> 29;
-////        result = (result ^ result >>> 33) * 0xFF51AFD7ED558CCDL;
-////        result = (result ^ result >>> 33) * 0xC4CEB9FE1A85EC53L;
-//        return (result ^ result >>> 33);
-//    }
-//
-//    private static long hash64(final byte[][] data) {
-//        long result = 0x9E3779B97F4A7C15L, z = 0xC6BC279692B5CC83L;
-//        final int len = data.length;
-//        for (int i = 0; i < len; i++) {
-//            result ^= (z += hash64(data[i]) + i);
-//        }
-//        result += (z ^ z >>> 26) * 0x632BE59BD9B4E019L;
-//        result ^= result >>> 25 ^ z ^ z >>> 29;
-////        result = (result ^ result >>> 33) * 0xFF51AFD7ED558CCDL;
-////        result = (result ^ result >>> 33) * 0xC4CEB9FE1A85EC53L;
-//        return (result ^ result >>> 33);
-//    }
-    
+    private static int isSurface(byte[][][] voxels, int x, int y, int z) {
+        if(x < 0 || y < 0 || z < 0 ||
+                x >= voxels.length || y >= voxels[x].length || z >= voxels[x][y].length ||
+                voxels[x][y][z] == 0)
+            return 0;
+        if(x <= 0 || voxels[x-1][y][z] == 0) return 1;
+        if(y <= 0 || voxels[x][y-1][z] == 0) return 2;
+        if(z <= 0 || voxels[x][y][z-1] == 0) return 3;
+        if(x >= voxels.length - 1 || voxels[x+1][y][z] == 0) return 4;
+        if(y >= voxels[x].length - 1 || voxels[x][y+1][z] == 0) return 5;
+        if(z >= voxels[x][y].length - 1 || voxels[x][y][z+1] == 0) return 6;
+        return -1;
+    }
+
+    public static void soakInPlace(byte[][][] voxels)
+    {
+        final int xs = voxels.length, ys = voxels[0].length, zs = voxels[0][0].length;
+        byte b;
+        for (int x = 0; x < xs; x++) {
+            for (int y = 0; y < ys; y++) {
+                for (int z = 0; z < zs; z++) {
+                    if(isSurface(voxels, x, y, z) > 0){
+                        b = voxels[x][y][z];
+                        if(isSurface(voxels, x, y, z-1) == -1) voxels[x][y][z-1] = b;
+                        if(isSurface(voxels, x-1, y, z) == -1) voxels[x-1][y][z] = b;
+                        if(isSurface(voxels, x, y-1, z) == -1) voxels[x][y-1][z] = b;
+                        if(isSurface(voxels, x+1, y, z) == -1) voxels[x+1][y][z] = b;
+                        if(isSurface(voxels, x, y+1, z) == -1) voxels[x][y+1][z] = b;
+                        if(isSurface(voxels, x, y, z+1) == -1) voxels[x][y][z+1] = b;
+                    }
+                }
+            }
+        }
+    }
+
+    public static byte[][][] soak(byte[][][] voxels)
+    {
+        final int xs = voxels.length, ys = voxels[0].length, zs = voxels[0][0].length;
+        byte[][][] next = new byte[xs][ys][zs];
+        byte b;
+        for (int x = 0; x < xs; x++) {
+            for (int y = 0; y < ys; y++) {
+                for (int z = 0; z < zs; z++) {
+                    if(isSurface(voxels, x, y, z) > 0){
+                        next[x][y][z] = b = voxels[x][y][z];
+                        if(isSurface(voxels, x, y, z-1) == -1) next[x][y][z-1] = b;
+                        if(isSurface(voxels, x-1, y, z) == -1) next[x-1][y][z] = b;
+                        if(isSurface(voxels, x, y-1, z) == -1) next[x][y-1][z] = b;
+                        if(isSurface(voxels, x+1, y, z) == -1) next[x+1][y][z] = b;
+                        if(isSurface(voxels, x, y+1, z) == -1) next[x][y+1][z] = b;
+                        if(isSurface(voxels, x, y, z+1) == -1) next[x][y][z+1] = b;
+                    }
+                }
+            }
+        }
+        return next;
+    }
+
+    public static byte[][][] scaleAndSoak(byte[][][] voxels) {
+        voxels = simpleScale(voxels);
+        soakInPlace(voxels);
+        return voxels;
+    }
+
     public static int hash(final byte[][] data) {
         if (data == null) return 0;
         long seed = 0x9E3779B97F4A7C15L;//0xfc637ed1a0c7a964L;//b1 ^ b1 >>> 41 ^ b1 << 53;
@@ -638,7 +797,65 @@ public class Tools3D {
         seed = (seed ^ seed << 16) * (len ^ b0);
         return seed - (seed >>> 31) + (seed << 33);
     }
+
+    public static int hash(CrossHash.Curlup h, byte[][] data) {
+        if (data == null) return 0;
+        long result = 0xBEEF1E57DADL ^ data.length * 0x9E3779B97F4A7C15L;
+        int i = 0;
+        for (; i + 7 < data.length; i += 8) {
+            result = 0xEBEDEED9D803C815L * result
+                    + 0xD96EB1A810CAAF5FL * h.hash(data[i])
+                    + 0xC862B36DAF790DD5L * h.hash(data[i + 1])
+                    + 0xB8ACD90C142FE10BL * h.hash(data[i + 2])
+                    + 0xAA324F90DED86B69L * h.hash(data[i + 3])
+                    + 0x9CDA5E693FEA10AFL * h.hash(data[i + 4])
+                    + 0x908E3D2C82567A73L * h.hash(data[i + 5])
+                    + 0x8538ECB5BD456EA3L * h.hash(data[i + 6])
+                    + 0xD1B54A32D192ED03L * h.hash(data[i + 7])
+            ;
+        }
+        for (; i < data.length; i++) {
+            result = 0x9E3779B97F4A7C15L * result + h.hash(data[i]);
+        }
+        result *= 0x94D049BB133111EBL;
+        result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+        result *= 0x369DEA0F31A53F85L;
+        result ^= result >>> 31;
+        result *= 0xDB4F0B9175AE2165L;
+        return (int) (result ^ result >>> 28);
+    }
     
+
+    public static int hash(CrossHash.Curlup h, byte[][][] data) {
+        return (int) hash64(h, data);
+    }
+    public static long hash64(CrossHash.Curlup h, byte[][][] data) {
+        if (data == null) return 0;
+        long result = 0xBEEF1E57DADD1E5L ^ data.length * 0x9E3779B97F4A7C15L;
+        int i = 0;
+        for (; i + 7 < data.length; i += 8) {
+            result = 0xEBEDEED9D803C815L * result
+                    + 0xD96EB1A810CAAF5FL * hash(h, data[i])
+                    + 0xC862B36DAF790DD5L * hash(h, data[i + 1])
+                    + 0xB8ACD90C142FE10BL * hash(h, data[i + 2])
+                    + 0xAA324F90DED86B69L * hash(h, data[i + 3])
+                    + 0x9CDA5E693FEA10AFL * hash(h, data[i + 4])
+                    + 0x908E3D2C82567A73L * hash(h, data[i + 5])
+                    + 0x8538ECB5BD456EA3L * hash(h, data[i + 6])
+                    + 0xD1B54A32D192ED03L * hash(h, data[i + 7])
+            ;
+        }
+        for (; i < data.length; i++) {
+            result = 0x9E3779B97F4A7C15L * result + hash(h, data[i]);
+        }
+        result *= 0x94D049BB133111EBL;
+        result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+        result *= 0x369DEA0F31A53F85L;
+        result ^= result >>> 31;
+        result *= 0xDB4F0B9175AE2165L;
+        return (result ^ result >>> 28);
+    }
+
     /**
      * A helper method for taking already-random input states and getting random values inside a small range.
      * The state can be any int, though only the least-significant 16 bits will be used, and the bound can be positive

@@ -67,7 +67,7 @@ public class VoxIO {
             stream.readInt();
             int sizeX = 16, sizeY = 16, size = 16, sizeZ = 16, offX = 0, offY = 0;
             byte[] key = new byte[6]; // used for MaterialTrait
-            byte[] val = new byte[8]; // used for MaterialType and numbers
+            byte[] val = new byte[10]; // used for MaterialType and numbers
             // a MagicaVoxel .vox file starts with a 'magic' 4 character 'VOX ' identifier
             if (chunkId[0] == 'V' && chunkId[1] == 'O' && chunkId[2] == 'X' && chunkId[3] == ' ') {
                 while (stream.available() > 0) {
