@@ -9,10 +9,7 @@ import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
-import com.github.tommyettinger.anim8.AnimatedGif;
-import com.github.tommyettinger.anim8.AnimatedPNG;
-import com.github.tommyettinger.anim8.Dithered;
-import com.github.tommyettinger.anim8.PaletteReducer;
+import com.github.tommyettinger.anim8.*;
 import isonomicon.io.LittleEndianDataInputStream;
 import isonomicon.io.VoxIO;
 import isonomicon.physical.Tools3D;
@@ -29,9 +26,9 @@ public class Isomancer extends ApplicationAdapter {
     private byte[][][] voxels;
     private String name;
     private String[] inputs;
-    private PixmapIO.PNG png;
+//    private PixmapIO.PNG png;
     private AnimatedGif gif;
-//    private PNG8 png8;
+    private PNG8 png8;
     private AnimatedPNG apng;
     private static byte[] PRELOAD;
     public Isomancer(String[] args){
@@ -46,7 +43,7 @@ public class Isomancer extends ApplicationAdapter {
 //            inputs = new String[]{"vox/Eye_Tyrant.vox", "vox/Infantry_Firing.vox", "vox/Lomuk.vox", "vox/Tree.vox", "vox/LAB.vox"};
 //            inputs = new String[]{"vox/Lomuk.vox", "vox/Tree.vox", "vox/Eye_Tyrant.vox", "vox/IPT.vox", "vox/LAB.vox"};
 //            inputs = new String[]{"vox/Infantry_Firing.vox"};
-            inputs = new String[]{"vox/Infantry.vox"};
+//            inputs = new String[]{"vox/Infantry.vox"};
 //            inputs = new String[]{"vox/IPT_No_Pow.vox"};
 //            inputs = new String[]{"vox/Box.vox", "vox/Direction_Cube.vox"};
 //            inputs = new String[]{"vox/IPT_Original.vox"};
@@ -68,50 +65,37 @@ public class Isomancer extends ApplicationAdapter {
         if (inputs == null) Gdx.app.exit();
         long startTime = TimeUtils.millis();
 //        Gdx.files.local("out/vox/").mkdirs();
-        png = new PixmapIO.PNG();
-//        png8 = new PNG8();
+//        png = new PixmapIO.PNG();
+        png8 = new PNG8();
         gif = new AnimatedGif();
 //        apng = new AnimatedPNG();
         gif.setDitherAlgorithm(Dithered.DitherAlgorithm.SCATTER);
-//        png8.setDitherAlgorithm(Dithered.DitherAlgorithm.SCATTER);
-        gif.palette = new PaletteReducer();
-//        png8.palette = gif.palette;
+        png8.setDitherAlgorithm(Dithered.DitherAlgorithm.SCATTER);
+        gif.palette = new PaletteReducer(Coloring.HALTONITE240, PRELOAD);
         gif.palette.setDitherStrength(0.625f);
+        png8.palette = gif.palette;
         Gdx.files.local("out/vox").mkdirs();
         for (String s : inputs) {
             System.out.println("Rendering " + s);
             load(s);
 //            VoxIO.writeVOX("out/" + s, voxels, renderer.palette, VoxIO.lastMaterials);
 //            load("out/"+s);
-            try {
-                Pixmap pixmap;
-                Array<Pixmap> pm = new Array<>(4);
-                for (int i = 0; i < 4; i++) {
-                    pixmap = renderer.drawSplats(voxels, i * 0.25f, VoxIO.lastMaterials);
-                    Pixmap p = new Pixmap(pixmap.getWidth(), pixmap.getHeight(), pixmap.getFormat());
-                    p.drawPixmap(pixmap, 0, 0);
-                    pm.add(p);
-                    png.write(Gdx.files.local("out/" + name + '/' + name + "_angle" + i + ".png"), p);
-//                    for (int colorCount : new int[]{3, 8, 32, 64, 86, 128, 256}) {
-//                        png8.palette.exact(Coloring.HALTONIC255, colorCount);
-//                        png8.write(Gdx.files.local("out/lowColor/" + colorCount + "/" + name + '/' + name + "_angle" + i + ".png"), p, false);
-//                    }
-//                    VoxIO.writeVOX("out/vox/" + s.substring(4, s.length() - 4) + "_angle"+i+".vox", renderer.remade, VoxIO.lastPalette);
-                }
-//                for (int colorCount : new int[]{3, 8, 32, 64, 86, 128, 256}) {
-//                    gif.palette.exact(Coloring.HALTONIC255, colorCount);
-//                    gif.write(Gdx.files.local("out/lowColor/" + colorCount + "/" + name + '/' + name + ".gif"), pm, 12);
-//                }
-                gif.palette.analyze(pm);
-                gif.write(Gdx.files.local("out/" + name + '/' + name + ".gif"), pm, 1);
-                gif.palette.exact(Coloring.HALTONITE240, PRELOAD);
-                gif.write(Gdx.files.local("out/" + name + '/' + name + "-256-color.gif"), pm, 1);
+            Pixmap pixmap;
+            Array<Pixmap> pm = new Array<>(4);
+            for (int i = 0; i < 4; i++) {
+                pixmap = renderer.drawSplats(voxels, i * 0.25f, VoxIO.lastMaterials);
+                Pixmap p = new Pixmap(pixmap.getWidth(), pixmap.getHeight(), pixmap.getFormat());
+                p.drawPixmap(pixmap, 0, 0);
+                pm.add(p);
+                png8.write(Gdx.files.local("out/" + name + '/' + name + "_angle" + i + ".png"), p, false, true);
+            }
+//                gif.palette.analyze(pm);
+            gif.write(Gdx.files.local("out/" + name + '/' + name + ".gif"), pm, 1);
+//                gif.palette.exact(Coloring.HALTONITE240, PRELOAD);
+//                gif.write(Gdx.files.local("out/" + name + '/' + name + "-256-color.gif"), pm, 1);
 //                apng.write(Gdx.files.local("out/" + name + '/' + name + ".png"), pm, 12);
-                for(Pixmap pix : pm) {
-                    pix.dispose();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+            for(Pixmap pix : pm) {
+                pix.dispose();
             }
         }
         System.out.println("Finished in " + TimeUtils.timeSinceMillis(startTime) * 0.001 + " seconds.");
