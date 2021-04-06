@@ -52,7 +52,7 @@ public class Isomancer extends ApplicationAdapter {
 //            inputs = new String[]{"vox/Floor.vox"};
 //            inputs = new String[]{"vox/Bear.vox"};
 //            inputs = new String[]{"vox/Lomuk.vox"};
-            inputs = new String[]{"vox/Lomuk.vox", "vox/Damned.vox"};
+//            inputs = new String[]{"vox/Lomuk.vox", "vox/Damned.vox"};
 //            inputs = new String[]{"vox/Damned.vox"};
 //            inputs = new String[]{"vox/teapot.vox"};
             if(!new File(inputs[0]).exists())

@@ -7,7 +7,6 @@ import com.github.tommyettinger.anim8.PaletteReducer;
 import com.github.tommyettinger.colorful.oklab.ColorTools;
 import isonomicon.physical.Tools3D;
 import isonomicon.physical.VoxMaterial;
-import squidpony.ArrayTools;
 
 import java.util.Arrays;
 
@@ -36,7 +35,7 @@ public class SmudgeRenderer {
     }
     public SmudgeRenderer(final int size) {
         this.size = size;
-        final int w = size * 4 + 4, h = size * 5 + 4;
+        final int w = size * 4 + 5, h = size * 5 + 4;
 //        pixmap = new Pixmap(w, h, Pixmap.Format.RGBA8888);
         pixmap = new Pixmap(w>>>shrink, h>>>shrink, Pixmap.Format.RGBA8888);
         render =   new int[w][h];
@@ -60,12 +59,22 @@ public class SmudgeRenderer {
         return (PaletteReducer.TRI_BLUE_NOISE[(x & 63) | (y & 63) << 6] + 128) * 0x1p-8f;
     }
 
-    public static float sin_(float turns){
-        return MathUtils.sin(turns * MathUtils.PI2);
+    public static float sin_(float turns)
+    {
+        turns *= 4f;
+        final long floor = (turns >= 0.0 ? (long) turns : (long) turns - 1L) & -2L;
+        turns -= floor;
+        turns *= 2f - turns;
+        return turns * (-0.775f - 0.225f * turns) * ((floor & 2L) - 1L);
     }
 
-    public static float cos_(float turns){
-        return MathUtils.cos(turns * MathUtils.PI2);
+    public static float cos_(float turns)
+    {
+        turns = turns * 4f + 1f;
+        final long floor = (turns >= 0.0 ? (long) turns : (long) turns - 1L) & -2L;
+        turns -= floor;
+        turns *= 2f - turns;
+        return turns * (-0.775f - 0.225f * turns) * ((floor & 2L) - 1L);
     }
 
     /**
@@ -130,7 +139,7 @@ public class SmudgeRenderer {
         final float hs = size * 0.5f;
         for (int x = 0, ax = xx; x < 4 && ax < render.length; x++, ax++) {
             for (int y = 0, ay = yy; y < 4 && ay < render[0].length; y++, ay++) {
-                if (depth >= depths[ax][ay] && (alpha == 0f || bn(ax, ay) >= alpha)) {
+                if ((depth > depths[ax][ay] || (depth == depths[ax][ay] && colorL[ax][ay] < paletteL[voxel & 255])) && (alpha == 0f || bn(ax, ay) >= alpha)) {
                     drawn = true;
                     colorL[ax][ay] = paletteL[voxel & 255];
                     colorA[ax][ay] = paletteA[voxel & 255];
