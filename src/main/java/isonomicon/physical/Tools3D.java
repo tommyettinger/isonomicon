@@ -876,14 +876,39 @@ public class Tools3D {
         return ((bound * (state & 0xFFFF)) >> 16);
     }
 
+    /**
+     * Returns a hashed float value given four longs; the result should be uniform between 0 (inclusive) and 1
+     * (exclusive).
+     * @param x position as a long
+     * @param y position as a long
+     * @param z position as a long
+     * @param s state or frame as a long
+     * @return a uniform float between 0.0f (inclusive) and 1.0f (exclusive)
+     */
     public static float randomizePoint(long x, long y, long z, long s){
         s =      (0xEBEDEED9D803C815L * x
                 + 0xD96EB1A810CAAF5FL * y
                 + 0xC862B36DAF790DD5L * z
                 + 0xB8ACD90C142FE10BL * s);
-        return ((s ^ s >>> 41 ^ s >>> 32) & 0x7FFFFF) * 0x1p-23f;
+        return ((s ^ s >>> 41 ^ s >>> 32) & 0x7FFFFFL) * 0x1p-23f;
     }
-    
+
+    /**
+     * Returns a hashed float value given four longs; the result is between 0 and 1.5 but is more often low.
+     * @param x position as a long
+     * @param y position as a long
+     * @param z position as a long
+     * @param s state or frame as a long
+     * @return a float between 0.0f (inclusive) and 1.5f (exclusive), more often low than high
+     */
+    public static float randomizePointRare(long x, long y, long z, long s){
+        s =      (0xEBEDEED9D803C815L * x
+                + 0xD96EB1A810CAAF5FL * y
+                + 0xC862B36DAF790DD5L * z
+                + 0xB8ACD90C142FE10BL * s);
+        return ((s >>> 41 ^ s >>> 32) & s & 0x7FFFFFL) * 0x1.8p-23f;
+    }
+
     public static StringBuilder show(byte[][][] data){
         final int sizeX = data.length, sizeY = data[0].length, sizeZ = data[0][0].length;
         StringBuilder sb = new StringBuilder(sizeX * (1+sizeY) * (1+sizeZ) << 2);

@@ -7,6 +7,9 @@ import com.github.tommyettinger.anim8.PaletteReducer;
 import com.github.tommyettinger.colorful.oklab.ColorTools;
 import isonomicon.physical.Tools3D;
 import isonomicon.physical.VoxMaterial;
+import squidpony.ArrayTools;
+
+import java.util.Arrays;
 
 import static squidpony.ArrayTools.fill;
 
@@ -110,7 +113,7 @@ public class SmudgeRenderer {
         return this;
     }
     
-    public void splat(float xPos, float yPos, float zPos, int vx, int vy, int vz, byte voxel) {
+    public void splat(float xPos, float yPos, float zPos, int vx, int vy, int vz, byte voxel, int frame) {
         if(xPos <= -1f || yPos <= -1f || zPos <= -1f
                 || xPos >= size * 2 || yPos >= size * 2 || zPos >= size * 2)
             return;
@@ -120,6 +123,8 @@ public class SmudgeRenderer {
                 depth = (int)(0.5f + (xPos + yPos) * 2 + zPos * 3);
         boolean drawn = false;
         final VoxMaterial m = materialMap.get(voxel & 255);
+        if(Tools3D.randomizePointRare(vx, vy, vz, frame) < m.getTrait(VoxMaterial.MaterialTrait._metal))
+            return;
         final float emit = m.getTrait(VoxMaterial.MaterialTrait._emit) * 0.75f;
         final float alpha = m.getTrait(VoxMaterial.MaterialTrait._alpha);
         final float hs = size * 0.5f;
@@ -169,26 +174,29 @@ public class SmudgeRenderer {
         fill(colorL, -1f);
         fill(colorA, -1f);
         fill(colorB, -1f);
+        for (int i = 0; i < materials.length; i++) {
+            Arrays.fill(materials[i], null);
+        }
         return this;
     }
 
     /**
-     * Compiles all of the individual voxels drawn with {@link #splat(float, float, float, int, int, int, byte)} into a
+     * Compiles all of the individual voxels drawn with {@link #splat(float, float, float, int, int, int, byte, int)} into a
      * single Pixmap and returns it.
      * @param turns yaw in turns; like turning your head or making a turn in a car
-     * @return {@link #pixmap}, edited to contain the render of all the voxels put in this with {@link #splat(float, float, float, int, int, int, byte)}
+     * @return {@link #pixmap}, edited to contain the render of all the voxels put in this with {@link #splat(float, float, float, int, int, int, byte, int)}
      */
     public Pixmap blit(float turns, int frame) {
         return blit(turns, 0f, 0f, frame);
     }
 
     /**
-     * Compiles all of the individual voxels drawn with {@link #splat(float, float, float, int, int, int, byte)} into a
+     * Compiles all of the individual voxels drawn with {@link #splat(float, float, float, int, int, int, byte, int)} into a
      * single Pixmap and returns it.
      * @param yaw in turns; like turning your head or making a turn in a car
      * @param pitch in turns; like looking up or down or making a nosedive in a plane
      * @param roll in turns; like tilting your head to one side or doing a barrel roll in a starship
-     * @return {@link #pixmap}, edited to contain the render of all the voxels put in this with {@link #splat(float, float, float, int, int, int, byte)}
+     * @return {@link #pixmap}, edited to contain the render of all the voxels put in this with {@link #splat(float, float, float, int, int, int, byte, int)}
      */
     public Pixmap blit(float yaw, float pitch, float roll, int frame) {
         final int threshold = 13;
@@ -223,8 +231,6 @@ public class SmudgeRenderer {
                     m = materials[sx][sy];
                     float rough = m.getTrait(VoxMaterial.MaterialTrait._rough);
                     float emit = m.getTrait(VoxMaterial.MaterialTrait._emit);
-                    float removal = m.getTrait(VoxMaterial.MaterialTrait._metal);
-                    if(Tools3D.randomizePoint(fx, fy, fz, frame) < removal) continue;
                     float limit = 2;
                     // + (PaletteReducer.TRI_BLUE_NOISE[(sx & 63) + (sy << 6) + (fx + fy + fz >>> 2) & 4095] + 0.5) * 0x1p-7;
                     if (Math.abs(shadeX[fy][fz] - tx) <= limit || ((fy > 1 && Math.abs(shadeX[fy - 2][fz] - tx) <= limit) || (fy < shadeX.length - 2 && Math.abs(shadeX[fy + 2][fz] - tx) <= limit))) {
@@ -252,11 +258,12 @@ public class SmudgeRenderer {
                         }
                     }
                     if (emit > 0) {
-                        float spread = emit * 0.03f;
+                        float spread = emit * 0.003f;
                         for (int i = -12, si = sx + i; i <= 12; i++, si++) {
                             for (int j = -12, sj = sy + j; j <= 12; j++, sj++) {
-                                if(i * i + j * j > 144 || si < 0 || sj < 0 || si > xSize || sj > ySize) continue;
-                                colorL[si][sj] += spread;
+                                final int dist = i * i + j * j;
+                                if(dist > 144 || si < 0 || sj < 0 || si > xSize || sj > ySize) continue;
+                                colorL[si][sj] += spread * (12f - (float) Math.sqrt(dist));
                             }
                         }
                     }
@@ -361,15 +368,18 @@ public class SmudgeRenderer {
             reducer.reduceScatter(pixmap);
         }
 
-        fill(render, 0);
         fill(depths, 0);
-        fill(outlines, 0);
+        fill(render, 0);
+        fill(outlines, (byte) 0);
         fill(voxels, -1);
-        fill(shadeX, -1);
-        fill(shadeZ, -1);
+        fill(shadeX, -1f);
+        fill(shadeZ, -1f);
         fill(colorL, -1f);
         fill(colorA, -1f);
         fill(colorB, -1f);
+        for (int i = 0; i < materials.length; i++) {
+            Arrays.fill(materials[i], null);
+        }
         return pixmap;
     }
 
@@ -395,7 +405,7 @@ public class SmudgeRenderer {
                     {
                         final float xPos = (x-hs) * c - (y-hs) * s + size;
                         final float yPos = (x-hs) * s + (y-hs) * c + size;
-                        splat(xPos, yPos, z, x, y, z, v);
+                        splat(xPos, yPos, z, x, y, z, v, frame);
                     }
                 }
             }
