@@ -52,6 +52,8 @@ public class Isomancer extends ApplicationAdapter {
 //            inputs = new String[]{"vox/Floor.vox"};
 //            inputs = new String[]{"vox/Bear.vox"};
 //            inputs = new String[]{"vox/Lomuk.vox"};
+            inputs = new String[]{"vox/Lomuk.vox", "vox/Damned.vox"};
+//            inputs = new String[]{"vox/Damned.vox"};
 //            inputs = new String[]{"vox/teapot.vox"};
             if(!new File(inputs[0]).exists())
                 System.exit(0);
@@ -81,24 +83,28 @@ public class Isomancer extends ApplicationAdapter {
             Pixmap pixmap;
             Array<Pixmap> pm = new Array<>(8);
             for (int i = 0; i < 8; i++) {
-                pixmap = renderer.drawSplats(voxels, i * 0.125f, VoxIO.lastMaterials);
-                Pixmap p = new Pixmap(pixmap.getWidth(), pixmap.getHeight(), pixmap.getFormat());
-                p.drawPixmap(pixmap, 0, 0);
-                pm.add(p);
-                try {
-                    png.write(Gdx.files.local("out/" + name + '/' + name + "_angle" + i + ".png"), p);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                for (int f = 0; f < 4; f++) {
+                    pixmap = renderer.drawSplats(voxels, i * 0.125f, f, VoxIO.lastMaterials);
+                    Pixmap p = new Pixmap(pixmap.getWidth(), pixmap.getHeight(), pixmap.getFormat());
+                    p.drawPixmap(pixmap, 0, 0);
+                    pm.add(p);
+                    try {
+                        png.write(Gdx.files.local("out/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), p);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 //                png8.write(Gdx.files.local("out/" + name + '/' + name + "_angle" + i + ".png"), p, false, true);
+                }
+                pm.insertRange(pm.size - 4, 4);
             }
 //                gif.palette.analyze(pm);
-            gif.write(Gdx.files.local("out/" + name + '/' + name + ".gif"), pm, 1);
+            gif.write(Gdx.files.local("out/" + name + '/' + name + ".gif"), pm, 8);
 //                gif.palette.exact(Coloring.HALTONITE240, PRELOAD);
 //                gif.write(Gdx.files.local("out/" + name + '/' + name + "-256-color.gif"), pm, 1);
 //                apng.write(Gdx.files.local("out/" + name + '/' + name + ".png"), pm, 12);
-            for(Pixmap pix : pm) {
-                pix.dispose();
+            for (Pixmap pix : pm) {
+                if(!pix.isDisposed())
+                    pix.dispose();
             }
         }
         System.out.println("Finished in " + TimeUtils.timeSinceMillis(startTime) * 0.001 + " seconds.");

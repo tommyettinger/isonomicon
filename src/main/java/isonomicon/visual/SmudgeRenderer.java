@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.IntMap;
 import com.github.tommyettinger.anim8.PaletteReducer;
 import com.github.tommyettinger.colorful.oklab.ColorTools;
+import isonomicon.physical.Tools3D;
 import isonomicon.physical.VoxMaterial;
 
 import static squidpony.ArrayTools.fill;
@@ -177,8 +178,8 @@ public class SmudgeRenderer {
      * @param turns yaw in turns; like turning your head or making a turn in a car
      * @return {@link #pixmap}, edited to contain the render of all the voxels put in this with {@link #splat(float, float, float, int, int, int, byte)}
      */
-    public Pixmap blit(float turns) {
-        return blit(turns, 0f, 0f);
+    public Pixmap blit(float turns, int frame) {
+        return blit(turns, 0f, 0f, frame);
     }
 
     /**
@@ -189,7 +190,7 @@ public class SmudgeRenderer {
      * @param roll in turns; like tilting your head to one side or doing a barrel roll in a starship
      * @return {@link #pixmap}, edited to contain the render of all the voxels put in this with {@link #splat(float, float, float, int, int, int, byte)}
      */
-    public Pixmap blit(float yaw, float pitch, float roll) {
+    public Pixmap blit(float yaw, float pitch, float roll, int frame) {
         final int threshold = 13;
         pixmap.setColor(0);
         pixmap.fill();
@@ -222,6 +223,8 @@ public class SmudgeRenderer {
                     m = materials[sx][sy];
                     float rough = m.getTrait(VoxMaterial.MaterialTrait._rough);
                     float emit = m.getTrait(VoxMaterial.MaterialTrait._emit);
+                    float removal = m.getTrait(VoxMaterial.MaterialTrait._metal);
+                    if(Tools3D.randomizePoint(fx, fy, fz, frame) < removal) continue;
                     float limit = 2;
                     // + (PaletteReducer.TRI_BLUE_NOISE[(sx & 63) + (sy << 6) + (fx + fy + fz >>> 2) & 4095] + 0.5) * 0x1p-7;
                     if (Math.abs(shadeX[fy][fz] - tx) <= limit || ((fy > 1 && Math.abs(shadeX[fy - 2][fz] - tx) <= limit) || (fy < shadeX.length - 2 && Math.abs(shadeX[fy + 2][fz] - tx) <= limit))) {
@@ -377,7 +380,7 @@ public class SmudgeRenderer {
     // To move one z+ in voxels is y + 3 in pixels.
     // To move one z- in voxels is y - 3 in pixels.
 
-    public Pixmap drawSplats(byte[][][] colors, float angleTurns, IntMap<VoxMaterial> materialMap) {
+    public Pixmap drawSplats(byte[][][] colors, float angleTurns, int frame, IntMap<VoxMaterial> materialMap) {
         this.materialMap = materialMap;
 //        Tools3D.fill(remade, 0);
 //        seed = Tools3D.hash64(colors) + NumberUtils.floatToRawIntBits(angleTurns);
@@ -397,7 +400,7 @@ public class SmudgeRenderer {
                 }
             }
         }
-        return blit(angleTurns);
+        return blit(angleTurns, frame);
     }
 
 }

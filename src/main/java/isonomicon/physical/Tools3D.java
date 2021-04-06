@@ -834,7 +834,7 @@ public class Tools3D {
         long result = 0xBEEF1E57DADD1E5L ^ data.length * 0x9E3779B97F4A7C15L;
         int i = 0;
         for (; i + 7 < data.length; i += 8) {
-            result = 0xEBEDEED9D803C815L * result
+            result =  0xEBEDEED9D803C815L * result
                     + 0xD96EB1A810CAAF5FL * hash(h, data[i])
                     + 0xC862B36DAF790DD5L * hash(h, data[i + 1])
                     + 0xB8ACD90C142FE10BL * hash(h, data[i + 2])
@@ -874,6 +874,14 @@ public class Tools3D {
     public static int determineSmallBounded(final int state, final int bound)
     {
         return ((bound * (state & 0xFFFF)) >> 16);
+    }
+
+    public static float randomizePoint(long x, long y, long z, long s){
+        s =      (0xEBEDEED9D803C815L * x
+                + 0xD96EB1A810CAAF5FL * y
+                + 0xC862B36DAF790DD5L * z
+                + 0xB8ACD90C142FE10BL * s);
+        return ((s ^ s >>> 41 ^ s >>> 32) & 0x7FFFFF) * 0x1p-23f;
     }
     
     public static StringBuilder show(byte[][][] data){
