@@ -25,10 +25,26 @@ public class VoxMaterial {
 	}
 
 	public enum MaterialTrait {
-		//0                      1              2                  3              4            5
-		_alpha("Transparency"), _d("Density"), _emit("Emission"), _flux("Flux"), _g("Phase"), _ior("Reflection"),
-		//6           7                  8                   9
-		_ldr("LDR"), _media("Special"), _metal("Metallic"), _rough("Roughness");
+		//0 lower is more opaque, higher is more transparent
+		_alpha("Transparency"),
+		//1 currently unused
+		_d("Density"),
+		//2 brightness of light emitted
+		_emit("Emission"),
+		//3 for emissive materials, this is called "strength," here it may be used for transitions.
+		_flux("Flux"),
+		//4 affects scatter media? unused
+		_g("Phase"),
+		//5 affects extra lightness applied when both the front and top are lit
+		_ior("Reflection"),
+		//6 when higher, adds a chance the voxel will not be rendered
+		_ldr("LDR"),
+		//7 not related to the "Cloud" _media MaterialType; unused
+		_media("Special"),
+		//8 when higher, adds a chance the voxel will not be rendered
+		_metal("Metallic"),
+		//9 determines how much lighting affects the color of a surface
+		_rough("Roughness");
 		
 		public String name;
 		MaterialTrait(String name){
@@ -66,10 +82,14 @@ public class VoxMaterial {
 		return traits.get(trait.ordinal(), 0.0f);
 	}
 	public void putTrait(MaterialTrait trait, float value){
-		traits.put(trait.ordinal(), value);
+		int ord = trait.ordinal();
+		if(ord == 6) traits.put(8, value);
+		traits.put(ord, value);
 	}
 	public void putTrait(String trait, float value){
-		traits.put(MaterialTrait.valueOf(trait).ordinal(), value);
+		int ord = MaterialTrait.valueOf(trait).ordinal();
+		if(ord == 6) traits.put(8, value);
+		traits.put(ord, value);
 	}
 
 	@Override
