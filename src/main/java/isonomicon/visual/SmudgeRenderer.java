@@ -35,7 +35,7 @@ public class SmudgeRenderer {
     }
     public SmudgeRenderer(final int size) {
         this.size = size;
-        final int w = size * 4 + 5, h = size * 5 + 4;
+        final int w = size * 4 + 4, h = size * 5 + 4;
 //        pixmap = new Pixmap(w, h, Pixmap.Format.RGBA8888);
         pixmap = new Pixmap(w>>>shrink, h>>>shrink, Pixmap.Format.RGBA8888);
         render =   new int[w][h];
