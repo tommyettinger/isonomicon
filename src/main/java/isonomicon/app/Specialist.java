@@ -51,7 +51,7 @@ public class Specialist extends ApplicationAdapter {
 //            inputs = new String[]{"vox/LAB.vox"};
 //            inputs = new String[]{"vox/Oklab.vox"};
 //            inputs = new String[]{"vox/Oklab.vox", "vox/LAB.vox", "vox/IPT.vox"};
-            inputs = new String[]{"vox/Eye_Tyrant.vox"};
+//            inputs = new String[]{"vox/Eye_Tyrant.vox"};
 //            inputs = new String[]{"vox/Floor.vox"};
 //            inputs = new String[]{"vox/Bear.vox"};
 //            inputs = new String[]{"vox/Lomuk.vox"};
@@ -145,7 +145,7 @@ public class Specialist extends ApplicationAdapter {
 //            renderer = new NextRenderer(voxels.length, QUALITY);
 //            renderer = new AngledRenderer(voxels.length);
             renderer = new SmudgeRenderer(voxels.length);
-            renderer.palette(Coloring.FANCY_MANOS64);
+            renderer.palette(Coloring.MANOS64);
             renderer.saturation(0f);
             
         } catch (FileNotFoundException e) {

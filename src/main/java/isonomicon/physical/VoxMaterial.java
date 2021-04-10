@@ -1,6 +1,7 @@
 package isonomicon.physical;
 
 import com.badlogic.gdx.utils.IntFloatMap;
+import com.badlogic.gdx.utils.ObjectIntMap;
 
 /**
  * Represents the physical qualities of a given material, like how reflective it is or how much light it emits.
@@ -60,6 +61,16 @@ public class VoxMaterial {
 	public static final MaterialType[] ALL_TYPES = MaterialType.values();
 	public static final MaterialTrait[] ALL_TRAITS = MaterialTrait.values();
 
+	public static final ObjectIntMap<String> TYPE_MAP = new ObjectIntMap<>(6), TRAIT_MAP = new ObjectIntMap<>(10);
+
+	static {
+		for(MaterialType t : ALL_TYPES) {
+			TYPE_MAP.put(t.name, t.ordinal());
+		}
+		for(MaterialTrait t : ALL_TRAITS) {
+			TRAIT_MAP.put(t.name, t.ordinal());
+		}
+	}
 	public final MaterialType type;
 	public final IntFloatMap traits = new IntFloatMap(16);
 	
@@ -76,6 +87,17 @@ public class VoxMaterial {
 		traits.put(4, 0.41f);
 		if(type == MaterialType._media)
 			traits.put(0, 0.6f); // cloud materials are always partly transparent
+	}
+
+	public VoxMaterial(String typeName, String traitMap) {
+		type = ALL_TYPES[TYPE_MAP.get(typeName, 0)];
+		traits.put(9, 0.1f);
+		traits.put(5, 0.3f);
+		traits.put(4, 0.41f);
+		String[] split = traitMap.split("[ ,;]+");
+		for (int i = 1; i < (split.length & -2); i+=2) {
+			traits.put(TRAIT_MAP.get(split[i-1], -1), Float.parseFloat(split[i]));
+		}
 	}
 
 	public float getTrait(MaterialTrait trait){
