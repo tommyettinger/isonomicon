@@ -16,6 +16,7 @@ import isonomicon.io.VoxIO;
 import isonomicon.physical.Tools3D;
 import isonomicon.visual.Coloring;
 import isonomicon.visual.SmudgeRenderer;
+import isonomicon.visual.SpecialRenderer;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -25,7 +26,7 @@ import java.io.IOException;
 public class Specialist extends ApplicationAdapter {
     public static final int SCREEN_WIDTH = 512;//640;
     public static final int SCREEN_HEIGHT = 512;//720;
-    private SmudgeRenderer renderer;
+    private SpecialRenderer renderer;
     private byte[][][] voxels;
     private String name;
     private String[] inputs;
@@ -51,7 +52,7 @@ public class Specialist extends ApplicationAdapter {
 //            inputs = new String[]{"vox/LAB.vox"};
 //            inputs = new String[]{"vox/Oklab.vox"};
 //            inputs = new String[]{"vox/Oklab.vox", "vox/LAB.vox", "vox/IPT.vox"};
-//            inputs = new String[]{"vox/Eye_Tyrant.vox"};
+            inputs = new String[]{"vox/Eye_Tyrant.vox"};
 //            inputs = new String[]{"vox/Floor.vox"};
 //            inputs = new String[]{"vox/Bear.vox"};
 //            inputs = new String[]{"vox/Lomuk.vox"};
@@ -87,7 +88,7 @@ public class Specialist extends ApplicationAdapter {
             Array<Pixmap> pm = new Array<>(8);
             for (int i = 0; i < 8; i++) {
                 for (int f = 0; f < 4; f++) {
-                    pixmap = renderer.drawSplats(voxels, i * 0.125f, f, VoxIO.lastMaterials);
+                    pixmap = renderer.drawSplats(voxels, i * 0.125f, f);
                     Pixmap p = new Pixmap(pixmap.getWidth(), pixmap.getHeight(), pixmap.getFormat());
                     p.drawPixmap(pixmap, 0, 0);
                     pm.add(p);
@@ -144,7 +145,7 @@ public class Specialist extends ApplicationAdapter {
             this.name = name.substring(nameStart, name.indexOf('.', nameStart));
 //            renderer = new NextRenderer(voxels.length, QUALITY);
 //            renderer = new AngledRenderer(voxels.length);
-            renderer = new SmudgeRenderer(voxels.length);
+            renderer = new SpecialRenderer(voxels.length);
             renderer.palette(Coloring.MANOS64);
             renderer.saturation(0f);
             
