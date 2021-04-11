@@ -32,7 +32,7 @@ public class VoxMaterial {
 		_d("Density"),
 		//2 brightness of light emitted
 		_emit("Emission"),
-		//3 for emissive materials, this is called "strength," here it may be used for transitions.
+		//3 for emissive materials, this is called "strength," here it may get used for lighting range?
 		_flux("Flux"),
 		//4 affects scatter media? unused
 		_g("Phase"),
@@ -80,8 +80,8 @@ public class VoxMaterial {
 		traits.put(5, 0.3f);
 		traits.put(4, 0.41f);
 	}
-	public VoxMaterial(String typeName){
-		type = MaterialType.valueOf(typeName);
+	public VoxMaterial(String typeCode){
+		type = MaterialType.valueOf(typeCode);
 		traits.put(9, 0.1f);
 		traits.put(5, 0.3f);
 		traits.put(4, 0.41f);
