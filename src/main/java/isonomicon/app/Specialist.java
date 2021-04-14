@@ -85,7 +85,7 @@ public class Specialist extends ApplicationAdapter {
 //            VoxIO.writeVOX("out/" + s, voxels, renderer.palette, VoxIO.lastMaterials);
 //            load("out/"+s);
             Pixmap pixmap;
-            Array<Pixmap> pm = new Array<>(8);
+            Array<Pixmap> pm = new Array<>(32);
             for (int i = 0; i < 8; i++) {
                 for (int f = 0; f < 4; f++) {
                     pixmap = renderer.drawSplats(voxels, i * 0.125f, f);
@@ -94,6 +94,7 @@ public class Specialist extends ApplicationAdapter {
                     pm.add(p);
                     try {
                         png.write(Gdx.files.local("out/specialized/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), p);
+                        png.write(Gdx.files.local("out/special_lab/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

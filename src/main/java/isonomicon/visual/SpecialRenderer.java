@@ -20,8 +20,8 @@ public class SpecialRenderer {
     public Pixmap pixmap, palettePixmap;
     public int[][] depths, voxels, render, outlines;
     public VoxMaterial[][] materials;
-    public float[][] shadeX, shadeZ, colorL, colorA, colorB;
-    public byte[][] indices;
+    public float[][] shadeX, shadeZ, colorL, colorA, colorB, shading;
+    public byte[][] indices, outlineIndices;
     public int[] palette;
     public float[] paletteL, paletteA, paletteB;
     public boolean outline = true;
@@ -41,6 +41,8 @@ public class SpecialRenderer {
         outlines = new int[w][h];
         depths =   new int[w][h];
         indices =  new byte[w][h];
+        outlineIndices =  new byte[w][h];
+        shading =  new float[w][h];
         materials = new VoxMaterial[w][h];
         voxels = fill(-1, w, h);
         shadeX = fill(-1f, size * 4, size * 4);
@@ -129,13 +131,17 @@ public class SpecialRenderer {
             for (int y = 0, ay = yy; y < 4 && ay < render[0].length; y++, ay++) {
                 if ((depth > depths[ax][ay] || (depth == depths[ax][ay] && colorL[ax][ay] < paletteL[voxel & 255])) && (alpha == 0f || bn(ax, ay) >= alpha)) {
                     drawn = true;
+                    indices[ax][ay] = voxel;
                     colorL[ax][ay] = paletteL[voxel & 255];
                     colorA[ax][ay] = paletteA[voxel & 255];
                     colorB[ax][ay] = paletteB[voxel & 255];
                     depths[ax][ay] = depth;
                     materials[ax][ay] = m;
                     if(alpha == 0f)
+                    {
                         outlines[ax][ay] = ColorTools.toRGBA8888(ColorTools.limitToGamut(paletteL[voxel & 255] * (0.8f + emit), paletteA[voxel & 255], paletteB[voxel & 255], 1f));
+                        outlineIndices[ax][ay] = voxel;
+                    }
 //                                Coloring.darken(palette[voxel & 255], 0.375f - emit);
 //                                Coloring.adjust(palette[voxel & 255], 0.625f + emit, neutral);
 //                    else
@@ -162,9 +168,13 @@ public class SpecialRenderer {
     public SpecialRenderer clear() {
         pixmap.setColor(0);
         pixmap.fill();
+        palettePixmap.setColor(0);
+        palettePixmap.fill();
         fill(depths, 0);
         fill(render, 0);
         fill(outlines, (byte) 0);
+        fill(indices, (byte) 0);
+        fill(outlineIndices, (byte) 0);
         fill(voxels, -1);
         fill(shadeX, -1f);
         fill(shadeZ, -1f);
@@ -199,6 +209,8 @@ public class SpecialRenderer {
         final int threshold = 13;
         pixmap.setColor(0);
         pixmap.fill();
+        palettePixmap.setColor(0);
+        palettePixmap.fill();
         int xSize = render.length - 1, ySize = render[0].length - 1, depth;
         int v, vx, vy, vz, fx, fy, fz;
         float hs = (size) * 0.5f, ox, oy, oz, tx, ty, tz;
@@ -234,13 +246,17 @@ public class SpecialRenderer {
                         float spread = MathUtils.lerp(0.0025f, 0.001f, rough);
                         if (Math.abs(shadeZ[fx][fy] - tz) <= limit) {
                             spread *= 2f;
-                            colorL[sx][sy] += m.getTrait(VoxMaterial.MaterialTrait._ior) * 0.2f;
+                            float change = m.getTrait(VoxMaterial.MaterialTrait._ior) * 0.2f;
+                            colorL[sx][sy] += change;
+                            shading[sx][sy] += change;
                         }
                         int dist;
                         for (int i = -3, si = sx + i; i <= 3; i++, si++) {
                             for (int j = -3, sj = sy + j; j <= 3; j++, sj++) {
                                 if((dist = Math.abs(i) + Math.abs(j)) > 3 || si < 0 || sj < 0 || si > xSize || sj > ySize) continue;
-                                colorL[si][sj] += spread * (4 - dist);
+                                float change = spread * (4 - dist);
+                                colorL[si][sj] += change;
+                                shading[si][sj] += change;
                             }
                         }
                     }
@@ -250,7 +266,9 @@ public class SpecialRenderer {
                         for (int i = -3, si = sx + i; i <= 3; i++, si++) {
                             for (int j = -3, sj = sy + j; j <= 3; j++, sj++) {
                                 if((dist = Math.abs(i) + Math.abs(j)) > 3 || si < 0 || sj < 0 || si > xSize || sj > ySize) continue;
-                                colorL[si][sj] += spread * (4 - dist);
+                                float change = spread * (4 - dist);
+                                colorL[si][sj] += change;
+                                shading[si][sj] += change;
                             }
                         }
                     }
@@ -260,63 +278,54 @@ public class SpecialRenderer {
                             for (int j = -12, sj = sy + j; j <= 12; j++, sj++) {
                                 final int dist = i * i + j * j;
                                 if(dist > 144 || si < 0 || sj < 0 || si > xSize || sj > ySize) continue;
-                                colorL[si][sj] += spread * (12f - (float) Math.sqrt(dist));
+                                float change = spread * (12f - (float) Math.sqrt(dist));
+                                colorL[si][sj] += change;
+                                shading[si][sj] += change;
                             }
                         }
                     }
                 }
             }
         }
-        final int distance = 1;
-        for (int x = 0; x <= xSize; x++) {
-            for (int y = 0; y <= ySize; y++) {
-                if (colorA[x][y] >= 0f) {
-                    float maxL = 0f, minL = 1f, avgL = 0f,
-                            maxA = 0f, minA = 1f, avgA = 0f,
-                            maxB = 0f, minB = 1f, avgB = 0f,
-                            div = 0f, current;
-                    for (int xx = -distance; xx <= distance; xx++) {
-                        if (x + xx < 0 || x + xx > xSize) continue;
-                        for (int yy = -distance; yy <= distance; yy++) {
-                            if ((xx & yy) != 0 || y + yy < 0 || y + yy > ySize || colorA[x + xx][y + yy] <= 0f)
-                                continue;
-                            current = colorL[x + xx][y + yy];
-                            maxL = Math.max(maxL, current);
-                            minL = Math.min(minL, current);
-                            avgL += current;
-                            current = colorA[x + xx][y + yy];
-                            maxA = Math.max(maxA, current);
-                            minA = Math.min(minA, current);
-                            avgA += current;
-                            current = colorB[x + xx][y + yy];
-                            maxB = Math.max(maxB, current);
-                            minB = Math.min(minB, current);
-                            avgB += current;
-                            div++;
-                        }
-                    }
-//                    avg = avg / div + (x + y & 1) * 0.05f - 0.025f;
-//                    pixmap.drawPixel(x, y, render[x][y] = ColorTools.toRGBA8888(ColorTools.limitToGamut(
-//                            Math.min(Math.max(((avg - minL) < (maxL - avg) ? minL : maxL) - 0.15625f, 0f), 1f),
-//                            (colorA[x][y] - 0.5f) * neutral + 0.5f,
-//                            (colorB[x][y] - 0.5f) * neutral + 0.5f, 1f)));
-//                    avgL = avgL / div + (x + y & 2) * 0.004f - 0.004f;
-                    avgL /= div;
-                    avgA /= div;
-                    avgB /= div;
-                    render[x][y] = ColorTools.toRGBA8888(ColorTools.limitToGamut(
-                            Math.min(Math.max(((avgL - minL) < (maxL - avgL) ? minL : maxL) - 0.15625f, 0f), 1f),
-                            (avgA - 0.5f) * neutral + 0.5f,
-                            (avgB - 0.5f) * neutral + 0.5f, 1f));
-//                    avg /= div;
-//                    colorL[x][y] = Math.min(Math.max(((avg - minL) < (maxL - avg) ? minL : maxL) - 0.15625f, 0f), 1f);
-//                    if (neutral != 1f) {
-//                        colorA[x][y] = (colorA[x][y] - 0.5f) * neutral + 0.5f;
-//                        colorB[x][y] = (colorB[x][y] - 0.5f) * neutral + 0.5f;
+//        final int distance = 1;
+//        for (int x = 0; x <= xSize; x++) {
+//            for (int y = 0; y <= ySize; y++) {
+//                if (colorA[x][y] >= 0f) {
+//                    float maxL = 0f, minL = 1f, avgL = 0f,
+//                            maxA = 0f, minA = 1f, avgA = 0f,
+//                            maxB = 0f, minB = 1f, avgB = 0f,
+//                            div = 0f, current;
+//                    for (int xx = -distance; xx <= distance; xx++) {
+//                        if (x + xx < 0 || x + xx > xSize) continue;
+//                        for (int yy = -distance; yy <= distance; yy++) {
+//                            if ((xx & yy) != 0 || y + yy < 0 || y + yy > ySize || colorA[x + xx][y + yy] <= 0f)
+//                                continue;
+//                            current = colorL[x + xx][y + yy];
+//                            maxL = Math.max(maxL, current);
+//                            minL = Math.min(minL, current);
+//                            avgL += current;
+//                            current = colorA[x + xx][y + yy];
+//                            maxA = Math.max(maxA, current);
+//                            minA = Math.min(minA, current);
+//                            avgA += current;
+//                            current = colorB[x + xx][y + yy];
+//                            maxB = Math.max(maxB, current);
+//                            minB = Math.min(minB, current);
+//                            avgB += current;
+//                            div++;
+//                        }
 //                    }
-                }
-            }
-        }
+//                    avgL /= div;
+//                    avgA /= div;
+//                    avgB /= div;
+//                    render[x][y] = ColorTools.toRGBA8888(ColorTools.limitToGamut(
+//                            Math.min(Math.max(((avgL - minL) < (maxL - avgL) ? minL : maxL) - 0.15625f, 0f), 1f),
+//                            (avgA - 0.5f) * neutral + 0.5f,
+//                            (avgB - 0.5f) * neutral + 0.5f, 1f));
+//                }
+//            }
+//        }
+
 //        for (int x = 0; x <= xSize; x++) {
 //            for (int y = 0; y <= ySize; y++) {
 //                if (colorA[x][y] >= 0f) {
@@ -330,12 +339,23 @@ public class SpecialRenderer {
         for (int x = xSize; x >= 0; x--) {
             for (int y = ySize; y >= 0; y--) {
                 if (colorA[x][y] >= 0f) {
-                    pixmap.drawPixel(x >>> shrink, y >>> shrink, render[x][y]);
+                    pixmap.drawPixel(x >>> shrink, y >>> shrink, ColorTools.toRGBA8888(ColorTools.limitToGamut(
+                            Math.min(Math.max(colorL[x][y] - 0.1875f, 0f), 1f),
+                            (colorA[x][y] - 0.5f) * neutral + 0.5f,
+                            (colorB[x][y] - 0.5f) * neutral + 0.5f, 1f)));
+                    palettePixmap.drawPixel(x >>> shrink, y >>> shrink, (indices[x][y] & 255) << 24 | (int) ((shading[x][y] - 0.75f) * 127.999f + 128f) << 16 |255);
                 }
             }
         }
+//        for (int x = xSize; x >= 0; x--) {
+//            for (int y = ySize; y >= 0; y--) {
+//                if (colorA[x][y] >= 0f) {
+//                    pixmap.drawPixel(x >>> shrink, y >>> shrink, render[x][y]);
+//                }
+//            }
+//        }
         if (outline) {
-            int o;
+            int o, po;
             for (int x = step; x <= xSize - step; x+= step) {
 //                final int hx = x;
                 final int hx = x >>> shrink;
@@ -344,17 +364,22 @@ public class SpecialRenderer {
                     int hy = y >>> shrink;
                     if ((o = outlines[x][y]) != 0) {
                         depth = depths[x][y];
+                        po = (outlineIndices[x][y] & 255) << 24 | 64 << 16 |255;
                         if (outlines[x - step][y] == 0 || depths[x - step][y] < depth - threshold) {
                             pixmap.drawPixel(hx - 1, hy    , o);
+                            palettePixmap.drawPixel(hx - 1, hy    , po);
                         }
                         if (outlines[x + step][y] == 0 || depths[x + step][y] < depth - threshold) {
                             pixmap.drawPixel(hx + 1, hy    , o);
+                            palettePixmap.drawPixel(hx + 1, hy    , po);
                         }
                         if (outlines[x][y - step] == 0 || depths[x][y - step] < depth - threshold) {
                             pixmap.drawPixel(hx    , hy - 1, o);
+                            palettePixmap.drawPixel(hx, hy - 1, po);
                         }
                         if (outlines[x][y + step] == 0 || depths[x][y + step] < depth - threshold) {
                             pixmap.drawPixel(hx    , hy + 1, o);
+                            palettePixmap.drawPixel(hx, hy + 1, po);
                         }
                     }
                 }
@@ -363,7 +388,10 @@ public class SpecialRenderer {
 
         fill(depths, 0);
         fill(render, 0);
+        fill(shading, 0);
         fill(outlines, (byte) 0);
+        fill(indices, (byte) 0);
+        fill(outlineIndices, (byte) 0);
         fill(voxels, -1);
         fill(shadeX, -1f);
         fill(shadeZ, -1f);
