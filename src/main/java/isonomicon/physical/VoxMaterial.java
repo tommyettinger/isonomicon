@@ -11,8 +11,18 @@ import com.badlogic.gdx.utils.ObjectIntMap;
  */
 public class VoxMaterial {
 	public enum MaterialType {
-		//0                   1                2              3                4                5
-		_diffuse("Diffuse"), _metal("Metal"), _emit("Emit"), _glass("Glass"), _blend("Blend"), _media("Cloud");
+		//0
+		_diffuse("Diffuse"),
+		//1
+		_metal("Metal"),
+		//2
+		_emit("Emit"),
+		//3
+		_glass("Glass"),
+		//4
+		_blend("Blend"),
+		//5
+		_media("Cloud");
 		public String name;
 		MaterialType(String name){
 			this.name = name;
@@ -43,7 +53,7 @@ public class VoxMaterial {
 		//7 not related to the "Cloud" _media MaterialType; unused
 		_media("Special"),
 		//8 when higher, adds a chance the voxel will not be rendered
-		_metal("Metallic"),
+		_metal("Missing"),
 		//9 determines how much lighting affects the color of a surface
 		_rough("Roughness");
 		
