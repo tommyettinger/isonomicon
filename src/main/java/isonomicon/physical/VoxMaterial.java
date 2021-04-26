@@ -55,7 +55,12 @@ public class VoxMaterial {
 		//8 when higher, adds a chance the voxel will not be rendered
 		_metal("Missing"),
 		//9 determines how much lighting affects the color of a surface
-		_rough("Roughness");
+		_rough("Roughness"),
+		//10 used with FastNoise; affects stretching of a voxel over time and space
+		_flow("Flow"),
+		//11 affects vertical movement of a voxel over time; may be negative
+		_rise("Rise")
+		;
 		
 		public String name;
 		MaterialTrait(String name){
