@@ -343,7 +343,7 @@ public class SpecialRenderer {
                             Math.min(Math.max(colorL[x][y] - 0.1875f, 0f), 1f),
                             (colorA[x][y] - 0.5f) * neutral + 0.5f,
                             (colorB[x][y] - 0.5f) * neutral + 0.5f, 1f)));
-                    palettePixmap.drawPixel(x >>> shrink, y >>> shrink, (indices[x][y] & 255) << 24 | (int) ((shading[x][y] - 0.1875f) * 127.999f + 128f) << 16 |255);
+                    palettePixmap.drawPixel(x >>> shrink, y >>> shrink, (indices[x][y] & 255) << 24 | (int) MathUtils.clamp((shading[x][y] - 0.1875f) * 127.999f + 96f, 0f, 255f) << 16 |255);
                 }
             }
         }

@@ -4,14 +4,13 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3WindowAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ScreenUtils;
-import squidpony.squidmath.CrossHash;
+import com.badlogic.gdx.utils.TimeUtils;
 
 public class SpecialViewer extends ApplicationAdapter {
     public static final String vertex = "attribute vec4 a_position;\n" +
@@ -47,7 +46,7 @@ public class SpecialViewer extends ApplicationAdapter {
                     "  vec3 lab = mat3(+0.2104542553, +1.9779984951, +0.0259040371, +0.7936177850, -2.4285922050, +0.7827717662, -0.0040720468, +0.4505937099, -0.8086757660) *" +
                     "             pow(mat3(0.4121656120, 0.2118591070, 0.0883097947, 0.5362752080, 0.6807189584, 0.2818474174, 0.0514575653, 0.1074065790, 0.6302613616) \n" +
                     "             * (tgt.rgb * tgt.rgb), forward);\n" +
-                    "  lab.x = clamp(lab.x + index.y + v_color.g - 1.26, 0.0, 1.0);\n" +
+                    "  lab.x = clamp(lab.x + index.y + v_color.g - 1.0, 0.0, 1.0);\n" +
                     "  lab.yz = clamp(lab.yz * (v_color.b + 0.5), -1.0, 1.0);\n" +
                     "  lab = mat3(1.0, 1.0, 1.0, +0.3963377774, -0.1055613458, -0.0894841775, +0.2158037573, -0.0638541728, -1.2914855480) * lab;\n" +
                     "  gl_FragColor = vec4(sqrt(clamp(" +
@@ -59,17 +58,28 @@ public class SpecialViewer extends ApplicationAdapter {
     public ShaderProgram indexShader;
 
     public Texture palettes;
-    public Texture image;
+    public Texture[] images;
 
     public SpriteBatch batch;
+
+    private long startTime;
 
     @Override
     public void create() {
         palettes = new Texture("palettes/palettes.png");
-        image = new Texture(Gdx.files.local("out/special_lab/Eye_Tyrant/Eye_Tyrant_angle0_0.png"));
+//        String name = "Eye_Tyrant";
+        String name = "Lomuk";
+        images = new Texture[]{
+                new Texture(Gdx.files.local("out/special_lab/"+name+"/"+name+"_angle0_0.png")),
+                new Texture(Gdx.files.local("out/special_lab/"+name+"/"+name+"_angle0_1.png")),
+                new Texture(Gdx.files.local("out/special_lab/"+name+"/"+name+"_angle0_2.png")),
+                new Texture(Gdx.files.local("out/special_lab/"+name+"/"+name+"_angle0_3.png")),
+        };
         batch = new SpriteBatch();
         indexShader = new ShaderProgram(vertex, fragment);
         if (!indexShader.isCompiled()) throw new GdxRuntimeException("Error compiling shader: " + indexShader.getLog());
+
+        startTime = TimeUtils.millis();
     }
 
     @Override
@@ -83,7 +93,7 @@ public class SpecialViewer extends ApplicationAdapter {
         indexShader.setUniformi("u_texPalette", 1);
         Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
         batch.setColor(0f, 0.63f, 0.5f, 1f);
-        batch.draw(image, 0, 0);
+        batch.draw(images[(int) (TimeUtils.timeSinceMillis(startTime) >>> 8) & 3], 0, 0);
         batch.end();
     }
 
