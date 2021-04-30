@@ -20,7 +20,7 @@ public class SpecialRenderer {
     public Pixmap pixmap, palettePixmap;
     public int[][] depths, voxels, render, outlines;
     public VoxMaterial[][] materials;
-    public float[][] shadeX, shadeZ, colorL, colorA, colorB, shading;
+    public float[][] shadeX, shadeZ, colorL, colorA, colorB, shading, outlineShading;
     public byte[][] indices, outlineIndices;
     public int[] palette;
     public float[] paletteL, paletteA, paletteB;
@@ -43,6 +43,7 @@ public class SpecialRenderer {
         indices =  new byte[w][h];
         outlineIndices =  new byte[w][h];
         shading =  new float[w][h];
+        outlineShading = new float[w][h];
         materials = new VoxMaterial[w][h];
         voxels = fill(-1, w, h);
         shadeX = fill(-1f, size * 4, size * 4);
@@ -139,7 +140,7 @@ public class SpecialRenderer {
                     materials[ax][ay] = m;
                     if(alpha == 0f)
                     {
-                        outlines[ax][ay] = ColorTools.toRGBA8888(ColorTools.limitToGamut(paletteL[voxel & 255] * (0.8f + emit), paletteA[voxel & 255], paletteB[voxel & 255], 1f));
+                        outlines[ax][ay] = ColorTools.toRGBA8888(ColorTools.limitToGamut(outlineShading[ax][ay] = paletteL[voxel & 255] * (0.625f + emit), paletteA[voxel & 255], paletteB[voxel & 255], 1f));
                         outlineIndices[ax][ay] = voxel;
                     }
 //                                Coloring.darken(palette[voxel & 255], 0.375f - emit);
@@ -178,6 +179,8 @@ public class SpecialRenderer {
         fill(voxels, -1);
         fill(shadeX, -1f);
         fill(shadeZ, -1f);
+        fill(shading, -1f);
+        fill(outlineShading, -1f);
         fill(colorL, -1f);
         fill(colorA, -1f);
         fill(colorB, -1f);
@@ -340,10 +343,10 @@ public class SpecialRenderer {
             for (int y = ySize; y >= 0; y--) {
                 if (colorA[x][y] >= 0f) {
                     pixmap.drawPixel(x >>> shrink, y >>> shrink, ColorTools.toRGBA8888(ColorTools.limitToGamut(
-                            Math.min(Math.max(colorL[x][y] - 0.1875f, 0f), 1f),
+                            Math.min(Math.max(0.25f + 0.625f * (colorL[x][y] - 0.1875f), 0f), 1f),
                             (colorA[x][y] - 0.5f) * neutral + 0.5f,
                             (colorB[x][y] - 0.5f) * neutral + 0.5f, 1f)));
-                    palettePixmap.drawPixel(x >>> shrink, y >>> shrink, (indices[x][y] & 255) << 24 | (int) MathUtils.clamp((shading[x][y] - 0.1875f) * 127.999f + 96f, 0f, 255f) << 16 |255);
+                    palettePixmap.drawPixel(x >>> shrink, y >>> shrink, (indices[x][y] & 255) << 24 | (int) MathUtils.clamp((shading[x][y] - 0.1875f) * 160f + 64f, 0f, 255f) << 16 |255);
                 }
             }
         }
@@ -364,7 +367,7 @@ public class SpecialRenderer {
                     int hy = y >>> shrink;
                     if ((o = outlines[x][y]) != 0) {
                         depth = depths[x][y];
-                        po = (outlineIndices[x][y] & 255) << 24 | 64 << 16 |255;
+                        po = (outlineIndices[x][y] & 255) << 24 | (int)MathUtils.clamp(64f * outlineShading[x][y], 0f, 255f) << 16 |255;
                         if (outlines[x - step][y] == 0 || depths[x - step][y] < depth - threshold) {
                             pixmap.drawPixel(hx - 1, hy    , o);
                             palettePixmap.drawPixel(hx - 1, hy    , po);
@@ -388,7 +391,8 @@ public class SpecialRenderer {
 
         fill(depths, 0);
         fill(render, 0);
-        fill(shading, 0);
+        fill(shading, 0f);
+        fill(outlineShading, 0f);
         fill(outlines, (byte) 0);
         fill(indices, (byte) 0);
         fill(outlineIndices, (byte) 0);
