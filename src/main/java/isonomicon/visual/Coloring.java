@@ -578,7 +578,9 @@ public class Coloring {
     /**
      * Manually-edited version of the 64-color Dawnplumnik palette, which was made by combining DawnBringer's Iso22,
      * bman4750's Super Plum 21, and Vinik's Vinik24. Has better gray, orange, yellow, and brown coverage, and reduced
-     * cyan coverage (which was very heavy originally). <a href="https://i.imgur.com/es1zfEU.png">Image preview</a>.
+     * cyan coverage (which was very heavy originally). Repeats the first 64 colors in four blocks, with the exception
+     * of the first color (transparent, which changes to black in the repeated blocks).
+     * <a href="https://i.imgur.com/es1zfEU.png">Image preview</a>.
      */
     public static final int[] MANOS64 = {
             0x00000000, 0x19092DFF, 0x213118FF, 0x314A29FF, 0x8C847BFF, 0x6E868EFF, 0x9CA59CFF, 0xAFC7CFFF,

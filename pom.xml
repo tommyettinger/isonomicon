@@ -69,8 +69,8 @@
         <junit.version>4.13.1</junit.version>
         <squidlib.version>3.0.3</squidlib.version>
         <gdx.version>1.10.0</gdx.version>
-        <anim8.version>0.2.8</anim8.version>
-        <colorful.version>8b62b61252</colorful.version>
+        <anim8.version>0.2.9</anim8.version>
+        <colorful.version>9f572e0c89</colorful.version>
         <!--        <colorful.version>0.5.1</colorful.version>-->
     </properties>
 
