@@ -94,12 +94,13 @@ public class PaletteDrafter extends ApplicationAdapter {
     public SpriteBatch batch;
 
     private long startTime;
+    private float L = 0.5f, A = 0.5f, B = 0.5f;
 
     @Override
     public void create() {
         font = new BitmapFont(Gdx.files.internal("font.fnt"));
-        palettes = new Texture("palettes/repeated-blocks.png");
         workingPalette = new Pixmap(Gdx.files.internal("palettes/repeated-blocks.png"));
+        palettes = new Texture(workingPalette);
         preview = new Pixmap(16, 16, Pixmap.Format.RGBA8888);
         preview.setColor(workingPalette.getPixel(stuffIndex & 127, 0));
         preview.fill();
@@ -121,12 +122,18 @@ public class PaletteDrafter extends ApplicationAdapter {
         Gdx.input.setInputProcessor(new InputAdapter(){
             @Override
             public boolean keyDown(int keycode) {
+                int old = stuffIndex;
                 switch (keycode){
                     case Input.Keys.LEFT:
-                        stuffIndex--;
-                        return true;
+                        stuffIndex -= 2;
                     case Input.Keys.RIGHT:
                         stuffIndex++;
+                        workingPalette.drawPixel(old & 127, 0, ColorTools.toRGBA8888(ColorTools.limitToGamut(L, A, B)));
+                        final float oklab = ColorTools.fromRGBA8888(workingPalette.getPixel(stuffIndex & 127, 0));
+                        L = ColorTools.channelL(oklab);
+                        A = ColorTools.channelA(oklab);
+                        B = ColorTools.channelB(oklab);
+                        palettes.draw(workingPalette, 0, 0);
                         return true;
                     case Input.Keys.ESCAPE:
                     case Input.Keys.Q:
@@ -140,35 +147,41 @@ public class PaletteDrafter extends ApplicationAdapter {
 
     @Override
     public void render() {
-        int currentPreview = workingPalette.getPixel(stuffIndex & 127, 0);
-        float oklab = ColorTools.fromRGBA8888(currentPreview);
         boolean changed = false;
         if(Gdx.input.isKeyJustPressed(Input.Keys.SLASH)){
-            System.out.printf("L=%02X A=%02X B=%02X\n", (int)(ColorTools.channelL(oklab) * 255.999f), (int)(ColorTools.channelA(oklab) * 255.999f), (int)(ColorTools.channelB(oklab) * 255.999f));
+            System.out.printf("limited=%08X L=%1.4f A=%1.4f B=%1.4f\n",
+                    Float.floatToRawIntBits(ColorTools.limitToGamut(L, A, B)),
+                    L,
+                    A,
+                    B);
         }
+        float step = Gdx.graphics.getDeltaTime() * 0.25f;
         if(Gdx.input.isKeyPressed(Input.Keys.L)){
 //            oklab = UIUtils.shift()
-//                    ? ColorTools.darken(oklab, Gdx.graphics.getDeltaTime())
-//                    : ColorTools.lighten(oklab, Gdx.graphics.getDeltaTime());
-            oklab = FloatColors.lerpFloatColors(oklab, UIUtils.shift() ? Palette.BLACK : Palette.WHITE, Gdx.graphics.getDeltaTime());
+//                    ? ColorTools.darken(oklab, step)
+//                    : ColorTools.lighten(oklab, step);
+//            oklab = FloatColors.lerpFloatColors(oklab, UIUtils.shift() ? Palette.BLACK : Palette.WHITE, step);
+            if(UIUtils.shift()) L -= step;
+            else L += step;
             changed = true;
         }
         if(Gdx.input.isKeyPressed(Input.Keys.A)){
-            oklab = UIUtils.shift()
-                    ? ColorTools.lowerA(oklab, Gdx.graphics.getDeltaTime())
-                    : ColorTools.raiseA(oklab, Gdx.graphics.getDeltaTime());
+//            oklab = UIUtils.shift()
+//                    ? ColorTools.lowerA(oklab, step)
+//                    : ColorTools.raiseA(oklab, step);
+            if(UIUtils.shift()) A -= step;
+            else A += step;
             changed = true;
         }
         if(Gdx.input.isKeyPressed(Input.Keys.B)){
-            oklab = UIUtils.shift()
-                    ? ColorTools.lowerB(oklab, Gdx.graphics.getDeltaTime())
-                    : ColorTools.raiseB(oklab, Gdx.graphics.getDeltaTime());
+//            oklab = UIUtils.shift()
+//                    ? ColorTools.lowerB(oklab, step)
+//                    : ColorTools.raiseB(oklab, step);
+            if(UIUtils.shift()) B -= step;
+            else B += step;
             changed = true;
         }
-        if(changed) {
-            currentPreview = ColorTools.toRGBA8888(oklab);
-            workingPalette.drawPixel(stuffIndex & 127, 0, currentPreview);
-        }
+        int currentPreview = ColorTools.toRGBA8888(ColorTools.limitToGamut(L, A, B));
 
         ScreenUtils.clear(0.5f, 0.5f, 0.5f, 1f);
         batch.setShader(indexShader);
@@ -182,11 +195,12 @@ public class PaletteDrafter extends ApplicationAdapter {
         batch.draw(images[(int) (TimeUtils.timeSinceMillis(startTime) >>> 8) & 31], 0, 0);
         batch.end();
 
+        batch.setShader(regularShader);
+
         preview.setColor(currentPreview);
         preview.fill();
         previewTexture.draw(preview, 0, 0);
 
-        batch.setShader(regularShader);
         batch.begin();
         batch.setPackedColor(Color.WHITE_FLOAT_BITS);
         font.draw(batch, Stuff.STUFFS[stuffIndex + 1 & 127].name, 0, 210, 256, Align.center, false);
