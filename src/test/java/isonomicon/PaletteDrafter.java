@@ -122,18 +122,15 @@ public class PaletteDrafter extends ApplicationAdapter {
         Gdx.input.setInputProcessor(new InputAdapter(){
             @Override
             public boolean keyDown(int keycode) {
-                int old = stuffIndex;
                 switch (keycode){
                     case Input.Keys.LEFT:
                         stuffIndex -= 2;
                     case Input.Keys.RIGHT:
                         stuffIndex++;
-                        workingPalette.drawPixel(old & 127, 0, ColorTools.toRGBA8888(ColorTools.limitToGamut(L, A, B)));
                         final float oklab = ColorTools.fromRGBA8888(workingPalette.getPixel(stuffIndex & 127, 0));
                         L = ColorTools.channelL(oklab);
                         A = ColorTools.channelA(oklab);
                         B = ColorTools.channelB(oklab);
-                        palettes.draw(workingPalette, 0, 0);
                         return true;
                     case Input.Keys.ESCAPE:
                     case Input.Keys.Q:
@@ -182,7 +179,10 @@ public class PaletteDrafter extends ApplicationAdapter {
             changed = true;
         }
         int currentPreview = ColorTools.toRGBA8888(ColorTools.limitToGamut(L, A, B));
-
+        if(changed) {
+            workingPalette.drawPixel(stuffIndex & 127, 0, currentPreview);
+            palettes.draw(workingPalette, 0, 0);
+        }
         ScreenUtils.clear(0.5f, 0.5f, 0.5f, 1f);
         batch.setShader(indexShader);
         Gdx.gl.glActiveTexture(GL20.GL_TEXTURE1);
