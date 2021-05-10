@@ -6,13 +6,11 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.utils.UIUtils;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.GdxRuntimeException;
@@ -22,6 +20,8 @@ import com.github.tommyettinger.colorful.FloatColors;
 import com.github.tommyettinger.colorful.oklab.ColorTools;
 import com.github.tommyettinger.colorful.oklab.Palette;
 import isonomicon.physical.Stuff;
+
+import java.io.IOException;
 
 /*
            Pixmap pix = new Pixmap(256, 1, Pixmap.Format.RGBA8888);
@@ -93,8 +93,10 @@ public class PaletteDrafter extends ApplicationAdapter {
     public BitmapFont font;
     public SpriteBatch batch;
 
-    private long startTime;
+    private long startTime, scrollTime;
     private float L = 0.5f, A = 0.5f, B = 0.5f;
+
+    private PixmapIO.PNG png;
 
     @Override
     public void create() {
@@ -105,6 +107,7 @@ public class PaletteDrafter extends ApplicationAdapter {
         preview.setColor(workingPalette.getPixel(stuffIndex & 127, 0));
         preview.fill();
         previewTexture = new Texture(preview);
+        png = new PixmapIO.PNG(1024);
         String name = "Eye_Tyrant";
 //        String name = "Lomuk";
 
@@ -119,19 +122,11 @@ public class PaletteDrafter extends ApplicationAdapter {
         if (!indexShader.isCompiled()) throw new GdxRuntimeException("Error compiling shader: " + indexShader.getLog());
         regularShader = SpriteBatch.createDefaultShader();
         startTime = TimeUtils.millis();
+        scrollTime = Long.MAX_VALUE >>> 4;
         Gdx.input.setInputProcessor(new InputAdapter(){
             @Override
             public boolean keyDown(int keycode) {
                 switch (keycode){
-                    case Input.Keys.LEFT:
-                        stuffIndex -= 2;
-                    case Input.Keys.RIGHT:
-                        stuffIndex++;
-                        final float oklab = ColorTools.fromRGBA8888(workingPalette.getPixel(stuffIndex & 127, 0));
-                        L = ColorTools.channelL(oklab);
-                        A = ColorTools.channelA(oklab);
-                        B = ColorTools.channelB(oklab);
-                        return true;
                     case Input.Keys.ESCAPE:
                     case Input.Keys.Q:
                         Gdx.app.exit();
@@ -144,7 +139,7 @@ public class PaletteDrafter extends ApplicationAdapter {
 
     @Override
     public void render() {
-        boolean changed = false;
+        boolean changed = false, switched = false;
         if(Gdx.input.isKeyJustPressed(Input.Keys.SLASH)){
             System.out.printf("limited=%08X L=%1.4f A=%1.4f B=%1.4f\n",
                     Float.floatToRawIntBits(ColorTools.limitToGamut(L, A, B)),
@@ -152,30 +147,60 @@ public class PaletteDrafter extends ApplicationAdapter {
                     A,
                     B);
         }
+        if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
+            try {
+                png.write(Gdx.files.local("tempPalette.png"), workingPalette);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        if(Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
+            stuffIndex--;
+            scrollTime = TimeUtils.millis();
+            switched = true;
+        }
+        else if(Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
+            stuffIndex++;
+            scrollTime = TimeUtils.millis();
+            switched = true;
+        }
+        else if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
+            if(TimeUtils.timeSinceMillis(scrollTime) >= 250){
+                stuffIndex--;
+                scrollTime += 250L;
+                switched = true;
+            }
+        }
+        else if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
+            if(TimeUtils.timeSinceMillis(scrollTime) >= 250){
+                stuffIndex++;
+                scrollTime += 250L;
+                switched = true;
+            }
+        }
+        if(switched){
+            final float oklab = ColorTools.fromRGBA8888(workingPalette.getPixel(stuffIndex & 127, 0));
+            L = ColorTools.channelL(oklab);
+            A = ColorTools.channelA(oklab);
+            B = ColorTools.channelB(oklab);
+        }
         float step = Gdx.graphics.getDeltaTime() * 0.25f;
         if(Gdx.input.isKeyPressed(Input.Keys.L)){
-//            oklab = UIUtils.shift()
-//                    ? ColorTools.darken(oklab, step)
-//                    : ColorTools.lighten(oklab, step);
-//            oklab = FloatColors.lerpFloatColors(oklab, UIUtils.shift() ? Palette.BLACK : Palette.WHITE, step);
             if(UIUtils.shift()) L -= step;
             else L += step;
+            L = MathUtils.clamp(L, 0f, 1f);
             changed = true;
         }
         if(Gdx.input.isKeyPressed(Input.Keys.A)){
-//            oklab = UIUtils.shift()
-//                    ? ColorTools.lowerA(oklab, step)
-//                    : ColorTools.raiseA(oklab, step);
             if(UIUtils.shift()) A -= step;
             else A += step;
+            A = MathUtils.clamp(A, 0f, 1f);
             changed = true;
         }
         if(Gdx.input.isKeyPressed(Input.Keys.B)){
-//            oklab = UIUtils.shift()
-//                    ? ColorTools.lowerB(oklab, step)
-//                    : ColorTools.raiseB(oklab, step);
             if(UIUtils.shift()) B -= step;
             else B += step;
+            B = MathUtils.clamp(B, 0f, 1f);
             changed = true;
         }
         int currentPreview = ColorTools.toRGBA8888(ColorTools.limitToGamut(L, A, B));
