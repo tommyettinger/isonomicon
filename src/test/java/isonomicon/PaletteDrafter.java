@@ -2,6 +2,8 @@ package isonomicon;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
@@ -11,10 +13,14 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.scenes.scene2d.utils.UIUtils;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.github.tommyettinger.colorful.FloatColors;
+import com.github.tommyettinger.colorful.oklab.ColorTools;
+import com.github.tommyettinger.colorful.oklab.Palette;
 import isonomicon.physical.Stuff;
 
 /*
@@ -112,11 +118,59 @@ public class PaletteDrafter extends ApplicationAdapter {
         if (!indexShader.isCompiled()) throw new GdxRuntimeException("Error compiling shader: " + indexShader.getLog());
         regularShader = SpriteBatch.createDefaultShader();
         startTime = TimeUtils.millis();
+        Gdx.input.setInputProcessor(new InputAdapter(){
+            @Override
+            public boolean keyDown(int keycode) {
+                switch (keycode){
+                    case Input.Keys.LEFT:
+                        stuffIndex--;
+                        return true;
+                    case Input.Keys.RIGHT:
+                        stuffIndex++;
+                        return true;
+                    case Input.Keys.ESCAPE:
+                    case Input.Keys.Q:
+                        Gdx.app.exit();
+                        break;
+                }
+                return false;
+            }
+        });
     }
 
     @Override
     public void render() {
-        ScreenUtils.clear(0.5f, 0.5f, 0.55f, 1f);
+        int currentPreview = workingPalette.getPixel(stuffIndex & 127, 0);
+        float oklab = ColorTools.fromRGBA8888(currentPreview);
+        boolean changed = false;
+        if(Gdx.input.isKeyJustPressed(Input.Keys.SLASH)){
+            System.out.printf("L=%02X A=%02X B=%02X\n", (int)(ColorTools.channelL(oklab) * 255.999f), (int)(ColorTools.channelA(oklab) * 255.999f), (int)(ColorTools.channelB(oklab) * 255.999f));
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.L)){
+//            oklab = UIUtils.shift()
+//                    ? ColorTools.darken(oklab, Gdx.graphics.getDeltaTime())
+//                    : ColorTools.lighten(oklab, Gdx.graphics.getDeltaTime());
+            oklab = FloatColors.lerpFloatColors(oklab, UIUtils.shift() ? Palette.BLACK : Palette.WHITE, Gdx.graphics.getDeltaTime());
+            changed = true;
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.A)){
+            oklab = UIUtils.shift()
+                    ? ColorTools.lowerA(oklab, Gdx.graphics.getDeltaTime())
+                    : ColorTools.raiseA(oklab, Gdx.graphics.getDeltaTime());
+            changed = true;
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.B)){
+            oklab = UIUtils.shift()
+                    ? ColorTools.lowerB(oklab, Gdx.graphics.getDeltaTime())
+                    : ColorTools.raiseB(oklab, Gdx.graphics.getDeltaTime());
+            changed = true;
+        }
+        if(changed) {
+            currentPreview = ColorTools.toRGBA8888(oklab);
+            workingPalette.drawPixel(stuffIndex & 127, 0, currentPreview);
+        }
+
+        ScreenUtils.clear(0.5f, 0.5f, 0.5f, 1f);
         batch.setShader(indexShader);
         Gdx.gl.glActiveTexture(GL20.GL_TEXTURE1);
         palettes.bind();
@@ -128,14 +182,14 @@ public class PaletteDrafter extends ApplicationAdapter {
         batch.draw(images[(int) (TimeUtils.timeSinceMillis(startTime) >>> 8) & 31], 0, 0);
         batch.end();
 
-        preview.setColor(workingPalette.getPixel(stuffIndex & 127, 0));
+        preview.setColor(currentPreview);
         preview.fill();
         previewTexture.draw(preview, 0, 0);
 
         batch.setShader(regularShader);
         batch.begin();
         batch.setPackedColor(Color.WHITE_FLOAT_BITS);
-        font.draw(batch, Stuff.STUFFS[stuffIndex & 127].name, 0, 210, 256, Align.center, false);
+        font.draw(batch, Stuff.STUFFS[stuffIndex + 1 & 127].name, 0, 210, 256, Align.center, false);
         batch.draw(previewTexture, 112, 150);
         batch.end();
     }
@@ -146,6 +200,7 @@ public class PaletteDrafter extends ApplicationAdapter {
         config.setTitle("Isonomicon Test: Special Viewer");
         config.setWindowedMode(256, 256);
         config.setIdleFPS(10);
+        config.setForegroundFPS(30);
         config.useVsync(true);
         config.setResizable(false);
         final PaletteDrafter app = new PaletteDrafter();
