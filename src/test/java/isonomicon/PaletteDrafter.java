@@ -12,12 +12,16 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.utils.UIUtils;
-import com.badlogic.gdx.utils.*;
+import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.github.tommyettinger.colorful.FloatColors;
 import com.github.tommyettinger.colorful.oklab.ColorTools;
 import com.github.tommyettinger.colorful.oklab.Palette;
 import isonomicon.physical.Stuff;
 import squidpony.ArrayTools;
+import squidpony.squidmath.OrderedMap;
 
 import java.io.IOException;
 
@@ -87,7 +91,7 @@ public class PaletteDrafter extends ApplicationAdapter {
     public Pixmap preview;
 
     public int groupIndex = 0;
-    public int stuffIndex = 1;
+    public int stuffIndex = 0;
 
     public BitmapFont font;
     public SpriteBatch batch;
@@ -108,10 +112,20 @@ public class PaletteDrafter extends ApplicationAdapter {
         groups.put("Wood", new int[]{18, 22, 94});
         groups.put("Leaves", new int[]{32, 33, 35, 4});
         groups.put("Fruit", new int[]{20, 26, 56});
+        groups.put("Water", new int[]{39, 43, 49, 102, 106, 107, 108, 109});
+        groups.put("Cold", new int[]{41, 104});
+        groups.put("Fire", new int[]{84, 81, 87, 118});
+        groups.put("Filth", new int[]{3, 29, 30});
+        groups.put("Poison", new int[]{31, 36, 119, 120, 93});
         groups.put("Protection", new int[]{45, 37, 38});
+        groups.put("Paint", new int[]{48, 47});
+        groups.put("Marks", new int[]{44, 40, 42, 59});
         groups.put("Metal", new int[]{7, 1, 101});
         groups.put("Stone", new int[]{5, 6});
+        groups.put("Crystal", new int[]{58, 73});
         groups.put("Cloth", new int[]{23, 57, 61, 85});
+        groups.put("Curse", new int[]{78, 76, 75});
+        groups.put("Eerie", new int[]{51, 52, 53, 115});
     }
     @Override
     public void create() {
@@ -132,6 +146,11 @@ public class PaletteDrafter extends ApplicationAdapter {
                 images[i++] = new Texture(Gdx.files.local("out/special_lab/"+name+"/"+name+"_angle"+a+"_"+f+".png"));
             }
         }
+        final float oklab = ColorTools.fromRGBA8888(workingPalette.getPixel(0, 0));
+        L = ColorTools.channelL(oklab);
+        A = ColorTools.channelA(oklab);
+        B = ColorTools.channelB(oklab);
+
         batch = new SpriteBatch();
         indexShader = new ShaderProgram(vertex, fragment);
         if (!indexShader.isCompiled()) throw new GdxRuntimeException("Error compiling shader: " + indexShader.getLog());
@@ -154,7 +173,7 @@ public class PaletteDrafter extends ApplicationAdapter {
 
     @Override
     public void render() {
-        boolean changed = false, switched = false;
+        boolean changed = false, regroup = false, switched = false;
         if(Gdx.input.isKeyJustPressed(Input.Keys.SLASH)){
             System.out.printf("limited=%08X L=%1.4f A=%1.4f B=%1.4f\n",
                     Float.floatToRawIntBits(ColorTools.limitToGamut(L, A, B)),
@@ -169,7 +188,17 @@ public class PaletteDrafter extends ApplicationAdapter {
                 e.printStackTrace();
             }
         }
-        if(Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
+        if(Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
+            groupIndex--;
+            scrollTime = TimeUtils.millis();
+            regroup = true;
+        }
+        else if(Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
+            groupIndex++;
+            scrollTime = TimeUtils.millis();
+            regroup = true;
+        }
+        else if(Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
             stuffIndex--;
             scrollTime = TimeUtils.millis();
             switched = true;
@@ -178,6 +207,20 @@ public class PaletteDrafter extends ApplicationAdapter {
             stuffIndex++;
             scrollTime = TimeUtils.millis();
             switched = true;
+        }
+        else if(Gdx.input.isKeyPressed(Input.Keys.DOWN)){
+            if(TimeUtils.timeSinceMillis(scrollTime) >= 500){
+                groupIndex--;
+                scrollTime += 500L;
+                regroup = true;
+            }
+        }
+        else if(Gdx.input.isKeyPressed(Input.Keys.UP)){
+            if(TimeUtils.timeSinceMillis(scrollTime) >= 500){
+                groupIndex++;
+                scrollTime += 500L;
+                regroup = true;
+            }
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
             if(TimeUtils.timeSinceMillis(scrollTime) >= 250){
@@ -193,8 +236,14 @@ public class PaletteDrafter extends ApplicationAdapter {
                 switched = true;
             }
         }
-        if(switched){
-            final float oklab = ColorTools.fromRGBA8888(workingPalette.getPixel(stuffIndex & 127, 0));
+        if(regroup){
+            stuffIndex = 0;
+            groupIndex = (groupIndex + groups.size()) % groups.size();
+        }
+        int[] group = groups.getAt(groupIndex);
+        if(regroup || switched){
+            stuffIndex = (stuffIndex + group.length) % group.length;
+            final float oklab = ColorTools.fromRGBA8888(workingPalette.getPixel(group[stuffIndex] - 1 & 127, 0));
             L = ColorTools.channelL(oklab);
             A = ColorTools.channelA(oklab);
             B = ColorTools.channelB(oklab);
@@ -220,7 +269,7 @@ public class PaletteDrafter extends ApplicationAdapter {
         }
         int currentPreview = ColorTools.toRGBA8888(ColorTools.limitToGamut(L, A, B));
         if(changed) {
-            workingPalette.drawPixel(stuffIndex & 127, 0, currentPreview);
+            workingPalette.drawPixel(group[stuffIndex] - 1 & 127, 0, currentPreview);
             palettes.draw(workingPalette, 0, 0);
         }
         ScreenUtils.clear(0.5f, 0.5f, 0.5f, 1f);
@@ -243,7 +292,8 @@ public class PaletteDrafter extends ApplicationAdapter {
 
         batch.begin();
         batch.setPackedColor(Color.WHITE_FLOAT_BITS);
-        font.draw(batch, Stuff.STUFFS[stuffIndex + 1 & 127].name, 0, 210, 256, Align.center, false);
+        font.draw(batch, groups.keyAt(groupIndex), 32, 226, 128, Align.left, false);
+        font.draw(batch, Stuff.STUFFS[group[stuffIndex]].name, 0, 210, 256, Align.center, false);
         batch.draw(previewTexture, 112, 150);
         batch.end();
     }
