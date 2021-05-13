@@ -253,22 +253,34 @@ public class PaletteDrafter extends ApplicationAdapter {
             alpha = 1f - Stuff.STUFFS[group[stuffIndex]].material.getTrait(VoxMaterial.MaterialTrait._alpha);
         }
         float step = Gdx.graphics.getDeltaTime() * 0.25f;
+        //light
         if(Gdx.input.isKeyPressed(Input.Keys.L)){
-            if(UIUtils.shift()) L -= step;
-            else L += step;
-            L = MathUtils.clamp(L, 0f, 1f);
+            L = MathUtils.clamp(L + step, 0f, 1f);
             changed = true;
         }
-        if(Gdx.input.isKeyPressed(Input.Keys.A)){
-            if(UIUtils.shift()) A -= step;
-            else A += step;
-            A = MathUtils.clamp(A, 0f, 1f);
+        //dark
+        if(Gdx.input.isKeyPressed(Input.Keys.D)){
+            L = MathUtils.clamp(L - step, 0f, 1f);
             changed = true;
         }
+        //red
+        if(Gdx.input.isKeyPressed(Input.Keys.R)){
+            A = MathUtils.clamp(A + step, 0f, 1f);
+            changed = true;
+        }
+        //green...ish
+        if(Gdx.input.isKeyPressed(Input.Keys.G)){
+            A = MathUtils.clamp(A - step, 0f, 1f);
+            changed = true;
+        }
+        //yellow
+        if(Gdx.input.isKeyPressed(Input.Keys.Y)){
+            B = MathUtils.clamp(B + step, 0f, 1f);
+            changed = true;
+        }
+        //blue
         if(Gdx.input.isKeyPressed(Input.Keys.B)){
-            if(UIUtils.shift()) B -= step;
-            else B += step;
-            B = MathUtils.clamp(B, 0f, 1f);
+            B = MathUtils.clamp(B - step, 0f, 1f);
             changed = true;
         }
         int currentPreview = ColorTools.toRGBA8888(ColorTools.limitToGamut(L, A, B, alpha));
