@@ -12,12 +12,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.utils.UIUtils;
-import com.badlogic.gdx.utils.*;
-import com.github.tommyettinger.colorful.FloatColors;
+import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.github.tommyettinger.colorful.oklab.ColorTools;
-import com.github.tommyettinger.colorful.oklab.Palette;
 import isonomicon.physical.Stuff;
-import squidpony.ArrayTools;
 
 import java.io.IOException;
 
@@ -34,7 +34,7 @@ import java.io.IOException;
            }
 
     */
-public class PaletteDrafter extends ApplicationAdapter {
+public class PaletteEditor extends ApplicationAdapter {
     public static final String vertex = "attribute vec4 a_position;\n" +
             "attribute vec4 a_color;\n" +
             "attribute vec2 a_texCoord0;\n" +
@@ -86,7 +86,6 @@ public class PaletteDrafter extends ApplicationAdapter {
     public Pixmap workingPalette;
     public Pixmap preview;
 
-    public int groupIndex = 0;
     public int stuffIndex = 1;
 
     public BitmapFont font;
@@ -96,23 +95,7 @@ public class PaletteDrafter extends ApplicationAdapter {
     private float L = 0.5f, A = 0.5f, B = 0.5f;
 
     private PixmapIO.PNG png;
-    private OrderedMap<String, int[]> groups = new OrderedMap<>(128);
-    {
-        groups.put("All", ArrayTools.range(1, 128));
-        groups.put("Skin", new int[]{21, 19});
-        groups.put("Hair", new int[]{15, 16, 17});
-        groups.put("Bone", new int[]{10, 63});
-        groups.put("Gore", new int[]{11, 12, 13});
-        groups.put("Feathers", new int[]{25, 9, 60, 83});
-        groups.put("Scales", new int[]{27, 28, 34});
-        groups.put("Wood", new int[]{18, 22, 94});
-        groups.put("Leaves", new int[]{32, 33, 35, 4});
-        groups.put("Fruit", new int[]{20, 26, 56});
-        groups.put("Protection", new int[]{45, 37, 38});
-        groups.put("Metal", new int[]{7, 1, 101});
-        groups.put("Stone", new int[]{5, 6});
-        groups.put("Cloth", new int[]{23, 57, 61, 85});
-    }
+
     @Override
     public void create() {
         font = new BitmapFont(Gdx.files.internal("font.fnt"));
@@ -257,7 +240,7 @@ public class PaletteDrafter extends ApplicationAdapter {
         config.setForegroundFPS(30);
         config.useVsync(true);
         config.setResizable(false);
-        final PaletteDrafter app = new PaletteDrafter();
+        final PaletteEditor app = new PaletteEditor();
         new Lwjgl3Application(app, config);
     }
 
