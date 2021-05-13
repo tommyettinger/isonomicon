@@ -20,6 +20,7 @@ import com.github.tommyettinger.colorful.FloatColors;
 import com.github.tommyettinger.colorful.oklab.ColorTools;
 import com.github.tommyettinger.colorful.oklab.Palette;
 import isonomicon.physical.Stuff;
+import isonomicon.physical.VoxMaterial;
 import squidpony.ArrayTools;
 import squidpony.squidmath.OrderedMap;
 
@@ -97,7 +98,7 @@ public class PaletteDrafter extends ApplicationAdapter {
     public SpriteBatch batch;
 
     private long startTime, scrollTime;
-    private float L = 0.5f, A = 0.5f, B = 0.5f;
+    private float L = 0.5f, A = 0.5f, B = 0.5f, alpha = 1f;
 
     private PixmapIO.PNG png;
     private OrderedMap<String, int[]> groups = new OrderedMap<>(128);
@@ -150,6 +151,7 @@ public class PaletteDrafter extends ApplicationAdapter {
         L = ColorTools.channelL(oklab);
         A = ColorTools.channelA(oklab);
         B = ColorTools.channelB(oklab);
+        alpha = 1f - Stuff.STUFFS[groups.getAt(groupIndex)[stuffIndex]].material.getTrait(VoxMaterial.MaterialTrait._alpha);
 
         batch = new SpriteBatch();
         indexShader = new ShaderProgram(vertex, fragment);
@@ -175,11 +177,12 @@ public class PaletteDrafter extends ApplicationAdapter {
     public void render() {
         boolean changed = false, regroup = false, switched = false;
         if(Gdx.input.isKeyJustPressed(Input.Keys.SLASH)){
-            System.out.printf("limited=%08X L=%1.4f A=%1.4f B=%1.4f\n",
-                    Float.floatToRawIntBits(ColorTools.limitToGamut(L, A, B)),
+            System.out.printf("limited=%08X L=%1.4f A=%1.4f B=%1.4f alpha=%1.4f\n",
+                    Float.floatToRawIntBits(ColorTools.limitToGamut(L, A, B, alpha)),
                     L,
                     A,
-                    B);
+                    B,
+                    alpha);
         }
         if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
             try {
@@ -247,6 +250,7 @@ public class PaletteDrafter extends ApplicationAdapter {
             L = ColorTools.channelL(oklab);
             A = ColorTools.channelA(oklab);
             B = ColorTools.channelB(oklab);
+            alpha = 1f - Stuff.STUFFS[group[stuffIndex]].material.getTrait(VoxMaterial.MaterialTrait._alpha);
         }
         float step = Gdx.graphics.getDeltaTime() * 0.25f;
         if(Gdx.input.isKeyPressed(Input.Keys.L)){
@@ -267,7 +271,7 @@ public class PaletteDrafter extends ApplicationAdapter {
             B = MathUtils.clamp(B, 0f, 1f);
             changed = true;
         }
-        int currentPreview = ColorTools.toRGBA8888(ColorTools.limitToGamut(L, A, B));
+        int currentPreview = ColorTools.toRGBA8888(ColorTools.limitToGamut(L, A, B, alpha));
         if(changed) {
             workingPalette.drawPixel(group[stuffIndex] - 1 & 127, 0, currentPreview);
             palettes.draw(workingPalette, 0, 0);
