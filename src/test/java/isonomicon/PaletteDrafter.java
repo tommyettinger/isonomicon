@@ -98,7 +98,7 @@ public class PaletteDrafter extends ApplicationAdapter {
     public SpriteBatch batch;
 
     private long startTime, scrollTime;
-    private float L = 0.5f, A = 0.5f, B = 0.5f, alpha = 1f;
+    private float L = 0.5f, A = 0.5f, B = 0.5f, alpha = 1f, allL = 0f, allA = 0f, allB = 0f, allS = 1f;
 
     private PixmapIO.PNG png;
     private OrderedMap<String, int[]> groups = new OrderedMap<>(128);
@@ -176,6 +176,7 @@ public class PaletteDrafter extends ApplicationAdapter {
     @Override
     public void render() {
         boolean changed = false, regroup = false, switched = false;
+        int currentPreview;
         if(Gdx.input.isKeyJustPressed(Input.Keys.SLASH)){
             System.out.printf("limited=%08X L=%1.4f A=%1.4f B=%1.4f alpha=%1.4f\n",
                     Float.floatToRawIntBits(ColorTools.limitToGamut(L, A, B, alpha)),
@@ -253,53 +254,114 @@ public class PaletteDrafter extends ApplicationAdapter {
             alpha = 1f - Stuff.STUFFS[group[stuffIndex]].material.getTrait(VoxMaterial.MaterialTrait._alpha);
         }
         float step = Math.min(Gdx.graphics.getDeltaTime() * 0.25f, 0.3f);
-        //light
-        if(Gdx.input.isKeyPressed(Input.Keys.L)){
-            L = MathUtils.clamp(L + step, 0f, 1f);
-            changed = true;
+        allL = allA = allB = 0f;
+        allS = 1f;
+        if(UIUtils.shift()) {
+            //light
+            if (Gdx.input.isKeyPressed(Input.Keys.L)) {
+                allL = MathUtils.clamp(allL + step, -1f, 1f);
+                changed = true;
+            }
+            //dark
+            if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+                allL = MathUtils.clamp(allL - step, -1f, 1f);
+                changed = true;
+            }
+            //red
+            if (Gdx.input.isKeyPressed(Input.Keys.R)) {
+                allA = MathUtils.clamp(allA + step, -1f, 1f);
+                changed = true;
+            }
+            //green...ish
+            if (Gdx.input.isKeyPressed(Input.Keys.G)) {
+                allA = MathUtils.clamp(allA - step, -1f, 1f);
+                changed = true;
+            }
+            //yellow
+            if (Gdx.input.isKeyPressed(Input.Keys.Y)) {
+                allB = MathUtils.clamp(allB + step, -1f, 1f);
+                changed = true;
+            }
+            //blue
+            if (Gdx.input.isKeyPressed(Input.Keys.B)) {
+                allB = MathUtils.clamp(allB - step, -1f, 1f);
+                changed = true;
+            }
+            //saturate
+            if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+                allS = MathUtils.clamp(allS + step, 0f, 2f);
+                changed = true;
+            }
+            //fade
+            if (Gdx.input.isKeyPressed(Input.Keys.F)) {
+                allS = MathUtils.clamp(allS - step, 0f, 2f);
+                changed = true;
+            }
+            L = MathUtils.clamp(L + allL, 0f, 1f);
+            A = MathUtils.clamp(A * allS + allA, 0f, 1f);
+            B = MathUtils.clamp(B * allS + allB, 0f, 1f);
+            currentPreview = ColorTools.toRGBA8888(ColorTools.limitToGamut(L, A, B, alpha));
+            if (changed) {
+                for (int i = 0; i < group.length; i++) {
+                    final float oklab = ColorTools.fromRGBA8888(workingPalette.getPixel(group[i] - 1 & 127, 0));
+                    float l = MathUtils.clamp(ColorTools.channelL(oklab) + allL, 0f, 1f);
+                    float a = MathUtils.clamp(ColorTools.channelA(oklab) * allS + allA, 0f, 1f);
+                    float b = MathUtils.clamp(ColorTools.channelB(oklab) * allS + allB, 0f, 1f);
+                    float al = 1f - Stuff.STUFFS[group[i]].material.getTrait(VoxMaterial.MaterialTrait._alpha);
+                    int pre = ColorTools.toRGBA8888(ColorTools.limitToGamut(l, a, b, al));
+                    workingPalette.drawPixel(group[i] - 1 & 127, 0, pre);
+                }
+                currentPreview = workingPalette.getPixel(group[stuffIndex] - 1 & 127, 0);
+                palettes.draw(workingPalette, 0, 0);
+            }
         }
-        //dark
-        if(Gdx.input.isKeyPressed(Input.Keys.D)){
-            L = MathUtils.clamp(L - step, 0f, 1f);
-            changed = true;
-        }
-        //red
-        if(Gdx.input.isKeyPressed(Input.Keys.R)){
-            A = MathUtils.clamp(A + step, 0f, 1f);
-            changed = true;
-        }
-        //green...ish
-        if(Gdx.input.isKeyPressed(Input.Keys.G)){
-            A = MathUtils.clamp(A - step, 0f, 1f);
-            changed = true;
-        }
-        //yellow
-        if(Gdx.input.isKeyPressed(Input.Keys.Y)){
-            B = MathUtils.clamp(B + step, 0f, 1f);
-            changed = true;
-        }
-        //blue
-        if(Gdx.input.isKeyPressed(Input.Keys.B)){
-            B = MathUtils.clamp(B - step, 0f, 1f);
-            changed = true;
-        }
-        //saturate
-        if(Gdx.input.isKeyPressed(Input.Keys.S)){
-            A = MathUtils.clamp((A - 0.5f) * (1f + step * 3f) + 0.5f, 0f, 1f);
-            B = MathUtils.clamp((B - 0.5f) * (1f + step * 3f) + 0.5f, 0f, 1f);
-            changed = true;
-        }
-        //fade
-        if(Gdx.input.isKeyPressed(Input.Keys.F)){
-            A = MathUtils.clamp((A - 0.5f) * (1f - step * 3f) + 0.5f, 0f, 1f);
-            B = MathUtils.clamp((B - 0.5f) * (1f - step * 3f) + 0.5f, 0f, 1f);
-            changed = true;
-        }
-
-        int currentPreview = ColorTools.toRGBA8888(ColorTools.limitToGamut(L, A, B, alpha));
-        if(changed) {
-            workingPalette.drawPixel(group[stuffIndex] - 1 & 127, 0, currentPreview);
-            palettes.draw(workingPalette, 0, 0);
+        else {
+            if (Gdx.input.isKeyPressed(Input.Keys.L)) {
+                L = MathUtils.clamp(L + step, 0f, 1f);
+                changed = true;
+            }
+            //dark
+            if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+                L = MathUtils.clamp(L - step, 0f, 1f);
+                changed = true;
+            }
+            //red
+            if (Gdx.input.isKeyPressed(Input.Keys.R)) {
+                A = MathUtils.clamp(A + step, 0f, 1f);
+                changed = true;
+            }
+            //green...ish
+            if (Gdx.input.isKeyPressed(Input.Keys.G)) {
+                A = MathUtils.clamp(A - step, 0f, 1f);
+                changed = true;
+            }
+            //yellow
+            if (Gdx.input.isKeyPressed(Input.Keys.Y)) {
+                B = MathUtils.clamp(B + step, 0f, 1f);
+                changed = true;
+            }
+            //blue
+            if (Gdx.input.isKeyPressed(Input.Keys.B)) {
+                B = MathUtils.clamp(B - step, 0f, 1f);
+                changed = true;
+            }
+            //saturate
+            if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+                A = MathUtils.clamp((A - 0.5f) * (1f + step * 3f) + 0.5f, 0f, 1f);
+                B = MathUtils.clamp((B - 0.5f) * (1f + step * 3f) + 0.5f, 0f, 1f);
+                changed = true;
+            }
+            //fade
+            if (Gdx.input.isKeyPressed(Input.Keys.F)) {
+                A = MathUtils.clamp((A - 0.5f) * (1f - step * 3f) + 0.5f, 0f, 1f);
+                B = MathUtils.clamp((B - 0.5f) * (1f - step * 3f) + 0.5f, 0f, 1f);
+                changed = true;
+            }
+            currentPreview = ColorTools.toRGBA8888(ColorTools.limitToGamut(L, A, B, alpha));
+            if (changed) {
+                workingPalette.drawPixel(group[stuffIndex] - 1 & 127, 0, currentPreview);
+                palettes.draw(workingPalette, 0, 0);
+            }
         }
         ScreenUtils.clear(0.5f, 0.5f, 0.5f, 1f);
         batch.setShader(indexShader);
