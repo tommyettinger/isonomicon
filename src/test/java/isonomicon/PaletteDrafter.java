@@ -252,7 +252,7 @@ public class PaletteDrafter extends ApplicationAdapter {
             B = ColorTools.channelB(oklab);
             alpha = 1f - Stuff.STUFFS[group[stuffIndex]].material.getTrait(VoxMaterial.MaterialTrait._alpha);
         }
-        float step = Gdx.graphics.getDeltaTime() * 0.25f;
+        float step = Math.min(Gdx.graphics.getDeltaTime() * 0.25f, 0.3f);
         //light
         if(Gdx.input.isKeyPressed(Input.Keys.L)){
             L = MathUtils.clamp(L + step, 0f, 1f);
@@ -283,6 +283,19 @@ public class PaletteDrafter extends ApplicationAdapter {
             B = MathUtils.clamp(B - step, 0f, 1f);
             changed = true;
         }
+        //saturate
+        if(Gdx.input.isKeyPressed(Input.Keys.S)){
+            A = MathUtils.clamp((A - 0.5f) * (1f + step * 3f) + 0.5f, 0f, 1f);
+            B = MathUtils.clamp((B - 0.5f) * (1f + step * 3f) + 0.5f, 0f, 1f);
+            changed = true;
+        }
+        //fade
+        if(Gdx.input.isKeyPressed(Input.Keys.F)){
+            A = MathUtils.clamp((A - 0.5f) * (1f - step * 3f) + 0.5f, 0f, 1f);
+            B = MathUtils.clamp((B - 0.5f) * (1f - step * 3f) + 0.5f, 0f, 1f);
+            changed = true;
+        }
+
         int currentPreview = ColorTools.toRGBA8888(ColorTools.limitToGamut(L, A, B, alpha));
         if(changed) {
             workingPalette.drawPixel(group[stuffIndex] - 1 & 127, 0, currentPreview);
