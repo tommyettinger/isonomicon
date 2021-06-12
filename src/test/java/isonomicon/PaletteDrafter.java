@@ -12,13 +12,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.utils.UIUtils;
-import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.GdxRuntimeException;
-import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.TimeUtils;
-import com.github.tommyettinger.colorful.FloatColors;
+import com.badlogic.gdx.utils.*;
 import com.github.tommyettinger.colorful.oklab.ColorTools;
-import com.github.tommyettinger.colorful.oklab.Palette;
 import isonomicon.physical.Stuff;
 import isonomicon.physical.VoxMaterial;
 import squidpony.ArrayTools;
@@ -90,6 +85,7 @@ public class PaletteDrafter extends ApplicationAdapter {
     public Texture[] images;
     public Pixmap workingPalette;
     public Pixmap preview;
+    public float[] workingOklab;
 
     public int groupIndex = 0;
     public int stuffIndex = 0;
@@ -132,6 +128,7 @@ public class PaletteDrafter extends ApplicationAdapter {
     public void create() {
         font = new BitmapFont(Gdx.files.internal("font.fnt"));
         workingPalette = new Pixmap(Gdx.files.internal("palettes/repeated-blocks.png"));
+        workingOklab = new float[128];
         palettes = new Texture(workingPalette);
         preview = new Pixmap(16, 16, Pixmap.Format.RGBA8888);
         preview.setColor(workingPalette.getPixel(stuffIndex & 127, 0));
@@ -147,11 +144,14 @@ public class PaletteDrafter extends ApplicationAdapter {
                 images[i++] = new Texture(Gdx.files.local("out/special_lab/"+name+"/"+name+"_angle"+a+"_"+f+".png"));
             }
         }
-        final float oklab = ColorTools.fromRGBA8888(workingPalette.getPixel(0, 0));
+        float oklab = ColorTools.fromRGBA8888(workingPalette.getPixel(0, 0));
         L = ColorTools.channelL(oklab);
         A = ColorTools.channelA(oklab);
         B = ColorTools.channelB(oklab);
         alpha = 1f - Stuff.STUFFS[groups.getAt(groupIndex)[stuffIndex]].material.getTrait(VoxMaterial.MaterialTrait._alpha);
+        for (int i = 1; i < 128; i++) {
+            workingOklab[i] = ColorTools.fromRGBA8888(workingPalette.getPixel(i, 0));
+        }
 
         batch = new SpriteBatch();
         indexShader = new ShaderProgram(vertex, fragment);
@@ -247,42 +247,42 @@ public class PaletteDrafter extends ApplicationAdapter {
         int[] group = groups.getAt(groupIndex);
         if(regroup || switched){
             stuffIndex = (stuffIndex + group.length) % group.length;
-            final float oklab = ColorTools.fromRGBA8888(workingPalette.getPixel(group[stuffIndex] - 1 & 127, 0));
+            final float oklab = workingOklab[group[stuffIndex] - 1 & 127];
             L = ColorTools.channelL(oklab);
             A = ColorTools.channelA(oklab);
             B = ColorTools.channelB(oklab);
             alpha = 1f - Stuff.STUFFS[group[stuffIndex]].material.getTrait(VoxMaterial.MaterialTrait._alpha);
         }
-        float step = Math.min(Gdx.graphics.getDeltaTime() * 0.2f, 0.3f);
+        float step = Math.min(Gdx.graphics.getDeltaTime(), 0.2f);
         if(UIUtils.shift()) {
             //light
             if (Gdx.input.isKeyPressed(Input.Keys.L)) {
-                allL = step;
+                allL = 0.125f * step;
                 changed = true;
             }
             //dark
             else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-                allL = -step;
+                allL = -0.125f * step;
                 changed = true;
             }
             //red
             else if (Gdx.input.isKeyPressed(Input.Keys.R)) {
-                allA = step;
+                allA = 0.25f * step;
                 changed = true;
             }
             //green...ish
             else if (Gdx.input.isKeyPressed(Input.Keys.G)) {
-                allA = -step;
+                allA = -0.25f * step;
                 changed = true;
             }
             //yellow
             else if (Gdx.input.isKeyPressed(Input.Keys.Y)) {
-                allB = step;
+                allB = 0.25f * step;
                 changed = true;
             }
             //blue
             else if (Gdx.input.isKeyPressed(Input.Keys.B)) {
-                allB = -step;
+                allB = -0.25f * step;
                 changed = true;
             }
             //saturate
@@ -297,19 +297,20 @@ public class PaletteDrafter extends ApplicationAdapter {
             }
             if (changed) {
                 for (int i = 0; i < group.length; i++) {
-                    final float oklab = ColorTools.fromRGBA8888(workingPalette.getPixel(group[i] - 1 & 127, 0));
+                    final float oklab = workingOklab[group[i] - 1 & 127];
                     float l = MathUtils.clamp(ColorTools.channelL(oklab) + allL, 0f, 1f);
                     float a = MathUtils.clamp((ColorTools.channelA(oklab) - 0.5f) * (1f + allS * 3f) + 0.5f + allA, 0f, 1f);
                     float b = MathUtils.clamp((ColorTools.channelB(oklab) - 0.5f) * (1f + allS * 3f) + 0.5f + allB, 0f, 1f);
                     float al = 1f - Stuff.STUFFS[group[i]].material.getTrait(VoxMaterial.MaterialTrait._alpha);
-                    float gam = ColorTools.oklab(l, a, b, al);
-                    int pre = ColorTools.toRGBA8888(gam);
+                    float edited;
+                    workingOklab[group[i] - 1 & 127] = edited = ColorTools.oklab(l, a, b, al);
+                    int pre = ColorTools.toRGBA8888(edited);
                     workingPalette.drawPixel(group[i] - 1 & 127, 0, pre);
                     if(stuffIndex == i){
-                        L = ColorTools.channelL(gam);
-                        A = ColorTools.channelA(gam);
-                        B = ColorTools.channelB(gam);
-                        alpha = 1f;
+                        L = l;
+                        A = a;
+                        B = b;
+                        alpha = al;
                     }
                 }
                 allL = allA = allB = allS = 0f;
@@ -359,7 +360,7 @@ public class PaletteDrafter extends ApplicationAdapter {
                 B = MathUtils.clamp((B - 0.5f) * (1f - step * 3f) + 0.5f, 0f, 1f);
                 changed = true;
             }
-            currentPreview = ColorTools.toRGBA8888(ColorTools.oklab(L, A, B, alpha));
+            currentPreview = ColorTools.toRGBA8888(workingOklab[group[stuffIndex] - 1 & 127] = ColorTools.oklab(L, A, B, alpha));
             if (changed) {
                 workingPalette.drawPixel(group[stuffIndex] - 1 & 127, 0, currentPreview);
                 palettes.draw(workingPalette, 0, 0);
@@ -397,7 +398,7 @@ public class PaletteDrafter extends ApplicationAdapter {
         config.setTitle("Isonomicon Test: Special Viewer");
         config.setWindowedMode(256, 256);
         config.setIdleFPS(10);
-        config.setForegroundFPS(30);
+        config.setForegroundFPS(12);
         config.useVsync(true);
         config.setResizable(false);
         final PaletteDrafter app = new PaletteDrafter();
