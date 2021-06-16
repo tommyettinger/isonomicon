@@ -7,6 +7,7 @@ import com.github.tommyettinger.colorful.oklab.ColorTools;
 import isonomicon.physical.Stuff;
 import isonomicon.physical.Tools3D;
 import isonomicon.physical.VoxMaterial;
+import squidpony.squidmath.IntPointHash;
 
 import java.util.Arrays;
 
@@ -116,15 +117,16 @@ public class SpecialRenderer {
         if(xPos <= -1f || yPos <= -1f || zPos <= -1f
                 || xPos >= size * 2 || yPos >= size * 2 || zPos >= size * 2)
             return;
-        final int 
-                xx = (int)(0.5f + Math.max(0, (size + yPos - xPos) * 2 + 1)),
-                yy = (int)(0.5f + Math.max(0, (zPos * 3 + size * 3 - xPos - yPos) + 1)),
-                depth = (int)(0.5f + (xPos + yPos) * 2 + zPos * 3);
-        boolean drawn = false;
         final Stuff stuff = Stuff.STUFFS[voxel & 127];
         final VoxMaterial m = stuff.material;
         if(Tools3D.randomizePointRare(vx, vy, vz, frame) < m.getTrait(VoxMaterial.MaterialTrait._metal))
             return;
+        final float rise = m.getTrait(VoxMaterial.MaterialTrait._rise) * (1.25f + IntPointHash.hash256(vx, vy, vz, frame) * 0x1.Cp-8f);
+        final int
+                xx = (int)(0.5f + Math.max(0, (size + yPos - xPos) * 2 + 1)),
+                yy = (int)(0.5f + Math.max(0, (zPos * 3 + size * 3 - xPos - yPos) + 1 + rise * frame)),
+                depth = (int)(0.5f + (xPos + yPos) * 2 + zPos * 3);
+        boolean drawn = false;
         final float emit = m.getTrait(VoxMaterial.MaterialTrait._emit) * 0.75f;
         final float alpha = m.getTrait(VoxMaterial.MaterialTrait._alpha);
         final float hs = size * 0.5f;

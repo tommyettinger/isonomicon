@@ -66,10 +66,11 @@ public class SpecialViewer extends ApplicationAdapter {
 
     @Override
     public void create() {
-//        palettes = new Texture("palettes/palettes.png");
-        palettes = new Texture("palettes/edited/BlueFurCyanCrystal.png");
+        palettes = new Texture("palettes/palettes.png");
+//        palettes = new Texture("palettes/edited/BlueFurCyanCrystal.png");
 //        String name = "Eye_Tyrant";
-        String name = "Lomuk";
+//        String name = "Lomuk";
+        String name = "Damned";
 
         images = new Texture[32];
         for (int a = 0, i = 0; a < 8; a++) {
@@ -86,7 +87,7 @@ public class SpecialViewer extends ApplicationAdapter {
 
     @Override
     public void render() {
-        ScreenUtils.clear(0.5f, 0.5f, 0.55f, 1f);
+        ScreenUtils.clear(0.5f, 0.5f, 0.5f, 1f);
         batch.setShader(indexShader);
         Gdx.gl.glActiveTexture(GL20.GL_TEXTURE1);
         palettes.bind();
@@ -95,7 +96,8 @@ public class SpecialViewer extends ApplicationAdapter {
         indexShader.setUniformi("u_texPalette", 1);
         Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
         batch.setColor(0f, 0.5f, 0.5f, 1f);
-        batch.draw(images[(int) (TimeUtils.timeSinceMillis(startTime) >>> 8) & 31], 0, 0);
+        final int time = (int) (TimeUtils.timeSinceMillis(startTime) >>> 7);
+        batch.draw(images[(time & 3) | (time >>> 1 & 28)], 0, 0);
         batch.end();
     }
 
