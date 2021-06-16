@@ -68,7 +68,7 @@ public class PaletteDrafter extends ApplicationAdapter {
                     "  vec3 lab = mat3(+0.2104542553, +1.9779984951, +0.0259040371, +0.7936177850, -2.4285922050, +0.7827717662, -0.0040720468, +0.4505937099, -0.8086757660) *" +
                     "             pow(mat3(0.4121656120, 0.2118591070, 0.0883097947, 0.5362752080, 0.6807189584, 0.2818474174, 0.0514575653, 0.1074065790, 0.6302613616) \n" +
                     "             * (tgt.rgb * tgt.rgb), forward);\n" +
-                    "  lab.x = clamp(lab.x + index.y + v_color.g - 0.8, 0.0, 1.0);\n" +
+                    "  lab.x = clamp(lab.x + index.y + v_color.g - 0.75, 0.0, 1.0);\n" +
                     "  lab.yz = clamp(lab.yz * (v_color.b + 0.5), -1.0, 1.0);\n" +
                     "  lab = mat3(1.0, 1.0, 1.0, +0.3963377774, -0.1055613458, -0.0894841775, +0.2158037573, -0.0638541728, -1.2914855480) * lab;\n" +
                     "  gl_FragColor = vec4(sqrt(clamp(" +
@@ -127,7 +127,8 @@ public class PaletteDrafter extends ApplicationAdapter {
     @Override
     public void create() {
         font = new BitmapFont(Gdx.files.internal("font.fnt"));
-        workingPalette = new Pixmap(Gdx.files.internal("palettes/repeated-blocks.png"));
+//        workingPalette = new Pixmap(Gdx.files.internal("palettes/repeated-blocks.png"));
+        workingPalette = new Pixmap(Gdx.files.internal("palettes/edited/BlueFurCyanCrystal.png"));
         workingOklab = new float[128];
         palettes = new Texture(workingPalette);
         preview = new Pixmap(16, 16, Pixmap.Format.RGBA8888);
@@ -135,8 +136,8 @@ public class PaletteDrafter extends ApplicationAdapter {
         preview.fill();
         previewTexture = new Texture(preview);
         png = new PixmapIO.PNG(1024);
-        String name = "Eye_Tyrant";
-//        String name = "Lomuk";
+//        String name = "Eye_Tyrant";
+        String name = "Lomuk";
 
         images = new Texture[32];
         for (int a = 0, i = 0; a < 8; a++) {
