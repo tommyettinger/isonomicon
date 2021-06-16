@@ -127,8 +127,7 @@ public class PaletteDrafter extends ApplicationAdapter {
     @Override
     public void create() {
         font = new BitmapFont(Gdx.files.internal("font.fnt"));
-//        workingPalette = new Pixmap(Gdx.files.internal("palettes/repeated-blocks.png"));
-        workingPalette = new Pixmap(Gdx.files.internal("palettes/edited/BlueFurCyanCrystal.png"));
+        workingPalette = new Pixmap(Gdx.files.internal("palettes/repeated-blocks.png"));
         workingOklab = new float[128];
         palettes = new Texture(workingPalette);
         preview = new Pixmap(16, 16, Pixmap.Format.RGBA8888);
