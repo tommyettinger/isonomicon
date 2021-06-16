@@ -31,6 +31,8 @@ public class SpecialRenderer {
     public int shrink = 2;
     public float neutral = 1f;
 
+    public static final FastNoise noise = new FastNoise(0x1337BEEF, 0.0125f, FastNoise.SIMPLEX_FRACTAL, 2);
+
     protected SpecialRenderer() {
 
     }
@@ -126,9 +128,9 @@ public class SpecialRenderer {
         final float flow = m.getTrait(VoxMaterial.MaterialTrait._flow);
         int lowX = 0, highX = 4;
         if(flow != 0f){
-            float noise = FastNoise.instance.getConfiguredNoise(xPos, yPos, zPos, frame * flow);
-            if(noise > 0) highX = (int)(4.5 + noise * 2);
-            else if(noise < 0) lowX = Math.round(lowX + noise * 2);
+            float ns = noise.getConfiguredNoise(xPos, yPos, zPos, frame * flow);
+            if(ns > 0) highX = (int)(4.5 + ns * (3 << shrink));
+            else if(ns < 0) lowX = Math.round(lowX + ns * (3 << shrink));
         }
         final int
                 xx = (int)(0.5f + Math.max(0, (size + yPos - xPos) * 2 + 1)),
