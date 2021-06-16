@@ -13,6 +13,7 @@ import com.github.tommyettinger.anim8.Dithered;
 import com.github.tommyettinger.anim8.PaletteReducer;
 import isonomicon.io.LittleEndianDataInputStream;
 import isonomicon.io.VoxIO;
+import isonomicon.physical.Stuff;
 import isonomicon.physical.Tools3D;
 import isonomicon.visual.Coloring;
 import isonomicon.visual.SmudgeRenderer;
@@ -52,10 +53,10 @@ public class Specialist extends ApplicationAdapter {
 //            inputs = new String[]{"vox/LAB.vox"};
 //            inputs = new String[]{"vox/Oklab.vox"};
 //            inputs = new String[]{"vox/Oklab.vox", "vox/LAB.vox", "vox/IPT.vox"};
-            inputs = new String[]{"vox/Eye_Tyrant.vox"};
+//            inputs = new String[]{"vox/Eye_Tyrant.vox"};
 //            inputs = new String[]{"vox/Floor.vox"};
 //            inputs = new String[]{"vox/Bear.vox"};
-//            inputs = new String[]{"vox/Lomuk.vox"};
+            inputs = new String[]{"vox/Lomuk.vox"};
 //            inputs = new String[]{"vox/Lomuk.vox", "vox/Damned.vox"};
 //            inputs = new String[]{"vox/Damned.vox"};
 //            inputs = new String[]{"vox/teapot.vox"};
@@ -86,9 +87,12 @@ public class Specialist extends ApplicationAdapter {
 //            load("out/"+s);
             Pixmap pixmap;
             Array<Pixmap> pm = new Array<>(32);
+            byte[][][] evolving = Tools3D.deepCopy(voxels);
             for (int i = 0; i < 8; i++) {
+                Tools3D.deepCopyInto(evolving, voxels);
                 for (int f = 0; f < 4; f++) {
-                    pixmap = renderer.drawSplats(voxels, i * 0.125f, f);
+                    pixmap = renderer.drawSplats(evolving, i * 0.125f, f);
+                    Stuff.evolve(evolving, f);
                     Pixmap p = new Pixmap(pixmap.getWidth(), pixmap.getHeight(), pixmap.getFormat());
                     p.drawPixmap(pixmap, 0, 0);
                     pm.add(p);

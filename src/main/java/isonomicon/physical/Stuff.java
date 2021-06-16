@@ -1,5 +1,6 @@
 package isonomicon.physical;
 
+import squidpony.squidmath.HastyPointHash;
 import squidpony.squidmath.WeightedTable;
 
 /**
@@ -201,4 +202,15 @@ public class Stuff {
             new Stuff("ember spawner", 126, 0, 0L, "Transparency 1.0", 81, 1, 126, 9),
             new Stuff("violent flash", 127, 0, 0L, "Emission 0.9 Roughness 0.0 Reflection 0.0 Missing 0.2", 127, 1, 0, 5),
     };
+
+    public static void evolve(byte[][][] model, int frame){
+        for (int x = 0; x < model.length; x++) {
+            for (int y = 0; y < model[x].length; y++) {
+                for (int z = 0; z < model[x][y].length; z++) {
+                    int v = model[x][y][z] & 255;
+                    model[x][y][z] = STUFFS[v].transitionIDs[STUFFS[v].transitions.random(HastyPointHash.hash64(x, y, z, frame))];
+                }
+            }
+        }
+    }
 }
