@@ -7,6 +7,7 @@ import com.github.tommyettinger.colorful.oklab.ColorTools;
 import isonomicon.physical.Stuff;
 import isonomicon.physical.Tools3D;
 import isonomicon.physical.VoxMaterial;
+import squidpony.squidmath.FastNoise;
 import squidpony.squidmath.IntPointHash;
 
 import java.util.Arrays;
@@ -122,6 +123,13 @@ public class SpecialRenderer {
         if(Tools3D.randomizePointRare(vx, vy, vz, frame) < m.getTrait(VoxMaterial.MaterialTrait._metal))
             return;
         final float rise = m.getTrait(VoxMaterial.MaterialTrait._rise) * (1.25f + IntPointHash.hash256(vx, vy, vz, frame) * 0x1.Cp-8f);
+        final float flow = m.getTrait(VoxMaterial.MaterialTrait._flow);
+        int lowX = 0, highX = 4;
+        if(flow != 0f){
+            float noise = FastNoise.instance.getConfiguredNoise(xPos, yPos, zPos, frame * flow);
+            if(noise > 0) highX = (int)(4.5 + noise * 2);
+            else if(noise < 0) lowX = Math.round(lowX + noise * 2);
+        }
         final int
                 xx = (int)(0.5f + Math.max(0, (size + yPos - xPos) * 2 + 1)),
                 yy = (int)(0.5f + Math.max(0, (zPos * 3 + size * 3 - xPos - yPos) + 1 + rise * frame)),
@@ -130,7 +138,8 @@ public class SpecialRenderer {
         final float emit = m.getTrait(VoxMaterial.MaterialTrait._emit) * 0.75f;
         final float alpha = m.getTrait(VoxMaterial.MaterialTrait._alpha);
         final float hs = size * 0.5f;
-        for (int x = 0, ax = xx; x < 4 && ax < render.length; x++, ax++) {
+        for (int x = lowX, ax = xx; x < highX && ax < render.length; x++, ax++) {
+            if(ax < 0) continue;
             for (int y = 0, ay = yy; y < 4 && ay < render[0].length; y++, ay++) {
                 if ((depth > depths[ax][ay] || (depth == depths[ax][ay] && colorL[ax][ay] < paletteL[voxel & 255])) && (alpha == 0f || bn(ax, ay) >= alpha)) {
                     drawn = true;
