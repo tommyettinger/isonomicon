@@ -73,7 +73,8 @@ public class SpecialViewer extends ApplicationAdapter {
 //        String name = "Eye_Tyrant";
 //        String name = "Lomuk";
 //        String name = "Damned";
-        String name = "Phantom_Wand";
+        String name = "Tree";
+//        String name = "Phantom_Wand";
 
         images = new Texture[32];
         for (int a = 0, i = 0; a < 8; a++) {
@@ -108,10 +109,11 @@ public class SpecialViewer extends ApplicationAdapter {
     public static void main(String[] arg) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         config.setTitle("Isonomicon Test: Special Viewer");
-        config.setWindowedMode(128, 128);
+        config.setWindowedMode(256, 256);
         config.setIdleFPS(10);
         config.useVsync(true);
         config.setResizable(false);
+//        new Specialist(null);
         final SpecialViewer app = new SpecialViewer();
         new Lwjgl3Application(app, config);
     }

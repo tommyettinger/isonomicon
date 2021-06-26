@@ -124,7 +124,7 @@ public class SpecialRenderer {
         final VoxMaterial m = stuff.material;
         if(Tools3D.randomizePointRare(vx, vy, vz, frame) < m.getTrait(VoxMaterial.MaterialTrait._metal))
             return;
-        final float rise = m.getTrait(VoxMaterial.MaterialTrait._rise) * (1.25f + IntPointHash.hash256(vx, vy, vz, frame) * 0x1.Cp-8f);
+        final float rise = m.getTrait(VoxMaterial.MaterialTrait._rise) * (1.25f + IntPointHash.hash256(vx, vy, vz, 12345) * 0x1.Cp-8f);
         final float flow = m.getTrait(VoxMaterial.MaterialTrait._flow);
         int lowX = 0, highX = 4;
         if(flow != 0f){
