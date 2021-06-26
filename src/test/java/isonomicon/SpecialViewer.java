@@ -67,9 +67,10 @@ public class SpecialViewer extends ApplicationAdapter {
 
     @Override
     public void create() {
-        palettes = new Texture("palettes/palettes.png");
+//        palettes = new Texture("palettes/palettes.png");
 //        palettes = new Texture("palettes/edited/BlueFurCyanCrystal.png");
 //        palettes = new Texture("palettes/edited/CherrySkinDarkCloth.png");
+        palettes = new Texture("palettes/edited/NaturalWoodAndLeaves.png");
 //        String name = "Eye_Tyrant";
 //        String name = "Lomuk";
 //        String name = "Damned";

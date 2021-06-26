@@ -94,12 +94,12 @@ public class PaletteDrafter extends ApplicationAdapter {
         groups.put("Feathers", new int[]{25, 9, 60, 83});
         groups.put("Scales", new int[]{27, 28, 34});
         groups.put("Wood", new int[]{18, 22, 94});
-        groups.put("Leaves", new int[]{32, 33, 35, 4});
+        groups.put("Leaves", new int[]{32, 33, 35});
         groups.put("Fruit", new int[]{20, 26, 56});
         groups.put("Water", new int[]{39, 43, 49, 102, 106, 107, 108, 109});
         groups.put("Cold", new int[]{41, 104});
         groups.put("Fire", new int[]{84, 81, 87, 118});
-        groups.put("Filth", new int[]{3, 29, 30});
+        groups.put("Filth", new int[]{3, 4, 29, 30});
         groups.put("Poison", new int[]{31, 36, 119, 120, 93});
         groups.put("Protection", new int[]{45, 37, 38});
         groups.put("Paint", new int[]{48, 47});
@@ -124,7 +124,8 @@ public class PaletteDrafter extends ApplicationAdapter {
         png = new PixmapIO.PNG(1024);
 //        String name = "Eye_Tyrant";
 //        String name = "Lomuk";
-        String name = "Damned";
+//        String name = "Damned";
+        String name = "Tree";
 
         images = new Texture[32];
         for (int a = 0, i = 0; a < 8; a++) {
@@ -242,7 +243,7 @@ public class PaletteDrafter extends ApplicationAdapter {
             B = ColorTools.channelB(oklab);
             alpha = 1f - Stuff.STUFFS[group[stuffIndex]].material.getTrait(VoxMaterial.MaterialTrait._alpha);
         }
-        float step = Math.min(Gdx.graphics.getDeltaTime(), 0.2f);
+        float step = Math.min(Gdx.graphics.getDeltaTime(), 0.2f) * 0.25f;
         if(UIUtils.shift()) {
             //light
             if (Gdx.input.isKeyPressed(Input.Keys.L)) {
