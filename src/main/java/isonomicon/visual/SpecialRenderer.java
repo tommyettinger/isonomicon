@@ -7,6 +7,7 @@ import com.github.tommyettinger.colorful.oklab.ColorTools;
 import isonomicon.physical.Stuff;
 import isonomicon.physical.Tools3D;
 import isonomicon.physical.VoxMaterial;
+import squidpony.squidmath.BlueNoise;
 import squidpony.squidmath.FastNoise;
 import squidpony.squidmath.IntPointHash;
 
@@ -22,11 +23,12 @@ public class SpecialRenderer {
     public Pixmap pixmap, palettePixmap;
     public int[][] depths, voxels, render, outlines;
     public VoxMaterial[][] materials;
-    public float[][] shadeX, shadeZ, colorL, colorA, colorB, shading, outlineShading;
+    public float[][] shadeX, shadeZ, colorL, colorA, colorB, shading, outlineShading, saturation;
     public byte[][] indices, outlineIndices;
     public int[] palette;
     public float[] paletteL, paletteA, paletteB;
     public boolean outline = true;
+    public boolean variance = true;
     public int size;
     public int shrink = 2;
     public float neutral = 1f;
@@ -47,6 +49,7 @@ public class SpecialRenderer {
         indices =  new byte[w][h];
         outlineIndices =  new byte[w][h];
         shading =  new float[w][h];
+        saturation =  new float[w][h];
         outlineShading = new float[w][h];
         materials = new VoxMaterial[w][h];
         voxels = fill(-1, w, h);
@@ -57,8 +60,12 @@ public class SpecialRenderer {
         colorB = fill(-1f, w, h);
     }
     
-    protected float bn(int x, int y) {
-        return (PaletteReducer.TRI_BLUE_NOISE[(x & 63) | (y & 63) << 6] + 128) * 0x1p-8f;
+    protected float bn(int x, int y, int seed) {
+        return (BlueNoise.getSeededTriOmniTiling(x, y, seed) + 128) * 0x1p-8f;
+    }
+
+    protected float bnBlocky(int x, int y, int seed) {
+        return (BlueNoise.getSeededTriOmniTiling(x, y, seed) & 0x40) * 0x1.8p-8f;
     }
 
     public static float sin_(float turns)
@@ -139,11 +146,12 @@ public class SpecialRenderer {
         boolean drawn = false;
         final float emit = m.getTrait(VoxMaterial.MaterialTrait._emit) * 0.75f;
         final float alpha = m.getTrait(VoxMaterial.MaterialTrait._alpha);
+
         final float hs = size * 0.5f;
         for (int x = lowX, ax = xx; x < highX && ax < render.length; x++, ax++) {
             if(ax < 0) continue;
             for (int y = 0, ay = yy; y < 4 && ay < render[0].length; y++, ay++) {
-                if ((depth > depths[ax][ay] || (depth == depths[ax][ay] && colorL[ax][ay] < paletteL[voxel & 255])) && (alpha == 0f || bn(ax, ay) >= alpha)) {
+                if ((depth > depths[ax][ay] || (depth == depths[ax][ay] && colorL[ax][ay] < paletteL[voxel & 255])) && (alpha == 0f || bn(ax, ay, voxel) >= alpha)) {
                     drawn = true;
                     indices[ax][ay] = voxel;
                     colorL[ax][ay] = paletteL[voxel & 255];
@@ -192,7 +200,8 @@ public class SpecialRenderer {
         fill(voxels, -1);
         fill(shadeX, -1f);
         fill(shadeZ, -1f);
-        fill(shading, -1f);
+        fill(shading, 0f);
+        fill(saturation, 0f);
         fill(outlineShading, -1f);
         fill(colorL, -1f);
         fill(colorA, -1f);
@@ -254,10 +263,24 @@ public class SpecialRenderer {
                     tz = ox * x_z + oy * y_z + oz * z_z + hs + hs;
                     fz = (int)(tz);
                     m = materials[sx][sy];
-                    float rough = m.getTrait(VoxMaterial.MaterialTrait._rough);
-                    float emit = m.getTrait(VoxMaterial.MaterialTrait._emit);
+                    final float rough = m.getTrait(VoxMaterial.MaterialTrait._rough);
+                    final float emit = m.getTrait(VoxMaterial.MaterialTrait._emit);
+                    if(variance) {
+                        final float dapple = m.getTrait(VoxMaterial.MaterialTrait._dapple);
+                        final float vary = m.getTrait(VoxMaterial.MaterialTrait._vary);
+                        if (dapple != 0f) {
+                            final float d = dapple * bnBlocky(sx >>> shrink, sy >>> shrink, v);
+                            colorL[sx][sy] += d;
+                            shading[sx][sy] += d;
+                        }
+                        if (vary != 0f) {
+                            final float s = 1f + vary * bnBlocky(sy >>> shrink, sx >>> shrink, ~v);
+                            colorA[sx][sy] = (colorA[sx][sy] - 0.5f) * s + 0.5f;
+                            colorB[sx][sy] = (colorB[sx][sy] - 0.5f) * s + 0.5f;
+                            saturation[sx][sy] = s - 1f;
+                        }
+                    }
                     float limit = 2;
-                    // + (PaletteReducer.TRI_BLUE_NOISE[(sx & 63) + (sy << 6) + (fx + fy + fz >>> 2) & 4095] + 0.5) * 0x1p-7;
                     if (Math.abs(shadeX[fy][fz] - tx) <= limit || ((fy > 1 && Math.abs(shadeX[fy - 2][fz] - tx) <= limit) || (fy < shadeX.length - 2 && Math.abs(shadeX[fy + 2][fz] - tx) <= limit))) {
                         float spread = MathUtils.lerp(0.0025f, 0.001f, rough);
                         if (Math.abs(shadeZ[fx][fy] - tz) <= limit) {
@@ -359,7 +382,9 @@ public class SpecialRenderer {
                             Math.min(Math.max(0.25f + 0.625f * (colorL[x][y] - 0.1875f), 0f), 1f),
                             (colorA[x][y] - 0.5f) * neutral + 0.5f,
                             (colorB[x][y] - 0.5f) * neutral + 0.5f, 1f)));
-                    palettePixmap.drawPixel(x >>> shrink, y >>> shrink, (indices[x][y] & 255) << 24 | (int) MathUtils.clamp((shading[x][y] - 0.1875f) * 160f + 64f, 0f, 255f) << 16 |255);
+                    palettePixmap.drawPixel(x >>> shrink, y >>> shrink, (indices[x][y] & 255) << 24 |
+                            (int) MathUtils.clamp((shading[x][y] - 0.1875f) * 160f + 64f, 0f, 255f) << 16 |
+                            (int) MathUtils.clamp((saturation[x][y]) * 127.5f + 127.5f, 0f, 255f) << 8 | 255);
                 }
             }
         }

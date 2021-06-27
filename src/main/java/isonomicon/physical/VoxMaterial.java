@@ -59,7 +59,11 @@ public class VoxMaterial {
 		//10 used with FastNoise; affects stretching of a voxel over time and space
 		_flow("Flow"),
 		//11 affects vertical movement of a voxel over time; may be negative
-		_rise("Rise")
+		_rise("Rise"),
+		//12 causes random per-voxel lightening (or darkening, if negative)
+		_dapple("Dapple"),
+		//13 causes random per-voxel increases to saturation (or decreases, if negative).
+		_vary("Vary")
 		;
 		
 		public String name;
