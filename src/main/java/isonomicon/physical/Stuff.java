@@ -107,7 +107,7 @@ public class Stuff {
             new Stuff("vibrant leaf", 32, 32, 32L, "Roughness 0.1 Reflection 0.85 Dapple -0.3"),
             new Stuff("moss", 33, 33, 32L, "Roughness 0.9 Reflection 0.03"),
             new Stuff("fine scales", 34, 34, 4L, "Roughness 0.15 Reflection 0.4"),
-            new Stuff("old leaf", 35, 35, 32L, "Roughness 0.2 Reflection 0.25 Vary 0.9"),
+            new Stuff("old leaf", 35, 35, 32L, "Roughness 0.2 Reflection 0.25 Vary -0.9"),
             new Stuff("gas", 36, 0, 256L, "Roughness 0.25 Reflection 0.0 Flow 0.4 Rise 0.1"),
             new Stuff("dull protection", 37, 37, 64L, "Roughness 0.55 Reflection 0.4"),
             new Stuff("accented protection", 38, 38, 64L, "Roughness 0.45 Reflection 0.6"),

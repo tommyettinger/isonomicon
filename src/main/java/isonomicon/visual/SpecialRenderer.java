@@ -267,7 +267,7 @@ public class SpecialRenderer {
                     final float emit = m.getTrait(VoxMaterial.MaterialTrait._emit);
                     if(variance) {
                         final float dapple = m.getTrait(VoxMaterial.MaterialTrait._dapple);
-                        final float vary = m.getTrait(VoxMaterial.MaterialTrait._vary);
+                        final float vary = m.getTrait(VoxMaterial.MaterialTrait._vary) * 20f;
                         if (dapple != 0f) {
                             final float d = dapple * bnBlocky(vx, vy, vz);
                             colorL[sx][sy] += d;
@@ -430,6 +430,7 @@ public class SpecialRenderer {
         fill(depths, 0);
         fill(render, 0);
         fill(shading, 0f);
+        fill(saturation, 0f);
         fill(outlineShading, 0f);
         fill(outlines, (byte) 0);
         fill(indices, (byte) 0);
