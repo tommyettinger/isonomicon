@@ -65,7 +65,7 @@ public class SpecialRenderer {
     }
 
     protected float bnBlocky(int x, int y, int seed) {
-        return (BlueNoise.getSeededTriOmniTiling(x, y, seed) & 0x40) * 0x1.8p-8f;
+        return (BlueNoise.TILE_NOISE[seed & 63][(x & 63) | (y & 63) << 6] & 0x80) * 0x3p-10f;
     }
 
     public static float sin_(float turns)
@@ -269,12 +269,12 @@ public class SpecialRenderer {
                         final float dapple = m.getTrait(VoxMaterial.MaterialTrait._dapple);
                         final float vary = m.getTrait(VoxMaterial.MaterialTrait._vary);
                         if (dapple != 0f) {
-                            final float d = dapple * bnBlocky(sx >>> shrink, sy >>> shrink, v);
+                            final float d = dapple * bnBlocky(vx, vy, vz);
                             colorL[sx][sy] += d;
                             shading[sx][sy] += d;
                         }
                         if (vary != 0f) {
-                            final float s = 1f + vary * bnBlocky(sy >>> shrink, sx >>> shrink, ~v);
+                            final float s = 1f + vary * bnBlocky(vy, vz, vx);
                             colorA[sx][sy] = (colorA[sx][sy] - 0.5f) * s + 0.5f;
                             colorB[sx][sy] = (colorB[sx][sy] - 0.5f) * s + 0.5f;
                             saturation[sx][sy] = s - 1f;
