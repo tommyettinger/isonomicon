@@ -30,7 +30,7 @@ public class SpecialRenderer {
     public boolean outline = true;
     public boolean variance = true;
     public int size;
-    public int shrink = 2;
+    public int shrink = 1;
     public float neutral = 1f;
 
     public static final FastNoise noise = new FastNoise(0x1337BEEF, 0.0125f, FastNoise.SIMPLEX_FRACTAL, 2);
@@ -267,17 +267,14 @@ public class SpecialRenderer {
                     final float emit = m.getTrait(VoxMaterial.MaterialTrait._emit);
                     if(variance) {
                         final float dapple = m.getTrait(VoxMaterial.MaterialTrait._dapple);
-                        final float vary = m.getTrait(VoxMaterial.MaterialTrait._vary) * 20f;
+                        final float vary = m.getTrait(VoxMaterial.MaterialTrait._vary) * 10f;
                         if (dapple != 0f) {
                             final float d = dapple * bnBlocky(vx, vy, vz);
                             colorL[sx][sy] += d;
                             shading[sx][sy] += d;
                         }
                         if (vary != 0f) {
-                            final float s = 1f + vary * bnBlocky(vy, vz, vx);
-                            colorA[sx][sy] = (colorA[sx][sy] - 0.5f) * s + 0.5f;
-                            colorB[sx][sy] = (colorB[sx][sy] - 0.5f) * s + 0.5f;
-                            saturation[sx][sy] = s - 1f;
+                            saturation[sx][sy] = Math.min(Math.max(vary * bnBlocky(vy, vz, vx), -1f), 1f);
                         }
                     }
                     float limit = 2;
@@ -379,9 +376,9 @@ public class SpecialRenderer {
             for (int y = ySize; y >= 0; y--) {
                 if (colorA[x][y] >= 0f) {
                     pixmap.drawPixel(x >>> shrink, y >>> shrink, ColorTools.toRGBA8888(ColorTools.limitToGamut(
-                            Math.min(Math.max(0.25f + 0.625f * (colorL[x][y] - 0.1875f), 0f), 1f),
-                            (colorA[x][y] - 0.5f) * neutral + 0.5f,
-                            (colorB[x][y] - 0.5f) * neutral + 0.5f, 1f)));
+                            0.25f + 0.625f * (colorL[x][y] - 0.1875f),
+                            (colorA[x][y] - 0.5f) * (saturation[x][y] + neutral) + 0.5f,
+                            (colorB[x][y] - 0.5f) * (saturation[x][y] + neutral) + 0.5f, 1f)));
                     palettePixmap.drawPixel(x >>> shrink, y >>> shrink, (indices[x][y] & 255) << 24 |
                             (int) MathUtils.clamp((shading[x][y] - 0.1875f) * 160f + 64f, 0f, 255f) << 16 |
                             (int) MathUtils.clamp((saturation[x][y]) * 127.5f + 127.5f, 0f, 255f) << 8 | 255);
@@ -405,7 +402,7 @@ public class SpecialRenderer {
                     int hy = y >>> shrink;
                     if ((o = outlines[x][y]) != 0) {
                         depth = depths[x][y];
-                        po = (outlineIndices[x][y] & 255) << 24 | (int)MathUtils.clamp(64f * outlineShading[x][y], 0f, 255f) << 16 |255;
+                        po = (outlineIndices[x][y] & 255) << 24 | (int)MathUtils.clamp(64f * outlineShading[x][y], 0f, 255f) << 16 | 64 << 8 | 255;
                         if (outlines[x - step][y] == 0 || depths[x - step][y] < depth - threshold) {
                             pixmap.drawPixel(hx - 1, hy    , o);
                             palettePixmap.drawPixel(hx - 1, hy    , po);
