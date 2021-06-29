@@ -137,7 +137,7 @@ public class VoxIO {
     }
 
     public static void writeVOX(String filename, byte[][][] voxelData, int[] palette, IntMap<VoxMaterial> materials) {
-        // check out http://voxel.codeplex.com/wikipage?title=VOX%20Format&referringTitle=Home for the file format used below
+        // check out https://github.com/ephtracy/voxel-model/blob/master/MagicaVoxel-file-format-vox.txt for the file format used below
         try {
             int xSize = voxelData.length, ySize = voxelData[0].length, zSize = voxelData[0][0].length;
 

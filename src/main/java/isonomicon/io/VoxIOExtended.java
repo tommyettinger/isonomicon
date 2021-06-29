@@ -2,6 +2,7 @@ package isonomicon.io;
 
 import com.badlogic.gdx.utils.IntFloatMap;
 import com.badlogic.gdx.utils.IntMap;
+import isonomicon.io.chunks.TransformChunk;
 import isonomicon.physical.VoxMaterial;
 
 import java.io.*;
@@ -19,6 +20,21 @@ import static isonomicon.io.VoxIO.lastPalette;
  * Created by Tommy Ettinger on 12/12/2017.
  */
 public class VoxIOExtended {
+    protected static String readString(LittleEndianDataInputStream stream) throws IOException {
+        int len = stream.readInt();
+        byte[] buf = new byte[len];
+        stream.read(buf, 0, len);
+        return new String(buf, StandardCharsets.UTF_8);
+    }
+    protected static String[][] readStringPairs(LittleEndianDataInputStream stream) throws IOException {
+        int len = stream.readInt();
+        String[][] pairs = new String[len][2];
+        for (int i = 0; i < len; i++) {
+            pairs[i][0] = readString(stream);
+            pairs[i][1] = readString(stream);
+        }
+        return pairs;
+    }
     public static byte[][][] readVox(InputStream stream) {
         return readVox(new LittleEndianDataInputStream(stream));
     }
@@ -83,8 +99,20 @@ public class VoxIOExtended {
                                 vm.putTrait(new String(key, 0, keyLen, StandardCharsets.UTF_8), Float.parseFloat(new String(val, 0, valLen, StandardCharsets.UTF_8)));
                         }
                     }
-//                    else if(chunkName.equals("nTRN")) {
-//                    }
+                    else if(chunkName.equals("nTRN")) {
+                        int chunkID = stream.readInt();
+                        String[][] attributes = readStringPairs(stream);
+                        int childID = stream.readInt();
+                        int reservedID = stream.readInt();
+                        int layerID = stream.readInt();
+                        int frameCount = stream.readInt();
+                        String[][][] frames = new String[frameCount][][];
+                        for (int i = 0; i < frameCount; i++) {
+                            frames[i] = readStringPairs(stream);
+                        }
+                        //TODO: NEED TO STORE THIS CHUNK SOMEWHERE
+                        new TransformChunk(chunkID, attributes, childID, reservedID, layerID, frames);
+                    }
                 else stream.skipBytes(chunkSize);   // read any excess bytes
                 }
 
@@ -106,7 +134,7 @@ public class VoxIOExtended {
     }
 
     public static void writeVOX(String filename, byte[][][] voxelData, int[] palette, IntMap<VoxMaterial> materials) {
-        // check out http://voxel.codeplex.com/wikipage?title=VOX%20Format&referringTitle=Home for the file format used below
+        // check out https://github.com/ephtracy/voxel-model/blob/master/MagicaVoxel-file-format-vox.txt for the file format used below
         try {
             int xSize = voxelData.length, ySize = voxelData[0].length, zSize = voxelData[0][0].length;
 
