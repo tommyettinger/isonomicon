@@ -270,7 +270,6 @@ public class SpecialRenderer {
                         final float vary = m.getTrait(VoxMaterial.MaterialTrait._vary) * 10f;
                         if (dapple != 0f) {
                             final float d = dapple * bnBlocky(vx, vy, vz);
-                            colorL[sx][sy] += d;
                             shading[sx][sy] += d;
                         }
                         if (vary != 0f) {
@@ -283,7 +282,6 @@ public class SpecialRenderer {
                         if (Math.abs(shadeZ[fx][fy] - tz) <= limit) {
                             spread *= 2f;
                             float change = m.getTrait(VoxMaterial.MaterialTrait._ior) * 0.2f;
-                            colorL[sx][sy] += change;
                             shading[sx][sy] += change;
                         }
                         int dist;
@@ -291,7 +289,6 @@ public class SpecialRenderer {
                             for (int j = -3, sj = sy + j; j <= 3; j++, sj++) {
                                 if((dist = Math.abs(i) + Math.abs(j)) > 3 || si < 0 || sj < 0 || si > xSize || sj > ySize) continue;
                                 float change = spread * (4 - dist);
-                                colorL[si][sj] += change;
                                 shading[si][sj] += change;
                             }
                         }
@@ -303,7 +300,6 @@ public class SpecialRenderer {
                             for (int j = -3, sj = sy + j; j <= 3; j++, sj++) {
                                 if((dist = Math.abs(i) + Math.abs(j)) > 3 || si < 0 || sj < 0 || si > xSize || sj > ySize) continue;
                                 float change = spread * (4 - dist);
-                                colorL[si][sj] += change;
                                 shading[si][sj] += change;
                             }
                         }
@@ -315,7 +311,6 @@ public class SpecialRenderer {
                                 final int dist = i * i + j * j;
                                 if(dist > 144 || si < 0 || sj < 0 || si > xSize || sj > ySize) continue;
                                 float change = spread * (12f - (float) Math.sqrt(dist));
-                                colorL[si][sj] += change;
                                 shading[si][sj] += change;
                             }
                         }
@@ -375,13 +370,16 @@ public class SpecialRenderer {
         for (int x = xSize; x >= 0; x--) {
             for (int y = ySize; y >= 0; y--) {
                 if (colorA[x][y] >= 0f) {
+                    float shade = Math.min(Math.max((shading[x][y]) * 0.625f + 0.1328125f, 0f), 1f);
+//                    float shade = Math.min(Math.max((shading[x][y]) * 0.625f + 0.125f, 0f), 1f);
+                    float sat = Math.min(Math.max((saturation[x][y]) * 0.5f + 0.5f, 0f), 1f);
                     pixmap.drawPixel(x >>> shrink, y >>> shrink, ColorTools.toRGBA8888(ColorTools.limitToGamut(
-                            0.25f + 0.625f * (colorL[x][y] - 0.1875f),
-                            (colorA[x][y] - 0.5f) * (saturation[x][y] + neutral) + 0.5f,
-                            (colorB[x][y] - 0.5f) * (saturation[x][y] + neutral) + 0.5f, 1f)));
+                            colorL[x][y] + shade - 0.25f,
+                            (colorA[x][y] - 0.5f) * (sat * 2f) + 0.5f,
+                            (colorB[x][y] - 0.5f) * (sat * 2f) + 0.5f, 1f)));
                     palettePixmap.drawPixel(x >>> shrink, y >>> shrink, (indices[x][y] & 255) << 24 |
-                            (int) MathUtils.clamp((shading[x][y] - 0.1875f) * 160f + 64f, 0f, 255f) << 16 |
-                            (int) MathUtils.clamp((saturation[x][y]) * 127.5f + 127.5f, 0f, 255f) << 8 | 255);
+                            (int)(shade * 255.999f) << 16 |
+                            (int)(sat * 255.999f) << 8 | 255);
                 }
             }
         }
