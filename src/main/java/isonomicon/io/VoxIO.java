@@ -6,6 +6,7 @@ import isonomicon.physical.VoxMaterial;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 
 /**
@@ -16,7 +17,7 @@ import java.nio.charset.StandardCharsets;
  * Created by Tommy Ettinger on 12/12/2017.
  */
 public class VoxIO {
-    public static int[] lastPalette = {
+    public static final int[] defaultPalette = {
             0x00000000, 0xffffffff, 0xffffccff, 0xffff99ff, 0xffff66ff, 0xffff33ff, 0xffff00ff, 0xffccffff,
             0xffccccff, 0xffcc99ff, 0xffcc66ff, 0xffcc33ff, 0xffcc00ff, 0xff99ffff, 0xff99ccff, 0xff9999ff,
             0xff9966ff, 0xff9933ff, 0xff9900ff, 0xff66ffff, 0xff66ccff, 0xff6699ff, 0xff6666ff, 0xff6633ff,
@@ -50,6 +51,7 @@ public class VoxIO {
             0x000088ff, 0x000077ff, 0x000055ff, 0x000044ff, 0x000022ff, 0x000011ff, 0xeeeeeeff, 0xddddddff,
             0xbbbbbbff, 0xaaaaaaff, 0x888888ff, 0x777777ff, 0x555555ff, 0x444444ff, 0x222222ff, 0x111111ff
     };
+    public static int[] lastPalette = Arrays.copyOf(defaultPalette, 256);
     public static final IntMap<VoxMaterial> lastMaterials = new IntMap<>(256);
 
     public static byte[][][] readVox(InputStream stream) {

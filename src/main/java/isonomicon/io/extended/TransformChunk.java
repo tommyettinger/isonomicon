@@ -6,6 +6,10 @@ public class TransformChunk extends AbstractChunk {
     public int reservedId;
     public int layerId;
     public String[][][] frameAttributes;
+    public TransformChunk(){
+        attributes = new String[0][0];
+        frameAttributes = new String[0][0][0];
+    }
     public TransformChunk(int id, String[][] attributes, int childId, int reservedId, int layerId,
                           String[][][] frameAttributes){
         this.id = id;

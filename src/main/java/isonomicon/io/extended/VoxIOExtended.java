@@ -17,11 +17,11 @@ import static isonomicon.io.VoxIO.lastPalette;
 
 
 /**
- * Handles reading MagicaVoxel .vox files from file to byte[][][], and vice versa.
- * The palette and, if present, materials of the latest .vox file read are available
- * in {@link VoxIO#lastPalette} and {@link VoxIO#lastMaterials}.
+ * Handles reading MagicaVoxel .vox files from file to VoxModel objects.
+ * Major credit for figuring out the largely-undocumented MagicaVoxel .vox extension format goes to Zarbuz, since I had
+ * to check <a href="https://github.com/Zarbuz/FileToVox">FileToVox</a> many times for help.
  * <br>
- * Created by Tommy Ettinger on 12/12/2017.
+ * Created by Tommy Ettinger on 6/28/2021.
  */
 public class VoxIOExtended {
     protected static String readString(LittleEndianDataInputStream stream) throws IOException {
@@ -79,26 +79,6 @@ public class VoxIOExtended {
         return result;
     }
 
-    /*
-        public Vector3 _t
-        {
-            get
-            {
-                var result = Vector3.zero;
-                var item = items.FirstOrDefault(i => i.Key == "_t");
-                if (item.Key == null)
-                    return result;
-                var data = item.Value.Split(' ');
-                if (data.Length > 0)
-                    float.TryParse(data[0], out result.X);
-                if (data.Length > 1)
-                    float.TryParse(data[1], out result.Y);
-                if (data.Length > 2)
-                    float.TryParse(data[2], out result.Z);
-                return result;
-            }
-
-    */
     public static byte[][][] readVox(InputStream stream) {
         return readVox(new LittleEndianDataInputStream(stream));
     }
