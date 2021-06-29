@@ -1,9 +1,13 @@
-package isonomicon.io;
+package isonomicon.io.extended;
 
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.IntFloatMap;
 import com.badlogic.gdx.utils.IntMap;
-import isonomicon.io.chunks.TransformChunk;
+import isonomicon.io.LittleEndianDataInputStream;
+import isonomicon.io.VoxIO;
+import isonomicon.io.extended.TransformChunk;
 import isonomicon.physical.VoxMaterial;
+import squidpony.StringKit;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -24,7 +28,7 @@ public class VoxIOExtended {
         int len = stream.readInt();
         byte[] buf = new byte[len];
         stream.read(buf, 0, len);
-        return new String(buf, StandardCharsets.UTF_8);
+        return new String(buf, StandardCharsets.ISO_8859_1);
     }
     protected static String[][] readStringPairs(LittleEndianDataInputStream stream) throws IOException {
         int len = stream.readInt();
@@ -35,6 +39,66 @@ public class VoxIOExtended {
         }
         return pairs;
     }
+
+    public static byte getRotation(String[][] pairs){
+        for(String[] pair : pairs){
+            if("_r".equals(pair[0])){
+                try{
+                    return Byte.parseByte(pair[1]);
+                } catch (Exception ignored){
+                    return 4;
+                }
+            }
+        }
+        return 4;
+    }
+
+    public static Vector3 getTranslation(String[][] pairs){
+        Vector3 result = new Vector3();
+        for(String[] pair : pairs) {
+            if("_t".equals(pair[0])) {
+                String[] parts = StringKit.split(pair[1], " ");
+                if (parts.length > 0) {
+                    try {
+                        result.x = Float.parseFloat(parts[0]);
+                    } catch (Exception ignored){}
+                }
+                if (parts.length > 1) {
+                    try {
+                        result.y = Float.parseFloat(parts[1]);
+                    } catch (Exception ignored){}
+                }
+                if (parts.length > 2) {
+                    try {
+                        result.z = Float.parseFloat(parts[2]);
+                    } catch (Exception ignored){}
+                }
+                return result;
+            }
+        }
+        return result;
+    }
+
+    /*
+        public Vector3 _t
+        {
+            get
+            {
+                var result = Vector3.zero;
+                var item = items.FirstOrDefault(i => i.Key == "_t");
+                if (item.Key == null)
+                    return result;
+                var data = item.Value.Split(' ');
+                if (data.Length > 0)
+                    float.TryParse(data[0], out result.X);
+                if (data.Length > 1)
+                    float.TryParse(data[1], out result.Y);
+                if (data.Length > 2)
+                    float.TryParse(data[2], out result.Z);
+                return result;
+            }
+
+    */
     public static byte[][][] readVox(InputStream stream) {
         return readVox(new LittleEndianDataInputStream(stream));
     }
@@ -94,9 +158,9 @@ public class VoxIOExtended {
                             stream.read(val, 0, valLen);
                             VoxMaterial vm;
                             if ((vm = lastMaterials.get(materialID)) == null)
-                                lastMaterials.put(materialID, new VoxMaterial(new String(val, 0, valLen, StandardCharsets.UTF_8)));
+                                lastMaterials.put(materialID, new VoxMaterial(new String(val, 0, valLen, StandardCharsets.ISO_8859_1)));
                             else
-                                vm.putTrait(new String(key, 0, keyLen, StandardCharsets.UTF_8), Float.parseFloat(new String(val, 0, valLen, StandardCharsets.UTF_8)));
+                                vm.putTrait(new String(key, 0, keyLen, StandardCharsets.ISO_8859_1), Float.parseFloat(new String(val, 0, valLen, StandardCharsets.ISO_8859_1)));
                         }
                     }
                     else if(chunkName.equals("nTRN")) {

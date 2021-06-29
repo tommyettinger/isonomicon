@@ -1,4 +1,4 @@
-package isonomicon.io.chunks;
+package isonomicon.io.extended;
 
 /**
  * The parent class for the more-complex node chunks that can exist in recent .vox files.

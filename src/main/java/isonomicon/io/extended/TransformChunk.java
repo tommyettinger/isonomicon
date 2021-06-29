@@ -1,4 +1,4 @@
-package isonomicon.io.chunks;
+package isonomicon.io.extended;
 
 public class TransformChunk extends AbstractChunk {
 
