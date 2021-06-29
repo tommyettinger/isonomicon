@@ -4,8 +4,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.IntFloatMap;
 import com.badlogic.gdx.utils.IntMap;
 import isonomicon.io.LittleEndianDataInputStream;
-import isonomicon.io.VoxIO;
-import isonomicon.io.extended.TransformChunk;
 import isonomicon.physical.VoxMaterial;
 import squidpony.StringKit;
 
@@ -53,8 +51,7 @@ public class VoxIOExtended {
         return 4;
     }
 
-    public static Vector3 getTranslation(String[][] pairs){
-        Vector3 result = new Vector3();
+    public static void getTranslation(Vector3 result, String[][] pairs){
         for(String[] pair : pairs) {
             if("_t".equals(pair[0])) {
                 String[] parts = StringKit.split(pair[1], " ");
@@ -73,10 +70,9 @@ public class VoxIOExtended {
                         result.z = Float.parseFloat(parts[2]);
                     } catch (Exception ignored){}
                 }
-                return result;
+                return;
             }
         }
-        return result;
     }
 
     public static byte[][][] readVox(InputStream stream) {
