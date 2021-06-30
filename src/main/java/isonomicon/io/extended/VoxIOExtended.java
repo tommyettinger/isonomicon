@@ -162,6 +162,16 @@ public class VoxIOExtended {
                         }
                         //TODO: NEED TO STORE THIS CHUNK SOMEWHERE
                         new GroupChunk(chunkID, attributes, childIds);
+                    } else if (chunkName.equals("nSHP")) {
+                        int chunkID = stream.readInt();
+                        String[][] attributes = readStringPairs(stream);
+                        int modelCount = stream.readInt();
+                        ShapeModel[] models = new ShapeModel[modelCount];
+                        for (int i = 0; i < modelCount; i++) {
+                            models[i] = new ShapeModel(stream.readInt(), readStringPairs(stream));
+                        }
+                        //TODO: NEED TO STORE THIS CHUNK SOMEWHERE
+                        new ShapeChunk(chunkID, attributes, models);
                     } else stream.skipBytes(chunkSize);   // read any excess bytes
                 }
 
