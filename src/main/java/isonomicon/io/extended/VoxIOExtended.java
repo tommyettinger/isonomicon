@@ -75,13 +75,15 @@ public class VoxIOExtended {
         }
     }
 
-    public static byte[][][] readVox(InputStream stream) {
+    public static VoxModel readVox(InputStream stream) {
         return readVox(new LittleEndianDataInputStream(stream));
     }
-    public static byte[][][] readVox(LittleEndianDataInputStream stream) {
+
+    public static VoxModel readVox(LittleEndianDataInputStream stream) {
         // check out https://github.com/ephtracy/voxel-model/blob/master/MagicaVoxel-file-format-vox.txt for the file format used below
-        byte[][][] voxelData = null;
         lastMaterials.clear();
+        VoxModel model = new VoxModel();
+        byte[][][] voxelData = null;
         try {
             byte[] chunkId = new byte[4];
             if (4 != stream.read(chunkId))
@@ -110,6 +112,7 @@ public class VoxIOExtended {
                         offX = size - sizeX >> 1;
                         offY = size - sizeY >> 1;
                         voxelData = new byte[size][size][size];
+                        model.grids.add(voxelData);
                         stream.skipBytes(chunkSize - 4 * 3);
                     } else if (chunkName.equals("XYZI") && voxelData != null) {
                         // XYZI contains n voxels
@@ -122,6 +125,7 @@ public class VoxIOExtended {
                         for (int i = 1; i < 256; i++) {
                             lastPalette[i] = Integer.reverseBytes(stream.readInt());
                         }
+                        System.arraycopy(lastPalette, 0, model.palette, 0, 256);
                         stream.readInt();
                     } else if (chunkName.equals("MATL")) { // remove this block if you don't handle materials
                         int materialID = stream.readInt();
@@ -148,8 +152,7 @@ public class VoxIOExtended {
                         for (int i = 0; i < frameCount; i++) {
                             frames[i] = readStringPairs(stream);
                         }
-                        //TODO: NEED TO STORE THIS CHUNK SOMEWHERE
-                        new TransformChunk(chunkID, attributes, childID, reservedID, layerID, frames);
+                        model.transformChunks.add(new TransformChunk(chunkID, attributes, childID, reservedID, layerID, frames));
                     } else if (chunkName.equals("nGRP")) {
                         int chunkID = stream.readInt();
                         String[][] attributes = readStringPairs(stream);
@@ -160,8 +163,7 @@ public class VoxIOExtended {
                                 childIds[i] = Integer.parseInt(readString(stream));
                             } catch (Exception ignored) {}
                         }
-                        //TODO: NEED TO STORE THIS CHUNK SOMEWHERE
-                        new GroupChunk(chunkID, attributes, childIds);
+                        model.groupChunks.add(new GroupChunk(chunkID, attributes, childIds));
                     } else if (chunkName.equals("nSHP")) {
                         int chunkID = stream.readInt();
                         String[][] attributes = readStringPairs(stream);
@@ -170,8 +172,7 @@ public class VoxIOExtended {
                         for (int i = 0; i < modelCount; i++) {
                             models[i] = new ShapeModel(stream.readInt(), readStringPairs(stream));
                         }
-                        //TODO: NEED TO STORE THIS CHUNK SOMEWHERE
-                        new ShapeChunk(chunkID, attributes, models);
+                        model.shapeChunks.add(new ShapeChunk(chunkID, attributes, models));
                     } else stream.skipBytes(chunkSize);   // read any excess bytes
                 }
 
@@ -180,7 +181,8 @@ public class VoxIOExtended {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return voxelData;
+        model.materials.putAll(lastMaterials);
+        return model;
     }
 
     private static void writeInt(DataOutputStream bin, int value) throws IOException
