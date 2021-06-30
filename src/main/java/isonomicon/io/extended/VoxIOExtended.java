@@ -118,13 +118,12 @@ public class VoxIOExtended {
                         for (int i = 0; i < numVoxels; i++) {
                             voxelData[stream.read() + offX][stream.read() + offY][stream.read()] = stream.readByte();
                         }
-                    } else if(chunkName.equals("RGBA"))
-                    {
+                    } else if (chunkName.equals("RGBA")) {
                         for (int i = 1; i < 256; i++) {
                             lastPalette[i] = Integer.reverseBytes(stream.readInt());
                         }
                         stream.readInt();
-                    } else if(chunkName.equals("MATL")){ // remove this block if you don't handle materials
+                    } else if (chunkName.equals("MATL")) { // remove this block if you don't handle materials
                         int materialID = stream.readInt();
                         int dictSize = stream.readInt();
                         for (int i = 0; i < dictSize; i++) {
@@ -138,8 +137,7 @@ public class VoxIOExtended {
                             else
                                 vm.putTrait(new String(key, 0, keyLen, StandardCharsets.ISO_8859_1), Float.parseFloat(new String(val, 0, valLen, StandardCharsets.ISO_8859_1)));
                         }
-                    }
-                    else if(chunkName.equals("nTRN")) {
+                    } else if (chunkName.equals("nTRN")) {
                         int chunkID = stream.readInt();
                         String[][] attributes = readStringPairs(stream);
                         int childID = stream.readInt();
@@ -152,8 +150,19 @@ public class VoxIOExtended {
                         }
                         //TODO: NEED TO STORE THIS CHUNK SOMEWHERE
                         new TransformChunk(chunkID, attributes, childID, reservedID, layerID, frames);
-                    }
-                else stream.skipBytes(chunkSize);   // read any excess bytes
+                    } else if (chunkName.equals("nGRP")) {
+                        int chunkID = stream.readInt();
+                        String[][] attributes = readStringPairs(stream);
+                        int childCount = stream.readInt();
+                        int[] childIds = new int[childCount];
+                        for (int i = 0; i < childCount; i++) {
+                            try {
+                                childIds[i] = Integer.parseInt(readString(stream));
+                            } catch (Exception ignored) {}
+                        }
+                        //TODO: NEED TO STORE THIS CHUNK SOMEWHERE
+                        new GroupChunk(chunkID, attributes, childIds);
+                    } else stream.skipBytes(chunkSize);   // read any excess bytes
                 }
 
             }
