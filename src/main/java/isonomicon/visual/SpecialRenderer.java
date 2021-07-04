@@ -30,7 +30,7 @@ public class SpecialRenderer {
     public boolean outline = true;
     public boolean variance = true;
     public int size;
-    public int shrink = 1;
+    public int shrink = 2;
     public float neutral = 1f;
 
     public static final FastNoise noise = new FastNoise(0x1337BEEF, 0.0125f, FastNoise.SIMPLEX_FRACTAL, 2);

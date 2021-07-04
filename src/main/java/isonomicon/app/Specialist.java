@@ -63,6 +63,7 @@ public class Specialist extends ApplicationAdapter {
 //            inputs = new String[]{"vox/Phantom_Wand.vox"};
 //            inputs = new String[]{"vox/Tree.vox"};
 //            inputs = new String[]{"vox/teapot.vox"};
+            inputs = new String[]{"vox/Figure.vox"};
             if(!new File("specialized/" + inputs[0]).exists()) {
                 System.out.println("File not found: specialized/" + inputs[0]);
                 System.exit(0);
@@ -150,8 +151,8 @@ public class Specialist extends ApplicationAdapter {
                 voxels = new byte[][][]{{{1}}};
                 return;
             }
-//            voxels = Tools3D.scaleAndSoak(voxels);
-            voxels = Tools3D.soak(voxels);
+            voxels = Tools3D.scaleAndSoak(voxels);
+//            voxels = Tools3D.soak(voxels);
             int nameStart = Math.max(name.lastIndexOf('/'), name.lastIndexOf('\\')) + 1;
             this.name = name.substring(nameStart, name.indexOf('.', nameStart));
 //            renderer = new NextRenderer(voxels.length, QUALITY);
