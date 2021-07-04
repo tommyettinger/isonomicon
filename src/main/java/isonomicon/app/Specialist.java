@@ -39,13 +39,14 @@ public class Specialist extends ApplicationAdapter {
         else 
         {
             System.out.println("INVALID ARGUMENTS. Please supply space-separated absolute paths to .vox models, or use the .bat file.");
-            inputs = new String[]{"vox/Box.vox", "vox/Eye_Tyrant.vox", "vox/Direction_Cube.vox", "vox/Infantry.vox", "vox/Infantry_Firing.vox", "vox/Materials.vox", "vox/Tree.vox", "vox/Simple.vox", "vox/teapot.vox"};
+            inputs = new String[]{"vox/Box.vox", "vox/Damned.vox", "vox/Lomuk.vox", "vox/Eye_Tyrant.vox", "vox/Direction_Cube.vox", "vox/Infantry.vox", "vox/Infantry_Firing.vox", "vox/Tree.vox", "vox/teapot.vox"};
 //            inputs = new String[]{"vox/Eye_Tyrant_Floor.vox", "vox/Eye_Tyrant.vox", "vox/Bear.vox", "vox/Infantry_Firing.vox", "vox/Lomuk.vox", "vox/Tree.vox"};
 //            inputs = new String[]{"vox/Eye_Tyrant.vox", "vox/Bear.vox", "vox/Infantry_Firing.vox", "vox/Tree.vox"};
 //            inputs = new String[]{"vox/Eye_Tyrant.vox", "vox/Infantry_Firing.vox", "vox/Lomuk.vox", "vox/Tree.vox", "vox/LAB.vox"};
 //            inputs = new String[]{"vox/Lomuk.vox", "vox/Tree.vox", "vox/Eye_Tyrant.vox", "vox/IPT.vox", "vox/LAB.vox"};
 //            inputs = new String[]{"vox/Infantry_Firing.vox"};
 //            inputs = new String[]{"vox/Infantry.vox"};
+//            inputs = new String[]{"vox/Materials.vox"};
 //            inputs = new String[]{"vox/IPT_No_Pow.vox"};
 //            inputs = new String[]{"vox/Box.vox", "vox/Direction_Cube.vox"};
 //            inputs = new String[]{"vox/IPT_Original.vox"};
@@ -60,7 +61,7 @@ public class Specialist extends ApplicationAdapter {
 //            inputs = new String[]{"vox/Lomuk.vox", "vox/Damned.vox"};
 //            inputs = new String[]{"vox/Damned.vox"};
 //            inputs = new String[]{"vox/Phantom_Wand.vox"};
-            inputs = new String[]{"vox/Tree.vox"};
+//            inputs = new String[]{"vox/Tree.vox"};
 //            inputs = new String[]{"vox/teapot.vox"};
             if(!new File("specialized/" + inputs[0]).exists()) {
                 System.out.println("File not found: specialized/" + inputs[0]);

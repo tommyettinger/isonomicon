@@ -78,7 +78,7 @@ public class VoxIO {
                     int chunkSize = stream.readInt();
                     //int childChunks = 
                     stream.readInt();
-                    String chunkName = new String(chunkId); // assumes default charset is compatible with ASCII
+                    String chunkName = new String(chunkId, StandardCharsets.ISO_8859_1);
 
                     // there are only 4 chunks we care about, and they are SIZE, XYZI, RGBA, and MATL
                     if (chunkName.equals("SIZE")) {
@@ -113,9 +113,9 @@ public class VoxIO {
                             stream.read(val, 0, valLen);
                             VoxMaterial vm;
                             if ((vm = lastMaterials.get(materialID)) == null)
-                                lastMaterials.put(materialID, new VoxMaterial(new String(val, 0, valLen, StandardCharsets.UTF_8)));
+                                lastMaterials.put(materialID, new VoxMaterial(new String(val, 0, valLen, StandardCharsets.ISO_8859_1)));
                             else
-                                vm.putTrait(new String(key, 0, keyLen, StandardCharsets.UTF_8), Float.parseFloat(new String(val, 0, valLen, StandardCharsets.UTF_8)));
+                                vm.putTrait(new String(key, 0, keyLen, StandardCharsets.ISO_8859_1), Float.parseFloat(new String(val, 0, valLen, StandardCharsets.ISO_8859_1)));
                         }
                     }
                     else stream.skipBytes(chunkSize);   // read any excess bytes
