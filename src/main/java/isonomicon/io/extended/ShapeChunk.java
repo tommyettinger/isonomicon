@@ -1,6 +1,9 @@
 package isonomicon.io.extended;
 
 public class ShapeChunk extends AbstractChunk {
+    /**
+     * Each ShapeModel's {@link ShapeModel#id} refers to a grid in {@link VoxModel#grids} by index.
+     */
     public ShapeModel[] models;
     public ShapeChunk(){
         attributes = new String[0][0];

@@ -114,7 +114,8 @@ public class PaletteDrafter extends ApplicationAdapter {
     @Override
     public void create() {
         font = new BitmapFont(Gdx.files.internal("font.fnt"));
-        workingPalette = new Pixmap(Gdx.files.internal("palettes/repeated-blocks.png"));
+//        workingPalette = new Pixmap(Gdx.files.internal("palettes/repeated-blocks.png"));
+        workingPalette = new Pixmap(Gdx.files.internal("palettes/edited/NaturalWoodAndLeaves.png"));
         workingOklab = new float[128];
         palettes = new Texture(workingPalette);
         preview = new Pixmap(16, 16, Pixmap.Format.RGBA8888);
@@ -376,9 +377,9 @@ public class PaletteDrafter extends ApplicationAdapter {
 
         batch.begin();
         batch.setPackedColor(Color.WHITE_FLOAT_BITS);
-        font.draw(batch, groups.keyAt(groupIndex), 32, 226, 128, Align.left, false);
-        font.draw(batch, Stuff.STUFFS[group[stuffIndex]].name, 0, 210, 256, Align.center, false);
-        batch.draw(previewTexture, 112, 150);
+        font.draw(batch, groups.keyAt(groupIndex), Gdx.graphics.getWidth() * 3 / 8, Gdx.graphics.getHeight() * 15 / 16, Gdx.graphics.getWidth() / 2, Align.left, false);
+        font.draw(batch, Stuff.STUFFS[group[stuffIndex]].name, 0, Gdx.graphics.getHeight() * 14 / 16, Gdx.graphics.getWidth(), Align.center, false);
+        batch.draw(previewTexture, Gdx.graphics.getWidth() / 2 - 8, Gdx.graphics.getHeight() / 2 + 16);
         batch.end();
     }
 
@@ -386,7 +387,7 @@ public class PaletteDrafter extends ApplicationAdapter {
     public static void main(String[] arg) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         config.setTitle("Isonomicon Test: Special Viewer");
-        config.setWindowedMode(256, 256);
+        config.setWindowedMode(400, 400);
         config.setIdleFPS(10);
         config.setForegroundFPS(12);
         config.useVsync(true);

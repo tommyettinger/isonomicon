@@ -38,17 +38,30 @@ public class VoxIOExtended {
         return pairs;
     }
 
-    public static byte getRotation(String[][] pairs){
+    public static void getRotation(TransformChunk chunk, String[][] pairs){
         for(String[] pair : pairs){
-            if("_r".equals(pair[0])){
+            if("_roll".equals(pair[0])){
                 try{
-                    return Byte.parseByte(pair[1]);
+                    chunk.roll = Float.parseFloat(pair[1]);
                 } catch (Exception ignored){
-                    return 4;
+                    return;
+                }
+            }
+            else if("_pitch".equals(pair[0])){
+                try{
+                    chunk.pitch = Float.parseFloat(pair[1]);
+                } catch (Exception ignored){
+                    return;
+                }
+            }
+            else if("_yaw".equals(pair[0])){
+                try{
+                    chunk.yaw = Float.parseFloat(pair[1]);
+                } catch (Exception ignored){
+                    return;
                 }
             }
         }
-        return 4;
     }
 
     public static void getTranslation(Vector3 result, String[][] pairs){
@@ -153,26 +166,26 @@ public class VoxIOExtended {
                             frames[i] = readStringPairs(stream);
                         }
                         model.transformChunks.add(new TransformChunk(chunkID, attributes, childID, reservedID, layerID, frames));
-//                    } else if (chunkName.equals("nGRP")) {
-//                        int chunkID = stream.readInt();
-//                        String[][] attributes = readStringPairs(stream);
-//                        int childCount = stream.readInt();
-//                        int[] childIds = new int[childCount];
-//                        for (int i = 0; i < childCount; i++) {
-//                            try {
-//                                childIds[i] = Integer.parseInt(readString(stream));
-//                            } catch (Exception ignored) {}
-//                        }
-//                        model.groupChunks.add(new GroupChunk(chunkID, attributes, childIds));
-//                    } else if (chunkName.equals("nSHP")) {
-//                        int chunkID = stream.readInt();
-//                        String[][] attributes = readStringPairs(stream);
-//                        int modelCount = stream.readInt();
-//                        ShapeModel[] models = new ShapeModel[modelCount];
-//                        for (int i = 0; i < modelCount; i++) {
-//                            models[i] = new ShapeModel(stream.readInt(), readStringPairs(stream));
-//                        }
-//                        model.shapeChunks.add(new ShapeChunk(chunkID, attributes, models));
+                    } else if (chunkName.equals("nGRP")) {
+                        int chunkID = stream.readInt();
+                        String[][] attributes = readStringPairs(stream);
+                        int childCount = stream.readInt();
+                        int[] childIds = new int[childCount];
+                        for (int i = 0; i < childCount; i++) {
+                            try {
+                                childIds[i] = Integer.parseInt(readString(stream));
+                            } catch (Exception ignored) {}
+                        }
+                        model.groupChunks.add(new GroupChunk(chunkID, attributes, childIds));
+                    } else if (chunkName.equals("nSHP")) {
+                        int chunkID = stream.readInt();
+                        String[][] attributes = readStringPairs(stream);
+                        int modelCount = stream.readInt();
+                        ShapeModel[] models = new ShapeModel[modelCount];
+                        for (int i = 0; i < modelCount; i++) {
+                            models[i] = new ShapeModel(stream.readInt(), readStringPairs(stream));
+                        }
+                        model.shapeChunks.add(new ShapeChunk(chunkID, attributes, models));
                     } else stream.skipBytes(chunkSize);   // read any excess bytes
                 }
 

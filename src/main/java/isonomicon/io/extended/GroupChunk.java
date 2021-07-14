@@ -1,6 +1,9 @@
 package isonomicon.io.extended;
 
 public class GroupChunk extends AbstractChunk {
+    /**
+     * Each childId refers to a ShapeChunk, by index.
+     */
     public int[] childIds;
 
     public GroupChunk() {
