@@ -115,8 +115,6 @@ public class VoxIOExtended {
                     //int childChunks = 
                     stream.readInt();
                     String chunkName = new String(chunkId, StandardCharsets.ISO_8859_1);
-
-                    // there are only 4 chunks we care about, and they are SIZE, XYZI, RGBA, and MATL
                     if (chunkName.equals("SIZE")) {
                         sizeX = stream.readInt();
                         sizeY = stream.readInt();
@@ -173,7 +171,7 @@ public class VoxIOExtended {
                         int[] childIds = new int[childCount];
                         for (int i = 0; i < childCount; i++) {
                             try {
-                                childIds[i] = Integer.parseInt(readString(stream));
+                                childIds[i] = stream.readInt();
                             } catch (Exception ignored) {}
                         }
                         model.groupChunks.add(new GroupChunk(chunkID, attributes, childIds));
