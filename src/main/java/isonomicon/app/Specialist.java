@@ -63,7 +63,7 @@ public class Specialist extends ApplicationAdapter {
 //            inputs = new String[]{"vox/Phantom_Wand.vox"};
 //            inputs = new String[]{"vox/Tree.vox"};
 //            inputs = new String[]{"vox/teapot.vox"};
-            inputs = new String[]{"vox/Figure.vox"};
+//            inputs = new String[]{"vox/Figure.vox"};
             if(!new File("specialized/" + inputs[0]).exists()) {
                 System.out.println("File not found: specialized/" + inputs[0]);
                 System.exit(0);
@@ -82,8 +82,8 @@ public class Specialist extends ApplicationAdapter {
 //        apng = new AnimatedPNG();
         gif.setDitherAlgorithm(Dithered.DitherAlgorithm.SCATTER);
 //        png8.setDitherAlgorithm(Dithered.DitherAlgorithm.SCATTER);
-        gif.palette = new PaletteReducer();
-        gif.palette.setDitherStrength(0.625f);
+        gif.palette = new PaletteReducer(Coloring.MANOSSUS256);
+        gif.palette.setDitherStrength(0.5f);
 //        png8.palette = gif.palette;
         Gdx.files.local("out/vox").mkdirs();
         for (String s : inputs) {
