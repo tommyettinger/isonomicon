@@ -4,6 +4,7 @@ import com.badlogic.gdx.*;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3WindowAdapter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -28,8 +30,8 @@ import static com.badlogic.gdx.graphics.GL20.GL_TEXTURE0;
 import static com.badlogic.gdx.graphics.GL20.GL_TEXTURE1;
 
 public class RotationVisualizer extends ApplicationAdapter {
-    public static final int SCREEN_WIDTH = 800;//640;
-    public static final int SCREEN_HEIGHT = 800;//720;
+    public static final int SCREEN_WIDTH = 400;//640;
+    public static final int SCREEN_HEIGHT = 400;//720;
     public static final int VIRTUAL_WIDTH = SCREEN_WIDTH;
     public static final int VIRTUAL_HEIGHT = SCREEN_HEIGHT;
     protected SpriteBatch batch;
@@ -86,45 +88,36 @@ public class RotationVisualizer extends ApplicationAdapter {
         }
 //        model.setFrame((int)(TimeUtils.millis() >>> 7) & 15);
 //        boom.setFrame((int)(TimeUtils.millis() >>> 7) & 15);
-        buffer.begin();
-        
-        Gdx.gl.glClearColor(0.4f, 0.75f, 0.3f, 1f);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        
+//        buffer.begin();
+        ScreenUtils.clear(0.5f, 0.5f, 0.5f, 1f);
+
         worldView.apply();
         worldView.getCamera().position.set(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT / 2, 0);
         worldView.update(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         batch.setProjectionMatrix(worldView.getCamera().combined);
-        batch.begin();
-        batch.setShader(null);
+//        batch.begin();
+//        batch.setShader(null);
         renderer.drawSplats(voxels, yaw, pitch, roll, (int) (TimeUtils.millis() >>> 8 & 3), 0, 0, 0);
         pmTexture.draw(renderer.palettePixmap, 0, 0);
-        batch.draw(pmTexture,
-                0,
-                0);
+//        batch.draw(pmTexture,
+//                0,
+//                0);
         //batch.setColor(-0x1.fffffep126f); // white as a packed float, resets any color changes that the renderer made
-        batch.end();
-        buffer.end();
-        screenTexture = buffer.getColorBufferTexture();
-        screenTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
-        Gdx.gl.glClearColor(0, 0, 0, 1f);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        screenView.apply();
-        batch.setProjectionMatrix(screenView.getCamera().combined);
+//        batch.end();
+//        buffer.end();
+//        screenTexture = buffer.getColorBufferTexture();
+//        screenTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+//        screenView.apply();
+//        batch.setProjectionMatrix(screenView.getCamera().combined);
 
         batch.setShader(indexShader);
+        palettes.bind(1);
         batch.begin();
-//        Gdx.gl.glActiveTexture(GL_TEXTURE1);
-        palettes.bind(0);
 
-        indexShader.setUniformi("u_texPalette", 0);
-
-        Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
+        indexShader.setUniformi("u_texPalette", 1);
+        pmTexture.bind(0);
         batch.setColor(0f, 0.5f, 0.5f, 1f);
-
-        batch.draw(screenTexture, 0, 0);
-//        font.setColor(1f, 1f, 1f, 1f);
-//        font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, 20);
+        batch.draw(pmTexture, 0, pmTexture.getHeight(), pmTexture.getWidth(), -pmTexture.getHeight());
         batch.end();
     }
 
