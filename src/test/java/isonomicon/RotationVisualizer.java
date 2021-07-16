@@ -9,16 +9,23 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import isonomicon.io.LittleEndianDataInputStream;
 import isonomicon.io.VoxIO;
 import isonomicon.physical.Tools3D;
+import isonomicon.visual.Coloring;
+import isonomicon.visual.ShaderUtils;
 import isonomicon.visual.SpecialRenderer;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+
+import static com.badlogic.gdx.graphics.GL20.GL_TEXTURE0;
+import static com.badlogic.gdx.graphics.GL20.GL_TEXTURE1;
 
 public class RotationVisualizer extends ApplicationAdapter {
     public static final int SCREEN_WIDTH = 800;//640;
@@ -29,15 +36,19 @@ public class RotationVisualizer extends ApplicationAdapter {
     protected Viewport worldView;
     protected Viewport screenView;
     protected FrameBuffer buffer;
-    protected Texture screenTexture, pmTexture;
+    protected Texture screenTexture, pmTexture, palettes;
     private SpecialRenderer renderer;
+    private ShaderProgram indexShader;
     private byte[][][] voxels;
     private float saturation;
     public float yaw, pitch, roll;
     
     @Override
     public void create() {
+        palettes = new Texture("palettes/palettes.png");
         batch = new SpriteBatch();
+        indexShader = new ShaderProgram(ShaderUtils.stuffSelectVertex, ShaderUtils.stuffSelectFragment);
+        if (!indexShader.isCompiled()) throw new GdxRuntimeException("Error compiling shader: " + indexShader.getLog());
         saturation = 0f;
         worldView = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         screenView = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
@@ -85,22 +96,32 @@ public class RotationVisualizer extends ApplicationAdapter {
         worldView.update(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         batch.setProjectionMatrix(worldView.getCamera().combined);
         batch.begin();
-//        pmTexture.draw(renderer.drawSplatsHalf(voxels, 0f, (TimeUtils.millis() & 2047) * 0x1p-11f, 0f), 0, 0);
+        batch.setShader(null);
         renderer.drawSplats(voxels, yaw, pitch, roll, (int) (TimeUtils.millis() >>> 8 & 3), 0, 0, 0);
-        pmTexture.draw(renderer.pixmap, 0, 0);
+        pmTexture.draw(renderer.palettePixmap, 0, 0);
         batch.draw(pmTexture,
                 0,
                 0);
         //batch.setColor(-0x1.fffffep126f); // white as a packed float, resets any color changes that the renderer made
         batch.end();
         buffer.end();
+        screenTexture = buffer.getColorBufferTexture();
+        screenTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         Gdx.gl.glClearColor(0, 0, 0, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         screenView.apply();
         batch.setProjectionMatrix(screenView.getCamera().combined);
+
+        batch.setShader(indexShader);
         batch.begin();
-        screenTexture = buffer.getColorBufferTexture();
-        screenTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+//        Gdx.gl.glActiveTexture(GL_TEXTURE1);
+        palettes.bind(0);
+
+        indexShader.setUniformi("u_texPalette", 0);
+
+        Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
+        batch.setColor(0f, 0.5f, 0.5f, 1f);
+
         batch.draw(screenTexture, 0, 0);
 //        font.setColor(1f, 1f, 1f, 1f);
 //        font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, 20);
@@ -172,7 +193,7 @@ public class RotationVisualizer extends ApplicationAdapter {
 //            Tools3D.translateCopyInto(v, voxels, v.length >> 2, v.length >> 2, v.length >> 2);
             voxels = v;
             renderer = new SpecialRenderer(voxels.length);
-            renderer.palette(VoxIO.lastPalette);
+            renderer.palette(Coloring.MANOS64);
         } catch (FileNotFoundException e) {
             voxels = new byte[][][]{{{1}}};
         }
