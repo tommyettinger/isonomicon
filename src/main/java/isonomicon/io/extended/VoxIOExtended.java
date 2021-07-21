@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.IntFloatMap;
 import com.badlogic.gdx.utils.IntMap;
 import isonomicon.io.LittleEndianDataInputStream;
+import isonomicon.physical.Tools3D;
 import isonomicon.physical.VoxMaterial;
 import squidpony.StringKit;
 
@@ -123,7 +124,6 @@ public class VoxIOExtended {
                         offX = size - sizeX >> 1;
                         offY = size - sizeY >> 1;
                         voxelData = new byte[size][size][size];
-                        model.grids.add(voxelData);
                         stream.skipBytes(chunkSize - 4 * 3);
                     } else if (chunkName.equals("XYZI") && voxelData != null) {
                         // XYZI contains n voxels
@@ -132,6 +132,7 @@ public class VoxIOExtended {
                         for (int i = 0; i < numVoxels; i++) {
                             voxelData[stream.read() + offX][stream.read() + offY][stream.read()] = stream.readByte();
                         }
+                        model.grids.add(Tools3D.soak(voxelData));
                     } else if (chunkName.equals("RGBA")) {
                         for (int i = 1; i < 256; i++) {
                             lastPalette[i] = Integer.reverseBytes(stream.readInt());
