@@ -163,7 +163,7 @@ public class VoxIOExtended {
                         for (int i = 0; i < frameCount; i++) {
                             frames[i] = readStringPairs(stream);
                         }
-                        model.transformChunks.add(new TransformChunk(chunkID, attributes, childID, reservedID, layerID, frames));
+                        model.transformChunks.put(chunkID, new TransformChunk(chunkID, attributes, childID, reservedID, layerID, frames));
                     } else if (chunkName.equals("nGRP")) {
                         int chunkID = stream.readInt();
                         String[][] attributes = readStringPairs(stream);
@@ -174,7 +174,7 @@ public class VoxIOExtended {
                                 childIds[i] = stream.readInt();
                             } catch (Exception ignored) {}
                         }
-                        model.groupChunks.add(new GroupChunk(chunkID, attributes, childIds));
+                        model.groupChunks.put(chunkID, new GroupChunk(chunkID, attributes, childIds));
                     } else if (chunkName.equals("nSHP")) {
                         int chunkID = stream.readInt();
                         String[][] attributes = readStringPairs(stream);
@@ -183,7 +183,7 @@ public class VoxIOExtended {
                         for (int i = 0; i < modelCount; i++) {
                             models[i] = new ShapeModel(stream.readInt(), readStringPairs(stream));
                         }
-                        model.shapeChunks.add(new ShapeChunk(chunkID, attributes, models));
+                        model.shapeChunks.put(chunkID, new ShapeChunk(chunkID, attributes, models));
                     } else stream.skipBytes(chunkSize);   // read any excess bytes
                 }
 
