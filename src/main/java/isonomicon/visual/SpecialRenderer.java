@@ -4,6 +4,10 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.math.MathUtils;
 import com.github.tommyettinger.anim8.PaletteReducer;
 import com.github.tommyettinger.colorful.oklab.ColorTools;
+import isonomicon.io.extended.GroupChunk;
+import isonomicon.io.extended.ShapeModel;
+import isonomicon.io.extended.TransformChunk;
+import isonomicon.io.extended.VoxModel;
 import isonomicon.physical.Stuff;
 import isonomicon.physical.Tools3D;
 import isonomicon.physical.VoxMaterial;
@@ -468,8 +472,8 @@ public class SpecialRenderer {
         }
         return blit(angleTurns, frame);
     }
-    public Pixmap drawSplats(byte[][][] colors, float yaw, float pitch, float roll, int frame,
-                             float translateX, float translateY, float translateZ) {
+    public void splatOnly(byte[][][] colors, float yaw, float pitch, float roll, int frame,
+                          float translateX, float translateY, float translateZ) {
         final int size = colors.length;
         final float hs = size * 0.5f;
         float ox, oy, oz; // offset x,y,z
@@ -495,7 +499,27 @@ public class SpecialRenderer {
                 }
             }
         }
+    }
+
+    public Pixmap drawSplats(byte[][][] colors, float yaw, float pitch, float roll, int frame,
+                             float translateX, float translateY, float translateZ) {
+        splatOnly(colors, yaw, pitch, roll, frame, translateX, translateY, translateZ);
         return blit(yaw, pitch, roll, frame);
     }
 
+    public Pixmap drawModel(VoxModel model, float yaw, float pitch, float roll, int frame,
+                            float translateX, float translateY, float translateZ){
+        for(GroupChunk gc : model.groupChunks.values()) {
+            for(int ch : gc.childIds) {
+                TransformChunk tc = model.transformChunks.get(ch);
+                if (tc != null) {
+                    for (ShapeModel sm : model.shapeChunks.get(tc.childId).models) {
+                        byte[][][] g = model.grids.get(sm.id);
+                        splatOnly(g, yaw, pitch, roll, frame, translateX, translateY, translateZ);
+                    }
+                }
+            }
+        }
+        return blit(yaw, pitch, roll, frame);
+    }
 }

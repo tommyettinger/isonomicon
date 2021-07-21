@@ -43,11 +43,15 @@ public class VoxModelCheck extends ApplicationAdapter {
                     System.out.println(sm.id + " hash: " + Tools3D.hash64(model.grids.get(sm.id)));
             }
             System.out.println();
-            for(int ch : model.groupChunks.values().iterator().next().childIds) {
-                for (ShapeModel sm : model.shapeChunks.get(model.transformChunks.get(ch).childId).models) {
-                    byte[][][] g = model.grids.get(sm.id);
-                    System.out.println(sm.id + ": " + Tools3D.countNot(g, 0));
-                    System.out.println(sm.id + " hash: " + Tools3D.hash64(g));
+            for(GroupChunk gc : model.groupChunks.values()) {
+                for(int ch : gc.childIds) {
+                    TransformChunk tc = model.transformChunks.get(ch);
+                    if(tc != null)
+                    for (ShapeModel sm : model.shapeChunks.get(tc.childId).models) {
+                        byte[][][] g = model.grids.get(sm.id);
+                        System.out.println(sm.id + ": " + Tools3D.countNot(g, 0));
+                        System.out.println(sm.id + " hash: " + Tools3D.hash64(g));
+                    }
                 }
             }
             System.out.println();
