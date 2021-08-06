@@ -128,11 +128,40 @@ public class VoxIOExtended {
                     } else if (chunkName.equals("XYZI") && voxelData != null) {
                         // XYZI contains n voxels
                         int numVoxels = stream.readInt();
+                        IntMap<float[]> linkage = new IntMap<>(8);
                         // each voxel has x, y, z and color index values
                         for (int i = 0; i < numVoxels; i++) {
-                            voxelData[stream.read() + offX][stream.read() + offY][stream.read()] = stream.readByte();
+                            int x = stream.read() + offX;
+                            int y = stream.read() + offY;
+                            int z = stream.read();
+                            byte color = stream.readByte();
+                            //If you are using this as a general .vox parser, use the following one line:
+                            //voxelData[x][y][z] = color;
+                            //If you are using this as Isonomicon's special parser, use the following if/else:
+                            if((color & 0xC0) != 0xC0) // The last 64 indices are used for link markers, and don't show.
+                                voxelData[x][y][z] = color;
+                            else {
+                                float[] ln;
+                                if((ln = linkage.get(color)) == null){
+                                    ln = new float[]{x, y, z, 1f};
+                                }
+                                else {
+                                    ln[0] += x;
+                                    ln[1] += y;
+                                    ln[2] += z;
+                                    ln[3]++;
+                                }
+                                linkage.put(color, ln);
+                            }
                         }
                         model.grids.add(Tools3D.soak(voxelData));
+                        for(IntMap.Entry<float[]> e : linkage){
+                            float div = e.value[3];
+                            e.value[0] /= div;
+                            e.value[1] /= div;
+                            e.value[2] /= div;
+                        }
+                        model.links.add(linkage);
                     } else if (chunkName.equals("RGBA")) {
                         for (int i = 1; i < 256; i++) {
                             lastPalette[i] = Integer.reverseBytes(stream.readInt());
