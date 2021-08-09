@@ -24,6 +24,7 @@ import static squidpony.ArrayTools.fill;
  * unusual technique that stores a palette index in the R channel and a lightness adjustment in the G channel.
  */
 public class SpecialRenderer {
+    public final Stuff[] stuffs;
     public Pixmap pixmap, palettePixmap;
     public int[][] depths, voxels, render, outlines;
     public VoxMaterial[][] materials;
@@ -40,9 +41,12 @@ public class SpecialRenderer {
     public static final FastNoise noise = new FastNoise(0x1337BEEF, 0.0125f, FastNoise.SIMPLEX_FRACTAL, 2);
 
     protected SpecialRenderer() {
-
+        this(64);
     }
     public SpecialRenderer(final int size) {
+        this(size, Stuff.STUFFS);
+    }
+    public SpecialRenderer(final int size, Stuff[] stuffs) {
         this.size = size;
         final int w = size * 4 + 4, h = size * 5 + 4;
         pixmap = new Pixmap(w>>>shrink, h>>>shrink, Pixmap.Format.RGBA8888);
@@ -62,6 +66,7 @@ public class SpecialRenderer {
         colorL = fill(-1f, w, h);
         colorA = fill(-1f, w, h);
         colorB = fill(-1f, w, h);
+        this.stuffs = stuffs;
     }
     
     protected float bn(int x, int y, int seed) {
@@ -131,7 +136,7 @@ public class SpecialRenderer {
         if(xPos <= -1f || yPos <= -1f || zPos <= -1f
                 || xPos >= size * 2 || yPos >= size * 2 || zPos >= size * 2)
             return;
-        final Stuff stuff = Stuff.STUFFS[voxel & 127];
+        final Stuff stuff = stuffs[voxel & 127];
         final VoxMaterial m = stuff.material;
         if(Tools3D.randomizePointRare(vx, vy, vz, frame) < m.getTrait(VoxMaterial.MaterialTrait._metal))
             return;
