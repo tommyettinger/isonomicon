@@ -216,18 +216,18 @@ public class Stuff {
             new Stuff("dull metal", 4, 4, 32L, "Metal", "Reflection 0.15 Roughness 0.8"),
             new Stuff("scratched metal", 5, 5, 2L, "Metal", "Reflection 0.5 Roughness 0.65"),
             new Stuff("polished metal", 6, 6, 1L, "Metal", "Reflection 0.8 Roughness 0.2", 101, 1, 7, 16),
-            new Stuff("cloud", 7, 0, 256L, "Cloud", "Roughness 0.9 Reflection 0.25 Missing 0.06 Flow 0.5"), /*white*/
+            new Stuff("cloud", 7, 0, 256L, "Cloud", "Roughness 0.9 Reflection 0.1 Missing 0.06 Flow 0.5"), /*white*/
+            new Stuff("sickly leaf", 8, 8, 2L, "Roughness 0.2 Reflection 0.25 Vary -0.35"), /*light lime*/
+            new Stuff("unripe fruit", 9, 9, 512L, "Roughness 0.6 Reflection 0.3 Dapple -0.1"),
+            new Stuff("poisonous liquid", 10, 10, 8L, "Roughness 0.5 Reflection 0.7 Flow 0.6"),
+            new Stuff("mold", 11, 0, 8L, "Roughness 0.9 Reflection 0.0 Vary -0.5"), /*dark lime*/
+            new Stuff("moss", 12, 12, 12L, "Roughness 0.9 Reflection 0.03"), /*dark green*/
+            new Stuff("cactus plant", 13, 11, 12L, "Roughness 0.4 Reflection 0.2"),
+            new Stuff("matte leaf", 14, 14, 0L, "Roughness 0.4 Reflection 0.05 Dapple -0.35"),
+            new Stuff("glossy leaf", 15, 15, 512L, "Roughness 0.1 Reflection 0.85 Dapple -0.1"),
+            new Stuff("succulent plant", 16, 16, 512L, "Roughness 0.8 Reflection 0.04"),
+            new Stuff("gas", 17, 17, 4L, "Roughness 0.65 Reflection 0.0 Flow 0.4 Rise 0.1"), /*light green*/
             //done up to here
-            new Stuff("cut stone", 8, 8, 2L, "Reflection 0.3 Roughness 0.45"), /*light lime*/
-            new Stuff("downy feather", 9, 10, 512L, "Roughness 0.95 Reflection 0.15"),
-            new Stuff("bone", 10, 10, 8L, "Roughness 0.4 Reflection 0.4"),
-            new Stuff("blood", 11, 0, 8L, "Roughness 0.04 Reflection 0.6"), /*dark lime*/
-            new Stuff("guts", 12, 12, 12L, "Roughness 0.4 Reflection 0.2"), /*dark green*/
-            new Stuff("meat", 13, 11, 12L, "Roughness 0.5 Reflection 0.1"),
-            new Stuff("brick", 14, 14, 0L, "Roughness 0.8 Reflection 0.02"),
-            new Stuff("base hair", 15, 15, 512L, "Roughness 0.4 Reflection 0.3"),
-            new Stuff("accented hair", 16, 16, 512L, "Roughness 0.3 Reflection 0.6"),
-            new Stuff("base fur", 17, 17, 4L, "Roughness 0.5 Reflection 0.45"), /*light green*/
             new Stuff("polished wood", 18, 18, 32L, "Roughness 0.3 Reflection 0.7 Dapple -0.2"), /*light cyan*/
             new Stuff("flush skin", 19, 19, 4L, "Roughness 0.4 Reflection 0.08"),
             new Stuff("ripe fruit", 20, 20, 32L, "Roughness 0.2 Reflection 0.55"), /*dark cyan*/
@@ -249,11 +249,11 @@ public class Stuff {
             new Stuff("gas", 36, 0, 256L, "Roughness 0.25 Reflection 0.0 Flow 0.4 Rise 0.1"),
             new Stuff("dull protection", 37, 37, 64L, "Roughness 0.55 Reflection 0.4"),
             new Stuff("accented protection", 38, 38, 64L, "Roughness 0.45 Reflection 0.6"), /*dark purple*/
-            new Stuff("slow water", 39, 0, -1L, "Roughness 0.1 Reflection 0.8 Missing 0.05"), /*burgundy*/
+            new Stuff("slow water", 39, 0, -1L, "Roughness 0.1 Reflection 0.8"), /*burgundy*/
             new Stuff("shining marks", 40, 40, 64L, "Roughness 0.25 Reflection 0.9"), /*medium magenta*/
             new Stuff("ice", 41, 41, -1L, "Roughness 0.05 Reflection 0.95"),
             new Stuff("accented marks", 42, 42, 64L, "Roughness 0.45 Reflection 0.8"),
-            new Stuff("fast water", 43, 0, -1L, "Roughness 0.2 Reflection 0.75 Missing 0.15 Flow 0.7"), /*light pink*/
+            new Stuff("fast water", 43, 0, -1L, "Roughness 0.2 Reflection 0.75 Flow 0.7"), /*light pink*/
             new Stuff("base marks", 44, 44, 64L, "Roughness 0.5 Reflection 0.65"), /*light tan*/
             new Stuff("base protection", 45, 45, 64L, "Roughness 0.5 Reflection 0.55"),
             new Stuff("less obscured", 46, 46, -1L, "Roughness 0.4 Reflection 0.0"),
@@ -272,8 +272,8 @@ public class Stuff {
             new Stuff("magic mark", 59, 0, 2L, "Roughness 0.25 Reflection 0.65 Emission 0.3"),
             new Stuff("accented feather", 60, 60, 512L, "Roughness 0.7 Reflection 0.4"), /*medium brown*/
             new Stuff("decorated cloth", 61, 61, 24L, "Roughness 0.6 Reflection 0.4"), /*dark yellow*/
-            new Stuff("attachment", 62, 62, 128L, "Roughness 0.4 Reflection 0.3"),
-            new Stuff("beak or claw", 63, 63, 64L, "Roughness 0.6 Reflection 0.45"), /*light yellow*/
+            new Stuff("ripe fruit", 62, 62, 128L, "Roughness 0.2 Reflection 0.55 Dapple -0.2"),
+            new Stuff("bone beak claw", 63, 63, 64L, "Roughness 0.4 Reflection 0.4"), /*light yellow*/
 
             new Stuff("dark glass", 64, 69, 0L, "Transparency 0.3 Roughness 0.0 Reflection 0.4"),
             new Stuff("dark eye", 65, 65, 0L, "Roughness 0.0 Reflection 0.0"),
