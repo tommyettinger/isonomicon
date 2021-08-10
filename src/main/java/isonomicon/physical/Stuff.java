@@ -210,14 +210,15 @@ public class Stuff {
      */
     public static final Stuff[] STUFFS_B = new Stuff[]{
             new Stuff("transparent", 0, 0, 0L, "Glass", "Transparency 1.0"),
-            new Stuff("dull metal", 1, 1, 1L, "Metal", "Reflection 0.2, Roughness 0.2"), /*black*/
-            new Stuff("char", 2, 2, -1L, "Reflection 0.0"),
-            new Stuff("wet dirt", 3, 3, -1L, "Reflection 0.05 Roughness 0.1"),
-            new Stuff("dry dirt", 4, 4, 32L, "Reflection 0.0 Roughness 0.85 Dapple -0.05"),
-            new Stuff("natural stone", 5, 5, 2L, "Reflection 0.15 Roughness 0.7"),
-            new Stuff("cut stone", 6, 6, 2L, "Reflection 0.3 Roughness 0.45"),
-            new Stuff("polished metal", 7, 7, 1L, "Metal", "Reflection 0.8 Roughness 0.2", 101, 1, 7, 16), /*white*/
-            new Stuff("cloud", 8, 0, 256L, "Cloud", "Roughness 0.9 Reflection 0.25 Missing 0.06"), /*light lime*/
+            new Stuff("glossy leather", 1, 1, 1L, "Reflection 0.7, Roughness 0.05"), /*black*/
+            new Stuff("matte leather", 2, 2, -1L, "Reflection 0.05 Roughness 0.6"),
+            new Stuff("rusted metal", 3, 3, -1L, "Metal", "Reflection 0.04 Roughness 0.4 Vary -0.4"),
+            new Stuff("dull metal", 4, 4, 32L, "Metal", "Reflection 0.15 Roughness 0.8"),
+            new Stuff("scratched metal", 5, 5, 2L, "Metal", "Reflection 0.5 Roughness 0.65"),
+            new Stuff("polished metal", 6, 6, 1L, "Metal", "Reflection 0.8 Roughness 0.2", 101, 1, 7, 16),
+            new Stuff("cloud", 7, 0, 256L, "Cloud", "Roughness 0.9 Reflection 0.25 Missing 0.06 Flow 0.5"), /*white*/
+            //done up to here
+            new Stuff("cut stone", 8, 8, 2L, "Reflection 0.3 Roughness 0.45"), /*light lime*/
             new Stuff("downy feather", 9, 10, 512L, "Roughness 0.95 Reflection 0.15"),
             new Stuff("bone", 10, 10, 8L, "Roughness 0.4 Reflection 0.4"),
             new Stuff("blood", 11, 0, 8L, "Roughness 0.04 Reflection 0.6"), /*dark lime*/
