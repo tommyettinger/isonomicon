@@ -235,15 +235,15 @@ public class Stuff {
             new Stuff("fast water", 23, 23, 24L, "Roughness 0.2 Reflection 0.75 Flow 0.7"),
             new Stuff("wet stone", 24, 24, 0L, "Roughness 0.5 Reflection 0.2"),
             new Stuff("ice", 25, 25, 512L, "Roughness 0.05 Reflection 0.95"), /*light azure*/
+            new Stuff("shining mark", 26, 26, 32L, "Roughness 0.25 Reflection 0.9"), /*light blue*/
+            new Stuff("accented mark", 27, 27, 4L, "Roughness 0.4 Reflection 0.5"),
+            new Stuff("bold mark", 28, 28, 4L, "Roughness 0.4 Reflection 0.5"),
+            new Stuff("deep mark", 29, 29, -1L, "Roughness 0.4 Reflection 0.5"), /*dark blue*/
+            new Stuff("coal", 30, 30, -1L, "Roughness 0.1 Reflection 0.0"), /*dark violet*/
+            new Stuff("ore", 31, 31, -1L, "Roughness 0.7 Reflection 0.1 Vary -0.3 Dapple 0.1"),
+            new Stuff("raw stone", 32, 32, 32L, "Roughness 0.55 Reflection 0.15 Vary -0.1"),
+            new Stuff("worked stone", 33, 33, 32L, "Roughness 0.25 Reflection 0.2"),
             //done up to here
-            new Stuff("unripe fruit", 26, 26, 32L, "Roughness 0.6 Reflection 0.3"), /*light blue*/
-            new Stuff("base scales", 27, 27, 4L, "Roughness 0.05 Reflection 0.55"),
-            new Stuff("accented scales", 28, 28, 4L, "Roughness 0.05 Reflection 0.65"),
-            new Stuff("mold", 29, 29, -1L, "Roughness 0.85 Reflection 0.01"), /*dark blue*/
-            new Stuff("mud", 30, 30, -1L, "Roughness 0.7 Reflection 0.1"), /*dark violet*/
-            new Stuff("acid", 31, 31, -1L, "Roughness 0.2 Reflection 0.4 Missing 0.15"),
-            new Stuff("vibrant leaf", 32, 32, 32L, "Roughness 0.1 Reflection 0.85 Dapple -0.3"),
-            new Stuff("moss", 33, 33, 32L, "Roughness 0.9 Reflection 0.03"),
             new Stuff("fine scales", 34, 34, 4L, "Roughness 0.15 Reflection 0.4"), /*light violet*/
             new Stuff("old leaf", 35, 35, 32L, "Roughness 0.2 Reflection 0.25 Vary -0.3"), /*light purple*/
             new Stuff("gas", 36, 0, 256L, "Roughness 0.25 Reflection 0.0 Flow 0.4 Rise 0.1"),
