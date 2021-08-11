@@ -216,7 +216,7 @@ public class Stuff {
             new Stuff("dull metal", 4, 4, 32L, "Metal", "Reflection 0.15 Roughness 0.8"),
             new Stuff("scratched metal", 5, 5, 2L, "Metal", "Reflection 0.5 Roughness 0.65"),
             new Stuff("polished metal", 6, 6, 1L, "Metal", "Reflection 0.8 Roughness 0.2", 101, 1, 7, 16),
-            new Stuff("cloud", 7, 0, 256L, "Cloud", "Roughness 0.9 Reflection 0.1 Missing 0.06 Flow 0.5"), /*white*/
+            new Stuff("snow", 7, 0, 256L, "Roughness 0.9 Reflection 0.4"), /*white*/
             new Stuff("sickly leaf", 8, 8, 2L, "Roughness 0.2 Reflection 0.25 Vary -0.35"), /*light lime*/
             new Stuff("unripe fruit", 9, 9, 512L, "Roughness 0.6 Reflection 0.3 Dapple -0.1"),
             new Stuff("poisonous liquid", 10, 10, 8L, "Roughness 0.5 Reflection 0.7 Flow 0.6"),
@@ -227,15 +227,15 @@ public class Stuff {
             new Stuff("glossy leaf", 15, 15, 512L, "Roughness 0.1 Reflection 0.85 Dapple -0.1"),
             new Stuff("succulent plant", 16, 16, 512L, "Roughness 0.8 Reflection 0.04"),
             new Stuff("gas", 17, 17, 4L, "Roughness 0.65 Reflection 0.0 Flow 0.4 Rise 0.1"), /*light green*/
+            new Stuff("fine scales", 18, 18, 32L, "Roughness 0.15 Reflection 0.4"), /*light cyan*/
+            new Stuff("base scales", 19, 19, 4L, "Roughness 0.05 Reflection 0.55"),
+            new Stuff("accented scales", 20, 20, 32L, "Roughness 0.05 Reflection 0.65"), /*dark cyan*/
+            new Stuff("deep water", 21, 21, 4L, "Roughness 0.3 Reflection 0.5"), /*dark azure*/
+            new Stuff("slow water", 22, 22, 32L, "Roughness 0.1 Reflection 0.8 Flow 0.1"),
+            new Stuff("fast water", 23, 23, 24L, "Roughness 0.2 Reflection 0.75 Flow 0.7"),
+            new Stuff("wet stone", 24, 24, 0L, "Roughness 0.5 Reflection 0.2"),
+            new Stuff("ice", 25, 25, 512L, "Roughness 0.05 Reflection 0.95"), /*light azure*/
             //done up to here
-            new Stuff("polished wood", 18, 18, 32L, "Roughness 0.3 Reflection 0.7 Dapple -0.2"), /*light cyan*/
-            new Stuff("flush skin", 19, 19, 4L, "Roughness 0.4 Reflection 0.08"),
-            new Stuff("ripe fruit", 20, 20, 32L, "Roughness 0.2 Reflection 0.55"), /*dark cyan*/
-            new Stuff("base skin", 21, 21, 4L, "Roughness 0.4 Reflection 0.08"), /*dark azure*/
-            new Stuff("rough wood", 22, 22, 32L, "Roughness 0.7 Reflection 0.04 Dapple 0.1 Vary -0.05"),
-            new Stuff("base cloth", 23, 23, 24L, "Roughness 0.6 Reflection 0.04"),
-            new Stuff("ceramic", 24, 24, 0L, "Roughness 0.2 Reflection 0.45"),
-            new Stuff("dull feathers", 25, 25, 512L, "Roughness 0.9 Reflection 0.02"), /*light azure*/
             new Stuff("unripe fruit", 26, 26, 32L, "Roughness 0.6 Reflection 0.3"), /*light blue*/
             new Stuff("base scales", 27, 27, 4L, "Roughness 0.05 Reflection 0.55"),
             new Stuff("accented scales", 28, 28, 4L, "Roughness 0.05 Reflection 0.65"),
