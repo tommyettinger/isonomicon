@@ -18,6 +18,7 @@ import isonomicon.physical.VoxMaterial;
 import isonomicon.visual.SmudgeRenderer;
 import squidpony.squidmath.FastNoise;
 import squidpony.squidmath.FlawedPointHash;
+import squidpony.squidmath.IPointHash;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -30,6 +31,7 @@ public class NoiseRenderer extends ApplicationAdapter {
     public static final int SCREEN_HEIGHT = 512;//720;
     private SmudgeRenderer renderer;
     private FastNoise noise;
+    private byte[][][] tempVoxels = new byte[64][64][64];
     private byte[][][] voxels = new byte[128][128][128];
     private String name;
     private PixmapIO.PNG png;
@@ -43,7 +45,7 @@ public class NoiseRenderer extends ApplicationAdapter {
         System.out.println("Setting up...");
         noise = new FastNoise(1234567, 0x1p-3f, FastNoise.CUBIC_FRACTAL, 1);
         noise.setFractalType(FastNoise.RIDGED_MULTI);
-        noise.setPointHash(new FlawedPointHash.CubeHash(123, 16));
+        noise.setPointHash(new CubeHash(123, 8));
         long startTime = TimeUtils.millis();
 //        Gdx.files.local("out/vox/").mkdirs();
         png = new PixmapIO.PNG();
@@ -58,7 +60,7 @@ public class NoiseRenderer extends ApplicationAdapter {
 //        png8.palette = gif.palette;
         Gdx.files.local("out/vox").mkdirs();
         System.out.println("Loading...");
-        System.out.println("Produced 128x128x128 noise.");
+        System.out.println("Produced 64x64x64 noise.");
 //            VoxIO.writeVOX("out/" + s, voxels, renderer.palette, VoxIO.lastMaterials);
 //            load("out/"+s);
         Pixmap pixmap;
@@ -112,16 +114,18 @@ public class NoiseRenderer extends ApplicationAdapter {
 
     public void load(int frame) {
         int sum = 0;
-        for (int x = 0; x < voxels.length; x++) {
-            for (int y = 0; y < voxels[0].length; y++) {
-                for (int z = 0; z < voxels[0][0].length; z++) {
-                    sum += (voxels[x][y][z] = (byte) (~(Float.floatToRawIntBits(noise.getConfiguredNoise(x, y, z, frame) - 0.875f) >> 31) & 81)); // gray-green
-//                    sum += (voxels[x][y][z] = (byte) (~(Float.floatToRawIntBits(noise.getConfiguredNoise(x, y, z, frame) - 0.875f) >> 31) & 44)); // gray
+        for (int x = 0; x < tempVoxels.length; x++) {
+            for (int y = 0; y < tempVoxels[0].length; y++) {
+                for (int z = 0; z < tempVoxels[0][0].length; z++) {
+//                    sum += (tempVoxels[x][y][z] = (byte) ((Float.floatToRawIntBits(noise.getConfiguredNoise(x, y, z, frame)) >> 31) & 81)); // gray-green
+//                    sum += (tempVoxels[x][y][z] = (byte) (~(Float.floatToRawIntBits(noise.getConfiguredNoise(x, y, z, frame) - 0.875f) >> 31) & 81)); // gray-green
+                    sum += (tempVoxels[x][y][z] = (byte) (~(Float.floatToRawIntBits(noise.getConfiguredNoise(x, y, z, frame) - 0.9f) >> 31) & 44)); // gray
                 }
             }
         }
         System.out.println(sum);
-        voxels = Tools3D.soak(voxels);
+        Tools3D.simpleScale(tempVoxels, voxels);
+        Tools3D.soakInPlace(voxels);
         this.name = "Noise";
         if(renderer == null) {
             for (int i = 1; i < 256; i++) {
@@ -132,4 +136,170 @@ public class NoiseRenderer extends ApplicationAdapter {
             renderer.saturation(0f);
         }
     }
+    public class CubeHash extends IPointHash.LongImpl implements FlawedPointHash {
+        private int size = 6;
+        private long mask = (1L << size) - 1L;
+        public CubeHash() {
+        }
+
+        public CubeHash(long state) {
+            super(state);
+        }
+
+        public CubeHash(long state, int size) {
+            super(state);
+            setSize(size);
+        }
+
+        public long getState() {
+            return state;
+        }
+
+        public int getSize() {
+            return 1 << size;
+        }
+
+        public void setSize(int size) {
+            this.size = 32 - Integer.numberOfLeadingZeros(Math.max(1, size));
+            mask = (1L << this.size) - 1L;
+        }
+
+        public long hashLongs(long x, long y, long s) {
+            x &= mask;
+            y &= mask;
+            x *= x * 0xC13FA9A902A6328FL;
+            y *= y * 0x91E10DA5C79E7B1DL;
+            x &= mask;
+            y &= mask;
+            long t;
+            if (x < y) {
+                t = x;
+                x = y;
+                y = t;
+            }
+            x = (x + 0x9E3779B97F4A7C15L ^ x) * (s + y);
+            y = (y + 0x9E3779B97F4A7C15L ^ y) * (x + s);
+            s = (s + 0x9E3779B97F4A7C15L ^ s) * (y + x);
+            return s;
+        }
+
+        public long hashLongs(long x, long y, long z, long s) {
+            x &= mask;
+            y &= mask;
+            z &= mask;
+            x *= x * 0xD1B54A32D192ED03L;
+            y *= y * 0xABC98388FB8FAC03L;
+            z *= z * 0x8CB92BA72F3D8DD7L;
+            x &= mask;
+            y &= mask;
+            z &= mask;
+            long t;
+            if (x < y) {
+                t = x;
+                x = y;
+                y = t;
+            }
+            if(x < z){
+                t = x;
+                x = z;
+                z = t;
+            }
+            if(y < z){
+                t = y;
+                y = z;
+                z = t;
+            }
+            x = (x + 0x9E3779B97F4A7C15L ^ x) * (s + z);
+            y = (y + 0x9E3779B97F4A7C15L ^ y) * (x + s);
+            z = (z + 0x9E3779B97F4A7C15L ^ z) * (y + x);
+            s = (s + 0x9E3779B97F4A7C15L ^ s) * (z + y);
+            return s;
+        }
+
+        public long hashLongs(long x, long y, long z, long w, long s) {
+            x &= mask;
+            y &= mask;
+            z &= mask;
+            w &= mask;
+            x *= x * 0xDB4F0B9175AE2165L;
+            y *= y * 0xBBE0563303A4615FL;
+            z *= z * 0xA0F2EC75A1FE1575L;
+            w *= w * 0x89E182857D9ED689L;
+            x &= mask;
+            y &= mask;
+            z &= mask;
+            w &= mask;
+            long t;
+            if (x < y) {
+                t = x;
+                x = y;
+                y = t;
+            }
+            if(x < z){
+                t = x;
+                x = z;
+                z = t;
+            }
+            if(x < w){
+                t = x;
+                x = w;
+                w = t;
+            }
+            if(y < z){
+                t = y;
+                y = z;
+                z = t;
+            }
+            if(y < w){
+                t = y;
+                y = w;
+                w = t;
+            }
+            if(z < w){
+                t = z;
+                z = w;
+                w = t;
+            }
+            x = (x + 0x9E3779B97F4A7C15L ^ x) * (s + w);
+            y = (y + 0x9E3779B97F4A7C15L ^ y) * (x + s);
+            z = (z + 0x9E3779B97F4A7C15L ^ z) * (y + x);
+            w = (w + 0x9E3779B97F4A7C15L ^ w) * (z + y);
+            s = (s + 0x9E3779B97F4A7C15L ^ s) * (w + z);
+            return s;
+        }
+
+        public long hashLongs(long x, long y, long z, long w, long u, long s) {
+            return hashLongs(x, hashLongs(y, hashLongs(z, hashLongs(w, u, s), s), s), s);
+        }
+
+        public long hashLongs(long x, long y, long z, long w, long u, long v, long s) {
+            return hashLongs(x, hashLongs(y, hashLongs(z, hashLongs(w, hashLongs(u, v, s), s), s), s), s);
+        }
+
+        @Override
+        public int hashWithState(int x, int y, int state) {
+            return (int)(hashLongs(x, y, state) >>> 32);
+        }
+
+        @Override
+        public int hashWithState(int x, int y, int z, int state) {
+            return (int)(hashLongs(x, y, z, state) >>> 32);
+        }
+
+        @Override
+        public int hashWithState(int x, int y, int z, int w, int state) {
+            return (int)(hashLongs(x, y, z, w, state) >>> 32);
+        }
+
+        @Override
+        public int hashWithState(int x, int y, int z, int w, int u, int state) {
+            return (int)(hashLongs(x, y, z, w, u, state) >>> 32);
+        }
+
+        @Override
+        public int hashWithState(int x, int y, int z, int w, int u, int v, int state) {
+            return (int)(hashLongs(x, y, z, w, u, v, state) >>> 32);
+        }
+    }
+
 }

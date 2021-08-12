@@ -378,12 +378,14 @@ public class Tools3D {
 
 
     public static byte[][][] simpleScale(byte[][][] voxels) {
+        return simpleScale(voxels, new byte[voxels.length][voxels[0].length][voxels[0][0].length]);
+    }
+    public static byte[][][] simpleScale(byte[][][] voxels, byte[][][] result) {
         final int limitX = voxels.length - 1;
         final int limitY = voxels[0].length - 1;
         final int limitZ = voxels[0][0].length - 1;
         byte[][][] nextColors = new byte[limitX+1][limitY+1][limitZ+1];
         byte[][][] nextSlopes = new byte[limitX+1][limitY+1][limitZ+1];
-        byte[][][] result = new byte[limitX+1<<1][limitY+1<<1][limitZ+1<<1];
         final int[] neighbors = new int[6];
         for (int x = 0; x <= limitX; x++) {
             for (int y = 0; y <= limitY; y++) {
