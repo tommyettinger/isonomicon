@@ -58,14 +58,14 @@ public class NoiseRenderer extends ApplicationAdapter {
 //        png8.palette = gif.palette;
         Gdx.files.local("out/vox").mkdirs();
         System.out.println("Loading...");
-        load();
         System.out.println("Produced 128x128x128 noise.");
 //            VoxIO.writeVOX("out/" + s, voxels, renderer.palette, VoxIO.lastMaterials);
 //            load("out/"+s);
         Pixmap pixmap;
-        Array<Pixmap> pm = new Array<>(8);
+        Array<Pixmap> pm = new Array<>(64);
         for (int i = 0; i < 64; i++) {
             for (int f = 0; f < 1; f++) {
+                load(i);
                 pixmap = renderer.drawSplats(voxels, i * 0x1p-6f, f, VoxIO.lastMaterials);
                 Pixmap p = new Pixmap(pixmap.getWidth(), pixmap.getHeight(), pixmap.getFormat());
                 p.drawPixmap(pixmap, 0, 0);
@@ -110,24 +110,26 @@ public class NoiseRenderer extends ApplicationAdapter {
         new Lwjgl3Application(app, config);
     }
 
-    public void load() {
+    public void load(int frame) {
         int sum = 0;
         for (int x = 0; x < voxels.length; x++) {
             for (int y = 0; y < voxels[0].length; y++) {
                 for (int z = 0; z < voxels[0][0].length; z++) {
-                    sum += (voxels[x][y][z] = (byte) (~(Float.floatToRawIntBits(noise.getConfiguredNoise(x, y, z) - 0.875f) >> 31) & 81)); // gray-green
-//                    sum += (voxels[x][y][z] = (byte) (~(Float.floatToRawIntBits(noise.getConfiguredNoise(x, y, z) - 0.875f) >> 31) & 44)); // gray
+                    sum += (voxels[x][y][z] = (byte) (~(Float.floatToRawIntBits(noise.getConfiguredNoise(x, y, z, frame) - 0.875f) >> 31) & 81)); // gray-green
+//                    sum += (voxels[x][y][z] = (byte) (~(Float.floatToRawIntBits(noise.getConfiguredNoise(x, y, z, frame) - 0.875f) >> 31) & 44)); // gray
                 }
             }
-        }
-        for (int i = 1; i < 256; i++) {
-            VoxIO.lastMaterials.put(i, new VoxMaterial());
         }
         System.out.println(sum);
         voxels = Tools3D.soak(voxels);
         this.name = "Noise";
-        renderer = new SmudgeRenderer(voxels.length);
-        renderer.palette(VoxIO.lastPalette);
-        renderer.saturation(0f);
+        if(renderer == null) {
+            for (int i = 1; i < 256; i++) {
+                VoxIO.lastMaterials.put(i, new VoxMaterial());
+            }
+            renderer = new SmudgeRenderer(voxels.length);
+            renderer.palette(VoxIO.lastPalette);
+            renderer.saturation(0f);
+        }
     }
 }
