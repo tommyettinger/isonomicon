@@ -10,6 +10,8 @@ import isonomicon.physical.VoxMaterial;
 
 import java.util.Arrays;
 
+import static isonomicon.visual.SpecialRenderer.cos_;
+import static isonomicon.visual.SpecialRenderer.sin_;
 import static squidpony.ArrayTools.fill;
 
 /**
@@ -59,23 +61,23 @@ public class SmudgeRenderer {
         return (PaletteReducer.TRI_BLUE_NOISE[(x & 63) | (y & 63) << 6] + 128) * 0x1p-8f;
     }
 
-    public static float sin_(float turns)
-    {
-        turns *= 4f;
-        final long floor = (turns >= 0.0 ? (long) turns : (long) turns - 1L) & -2L;
-        turns -= floor;
-        turns *= 2f - turns;
-        return turns * (-0.775f - 0.225f * turns) * ((floor & 2L) - 1L);
-    }
-
-    public static float cos_(float turns)
-    {
-        turns = turns * 4f + 1f;
-        final long floor = (turns >= 0.0 ? (long) turns : (long) turns - 1L) & -2L;
-        turns -= floor;
-        turns *= 2f - turns;
-        return turns * (-0.775f - 0.225f * turns) * ((floor & 2L) - 1L);
-    }
+//    public static float sin_(float turns)
+//    {
+//        turns *= 4f;
+//        final long floor = (turns >= 0.0 ? (long) turns : (long) turns - 1L) & -2L;
+//        turns -= floor;
+//        turns *= 2f - turns;
+//        return turns * (-0.775f - 0.225f * turns) * ((floor & 2L) - 1L);
+//    }
+//
+//    public static float cos_(float turns)
+//    {
+//        turns = turns * 4f + 1f;
+//        final long floor = (turns >= 0.0 ? (long) turns : (long) turns - 1L) & -2L;
+//        turns -= floor;
+//        turns *= 2f - turns;
+//        return turns * (-0.775f - 0.225f * turns) * ((floor & 2L) - 1L);
+//    }
 
     /**
      * Takes a modifier between -1f and 0.5f, and adjusts how this changes saturation accordingly.

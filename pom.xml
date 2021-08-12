@@ -67,7 +67,7 @@
         <maven.gpg.version>1.6</maven.gpg.version>
         <jdk.version>1.8</jdk.version>
         <junit.version>4.13.2</junit.version>
-        <squidlib.version>30b445ea20</squidlib.version>
+        <squidlib.version>fe6326ae66</squidlib.version>
         <gdx.version>1.10.0</gdx.version>
         <anim8.version>0.2.10</anim8.version>
 <!--        <colorful.version>9f572e0c89</colorful.version>-->

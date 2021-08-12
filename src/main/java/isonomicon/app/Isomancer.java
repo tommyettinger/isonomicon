@@ -55,7 +55,7 @@ public class Isomancer extends ApplicationAdapter {
 //            inputs = new String[]{"vox/Lomuk.vox", "vox/Damned.vox"};
 //            inputs = new String[]{"vox/Damned.vox"};
 //            inputs = new String[]{"vox/teapot.vox"};
-            inputs = new String[]{"vox/BareBear.vox", "vox/Grin.vox", "vox/Castle.vox"};
+//            inputs = new String[]{"vox/BareBear.vox", "vox/Grin.vox", "vox/Castle.vox"};
             if(!new File(inputs[0]).exists())
                 System.exit(0);
         }
@@ -138,6 +138,8 @@ public class Isomancer extends ApplicationAdapter {
                 return;
             }
             voxels = Tools3D.scaleAndSoak(voxels);
+//            voxels = Tools3D.soak(voxels);
+
             int nameStart = Math.max(name.lastIndexOf('/'), name.lastIndexOf('\\')) + 1;
             this.name = name.substring(nameStart, name.indexOf('.', nameStart));
 //            renderer = new NextRenderer(voxels.length, QUALITY);

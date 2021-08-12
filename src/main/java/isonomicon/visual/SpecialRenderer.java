@@ -43,9 +43,11 @@ public class SpecialRenderer {
     protected SpecialRenderer() {
         this(64);
     }
+
     public SpecialRenderer(final int size) {
         this(size, Stuff.STUFFS);
     }
+
     public SpecialRenderer(final int size, Stuff[] stuffs) {
         this.size = size;
         final int w = size * 4 + 4, h = size * 5 + 4;
