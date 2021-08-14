@@ -219,7 +219,7 @@ public class Stuff {
             new Stuff("snow", 7, 0, 256L, "Roughness 0.9 Reflection 0.4"), /*white*/
             new Stuff("sickly leaf", 8, 8, 2L, "Roughness 0.2 Reflection 0.25 Vary -0.35"), /*light lime*/
             new Stuff("unripe fruit", 9, 9, 512L, "Roughness 0.6 Reflection 0.3 Dapple -0.1"),
-            new Stuff("poisonous liquid", 10, 10, 8L, "Roughness 0.5 Reflection 0.7 Flow 0.6"),
+            new Stuff("acid", 10, 10, 8L, "Roughness 0.5 Reflection 0.7 Flow 0.6"),
             new Stuff("mold", 11, 0, 8L, "Roughness 0.9 Reflection 0.0 Vary -0.5"), /*dark lime*/
             new Stuff("moss", 12, 12, 12L, "Roughness 0.9 Reflection 0.03"), /*dark green*/
             new Stuff("cactus plant", 13, 11, 12L, "Roughness 0.4 Reflection 0.2"),
@@ -253,15 +253,15 @@ public class Stuff {
             new Stuff("flower petal", 41, 41, -1L, "Roughness 0.5 Reflection 0.05"),
             new Stuff("meat", 42, 42, 64L, "Roughness 0.5 Reflection 0.1"),
             new Stuff("flower ornaments", 43, 0, -1L, "Roughness 0.1 Reflection 0.0"), /*light pink*/
+            new Stuff("sand", 44, 44, 64L, "Roughness 0.7 Reflection 0.0"), /*light tan*/
+            new Stuff("rubble", 45, 45, 64L, "Roughness 0.55 Reflection 0.0 Dapple -0.4 Vary -0.3"),
+            new Stuff("dry dirt", 46, 46, -1L, "Reflection 0.0 Roughness 0.85 Dapple -0.05"),
+            new Stuff("wet dirt", 47, 47, 64L, "Reflection 0.05 Roughness 0.1"), /*dark tan*/
+            new Stuff("marked fluff", 48, 48, 64L, "Roughness 0.6 Reflection 0.15 Dapple -0.16"), /*dark orange*/
+            new Stuff("base fluff", 49, 0, -1L, "Roughness 0.5 Reflection 0.4 Dapple -0.08"),
+            new Stuff("highlight fluff", 50, 50, -1L, "Roughness 0.4 Reflection 0.75 Dapple -0.04"), /*hot orange*/
+            new Stuff("scar", 51, 51, 64L, "Roughness 0.7 Reflection 0.05"), /*light skin*/
             //done up to here
-            new Stuff("base marks", 44, 44, 64L, "Roughness 0.5 Reflection 0.65"), /*light tan*/
-            new Stuff("base protection", 45, 45, 64L, "Roughness 0.5 Reflection 0.55"),
-            new Stuff("less obscured", 46, 46, -1L, "Roughness 0.4 Reflection 0.0"),
-            new Stuff("faded paint", 47, 47, 64L, "Roughness 0.55 Reflection 0.3"), /*dark tan*/
-            new Stuff("bold paint", 48, 48, 64L, "Roughness 0.4 Reflection 0.55"), /*dark orange*/
-            new Stuff("deep water", 49, 0, -1L, "Roughness 0.3 Reflection 0.5 Flow 0.1"),
-            new Stuff("more obscured", 50, 50, -1L, "Roughness 0.2 Reflection 0.0"), /*hot orange*/
-            new Stuff("eerie matter", 51, 51, 64L, "Roughness 0.55 Reflection 0.4 Missing 0.15 Emission 0.05 Flow 0.1"), /*light skin*/
             new Stuff("eerie slime", 52, 0, -1L, "Roughness 0.2 Reflection 0.7 Missing 0.25 Emission 0.2 Flow 0.35"),
             new Stuff("eerie device", 53, 53, 1L, "Roughness 0.1 Reflection 0.6 Emission 0.35"),
             new Stuff("phantasm", 54, 8, -1L, "Roughness 0.85 Reflection 0.2 Missing 0.4 Emission 0.1 Rise 0.2"),
