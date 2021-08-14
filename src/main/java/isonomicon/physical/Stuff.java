@@ -261,20 +261,20 @@ public class Stuff {
             new Stuff("base fluff", 49, 0, -1L, "Roughness 0.5 Reflection 0.4 Dapple -0.08"),
             new Stuff("highlight fluff", 50, 50, -1L, "Roughness 0.4 Reflection 0.75 Dapple -0.04"), /*hot orange*/
             new Stuff("scar", 51, 51, 64L, "Roughness 0.7 Reflection 0.05"), /*light skin*/
-            //done up to here
-            new Stuff("eerie slime", 52, 0, -1L, "Roughness 0.2 Reflection 0.7 Missing 0.25 Emission 0.2 Flow 0.35"),
-            new Stuff("eerie device", 53, 53, 1L, "Roughness 0.1 Reflection 0.6 Emission 0.35"),
-            new Stuff("phantasm", 54, 8, -1L, "Roughness 0.85 Reflection 0.2 Missing 0.4 Emission 0.1 Rise 0.2"),
-            new Stuff("tentacle", 55, 55, 4L, "Roughness 0.45 Reflection 0.6 Flow 0.1"),
-            new Stuff("drink", 56, 0, -1L, "Roughness 0.3 Reflection 0.5"), /*dark skin*/
-            new Stuff("magic cloth", 57, 57, 16L, "Roughness 0.65 Reflection 0.7 Emission 0.25"), /*meat*/
-            new Stuff("magic crystal", 58, 0, 128L, "Roughness 0.05 Reflection 0.85 Emission 0.35", 58, 7, 73, 1), /*dark brown*/
-            new Stuff("magic mark", 59, 0, 2L, "Roughness 0.25 Reflection 0.65 Emission 0.3"),
-            new Stuff("accented feather", 60, 60, 512L, "Roughness 0.7 Reflection 0.4"), /*medium brown*/
-            new Stuff("decorated cloth", 61, 61, 24L, "Roughness 0.6 Reflection 0.4"), /*dark yellow*/
+            new Stuff("base skin", 52, 0, -1L, "Roughness 0.6 Reflection 0.2"),
+            new Stuff("freckle", 53, 53, 1L, "Roughness 0.6 Reflection 0.2 Vary -0.1"),
+            new Stuff("nose", 54, 8, -1L, "Roughness 0.6 Reflection 0.3"),
+            new Stuff("ears", 55, 55, 4L, "Roughness 0.5 Reflection 0.1"),
+            new Stuff("shimmering markings", 56, 0, -1L, "Roughness 0.5 Reflection 0.9 Dapple 0.15"), /*dark skin*/
+            new Stuff("lips blood gore", 57, 57, 16L, "Roughness 0.04 Reflection 0.4"), /*gore*/
+            new Stuff("knotted wood", 58, 0, 128L, "Roughness 0.5 Reflection 0.1 Dapple -0.1"), /*dark brown*/
+            new Stuff("old wood", 59, 0, 2L, "Roughness 0.6 Reflection 0.0 Dapple -0.25 Vary -0.35"),
+            new Stuff("fresh wood", 60, 60, 512L, "Roughness 0.4 Reflection 0.0 Dapple -0.15 Vary -0.1"), /*medium brown*/
+            new Stuff("gold", 61, 61, 24L, "Roughness 0.5 Reflection 0.85"), /*dark yellow*/
             new Stuff("ripe fruit", 62, 62, 128L, "Roughness 0.2 Reflection 0.55 Dapple -0.2"),
             new Stuff("bone beak claw", 63, 63, 64L, "Roughness 0.4 Reflection 0.4"), /*light yellow*/
 
+            //done up to here
             new Stuff("dark glass", 64, 69, 0L, "Transparency 0.3 Roughness 0.0 Reflection 0.4"),
             new Stuff("dark eye", 65, 65, 0L, "Roughness 0.0 Reflection 0.0"),
             new Stuff("smoke", 66, 66, 0L, "Roughness 0.5 Reflection 0.0 Missing 0.1 Rise 0.4", 0, 2, 66, 7),
