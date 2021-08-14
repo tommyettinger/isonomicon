@@ -215,7 +215,7 @@ public class Stuff {
             new Stuff("rusted metal", 3, 3, -1L, "Metal", "Reflection 0.04 Roughness 0.4 Vary -0.4"),
             new Stuff("dull metal", 4, 4, 32L, "Metal", "Reflection 0.15 Roughness 0.8"),
             new Stuff("scratched metal", 5, 5, 2L, "Metal", "Reflection 0.5 Roughness 0.65"),
-            new Stuff("polished metal", 6, 6, 1L, "Metal", "Reflection 0.8 Roughness 0.2", 101, 1, 7, 16),
+            new Stuff("polished metal", 6, 6, 1L, "Metal", "Reflection 0.8 Roughness 0.2", 101, 1, 6, 16),
             new Stuff("snow", 7, 0, 256L, "Roughness 0.9 Reflection 0.4"), /*white*/
             new Stuff("sickly leaf", 8, 8, 2L, "Roughness 0.2 Reflection 0.25 Vary -0.35"), /*light lime*/
             new Stuff("unripe fruit", 9, 9, 512L, "Roughness 0.6 Reflection 0.3 Dapple -0.1"),
@@ -243,17 +243,17 @@ public class Stuff {
             new Stuff("ore", 31, 31, -1L, "Roughness 0.7 Reflection 0.1 Vary -0.3 Dapple 0.1"),
             new Stuff("raw stone", 32, 32, 32L, "Roughness 0.55 Reflection 0.15 Vary -0.1"),
             new Stuff("worked stone", 33, 33, 32L, "Roughness 0.25 Reflection 0.2"),
+            new Stuff("chipped stone", 34, 34, 4L, "Roughness 0.8 Reflection 0.05"), /*light violet*/
+            new Stuff("magic crystal", 35, 35, 32L, "Roughness 0.05 Reflection 0.85 Emission 0.35", 35, 7, 73, 1), /*light purple*/
+            new Stuff("ectoplasm", 36, 0, 256L, "Roughness 0.2 Reflection 0.4 Flow 0.7 Emission 0.1"),
+            new Stuff("tentacle", 37, 37, 64L, "Roughness 0.5 Reflection 0.02 Dapple 0.2"),
+            new Stuff("apparition", 38, 38, 64L, "Roughness 0.6 Reflection 0.0 Flow 0.1 Emission -0.2"), /*dark purple*/
+            new Stuff("drink", 39, 0, -1L, "Roughness 0.3 Reflection 0.5"), /*burgundy*/
+            new Stuff("wilted flower", 40, 40, 64L, "Roughness 0.75 Reflection 0.0 Dapple -0.1"), /*medium magenta*/
+            new Stuff("flower petal", 41, 41, -1L, "Roughness 0.5 Reflection 0.05"),
+            new Stuff("meat", 42, 42, 64L, "Roughness 0.5 Reflection 0.1"),
+            new Stuff("flower ornaments", 43, 0, -1L, "Roughness 0.1 Reflection 0.0"), /*light pink*/
             //done up to here
-            new Stuff("fine scales", 34, 34, 4L, "Roughness 0.15 Reflection 0.4"), /*light violet*/
-            new Stuff("old leaf", 35, 35, 32L, "Roughness 0.2 Reflection 0.25 Vary -0.3"), /*light purple*/
-            new Stuff("gas", 36, 0, 256L, "Roughness 0.25 Reflection 0.0 Flow 0.4 Rise 0.1"),
-            new Stuff("dull protection", 37, 37, 64L, "Roughness 0.55 Reflection 0.4"),
-            new Stuff("accented protection", 38, 38, 64L, "Roughness 0.45 Reflection 0.6"), /*dark purple*/
-            new Stuff("slow water", 39, 0, -1L, "Roughness 0.1 Reflection 0.8"), /*burgundy*/
-            new Stuff("shining marks", 40, 40, 64L, "Roughness 0.25 Reflection 0.9"), /*medium magenta*/
-            new Stuff("ice", 41, 41, -1L, "Roughness 0.05 Reflection 0.95"),
-            new Stuff("accented marks", 42, 42, 64L, "Roughness 0.45 Reflection 0.8"),
-            new Stuff("fast water", 43, 0, -1L, "Roughness 0.2 Reflection 0.75 Flow 0.7"), /*light pink*/
             new Stuff("base marks", 44, 44, 64L, "Roughness 0.5 Reflection 0.65"), /*light tan*/
             new Stuff("base protection", 45, 45, 64L, "Roughness 0.5 Reflection 0.55"),
             new Stuff("less obscured", 46, 46, -1L, "Roughness 0.4 Reflection 0.0"),
