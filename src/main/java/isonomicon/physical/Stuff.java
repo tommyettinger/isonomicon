@@ -274,71 +274,71 @@ public class Stuff {
             new Stuff("ripe fruit or flower", 62, 62, 128L, "Roughness 0.2 Reflection 0.55 Dapple -0.2"),
             new Stuff("bone beak claw", 63, 63, 64L, "Roughness 0.4 Reflection 0.4"), /*light yellow*/
 
-            //done up to here
             new Stuff("dark glass", 64, 69, 0L, "Transparency 0.3 Roughness 0.0 Reflection 0.4"),
-            new Stuff("dark eye", 65, 65, 0L, "Roughness 0.0 Reflection 0.0"),
-            new Stuff("smoke", 66, 66, 0L, "Roughness 0.5 Reflection 0.0 Missing 0.1 Rise 0.4", 0, 2, 66, 7),
-            new Stuff("shadow", 67, 0, 0L, "Roughness 0.0 Reflection 0.0"),
-            new Stuff("fly", 68, 0, 0L, "Roughness 0.2 Reflection 0.0 Missing 0.5", 82, 10),
-            new Stuff("gray glass", 69, 71, 0L, "Transparency 0.5 Roughness 0.0 Reflection 0.65"),
-            new Stuff("dead eye", 70, 70, 0L, "Roughness 0.5 Reflection 0.0"),
-            new Stuff("steam", 71, 71, 0L, "Transparency 0.5 Roughness 0.3 Missing 0.2 Flow 0.3 Rise 0.7", 0, 3, 71, 5),
-            new Stuff("light eye", 72, 72, 0L, "Roughness 1.0 Reflection 1.0"),
+            new Stuff("dark eye", 65, 65, 0L, "Roughness 0.0 Reflection 0.1"), /*black*/
+            new Stuff("shadow", 66, 66, 0L, "Roughness 0.0 Reflection 0.0"),
+            new Stuff("smoke", 67, 0, 0L, "Roughness 0.5 Reflection 0.0 Missing 0.1 Rise 0.4", 0, 2, 67, 7),
+            new Stuff("gray glass", 68, 0, 0L, "Transparency 0.5 Roughness 0.0 Reflection 0.65"),
+            new Stuff("dead eye", 69, 71, 0L, "Roughness 0.5 Reflection 0.0"),
+            new Stuff("steam", 70, 70, 0L, "Transparency 0.5 Roughness 0.3 Missing 0.2 Flow 0.3 Rise 0.7", 0, 3, 70, 5),
+            new Stuff("light eye", 71, 71, 0L, "Roughness 1.0 Reflection 1.0"), /*white*/
+            new Stuff("radioactive glow", 72, 72, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.6 Flow 0.3"), /*light lime*/
+            //done up to here
             new Stuff("crystal sparkle", 73, 0, 128L, "Roughness 0.0 Reflection 0.95 Emission 0.75", 73, 1, 58, 5),
             new Stuff("pure light", 74, 0, 0L, "Roughness 1.0 Reflection 1.0 Emission 1.0"),
-            new Stuff("evil eye", 75, 75, 0L, "Roughness 0.75 Reflection 0.5 Emission 0.15"),
-            new Stuff("curse fading", 76, 0, 0L, "Roughness 0.25 Reflection 0.0 Emission 0.25 Rise 0.3 Missing 0.4", 0, 3, 76, 8),
+            new Stuff("evil eye", 75, 75, 0L, "Roughness 0.75 Reflection 0.5 Emission 0.15"), /*dark lime*/
+            new Stuff("curse fading", 76, 0, 0L, "Roughness 0.25 Reflection 0.0 Emission 0.25 Rise 0.3 Missing 0.4", 0, 3, 76, 8), /*dark green*/
             new Stuff("red glass", 77, 73, 0L, "Transparency 0.5 Roughness 0.0 Reflection 0.65"),
             new Stuff("curse active", 78, 0, 0L, "Roughness 0.35 Reflection 0.0 Emission 0.6 Rise -0.4 Missing 0.1", 78, 7, 76, 4),
             new Stuff("orange glass", 79, 84, 0L, "Transparency 0.5 Roughness 0.0 Reflection 0.65"),
             new Stuff("flying fur", 80, 80, 0L, "Roughness 0.4 Reflection 0.1 Missing 0.2", 80, 4, 0, 1),
-            new Stuff("ember", 81, 0, 0L, "Roughness 0.0 Reflection 0.2 Emission 0.45 Missing 0.3 Rise 0.3 Flow 0.1", 81, 8, 126, 7, 66, 1),
-            new Stuff("fly spawner", 82, 0, 0L, "Transparency 1.0", 82, 15, 68, 1),
+            new Stuff("ember", 81, 0, 0L, "Roughness 0.0 Reflection 0.2 Emission 0.45 Missing 0.3 Rise 0.3 Flow 0.1", 81, 8, 126, 7, 66, 1), /*light green*/
+            new Stuff("fly spawner", 82, 0, 0L, "Transparency 1.0", 82, 15, 68, 1), /*light cyan*/
             new Stuff("flying feathers", 83, 0, 0L, "Roughness 0.8 Reflection 0.05 Missing 0.15", 83, 7, 0, 1),
-            new Stuff("hot fire", 84, 0, 0L, "Roughness 0.0 Reflection 0.1 Emission 0.6 Missing 0.15 Flow 0.1", 84, 11, 87, 8, 66, 3, 81, 2),
-            new Stuff("shredded cloth", 85, 0, 0L, "Roughness 0.7 Reflection 0.05 Missing 0.1", 85, 9, 0, 1),
+            new Stuff("hot fire", 84, 0, 0L, "Roughness 0.0 Reflection 0.1 Emission 0.6 Missing 0.15 Flow 0.1", 84, 11, 87, 8, 66, 3, 81, 2), /*dark cyan*/
+            new Stuff("shredded cloth", 85, 0, 0L, "Roughness 0.7 Reflection 0.05 Missing 0.1", 85, 9, 0, 1), /*dark azure*/
             new Stuff("wax", 86, 89, 0L, "Roughness 1.0 Reflection 0.1"),
             new Stuff("bright fire", 87, 0, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.8 Missing 0.1 Flow 0.15", 84, 7, 87, 8, 81, 3),
             new Stuff("yellow glass", 88, 74, 0L, "Transparency 0.5 Roughness 0.0 Reflection 0.65"),
-            new Stuff("brown glass", 89, 79, 0L, "Transparency 0.35 Roughness 0.0 Reflection 0.65"),
-            new Stuff("miasma spawner", 90, 0, 0L, "Transparency 1.0", 90, 7, 93, 1),
+            new Stuff("brown glass", 89, 79, 0L, "Transparency 0.35 Roughness 0.0 Reflection 0.65"), /*light azure*/
+            new Stuff("miasma spawner", 90, 0, 0L, "Transparency 1.0", 90, 7, 93, 1), /*light blue*/
             new Stuff("radioactive glow", 91, 0, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.6 Flow 0.3"),
             new Stuff("green glass", 92, 72, 0L, "Transparency 0.5 Roughness 0.0 Reflection 0.65"),
-            new Stuff("miasma", 93, 0, 0L, "Roughness 0.3 Reflection 0.0 Flow 0.5 Rise -0.1 Missing 0.05", 90, 2, 93, 5),
-            new Stuff("wood shrapnel", 94, 94, 0L, "Roughness 0.9 Reflection 0.05 Missing 0.05", 94, 8, 0, 1),
+            new Stuff("miasma", 93, 0, 0L, "Roughness 0.3 Reflection 0.0 Flow 0.5 Rise -0.1 Missing 0.05", 90, 2, 93, 5), /*dark blue*/
+            new Stuff("wood shrapnel", 94, 94, 0L, "Roughness 0.9 Reflection 0.05 Missing 0.05", 94, 8, 0, 1), /*dark violet*/
             new Stuff("vigor active", 95, 0, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.4", 95, 9, 76, 4, 0, 1),
             new Stuff("vigor spawner", 96, 0, 0L, "Transparency 1.0", 95, 1, 96, 6),
             new Stuff("vigor fading", 97, 0, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.2 Missing 0.3", 0, 4, 97, 7, 95, 1),
-            new Stuff("confirm particle", 98, 0, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.7 Rise 0.9", 98, 1, 99, 1, 0, 1),
-            new Stuff("confirm spawner", 99, 0, 0L, "Transparency 1.0", 98, 1, 99, 4),
+            new Stuff("confirm particle", 98, 0, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.7 Rise 0.9", 98, 1, 99, 1, 0, 1), /*light violet*/
+            new Stuff("confirm spawner", 99, 0, 0L, "Transparency 1.0", 98, 1, 99, 4), /*light purple*/
             new Stuff("chaos spawner", 100, 0, 0L, "Transparency 1.0", 78, 1, 94, 1, 118, 1, 100, 5),
             new Stuff("metal glint", 101, 0, 0L, "Roughness 0.2 Reflection 1.0 Emission 0.5", 101, 1, 7, 14),
-            new Stuff("darkened water", 102, 0, -1L, "Roughness 0.0 Reflection 0.0 Flow 0.1"),
-            new Stuff("chill spawner", 103, 0, 0L, "Transparency 1.0", 104, 2, 103, 5),
-            new Stuff("chill", 104, 0, 0L, "Roughness 0.8 Reflection 0.0 Missing 0.2 Transparency 0.5 Rise -0.1", 104, 3, 103, 2),
+            new Stuff("darkened water", 102, 0, -1L, "Roughness 0.0 Reflection 0.0 Flow 0.1"), /*dark purple*/
+            new Stuff("chill spawner", 103, 0, 0L, "Transparency 1.0", 104, 2, 103, 5), /*burgundy*/
+            new Stuff("chill", 104, 0, 0L, "Roughness 0.8 Reflection 0.0 Missing 0.2 Transparency 0.5 Rise -0.1", 104, 3, 103, 2), /*medium magenta*/
             new Stuff("clear glass", 105, 72, 0L, "Transparency 0.25 Roughness 0.0 Reflection 0.65"),
             new Stuff("splash ascent", 106, 0, -1L, "Roughness 0.6 Reflection 0.6 Flow 0.4 Rise 0.1", 106, 2, 107, 6, 109, 1),
-            new Stuff("splash apex", 107, 0, -1L, "Roughness 0.7 Reflection 0.95 Flow 0.6", 107, 2, 108, 6, 106, 1),
-            new Stuff("splash descent", 108, 0, -1L, "Roughness 0.5 Reflection 0.5 Flow 0.5 Rise -0.1", 108, 2, 109, 6, 107, 1),
+            new Stuff("splash apex", 107, 0, -1L, "Roughness 0.7 Reflection 0.95 Flow 0.6", 107, 2, 108, 6, 106, 1), /*light pink*/
+            new Stuff("splash descent", 108, 0, -1L, "Roughness 0.5 Reflection 0.5 Flow 0.5 Rise -0.1", 108, 2, 109, 6, 107, 1), /*light tan*/
             new Stuff("splash nadir", 109, 0, -1L, "Roughness 0.4 Reflection 0.3 Flow 0.7", 109, 2, 106, 6, 108, 1),
             new Stuff("mote spawner", 110, 0, 0L, "Transparency 1.0", 112, 1, 123, 1, 110, 9),
-            new Stuff("blue glass", 111, 72, 0L, "Transparency 0.5 Roughness 0.0 Reflection 0.65"),
-            new Stuff("subtle mote", 112, 0, 0L, "Emission 0.2 Roughness 0.0 Reflection 0.0 Transparency 0.9", 112, 5, 110, 3),
+            new Stuff("blue glass", 111, 72, 0L, "Transparency 0.5 Roughness 0.0 Reflection 0.65"), /*dark tan*/
+            new Stuff("subtle mote", 112, 0, 0L, "Emission 0.2 Roughness 0.0 Reflection 0.0 Transparency 0.9", 112, 5, 110, 3), /*dark orange*/
             new Stuff("dread spawner", 113, 0, 0L, "Transparency 1.0", 114, 1, 113, 11),
-            new Stuff("dread", 114, 120, 0L, "Emission -0.4 Roughness 0.0 Reflection 0.0 Transparency 0.7 Missing 0.1", 114, 4, 113, 3),
-            new Stuff("unknown energy", 115, 0, 0L, "Emission 0.4 Roughness 0.3 Reflection 0.0 Flow 0.7 Missing 0.4", 115, 5, 117, 1, 0, 1),
+            new Stuff("dread", 114, 120, 0L, "Emission -0.4 Roughness 0.0 Reflection 0.0 Transparency 0.7 Missing 0.1", 114, 4, 113, 3), /*hot orange*/
+            new Stuff("unknown energy", 115, 0, 0L, "Emission 0.4 Roughness 0.3 Reflection 0.0 Flow 0.7 Missing 0.4", 115, 5, 117, 1, 0, 1), /*light skin*/
             new Stuff("purple glass", 116, 73, 0L, "Transparency 0.5 Roughness 0.0 Reflection 0.65"),
             new Stuff("spark spawner", 117, 0, 0L, "Transparency 1.0", 118, 1, 117, 14),
             new Stuff("spark", 118, 0, 0L, "Emission 0.6 Roughness 0.4 Reflection 0.0 Missing 0.6", 118, 2, 117, 3),
             new Stuff("sludge bubble", 119, 119, -1L, "Roughness 0.6 Reflection 0.2", 120, 1),
-            new Stuff("sludge", 120, 119, -1L, "Roughness 0.6 Reflection 0.2 Flow 0.15", 120, 6, 119, 1),
-            new Stuff("deny spawner", 121, 0, 0L, "Transparency 1.0", 125, 1, 121, 4),
-            new Stuff("love spawner", 122, 0, 0L, "Transparency 1.0", 125, 1, 122, 5),
+            new Stuff("sludge", 120, 119, -1L, "Roughness 0.6 Reflection 0.2 Flow 0.15", 120, 6, 119, 1), /*dark skin*/
+            new Stuff("deny spawner", 121, 0, 0L, "Transparency 1.0", 125, 1, 121, 4), /*gore*/
+            new Stuff("love spawner", 122, 0, 0L, "Transparency 1.0", 125, 1, 122, 5), /*dark brown*/
             new Stuff("powerful mote", 123, 0, 0L, "Emission 0.6 Roughness 0.0 Reflection 0.0 Transparency 0.8", 123, 5, 110, 3),
-            new Stuff("love", 124, 0, 0L, "Emission 0.1 Roughness 0.5 Reflection 0.4 Rise 0.3", 124, 2, 122, 1),
-            new Stuff("deny particle", 125, 0, 0L,  "Emission -0.15 Roughness 0.3 Reflection 0.2 Rise -0.4", 125, 1, 121, 1, 0, 1),
+            new Stuff("love", 124, 0, 0L, "Emission 0.1 Roughness 0.5 Reflection 0.4 Rise 0.3", 124, 2, 122, 1), /*medium brown*/
+            new Stuff("deny particle", 125, 0, 0L,  "Emission -0.15 Roughness 0.3 Reflection 0.2 Rise -0.4", 125, 1, 121, 1, 0, 1), /*dark yellow*/
             new Stuff("ember spawner", 126, 0, 0L, "Transparency 1.0", 81, 1, 126, 9),
-            new Stuff("violent flash", 127, 0, 0L, "Emission 0.9 Roughness 0.0 Reflection 0.0 Missing 0.2", 127, 1, 0, 5),
+            new Stuff("violent flash", 127, 0, 0L, "Emission 0.9 Roughness 0.0 Reflection 0.0 Missing 0.2", 127, 1, 0, 5), /*light yellow*/
     };
 
     public static void evolve(byte[][][] model, int frame){
