@@ -215,7 +215,7 @@ public class Stuff {
             new Stuff("rusted metal", 3, 3, -1L, "Metal", "Reflection 0.04 Roughness 0.4 Vary -0.4"),
             new Stuff("dull metal", 4, 4, 32L, "Metal", "Reflection 0.15 Roughness 0.8"),
             new Stuff("scratched metal", 5, 5, 2L, "Metal", "Reflection 0.5 Roughness 0.65"),
-            new Stuff("polished metal", 6, 6, 1L, "Metal", "Reflection 0.8 Roughness 0.2", 101, 1, 6, 16),
+            new Stuff("polished metal", 6, 6, 1L, "Metal", "Reflection 0.8 Roughness 0.2", 89, 1, 6, 16),
             new Stuff("snow", 7, 7, 256L, "Roughness 0.9 Reflection 0.4"), /*white*/
             new Stuff("sickly leaf", 8, 8, 2L, "Roughness 0.2 Reflection 0.25 Vary -0.35"), /*light lime*/
             new Stuff("unripe fruit or bud", 9, 9, 512L, "Roughness 0.6 Reflection 0.3 Dapple -0.1"),
@@ -234,7 +234,7 @@ public class Stuff {
             new Stuff("slow water", 22, 22, 32L, "Roughness 0.1 Reflection 0.8 Flow 0.1"),
             new Stuff("fast water", 23, 23, 24L, "Roughness 0.2 Reflection 0.75 Flow 0.7"),
             new Stuff("wet stone", 24, 24, 0L, "Roughness 0.5 Reflection 0.2"),
-            new Stuff("ice", 25, 25, 512L, "Roughness 0.05 Reflection 0.95"), /*light azure*/
+            new Stuff("ice", 25, 25, 512L, "Roughness 0.05 Reflection 0.95", 25, 8, 82, 1), /*light azure*/
             new Stuff("shining mark", 26, 26, 32L, "Roughness 0.25 Reflection 0.9"), /*light blue*/
             new Stuff("accented mark", 27, 27, 4L, "Roughness 0.4 Reflection 0.5"),
             new Stuff("bold mark", 28, 28, 4L, "Roughness 0.4 Reflection 0.5"),
@@ -292,18 +292,18 @@ public class Stuff {
             new Stuff("confirm particle", 79, 84, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.7 Rise 0.9", 79, 1, 77, 1, 0, 1),
             new Stuff("vigor fading", 80, 80, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.2 Missing 0.3 Vary 0.1", 0, 4, 80, 7, 81, 1),
             new Stuff("vigor active", 81, 0, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.4 Vary 0.3", 81, 9, 80, 4, 0, 1), /*light green*/
+            new Stuff("ice glint", 82, 0, 0L, "Transparency 1.0", 82, 1, 25, 20), /*light cyan*/
+            new Stuff("chill particle", 83, 0, 0L, "Roughness 0.8 Reflection 0.0 Missing 0.2 Transparency 0.5 Rise -0.1", 83, 7, 84, 1),
+            new Stuff("chill spawner", 84, 0, 0L, "Transparency 1.0", 84, 5, 83, 2), /*dark cyan*/
+            new Stuff("splash lowest", 85, 0, 0L, "Roughness 0.4 Reflection 0.3 Flow 0.7", 85, 3, 86, 5), /*dark azure*/
+            new Stuff("splash rise", 86, 0, 0L, "Roughness 0.6 Reflection 0.6 Flow 0.4 Rise 0.1", 86, 2, 87, 6, 85, 1),
+            new Stuff("splash highest", 87, 0, 0L, "Roughness 0.7 Reflection 0.95 Flow 0.6", 87, 2, 88, 6, 86, 1),
+            new Stuff("splash curl", 88, 0, 0L, "Roughness 0.5 Reflection 0.5 Flow 0.5 Rise -0.1", 88, 2, 85, 6, 87, 1),
+            new Stuff("metal glint", 89, 0, 0L, "Roughness 0.2 Reflection 1.0 Emission 0.5", 89, 1, 6, 14), /*light azure*/
             //done up to here
-            new Stuff("fly spawner", 82, 0, 0L, "Transparency 1.0", 82, 15, 68, 1), /*light cyan*/
-            new Stuff("flying feathers", 83, 0, 0L, "Roughness 0.8 Reflection 0.05 Missing 0.15", 83, 7, 0, 1),
-            new Stuff("hot fire", 84, 0, 0L, "Roughness 0.0 Reflection 0.1 Emission 0.6 Missing 0.15 Flow 0.1", 84, 11, 87, 8, 66, 3, 81, 2), /*dark cyan*/
-            new Stuff("shredded cloth", 85, 0, 0L, "Roughness 0.7 Reflection 0.05 Missing 0.1", 85, 9, 0, 1), /*dark azure*/
-            new Stuff("wax", 86, 89, 0L, "Roughness 1.0 Reflection 0.1"),
-            new Stuff("bright fire", 87, 0, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.8 Missing 0.1 Flow 0.15", 84, 7, 87, 8, 81, 3),
-            new Stuff("yellow glass", 88, 74, 0L, "Transparency 0.5 Roughness 0.0 Reflection 0.65"),
-            new Stuff("brown glass", 89, 79, 0L, "Transparency 0.35 Roughness 0.0 Reflection 0.65"), /*light azure*/
-            new Stuff("miasma spawner", 90, 0, 0L, "Transparency 1.0", 90, 7, 93, 1), /*light blue*/
-            new Stuff("radioactive glow", 91, 0, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.6 Flow 0.3"),
-            new Stuff("green glass", 92, 72, 0L, "Transparency 0.5 Roughness 0.0 Reflection 0.65"),
+            new Stuff("", 90, 0, 0L, "Transparency 1.0", 90, 7, 93, 1), /*light blue*/
+            new Stuff("", 91, 0, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.6 Flow 0.3"),
+            new Stuff("", 92, 0, 0L, "Transparency 0.5 Roughness 0.0 Reflection 0.65"),
             new Stuff("miasma", 93, 0, 0L, "Roughness 0.3 Reflection 0.0 Flow 0.5 Rise -0.1 Missing 0.05", 90, 2, 93, 5), /*dark blue*/
             new Stuff("wood shrapnel", 94, 94, 0L, "Roughness 0.9 Reflection 0.05 Missing 0.05", 94, 8, 0, 1), /*dark violet*/
             new Stuff("vigor active", 95, 0, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.4", 95, 9, 97, 4, 0, 1),
