@@ -168,7 +168,7 @@ public class Stuff {
             new Stuff("green glass", 92, 72, 0L, "Transparency 0.5 Roughness 0.0 Reflection 0.65"),
             new Stuff("miasma", 93, 0, 0L, "Roughness 0.3 Reflection 0.0 Flow 0.5 Rise -0.1 Missing 0.05", 90, 2, 93, 5),
             new Stuff("wood shrapnel", 94, 94, 0L, "Roughness 0.9 Reflection 0.05 Missing 0.05", 94, 8, 0, 1),
-            new Stuff("vigor active", 95, 0, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.4", 95, 9, 76, 4, 0, 1),
+            new Stuff("vigor active", 95, 0, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.4", 95, 9, 97, 4, 0, 1),
             new Stuff("vigor spawner", 96, 0, 0L, "Transparency 1.0", 95, 1, 96, 6),
             new Stuff("vigor fading", 97, 0, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.2 Missing 0.3", 0, 4, 97, 7, 95, 1),
             new Stuff("confirm particle", 98, 0, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.7 Rise 0.9", 98, 1, 99, 1, 0, 1),
@@ -283,16 +283,16 @@ public class Stuff {
             new Stuff("steam", 70, 70, 0L, "Transparency 0.5 Roughness 0.3 Missing 0.2 Flow 0.3 Rise 0.7", 0, 3, 70, 5),
             new Stuff("light eye", 71, 71, 0L, "Roughness 1.0 Reflection 1.0"), /*white*/
             new Stuff("radioactive glow", 72, 72, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.6 Flow 0.3"), /*light lime*/
+            new Stuff("miasma", 73, 0, 0L, "Roughness 0.3 Reflection 0.0 Flow 0.5 Rise -0.1 Missing 0.05", 75, 2, 73, 5),
+            new Stuff("rustling leaf", 74, 0, 0L, "Roughness 0.4 Reflection 0.05 Dapple -0.35 Missing 0.2"),
+            new Stuff("miasma spawner", 75, 75, 0L, "Transparency 1.0", 75, 7, 73, 1), /*dark lime*/
+            new Stuff("vigor spawner", 76, 0, 0L, "Transparency 1.0", 81, 1, 76, 6), /*dark green*/
+            new Stuff("confirm spawner", 77, 73, 0L, "Transparency 1.0", 79, 1, 77, 4),
+            new Stuff("green glass", 78, 0, 0L, "Transparency 0.5 Roughness 0.0 Reflection 0.65"),
+            new Stuff("confirm particle", 79, 84, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.7 Rise 0.9", 79, 1, 77, 1, 0, 1),
+            new Stuff("vigor fading", 80, 80, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.2 Missing 0.3 Vary 0.1", 0, 4, 80, 7, 81, 1),
+            new Stuff("vigor active", 81, 0, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.4 Vary 0.3", 81, 9, 80, 4, 0, 1), /*light green*/
             //done up to here
-            new Stuff("crystal sparkle", 73, 0, 128L, "Roughness 0.0 Reflection 0.95 Emission 0.75", 73, 1, 58, 5),
-            new Stuff("pure light", 74, 0, 0L, "Roughness 1.0 Reflection 1.0 Emission 1.0"),
-            new Stuff("evil eye", 75, 75, 0L, "Roughness 0.75 Reflection 0.5 Emission 0.15"), /*dark lime*/
-            new Stuff("curse fading", 76, 0, 0L, "Roughness 0.25 Reflection 0.0 Emission 0.25 Rise 0.3 Missing 0.4", 0, 3, 76, 8), /*dark green*/
-            new Stuff("red glass", 77, 73, 0L, "Transparency 0.5 Roughness 0.0 Reflection 0.65"),
-            new Stuff("curse active", 78, 0, 0L, "Roughness 0.35 Reflection 0.0 Emission 0.6 Rise -0.4 Missing 0.1", 78, 7, 76, 4),
-            new Stuff("orange glass", 79, 84, 0L, "Transparency 0.5 Roughness 0.0 Reflection 0.65"),
-            new Stuff("flying fur", 80, 80, 0L, "Roughness 0.4 Reflection 0.1 Missing 0.2", 80, 4, 0, 1),
-            new Stuff("ember", 81, 0, 0L, "Roughness 0.0 Reflection 0.2 Emission 0.45 Missing 0.3 Rise 0.3 Flow 0.1", 81, 8, 126, 7, 66, 1), /*light green*/
             new Stuff("fly spawner", 82, 0, 0L, "Transparency 1.0", 82, 15, 68, 1), /*light cyan*/
             new Stuff("flying feathers", 83, 0, 0L, "Roughness 0.8 Reflection 0.05 Missing 0.15", 83, 7, 0, 1),
             new Stuff("hot fire", 84, 0, 0L, "Roughness 0.0 Reflection 0.1 Emission 0.6 Missing 0.15 Flow 0.1", 84, 11, 87, 8, 66, 3, 81, 2), /*dark cyan*/
@@ -306,7 +306,7 @@ public class Stuff {
             new Stuff("green glass", 92, 72, 0L, "Transparency 0.5 Roughness 0.0 Reflection 0.65"),
             new Stuff("miasma", 93, 0, 0L, "Roughness 0.3 Reflection 0.0 Flow 0.5 Rise -0.1 Missing 0.05", 90, 2, 93, 5), /*dark blue*/
             new Stuff("wood shrapnel", 94, 94, 0L, "Roughness 0.9 Reflection 0.05 Missing 0.05", 94, 8, 0, 1), /*dark violet*/
-            new Stuff("vigor active", 95, 0, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.4", 95, 9, 76, 4, 0, 1),
+            new Stuff("vigor active", 95, 0, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.4", 95, 9, 97, 4, 0, 1),
             new Stuff("vigor spawner", 96, 0, 0L, "Transparency 1.0", 95, 1, 96, 6),
             new Stuff("vigor fading", 97, 0, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.2 Missing 0.3", 0, 4, 97, 7, 95, 1),
             new Stuff("confirm particle", 98, 0, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.7 Rise 0.9", 98, 1, 99, 1, 0, 1), /*light violet*/
