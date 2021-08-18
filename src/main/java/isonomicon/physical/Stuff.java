@@ -244,7 +244,7 @@ public class Stuff {
             new Stuff("raw stone", 32, 32, 32L, "Roughness 0.55 Reflection 0.15 Vary -0.1"),
             new Stuff("worked stone", 33, 33, 32L, "Roughness 0.25 Reflection 0.2"),
             new Stuff("chipped stone", 34, 34, 4L, "Roughness 0.8 Reflection 0.05"), /*light violet*/
-            new Stuff("magic crystal", 35, 35, 32L, "Roughness 0.05 Reflection 0.85 Emission 0.35", 35, 7, 73, 1), /*light purple*/
+            new Stuff("magic crystal", 35, 35, 32L, "Roughness 0.05 Reflection 0.85 Emission 0.35", 35, 7, 98, 1), /*light purple*/
             new Stuff("ectoplasm", 36, 36, 256L, "Roughness 0.2 Reflection 0.4 Flow 0.7 Emission 0.1"),
             new Stuff("tentacle", 37, 37, 64L, "Roughness 0.5 Reflection 0.02 Dapple 0.2"),
             new Stuff("apparition", 38, 38, 64L, "Roughness 0.6 Reflection 0.0 Flow 0.1 Emission -0.2"), /*dark purple*/
@@ -300,16 +300,16 @@ public class Stuff {
             new Stuff("splash highest", 87, 0, 0L, "Roughness 0.7 Reflection 0.95 Flow 0.6", 87, 2, 88, 6, 86, 1),
             new Stuff("splash curl", 88, 0, 0L, "Roughness 0.5 Reflection 0.5 Flow 0.5 Rise -0.1", 88, 2, 85, 6, 87, 1),
             new Stuff("metal glint", 89, 0, 0L, "Roughness 0.2 Reflection 1.0 Emission 0.5", 89, 1, 6, 14), /*light azure*/
+            new Stuff("quiet speech", 90, 0, 0L, "Roughness 0.0 Reflection 0.0 Flow 0.2 Rise 0.3 Missing 0.05", 90, 1, 91, 1, 92, 2), /*light blue*/
+            new Stuff("loud speech", 91, 0, 0L, "Roughness 0.0 Reflection 0.0 Flow 0.2 Rise 0.6 Missing 0.08", 91, 1, 92, 4),
+            new Stuff("speech spawner", 92, 0, 0L, "Transparency 1.0", 92, 3, 90, 3, 91, 1),
+            new Stuff("dread spawner", 93, 0, 0L, "Transparency 1.0", 94, 1, 93, 11), /*dark blue*/
+            new Stuff("dread particle", 94, 94, 0L, "Emission -0.4 Roughness 0.0 Reflection 0.0 Transparency 0.7 Missing 0.1", 94, 4, 93, 3), /*dark violet*/
+            new Stuff("stored energy", 95, 0, 0L, "Emission 0.4 Roughness 0.3 Reflection 0.0 Flow 0.7 Missing 0.4", 95, 5, 96, 1, 0, 1),
+            new Stuff("shock spawner", 96, 0, 0L, "Transparency 1.0", 97, 1, 96, 14),
+            new Stuff("shock particle", 97, 0, 0L, "Emission 0.6 Roughness 0.4 Reflection 0.0 Missing 0.6", 97, 2, 96, 3),
             //done up to here
-            new Stuff("", 90, 0, 0L, "Transparency 1.0", 90, 7, 93, 1), /*light blue*/
-            new Stuff("", 91, 0, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.6 Flow 0.3"),
-            new Stuff("", 92, 0, 0L, "Transparency 0.5 Roughness 0.0 Reflection 0.65"),
-            new Stuff("miasma", 93, 0, 0L, "Roughness 0.3 Reflection 0.0 Flow 0.5 Rise -0.1 Missing 0.05", 90, 2, 93, 5), /*dark blue*/
-            new Stuff("wood shrapnel", 94, 94, 0L, "Roughness 0.9 Reflection 0.05 Missing 0.05", 94, 8, 0, 1), /*dark violet*/
-            new Stuff("vigor active", 95, 0, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.4", 95, 9, 97, 4, 0, 1),
-            new Stuff("vigor spawner", 96, 0, 0L, "Transparency 1.0", 95, 1, 96, 6),
-            new Stuff("vigor fading", 97, 0, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.2 Missing 0.3", 0, 4, 97, 7, 95, 1),
-            new Stuff("confirm particle", 98, 0, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.7 Rise 0.9", 98, 1, 99, 1, 0, 1), /*light violet*/
+            new Stuff("crystal glint", 98, 0, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.7 Rise 0.9", 98, 1, 99, 1, 0, 1), /*light violet*/
             new Stuff("confirm spawner", 99, 0, 0L, "Transparency 1.0", 98, 1, 99, 4), /*light purple*/
             new Stuff("chaos spawner", 100, 0, 0L, "Transparency 1.0", 78, 1, 94, 1, 118, 1, 100, 5),
             new Stuff("metal glint", 101, 0, 0L, "Roughness 0.2 Reflection 1.0 Emission 0.5", 101, 1, 7, 14),
