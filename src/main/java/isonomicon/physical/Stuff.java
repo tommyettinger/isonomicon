@@ -195,7 +195,7 @@ public class Stuff {
             new Stuff("sludge bubble", 119, 119, -1L, "Roughness 0.6 Reflection 0.2", 120, 1),
             new Stuff("sludge", 120, 119, -1L, "Roughness 0.6 Reflection 0.2 Flow 0.15", 120, 6, 119, 1),
             new Stuff("deny spawner", 121, 0, 0L, "Transparency 1.0", 125, 1, 121, 4),
-            new Stuff("love spawner", 122, 0, 0L, "Transparency 1.0", 125, 1, 122, 5),
+            new Stuff("love spawner", 122, 0, 0L, "Transparency 1.0", 124, 1, 122, 5),
             new Stuff("powerful mote", 123, 0, 0L, "Emission 0.6 Roughness 0.0 Reflection 0.0 Transparency 0.8", 123, 5, 110, 3),
             new Stuff("love", 124, 0, 0L, "Emission 0.1 Roughness 0.5 Reflection 0.4 Rise 0.3", 124, 2, 122, 1),
             new Stuff("deny particle", 125, 0, 0L,  "Emission -0.15 Roughness 0.3 Reflection 0.2 Rise -0.4", 125, 1, 121, 1, 0, 1),
@@ -277,7 +277,7 @@ public class Stuff {
             new Stuff("dark glass", 64, 69, 0L, "Transparency 0.3 Roughness 0.0 Reflection 0.4"),
             new Stuff("dark eye", 65, 65, 0L, "Roughness 0.0 Reflection 0.1"), /*black*/
             new Stuff("shadow", 66, 66, 0L, "Roughness 0.0 Reflection 0.0"),
-            new Stuff("smoke", 67, 0, 0L, "Roughness 0.5 Reflection 0.0 Missing 0.1 Rise 0.4", 0, 2, 67, 7),
+            new Stuff("smoke", 67, 0, 0L, "Roughness 0.5 Reflection 0.0 Missing 0.1 Rise 0.4 Dapple -0.15", 0, 2, 67, 7),
             new Stuff("gray glass", 68, 0, 0L, "Transparency 0.5 Roughness 0.0 Reflection 0.65"),
             new Stuff("dead eye", 69, 71, 0L, "Roughness 0.5 Reflection 0.0"),
             new Stuff("steam", 70, 70, 0L, "Transparency 0.5 Roughness 0.3 Missing 0.2 Flow 0.3 Rise 0.7", 0, 3, 70, 5),
@@ -309,21 +309,21 @@ public class Stuff {
             new Stuff("shock spawner", 96, 0, 0L, "Transparency 1.0", 97, 1, 96, 14),
             new Stuff("shock particle", 97, 0, 0L, "Emission 0.6 Roughness 0.4 Reflection 0.0 Missing 0.6", 97, 2, 96, 3),
             new Stuff("crystal glint", 98, 0, 0L, "Roughness 0.1 Reflection 1.0 Emission 0.65", 98, 1, 35, 8), /*light violet*/
-            new Stuff("sludge bubble", 99, 0, 0L, "Roughness 0.6 Reflection 0.2", 101, 1), /*light purple*/
+            new Stuff("sludge bubble", 99, 0, 0L, "Roughness 0.6 Reflection 0.2 Vary -0.3 Dapple 0.15", 101, 1), /*light purple*/
             new Stuff("purple glass", 100, 0, 0L, "Transparency 0.5 Roughness 0.0 Reflection 0.65"),
-            new Stuff("toxic sludge", 101, 0, 0L, "Roughness 0.6 Reflection 0.2 Flow 0.15", 101, 6, 99, 1),
+            new Stuff("toxic sludge", 101, 0, 0L, "Roughness 0.6 Reflection 0.2 Flow 0.15 Vary -0.3 Dapple 0.15", 101, 6, 99, 1),
             new Stuff("void", 102, 0, -1L, "Roughness 0.0 Reflection 0.0 Emission -0.9 Transparency 1.0"), /*dark purple*/
             new Stuff("violent flash", 103, 0, 0L, "Emission 0.9 Roughness 0.0 Reflection 0.0 Missing 0.2", 103, 1, 0, 5), /*burgundy*/
             new Stuff("red glass", 104, 0, 0L, "Transparency 0.5 Roughness 0.0 Reflection 0.65"), /*medium magenta*/
+            new Stuff("love spawner", 105, 72, 0L, "Transparency 1.0", 106, 1, 105, 5),
+            new Stuff("love particle", 106, 0, -1L, "Emission 0.1 Roughness 0.5 Reflection 0.4 Rise 0.3", 106, 2, 105, 1),
+            new Stuff("flower petals", 107, 0, -1L, "Roughness 0.4 Reflection 0.0 Rise -0.1", 107, 2, 108, 6, 106, 1), /*light pink*/
+            new Stuff("clear glass", 108, 0, -1L, "Transparency 0.25 Roughness 0.0 Reflection 0.65"), /*light tan*/
+            new Stuff("sand particle", 109, 0, -1L, "Roughness 0.6 Reflection 0.05 Flow 0.2 Rise 0.1", 109, 3, 110, 1),
+            new Stuff("sand spawner", 110, 0, 0L, "Transparency 1.0", 109, 1, 110, 5),
+            new Stuff("dirt splatter", 111, 72, 0L, "Roughness 0.4 Reflection 0.0 Rise -0.1"), /*dark tan*/
+            new Stuff("lava", 112, 0, 0L, "Emission 0.2 Roughness 0.6 Reflection 0.0 Flow 0.05 Dapple -0.5"), /*dark orange*/
             //done up to here
-            new Stuff("clear glass", 105, 72, 0L, "Transparency 0.25 Roughness 0.0 Reflection 0.65"),
-            new Stuff("splash ascent", 106, 0, -1L, "Roughness 0.6 Reflection 0.6 Flow 0.4 Rise 0.1", 106, 2, 107, 6, 109, 1),
-            new Stuff("splash apex", 107, 0, -1L, "Roughness 0.7 Reflection 0.95 Flow 0.6", 107, 2, 108, 6, 106, 1), /*light pink*/
-            new Stuff("splash descent", 108, 0, -1L, "Roughness 0.5 Reflection 0.5 Flow 0.5 Rise -0.1", 108, 2, 109, 6, 107, 1), /*light tan*/
-            new Stuff("splash nadir", 109, 0, -1L, "Roughness 0.4 Reflection 0.3 Flow 0.7", 109, 2, 106, 6, 108, 1),
-            new Stuff("mote spawner", 110, 0, 0L, "Transparency 1.0", 112, 1, 123, 1, 110, 9),
-            new Stuff("blue glass", 111, 72, 0L, "Transparency 0.5 Roughness 0.0 Reflection 0.65"), /*dark tan*/
-            new Stuff("subtle mote", 112, 0, 0L, "Emission 0.2 Roughness 0.0 Reflection 0.0 Transparency 0.9", 112, 5, 110, 3), /*dark orange*/
             new Stuff("dread spawner", 113, 0, 0L, "Transparency 1.0", 114, 1, 113, 11),
             new Stuff("dread", 114, 120, 0L, "Emission -0.4 Roughness 0.0 Reflection 0.0 Transparency 0.7 Missing 0.1", 114, 4, 113, 3), /*hot orange*/
             new Stuff("unknown energy", 115, 0, 0L, "Emission 0.4 Roughness 0.3 Reflection 0.0 Flow 0.7 Missing 0.4", 115, 5, 117, 1, 0, 1), /*light skin*/
@@ -333,7 +333,7 @@ public class Stuff {
             new Stuff("sludge bubble", 119, 119, -1L, "Roughness 0.6 Reflection 0.2", 120, 1),
             new Stuff("sludge", 120, 119, -1L, "Roughness 0.6 Reflection 0.2 Flow 0.15", 120, 6, 119, 1), /*dark skin*/
             new Stuff("deny spawner", 121, 0, 0L, "Transparency 1.0", 125, 1, 121, 4), /*gore*/
-            new Stuff("love spawner", 122, 0, 0L, "Transparency 1.0", 125, 1, 122, 5), /*dark brown*/
+            new Stuff("love spawner", 122, 0, 0L, "Transparency 1.0", 124, 1, 122, 5), /*dark brown*/
             new Stuff("powerful mote", 123, 0, 0L, "Emission 0.6 Roughness 0.0 Reflection 0.0 Transparency 0.8", 123, 5, 110, 3),
             new Stuff("love", 124, 0, 0L, "Emission 0.1 Roughness 0.5 Reflection 0.4 Rise 0.3", 124, 2, 122, 1), /*medium brown*/
             new Stuff("deny particle", 125, 0, 0L,  "Emission -0.15 Roughness 0.3 Reflection 0.2 Rise -0.4", 125, 1, 121, 1, 0, 1), /*dark yellow*/
