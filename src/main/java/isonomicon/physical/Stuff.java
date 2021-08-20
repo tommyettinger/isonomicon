@@ -292,7 +292,7 @@ public class Stuff {
             new Stuff("confirm particle", 79, 84, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.7 Rise 0.9", 79, 1, 77, 1, 0, 1),
             new Stuff("vigor fading", 80, 80, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.2 Missing 0.3 Vary 0.1", 0, 4, 80, 7, 81, 1),
             new Stuff("vigor active", 81, 0, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.4 Vary 0.3", 81, 9, 80, 4, 0, 1), /*light green*/
-            new Stuff("ice glint", 82, 0, 0L, "Transparency 1.0", 82, 1, 25, 20), /*light cyan*/
+            new Stuff("ice glint", 82, 0, 0L, "Roughness 0.4 Reflection 0.95 Emission 0.4", 82, 1, 25, 20), /*light cyan*/
             new Stuff("chill particle", 83, 0, 0L, "Roughness 0.8 Reflection 0.0 Missing 0.2 Transparency 0.5 Rise -0.1", 83, 7, 84, 1),
             new Stuff("chill spawner", 84, 0, 0L, "Transparency 1.0", 84, 5, 83, 2), /*dark cyan*/
             new Stuff("splash lowest", 85, 0, 0L, "Roughness 0.4 Reflection 0.3 Flow 0.7", 85, 3, 86, 5), /*dark azure*/
@@ -300,22 +300,22 @@ public class Stuff {
             new Stuff("splash highest", 87, 0, 0L, "Roughness 0.7 Reflection 0.95 Flow 0.6", 87, 2, 88, 6, 86, 1),
             new Stuff("splash curl", 88, 0, 0L, "Roughness 0.5 Reflection 0.5 Flow 0.5 Rise -0.1", 88, 2, 85, 6, 87, 1),
             new Stuff("metal glint", 89, 0, 0L, "Roughness 0.2 Reflection 1.0 Emission 0.5", 89, 1, 6, 14), /*light azure*/
-            new Stuff("quiet speech", 90, 0, 0L, "Roughness 0.0 Reflection 0.0 Flow 0.2 Rise 0.3 Missing 0.05", 90, 1, 91, 1, 92, 2), /*light blue*/
-            new Stuff("loud speech", 91, 0, 0L, "Roughness 0.0 Reflection 0.0 Flow 0.2 Rise 0.6 Missing 0.08", 91, 1, 92, 4),
-            new Stuff("speech spawner", 92, 0, 0L, "Transparency 1.0", 92, 3, 90, 3, 91, 1),
+            new Stuff("blue glass", 90, 0, 0L, "Transparency 0.5 Roughness 0.0 Reflection 0.65"), /*light blue*/
+            new Stuff("speech particle", 91, 0, 0L, "Roughness 0.0 Reflection 0.0 Flow 0.2 Rise 0.6 Missing 0.08", 91, 1, 92, 1),
+            new Stuff("speech spawner", 92, 0, 0L, "Transparency 1.0", 92, 3, 91, 4),
             new Stuff("dread spawner", 93, 0, 0L, "Transparency 1.0", 94, 1, 93, 11), /*dark blue*/
             new Stuff("dread particle", 94, 94, 0L, "Emission -0.4 Roughness 0.0 Reflection 0.0 Transparency 0.7 Missing 0.1", 94, 4, 93, 3), /*dark violet*/
             new Stuff("stored energy", 95, 0, 0L, "Emission 0.4 Roughness 0.3 Reflection 0.0 Flow 0.7 Missing 0.4", 95, 5, 96, 1, 0, 1),
             new Stuff("shock spawner", 96, 0, 0L, "Transparency 1.0", 97, 1, 96, 14),
             new Stuff("shock particle", 97, 0, 0L, "Emission 0.6 Roughness 0.4 Reflection 0.0 Missing 0.6", 97, 2, 96, 3),
+            new Stuff("crystal glint", 98, 0, 0L, "Roughness 0.1 Reflection 1.0 Emission 0.65", 98, 1, 35, 8), /*light violet*/
+            new Stuff("sludge bubble", 99, 0, 0L, "Roughness 0.6 Reflection 0.2", 101, 1), /*light purple*/
+            new Stuff("purple glass", 100, 0, 0L, "Transparency 0.5 Roughness 0.0 Reflection 0.65"),
+            new Stuff("toxic sludge", 101, 0, 0L, "Roughness 0.6 Reflection 0.2 Flow 0.15", 101, 6, 99, 1),
+            new Stuff("void", 102, 0, -1L, "Roughness 0.0 Reflection 0.0 Emission -0.9 Transparency 1.0"), /*dark purple*/
+            new Stuff("violent flash", 103, 0, 0L, "Emission 0.9 Roughness 0.0 Reflection 0.0 Missing 0.2", 103, 1, 0, 5), /*burgundy*/
+            new Stuff("red glass", 104, 0, 0L, "Transparency 0.5 Roughness 0.0 Reflection 0.65"), /*medium magenta*/
             //done up to here
-            new Stuff("crystal glint", 98, 0, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.7 Rise 0.9", 98, 1, 99, 1, 0, 1), /*light violet*/
-            new Stuff("confirm spawner", 99, 0, 0L, "Transparency 1.0", 98, 1, 99, 4), /*light purple*/
-            new Stuff("chaos spawner", 100, 0, 0L, "Transparency 1.0", 78, 1, 94, 1, 118, 1, 100, 5),
-            new Stuff("metal glint", 101, 0, 0L, "Roughness 0.2 Reflection 1.0 Emission 0.5", 101, 1, 7, 14),
-            new Stuff("darkened water", 102, 0, -1L, "Roughness 0.0 Reflection 0.0 Flow 0.1"), /*dark purple*/
-            new Stuff("chill spawner", 103, 0, 0L, "Transparency 1.0", 104, 2, 103, 5), /*burgundy*/
-            new Stuff("chill", 104, 0, 0L, "Roughness 0.8 Reflection 0.0 Missing 0.2 Transparency 0.5 Rise -0.1", 104, 3, 103, 2), /*medium magenta*/
             new Stuff("clear glass", 105, 72, 0L, "Transparency 0.25 Roughness 0.0 Reflection 0.65"),
             new Stuff("splash ascent", 106, 0, -1L, "Roughness 0.6 Reflection 0.6 Flow 0.4 Rise 0.1", 106, 2, 107, 6, 109, 1),
             new Stuff("splash apex", 107, 0, -1L, "Roughness 0.7 Reflection 0.95 Flow 0.6", 107, 2, 108, 6, 106, 1), /*light pink*/
