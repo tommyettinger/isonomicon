@@ -274,23 +274,23 @@ public class Stuff {
             new Stuff("ripe fruit or flower", 62, 62, 128L, "Roughness 0.2 Reflection 0.55 Dapple -0.2"),
             new Stuff("bone beak claw", 63, 63, 64L, "Roughness 0.4 Reflection 0.4"), /*light yellow*/
 
-            new Stuff("dark glass", 64, 69, 0L, "Transparency 0.3 Roughness 0.0 Reflection 0.4"),
-            new Stuff("dark eye", 65, 65, 0L, "Roughness 0.0 Reflection 0.1"), /*black*/
-            new Stuff("shadow", 66, 66, 0L, "Roughness 0.0 Reflection 0.0"),
+            new Stuff("dark glass", 64, 0, 0L, "Transparency 0.3 Roughness 0.0 Reflection 0.4"),
+            new Stuff("dark eye", 65, 0, 0L, "Roughness 0.0 Reflection 0.1"), /*black*/
+            new Stuff("shadow", 66, 0, 0L, "Roughness 0.0 Reflection 0.0"),
             new Stuff("smoke", 67, 0, 0L, "Roughness 0.5 Reflection 0.0 Missing 0.1 Rise 0.4 Dapple -0.15", 0, 2, 67, 7),
             new Stuff("gray glass", 68, 0, 0L, "Transparency 0.5 Roughness 0.0 Reflection 0.65"),
-            new Stuff("dead eye", 69, 71, 0L, "Roughness 0.5 Reflection 0.0"),
-            new Stuff("steam", 70, 70, 0L, "Transparency 0.5 Roughness 0.3 Missing 0.2 Flow 0.3 Rise 0.7", 0, 3, 70, 5),
-            new Stuff("light eye", 71, 71, 0L, "Roughness 1.0 Reflection 1.0"), /*white*/
-            new Stuff("radioactive glow", 72, 72, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.6 Flow 0.3"), /*light lime*/
+            new Stuff("dead eye", 69, 0, 0L, "Roughness 0.5 Reflection 0.0"),
+            new Stuff("steam", 70, 0, 0L, "Transparency 0.5 Roughness 0.3 Missing 0.2 Flow 0.3 Rise 0.7", 0, 3, 70, 5),
+            new Stuff("light eye", 71, 0, 0L, "Roughness 1.0 Reflection 1.0"), /*white*/
+            new Stuff("radioactive glow", 72, 0, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.6 Flow 0.3"), /*light lime*/
             new Stuff("miasma", 73, 0, 0L, "Roughness 0.3 Reflection 0.0 Flow 0.5 Rise -0.1 Missing 0.05", 75, 2, 73, 5),
             new Stuff("rustling leaf", 74, 0, 0L, "Roughness 0.4 Reflection 0.05 Dapple -0.35 Missing 0.2"),
-            new Stuff("miasma spawner", 75, 75, 0L, "Transparency 1.0", 75, 7, 73, 1), /*dark lime*/
+            new Stuff("miasma spawner", 75, 0, 0L, "Transparency 1.0", 75, 7, 73, 1), /*dark lime*/
             new Stuff("vigor spawner", 76, 0, 0L, "Transparency 1.0", 81, 1, 76, 6), /*dark green*/
-            new Stuff("confirm spawner", 77, 73, 0L, "Transparency 1.0", 79, 1, 77, 4),
+            new Stuff("confirm spawner", 77, 0, 0L, "Transparency 1.0", 79, 1, 77, 4),
             new Stuff("green glass", 78, 0, 0L, "Transparency 0.5 Roughness 0.0 Reflection 0.65"),
-            new Stuff("confirm particle", 79, 84, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.7 Rise 0.9", 79, 1, 77, 1, 0, 1),
-            new Stuff("vigor fading", 80, 80, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.2 Missing 0.3 Vary 0.1", 0, 4, 80, 7, 81, 1),
+            new Stuff("confirm particle", 79, 0, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.7 Rise 0.9", 79, 1, 77, 1, 0, 1),
+            new Stuff("vigor fading", 80, 0, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.2 Missing 0.3 Vary 0.1", 0, 4, 80, 7, 81, 1),
             new Stuff("vigor active", 81, 0, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.4 Vary 0.3", 81, 9, 80, 4, 0, 1), /*light green*/
             new Stuff("ice glint", 82, 0, 0L, "Roughness 0.4 Reflection 0.95 Emission 0.4", 82, 1, 25, 20), /*light cyan*/
             new Stuff("chill particle", 83, 0, 0L, "Roughness 0.8 Reflection 0.0 Missing 0.2 Transparency 0.5 Rise -0.1", 83, 7, 84, 1),
@@ -304,7 +304,7 @@ public class Stuff {
             new Stuff("speech particle", 91, 0, 0L, "Roughness 0.0 Reflection 0.0 Flow 0.2 Rise 0.6 Missing 0.08", 91, 1, 92, 1),
             new Stuff("speech spawner", 92, 0, 0L, "Transparency 1.0", 92, 3, 91, 4),
             new Stuff("dread spawner", 93, 0, 0L, "Transparency 1.0", 94, 1, 93, 11), /*dark blue*/
-            new Stuff("dread particle", 94, 94, 0L, "Emission -0.4 Roughness 0.0 Reflection 0.0 Transparency 0.7 Missing 0.1", 94, 4, 93, 3), /*dark violet*/
+            new Stuff("dread particle", 94, 0, 0L, "Emission -0.4 Roughness 0.0 Reflection 0.0 Transparency 0.7 Missing 0.1", 94, 4, 93, 3), /*dark violet*/
             new Stuff("stored energy", 95, 0, 0L, "Emission 0.4 Roughness 0.3 Reflection 0.0 Flow 0.7 Missing 0.4", 95, 5, 96, 1, 0, 1),
             new Stuff("shock spawner", 96, 0, 0L, "Transparency 1.0", 97, 1, 96, 14),
             new Stuff("shock particle", 97, 0, 0L, "Emission 0.6 Roughness 0.4 Reflection 0.0 Missing 0.6", 97, 2, 96, 3),
@@ -315,30 +315,30 @@ public class Stuff {
             new Stuff("void", 102, 0, -1L, "Roughness 0.0 Reflection 0.0 Emission -0.9 Transparency 1.0"), /*dark purple*/
             new Stuff("violent flash", 103, 0, 0L, "Emission 0.9 Roughness 0.0 Reflection 0.0 Missing 0.2", 103, 1, 0, 5), /*burgundy*/
             new Stuff("red glass", 104, 0, 0L, "Transparency 0.5 Roughness 0.0 Reflection 0.65"), /*medium magenta*/
-            new Stuff("love spawner", 105, 72, 0L, "Transparency 1.0", 106, 1, 105, 5),
+            new Stuff("love spawner", 105, 0, 0L, "Transparency 1.0", 106, 1, 105, 5),
             new Stuff("love particle", 106, 0, -1L, "Emission 0.1 Roughness 0.5 Reflection 0.4 Rise 0.3", 106, 2, 105, 1),
             new Stuff("flower petals", 107, 0, -1L, "Roughness 0.4 Reflection 0.0 Rise -0.1", 107, 2, 108, 6, 106, 1), /*light pink*/
             new Stuff("clear glass", 108, 0, -1L, "Transparency 0.25 Roughness 0.0 Reflection 0.65"), /*light tan*/
             new Stuff("sand particle", 109, 0, -1L, "Roughness 0.6 Reflection 0.05 Flow 0.2 Rise 0.1", 109, 3, 110, 1),
             new Stuff("sand spawner", 110, 0, 0L, "Transparency 1.0", 109, 1, 110, 5),
-            new Stuff("dirt splatter", 111, 72, 0L, "Roughness 0.4 Reflection 0.0 Rise -0.1"), /*dark tan*/
+            new Stuff("dirt splatter", 111, 0, 0L, "Roughness 0.4 Reflection 0.0 Rise -0.1"), /*dark tan*/
             new Stuff("lava", 112, 0, 0L, "Emission 0.2 Roughness 0.6 Reflection 0.0 Flow 0.05 Dapple -0.5"), /*dark orange*/
-            //done up to here
-            new Stuff("dread spawner", 113, 0, 0L, "Transparency 1.0", 114, 1, 113, 11),
-            new Stuff("dread", 114, 120, 0L, "Emission -0.4 Roughness 0.0 Reflection 0.0 Transparency 0.7 Missing 0.1", 114, 4, 113, 3), /*hot orange*/
-            new Stuff("unknown energy", 115, 0, 0L, "Emission 0.4 Roughness 0.3 Reflection 0.0 Flow 0.7 Missing 0.4", 115, 5, 117, 1, 0, 1), /*light skin*/
-            new Stuff("purple glass", 116, 73, 0L, "Transparency 0.5 Roughness 0.0 Reflection 0.65"),
-            new Stuff("spark spawner", 117, 0, 0L, "Transparency 1.0", 118, 1, 117, 14),
-            new Stuff("spark", 118, 0, 0L, "Emission 0.6 Roughness 0.4 Reflection 0.0 Missing 0.6", 118, 2, 117, 3),
-            new Stuff("sludge bubble", 119, 119, -1L, "Roughness 0.6 Reflection 0.2", 120, 1),
-            new Stuff("sludge", 120, 119, -1L, "Roughness 0.6 Reflection 0.2 Flow 0.15", 120, 6, 119, 1), /*dark skin*/
-            new Stuff("deny spawner", 121, 0, 0L, "Transparency 1.0", 125, 1, 121, 4), /*gore*/
-            new Stuff("love spawner", 122, 0, 0L, "Transparency 1.0", 124, 1, 122, 5), /*dark brown*/
-            new Stuff("powerful mote", 123, 0, 0L, "Emission 0.6 Roughness 0.0 Reflection 0.0 Transparency 0.8", 123, 5, 110, 3),
-            new Stuff("love", 124, 0, 0L, "Emission 0.1 Roughness 0.5 Reflection 0.4 Rise 0.3", 124, 2, 122, 1), /*medium brown*/
-            new Stuff("deny particle", 125, 0, 0L,  "Emission -0.15 Roughness 0.3 Reflection 0.2 Rise -0.4", 125, 1, 121, 1, 0, 1), /*dark yellow*/
-            new Stuff("ember spawner", 126, 0, 0L, "Transparency 1.0", 81, 1, 126, 9),
-            new Stuff("violent flash", 127, 0, 0L, "Emission 0.9 Roughness 0.0 Reflection 0.0 Missing 0.2", 127, 1, 0, 5), /*light yellow*/
+            new Stuff("ember", 113, 0, 0L, "Roughness 0.0 Reflection 0.2 Emission 0.45 Missing 0.3 Rise 0.3 Dapple 0.3", 113, 8, 126, 7, 67, 1),
+            new Stuff("hot fire", 114, 0, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.6 Missing 0.15 Dapple 0.15 Flow 0.18 Rise 0.06", 114, 11, 115, 8, 67, 3, 113, 2), /*hot orange*/
+            new Stuff("bright fire", 115, 0, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.8 Missing 0.1 Flow 0.15 Rise 0.08", 114, 7, 115, 8, 113, 3), /*light skin*/
+            new Stuff("orange glass", 116, 0, 0L, "Transparency 0.5 Roughness 0.0 Reflection 0.65"),
+            //done up to here, plus some later
+            new Stuff("", 117, 0, 0L, "Transparency 1.0", 118, 1, 117, 14),
+            new Stuff("", 118, 0, 0L, "Emission 0.6 Roughness 0.4 Reflection 0.0 Missing 0.6", 118, 2, 117, 3),
+            new Stuff("", 119, 119, -1L, "Roughness 0.6 Reflection 0.2", 120, 1),
+            new Stuff("brown glass", 120, 119, -1L, "Transparency 0.35 Roughness 0.0 Reflection 0.65"), /*dark skin*/
+            new Stuff("", 121, 0, 0L, "Transparency 1.0", 125, 1, 121, 4), /*gore*/
+            new Stuff("", 122, 0, 0L, "Transparency 1.0", 124, 1, 122, 5), /*dark brown*/
+            new Stuff("", 123, 0, 0L, "Emission 0.6 Roughness 0.0 Reflection 0.0 Transparency 0.8", 123, 5, 110, 3),
+            new Stuff("", 124, 0, 0L, "Emission 0.1 Roughness 0.5 Reflection 0.4 Rise 0.3", 124, 2, 122, 1), /*medium brown*/
+            new Stuff("yellow glass", 125, 0, 0L,  "Emission -0.15 Roughness 0.3 Reflection 0.2 Rise -0.4", 125, 1, 121, 1, 0, 1), /*dark yellow*/
+            new Stuff("ember spawner", 126, 0, 0L, "Transparency 1.0", 113, 1, 126, 9),
+            new Stuff("fiery spark", 127, 0, 0L, "Emission 0.6 Roughness 0.4 Reflection 0.0 Missing 0.6", 127, 2, 0, 3), /*light yellow*/
     };
 
     public static void evolve(byte[][][] model, int frame){
