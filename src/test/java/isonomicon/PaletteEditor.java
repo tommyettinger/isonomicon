@@ -96,6 +96,8 @@ public class PaletteEditor extends ApplicationAdapter {
 
     private PixmapIO.PNG png;
 
+    private static final Stuff[] STUFFS = Stuff.STUFFS;
+
     @Override
     public void create() {
         font = new BitmapFont(Gdx.files.internal("font.fnt"));
@@ -226,7 +228,7 @@ public class PaletteEditor extends ApplicationAdapter {
 
         batch.begin();
         batch.setPackedColor(Color.WHITE_FLOAT_BITS);
-        font.draw(batch, Stuff.STUFFS[stuffIndex + 1 & 127].name, 0, 210, 256, Align.center, false);
+        font.draw(batch, STUFFS[stuffIndex + 1 & 127].name, 0, 210, 256, Align.center, false);
         batch.draw(previewTexture, 112, 150);
         batch.end();
     }

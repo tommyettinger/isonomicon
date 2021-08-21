@@ -84,6 +84,9 @@ public class PaletteDrafter extends ApplicationAdapter {
     private float L = 0.5f, A = 0.5f, B = 0.5f, alpha = 1f, allL = 0f, allA = 0f, allB = 0f, allS = 0f;
 
     private PixmapIO.PNG png;
+
+    private static final Stuff[] STUFFS = Stuff.STUFFS;
+
     private final OrderedMap<String, int[]> groups = new OrderedMap<>(128);
     {
         groups.put("All", ArrayTools.range(1, 128));
@@ -138,7 +141,7 @@ public class PaletteDrafter extends ApplicationAdapter {
         L = ColorTools.channelL(oklab);
         A = ColorTools.channelA(oklab);
         B = ColorTools.channelB(oklab);
-        alpha = 1f - Stuff.STUFFS[groups.getAt(groupIndex)[stuffIndex]].material.getTrait(VoxMaterial.MaterialTrait._alpha);
+        alpha = 1f - STUFFS[groups.getAt(groupIndex)[stuffIndex]].material.getTrait(VoxMaterial.MaterialTrait._alpha);
         for (int i = 1; i < 128; i++) {
             workingOklab[i] = ColorTools.fromRGBA8888(workingPalette.getPixel(i, 0));
         }
@@ -242,7 +245,7 @@ public class PaletteDrafter extends ApplicationAdapter {
             L = ColorTools.channelL(oklab);
             A = ColorTools.channelA(oklab);
             B = ColorTools.channelB(oklab);
-            alpha = 1f - Stuff.STUFFS[group[stuffIndex]].material.getTrait(VoxMaterial.MaterialTrait._alpha);
+            alpha = 1f - STUFFS[group[stuffIndex]].material.getTrait(VoxMaterial.MaterialTrait._alpha);
         }
         float step = Math.min(Gdx.graphics.getDeltaTime(), 0.2f) * 0.25f;
         if(UIUtils.shift()) {
@@ -292,7 +295,7 @@ public class PaletteDrafter extends ApplicationAdapter {
                     float l = MathUtils.clamp(ColorTools.channelL(oklab) + allL, 0f, 1f);
                     float a = MathUtils.clamp((ColorTools.channelA(oklab) - 0.5f) * (1f + allS * 3f) + 0.5f + allA, 0f, 1f);
                     float b = MathUtils.clamp((ColorTools.channelB(oklab) - 0.5f) * (1f + allS * 3f) + 0.5f + allB, 0f, 1f);
-                    float al = 1f - Stuff.STUFFS[group[i]].material.getTrait(VoxMaterial.MaterialTrait._alpha);
+                    float al = 1f - STUFFS[group[i]].material.getTrait(VoxMaterial.MaterialTrait._alpha);
                     float edited;
                     workingOklab[group[i] - 1 & 127] = edited = ColorTools.limitToGamut(l, a, b, al);
                     int pre = ColorTools.toRGBA8888(edited);
@@ -378,7 +381,7 @@ public class PaletteDrafter extends ApplicationAdapter {
         batch.begin();
         batch.setPackedColor(Color.WHITE_FLOAT_BITS);
         font.draw(batch, groups.keyAt(groupIndex), Gdx.graphics.getWidth() * 3 / 8, Gdx.graphics.getHeight() * 15 / 16, Gdx.graphics.getWidth() / 2, Align.left, false);
-        font.draw(batch, Stuff.STUFFS[group[stuffIndex]].name, 0, Gdx.graphics.getHeight() * 14 / 16, Gdx.graphics.getWidth(), Align.center, false);
+        font.draw(batch, STUFFS[group[stuffIndex]].name, 0, Gdx.graphics.getHeight() * 14 / 16, Gdx.graphics.getWidth(), Align.center, false);
         batch.draw(previewTexture, Gdx.graphics.getWidth() / 2 - 8, Gdx.graphics.getHeight() / 2 + 16);
         batch.end();
     }
