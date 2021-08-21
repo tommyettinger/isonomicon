@@ -270,7 +270,7 @@ public class Stuff {
             new Stuff("knotted wood", 58, 58, 128L, "Roughness 0.5 Reflection 0.1 Dapple -0.1"), /*dark brown*/
             new Stuff("old wood", 59, 59, 2L, "Roughness 0.6 Reflection 0.0 Dapple -0.25 Vary -0.35"),
             new Stuff("fresh wood", 60, 60, 512L, "Roughness 0.4 Reflection 0.0 Dapple -0.15 Vary -0.1"), /*medium brown*/
-            new Stuff("gold", 61, 61, 24L, "Roughness 0.5 Reflection 0.85"), /*dark yellow*/
+            new Stuff("gold", 61, 61, 24L, "Roughness 0.5 Reflection 0.85", 126, 1, 5, 61), /*dark yellow*/
             new Stuff("ripe fruit or flower", 62, 62, 128L, "Roughness 0.2 Reflection 0.55 Dapple -0.2"),
             new Stuff("bone beak claw", 63, 63, 64L, "Roughness 0.4 Reflection 0.4"), /*light yellow*/
 
@@ -323,21 +323,20 @@ public class Stuff {
             new Stuff("sand spawner", 110, 0, 0L, "Transparency 1.0", 109, 1, 110, 5),
             new Stuff("dirt splatter", 111, 0, 0L, "Roughness 0.4 Reflection 0.0 Rise -0.1"), /*dark tan*/
             new Stuff("lava", 112, 0, 0L, "Emission 0.2 Roughness 0.6 Reflection 0.0 Flow 0.05 Dapple -0.5"), /*dark orange*/
-            new Stuff("ember", 113, 0, 0L, "Roughness 0.0 Reflection 0.2 Emission 0.45 Missing 0.3 Rise 0.3 Dapple 0.3", 113, 8, 126, 7, 67, 1),
+            new Stuff("ember", 113, 0, 0L, "Roughness 0.0 Reflection 0.2 Emission 0.45 Missing 0.3 Rise 0.3 Dapple 0.3", 113, 8, 119, 7, 67, 1),
             new Stuff("hot fire", 114, 0, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.6 Missing 0.15 Dapple 0.15 Flow 0.18 Rise 0.06", 114, 11, 115, 8, 67, 3, 113, 2), /*hot orange*/
             new Stuff("bright fire", 115, 0, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.8 Missing 0.1 Flow 0.15 Rise 0.08", 114, 7, 115, 8, 113, 3), /*light skin*/
             new Stuff("orange glass", 116, 0, 0L, "Transparency 0.5 Roughness 0.0 Reflection 0.65"),
-            //done up to here, plus some later
-            new Stuff("", 117, 0, 0L, "Transparency 1.0", 118, 1, 117, 14),
-            new Stuff("", 118, 0, 0L, "Emission 0.6 Roughness 0.4 Reflection 0.0 Missing 0.6", 118, 2, 117, 3),
-            new Stuff("", 119, 119, -1L, "Roughness 0.6 Reflection 0.2", 120, 1),
+            new Stuff("flying fluff", 117, 0, 0L, "Roughness 0.8 Reflection 0.05 Missing 0.15", 117, 7, 0, 1),
+            new Stuff("flailing limbs", 118, 0, 0L, "Roughness 0.6 Reflection 0.2 Missing 0.3"),
+            new Stuff("ember spawner", 119, 119, -1L, "Transparency 1.0", 113, 1, 119, 9),
             new Stuff("brown glass", 120, 119, -1L, "Transparency 0.35 Roughness 0.0 Reflection 0.65"), /*dark skin*/
-            new Stuff("", 121, 0, 0L, "Transparency 1.0", 125, 1, 121, 4), /*gore*/
-            new Stuff("", 122, 0, 0L, "Transparency 1.0", 124, 1, 122, 5), /*dark brown*/
-            new Stuff("", 123, 0, 0L, "Emission 0.6 Roughness 0.0 Reflection 0.0 Transparency 0.8", 123, 5, 110, 3),
-            new Stuff("", 124, 0, 0L, "Emission 0.1 Roughness 0.5 Reflection 0.4 Rise 0.3", 124, 2, 122, 1), /*medium brown*/
-            new Stuff("yellow glass", 125, 0, 0L,  "Emission -0.15 Roughness 0.3 Reflection 0.2 Rise -0.4", 125, 1, 121, 1, 0, 1), /*dark yellow*/
-            new Stuff("ember spawner", 126, 0, 0L, "Transparency 1.0", 113, 1, 126, 9),
+            new Stuff("gore splatter", 121, 0, 0L, "Roughness 0.45 Reflection 0.15 Rise -0.1"), /*gore*/
+            new Stuff("wood pieces", 122, 0, 0L, "Roughness 0.6 Reflection 0.0 Dapple -0.25 Vary -0.35 Missing 0.5 Rise -0.2", 0, 1, 122, 3), /*dark brown*/
+            new Stuff("stone pieces", 123, 0, 0L, "Roughness 0.8 Reflection 0.05 Missing 0.45 Rise -0.25", 0, 2, 123, 7),
+            new Stuff("cloth pieces", 124, 0, 0L,  "Roughness 0.25 Reflection 0.06 Missing 0.4 Rise -0.05", 0, 2, 124, 5), /*medium brown*/
+            new Stuff("yellow glass", 125, 0, 0L, "Transparency 0.5 Roughness 0.0 Reflection 0.65"), /*dark yellow*/
+            new Stuff("gold glint", 126, 0, 0L, "Roughness 0.2 Reflection 1.0 Emission 0.5", 126, 1, 5, 61),
             new Stuff("fiery spark", 127, 0, 0L, "Emission 0.6 Roughness 0.4 Reflection 0.0 Missing 0.6", 127, 2, 0, 3), /*light yellow*/
     };
 
