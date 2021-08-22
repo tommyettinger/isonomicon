@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.github.tommyettinger.anim8.AnimatedGif;
+import com.github.tommyettinger.anim8.AnimatedPNG;
 import com.github.tommyettinger.anim8.Dithered;
 import com.github.tommyettinger.anim8.PaletteReducer;
 import isonomicon.io.LittleEndianDataInputStream;
@@ -33,13 +34,14 @@ public class Specialist extends ApplicationAdapter {
     private String[] inputs;
     private PixmapIO.PNG png;
     private AnimatedGif gif;
+    private AnimatedPNG apng;
     public Specialist(String[] args){
         if(args != null && args.length > 0)
             inputs = args;
         else 
         {
             System.out.println("INVALID ARGUMENTS. Please supply space-separated absolute paths to .vox models, or use the .bat file.");
-            inputs = new String[]{"vox/Box.vox", "vox/Damned.vox", "vox/Lomuk.vox", "vox/Eye_Tyrant.vox", "vox/Direction_Cube.vox", "vox/Infantry.vox", "vox/Infantry_Firing.vox", "vox/Tree.vox", "vox/teapot.vox"};
+//            inputs = new String[]{"vox/Box.vox", "vox/Damned.vox", "vox/Lomuk.vox", "vox/Eye_Tyrant.vox", "vox/Direction_Cube.vox", "vox/Infantry.vox", "vox/Infantry_Firing.vox", "vox/Tree.vox", "vox/teapot.vox"};
 //            inputs = new String[]{"vox/Eye_Tyrant_Floor.vox", "vox/Eye_Tyrant.vox", "vox/Bear.vox", "vox/Infantry_Firing.vox", "vox/Lomuk.vox", "vox/Tree.vox"};
 //            inputs = new String[]{"vox/Eye_Tyrant.vox", "vox/Bear.vox", "vox/Infantry_Firing.vox", "vox/Tree.vox"};
 //            inputs = new String[]{"vox/Eye_Tyrant.vox", "vox/Infantry_Firing.vox", "vox/Lomuk.vox", "vox/Tree.vox", "vox/LAB.vox"};
@@ -64,6 +66,7 @@ public class Specialist extends ApplicationAdapter {
 //            inputs = new String[]{"vox/Tree.vox"};
 //            inputs = new String[]{"vox/teapot.vox"};
 //            inputs = new String[]{"vox/Figure.vox"};
+            inputs = new String[]{"b/vox/Figure.vox"};
             if(!new File("specialized/" + inputs[0]).exists()) {
                 System.out.println("File not found: specialized/" + inputs[0]);
                 System.exit(0);
@@ -79,11 +82,11 @@ public class Specialist extends ApplicationAdapter {
         png.setCompression(2); // we are likely to compress these with something better, like oxipng.
 //        png8 = new PNG8();
         gif = new AnimatedGif();
-//        apng = new AnimatedPNG();
+        apng = new AnimatedPNG();
         gif.setDitherAlgorithm(Dithered.DitherAlgorithm.SCATTER);
 //        png8.setDitherAlgorithm(Dithered.DitherAlgorithm.SCATTER);
-        gif.palette = new PaletteReducer(Coloring.MANOSSUS256);
-        gif.palette.setDitherStrength(0.5f);
+        gif.palette = new PaletteReducer(Coloring.BETSY256);
+        gif.palette.setDitherStrength(0.25f);
 //        png8.palette = gif.palette;
         Gdx.files.local("out/vox").mkdirs();
         for (String s : inputs) {
@@ -103,8 +106,8 @@ public class Specialist extends ApplicationAdapter {
                     p.drawPixmap(pixmap, 0, 0);
                     pm.add(p);
                     try {
-                        png.write(Gdx.files.local("out/specialized/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), p);
-                        png.write(Gdx.files.local("out/special_lab/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
+                        png.write(Gdx.files.local("out/b/specialized/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), p);
+                        png.write(Gdx.files.local("out/b/special_lab/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -113,10 +116,10 @@ public class Specialist extends ApplicationAdapter {
                 pm.insertRange(pm.size - 4, 4);
             }
 //                gif.palette.analyze(pm);
-            gif.write(Gdx.files.local("out/specialized/" + name + '/' + name + ".gif"), pm, 8);
+            gif.write(Gdx.files.local("out/b/specialized/" + name + '/' + name + ".gif"), pm, 8);
 //                gif.palette.exact(Coloring.HALTONITE240, PRELOAD);
 //                gif.write(Gdx.files.local("out/" + name + '/' + name + "-256-color.gif"), pm, 1);
-//                apng.write(Gdx.files.local("out/" + name + '/' + name + ".png"), pm, 12);
+            apng.write(Gdx.files.local("out/b/specialized/" + name + '/' + name + ".png"), pm, 8);
             for (Pixmap pix : pm) {
                 if(!pix.isDisposed())
                     pix.dispose();
@@ -157,8 +160,9 @@ public class Specialist extends ApplicationAdapter {
             this.name = name.substring(nameStart, name.indexOf('.', nameStart));
 //            renderer = new NextRenderer(voxels.length, QUALITY);
 //            renderer = new AngledRenderer(voxels.length);
-            renderer = new SpecialRenderer(voxels.length);
-            renderer.palette(Coloring.MANOS64);
+            SpecialRenderer.shrink = 2;
+            renderer = new SpecialRenderer(voxels.length, Stuff.STUFFS_B);
+            renderer.palette(Coloring.BETTS64);
             renderer.saturation(0f);
             
         } catch (FileNotFoundException e) {
