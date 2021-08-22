@@ -378,7 +378,7 @@ public class Tools3D {
 
 
     public static byte[][][] simpleScale(byte[][][] voxels) {
-        return simpleScale(voxels, new byte[voxels.length][voxels[0].length][voxels[0][0].length]);
+        return simpleScale(voxels, new byte[voxels.length << 1][voxels[0].length << 1][voxels[0][0].length << 1]);
     }
     public static byte[][][] simpleScale(byte[][][] voxels, byte[][][] result) {
         final int limitX = voxels.length - 1;
