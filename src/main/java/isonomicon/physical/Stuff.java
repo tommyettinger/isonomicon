@@ -327,7 +327,7 @@ public class Stuff {
             new Stuff("hot fire", 114, 0, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.6 Missing 0.15 Dapple 0.15 Flow 0.18 Rise 0.06", 114, 11, 115, 8, 67, 3, 113, 2), /*hot orange*/
             new Stuff("bright fire", 115, 0, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.8 Missing 0.1 Flow 0.15 Rise 0.08", 114, 7, 115, 8, 113, 3), /*light skin*/
             new Stuff("orange glass", 116, 0, 0L, "Transparency 0.5 Roughness 0.0 Reflection 0.65"),
-            new Stuff("flying fluff", 117, 0, 0L, "Roughness 0.8 Reflection 0.05 Missing 0.15", 117, 7, 0, 1),
+            new Stuff("fluff pieces", 117, 0, 0L, "Roughness 0.8 Reflection 0.05 Missing 0.15", 117, 7, 0, 1),
             new Stuff("flailing limbs", 118, 0, 0L, "Roughness 0.6 Reflection 0.2 Missing 0.3"),
             new Stuff("ember spawner", 119, 119, -1L, "Transparency 1.0", 113, 1, 119, 9),
             new Stuff("brown glass", 120, 119, -1L, "Transparency 0.35 Roughness 0.0 Reflection 0.65"), /*dark skin*/
