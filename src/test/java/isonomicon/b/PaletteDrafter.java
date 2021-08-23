@@ -102,20 +102,19 @@ public class PaletteDrafter extends ApplicationAdapter {
         groups.put("Leaves", new int[]{14, 15, 16, 12, 13, 8});
         groups.put("Fruit", new int[]{62, 56, 9});
         groups.put("Water", new int[]{22, 21, 23});
-        groups.put("Cold", new int[]{25});
+        groups.put("Cold", new int[]{25, 82, 7});
+        groups.put("Earth", new int[]{46, 44, 47});
+        groups.put("Filth", new int[]{11, 10, 17});
+        groups.put("Leather", new int[]{2, 1});
+        groups.put("Marks", new int[]{28, 27, 26, 29});
+        groups.put("Metal", new int[]{4, 5, 6, 89, 3, 61, 126});
+        groups.put("Stone", new int[]{32, 24, 30, 31, 33, 34, 45});
+        groups.put("Crystal", new int[]{35, 98});
+        groups.put("Cloth", new int[]{41, 40, 42, 43});
+        groups.put("Eerie", new int[]{36, 38});
         // stopped here
-        groups.put("Fire", new int[]{84, 81, 87, 118});
-        groups.put("Filth", new int[]{3, 4, 29, 30});
-        groups.put("Poison", new int[]{31, 36, 119, 120, 93});
-        groups.put("Protection", new int[]{45, 37, 38});
-        groups.put("Paint", new int[]{48, 47});
-        groups.put("Marks", new int[]{44, 40, 42, 59});
-        groups.put("Metal", new int[]{7, 1, 101});
-        groups.put("Stone", new int[]{5, 6});
-        groups.put("Crystal", new int[]{58, 73});
-        groups.put("Cloth", new int[]{23, 57, 61, 85});
         groups.put("Curse", new int[]{78, 76, 75});
-        groups.put("Eerie", new int[]{51, 52, 53, 115});
+        groups.put("Fire", new int[]{84, 81, 87, 118});
     }
     @Override
     public void create() {
