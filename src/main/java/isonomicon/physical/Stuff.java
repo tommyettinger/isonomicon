@@ -313,7 +313,7 @@ public class Stuff {
             new Stuff("purple glass", 100, 0, 0L, "Transparency 0.5 Roughness 0.0 Reflection 0.65"),
             new Stuff("toxic sludge", 101, 0, 0L, "Roughness 0.6 Reflection 0.2 Flow 0.15 Vary -0.3 Dapple 0.15", 101, 6, 99, 1),
             new Stuff("void", 102, 0, -1L, "Roughness 0.0 Reflection 0.0 Emission -0.9 Transparency 1.0"), /*dark purple*/
-            new Stuff("violent flash", 103, 0, 0L, "Emission 0.9 Roughness 0.0 Reflection 0.0 Missing 0.2", 103, 1, 0, 5), /*burgundy*/
+            new Stuff("evil eye", 103, 0, 0L, "Roughness 0.75 Reflection 0.5 Emission 0.15"), /*burgundy*/
             new Stuff("red glass", 104, 0, 0L, "Transparency 0.5 Roughness 0.0 Reflection 0.65"), /*medium magenta*/
             new Stuff("love spawner", 105, 0, 0L, "Transparency 1.0", 106, 1, 105, 5),
             new Stuff("love particle", 106, 0, -1L, "Emission 0.1 Roughness 0.5 Reflection 0.4 Rise 0.3", 106, 2, 105, 1),
