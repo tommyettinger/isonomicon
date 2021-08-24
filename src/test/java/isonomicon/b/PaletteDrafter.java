@@ -131,8 +131,8 @@ public class PaletteDrafter extends ApplicationAdapter {
         png = new PixmapIO.PNG(1024);
 //        String name = "Eye_Tyrant";
 //        String name = "Lomuk";
-//        String name = "Damned";
-        String name = "Figure";
+        String name = "Damned";
+//        String name = "Figure";
 
         images = new Texture[32];
         for (int a = 0, i = 0; a < 8; a++) {
