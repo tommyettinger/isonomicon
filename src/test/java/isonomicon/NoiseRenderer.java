@@ -34,8 +34,9 @@ public class NoiseRenderer extends ApplicationAdapter {
     private SmudgeRenderer renderer;
     private FastNoise noise;
 
-    private static final int SMALL_SIZE = 128, LARGE_SIZE = 256;
+    private static final int SMALL_SIZE = 64, MID_SIZE = SMALL_SIZE << 1, LARGE_SIZE = SMALL_SIZE << 2;
     private byte[][][] tempVoxels = new byte[SMALL_SIZE][SMALL_SIZE][SMALL_SIZE];
+    private byte[][][] midVoxels = new byte[MID_SIZE][MID_SIZE][MID_SIZE];
     private byte[][][] voxels = new byte[LARGE_SIZE][LARGE_SIZE][LARGE_SIZE];
     private String name;
     private PNG8 png;
@@ -47,9 +48,9 @@ public class NoiseRenderer extends ApplicationAdapter {
     @Override
     public void create() {
         System.out.println("Setting up...");
-        noise = new FastNoise(12345678, 0x1p-3f, FastNoise.CUBIC_FRACTAL, 1);
+        noise = new FastNoise(123456789, 0x1p-3f, FastNoise.CUBIC_FRACTAL, 1);
         noise.setFractalType(FastNoise.RIDGED_MULTI);
-        noise.setPointHash(new CubeHash(123, 16));
+        noise.setPointHash(new CubeHash(1234, 16));
         long startTime = TimeUtils.millis();
 //        Gdx.files.local("out/vox/").mkdirs();
 //        png = new PixmapIO.PNG();
@@ -90,7 +91,7 @@ public class NoiseRenderer extends ApplicationAdapter {
 //            pm.insertRange(pm.size - 4, 4);
         }
         System.out.println("Mostly done, gif stuff in progress...");
-//        gif.palette.analyze(pm);
+        gif.palette.analyze(pm);
         gif.write(Gdx.files.local("out/" + name + '/' + name + ".gif"), pm, 8);
 //                gif.palette.exact(Coloring.HALTONITE240, PRELOAD);
 //                gif.write(Gdx.files.local("out/" + name + '/' + name + "-256-color.gif"), pm, 1);
@@ -127,20 +128,24 @@ public class NoiseRenderer extends ApplicationAdapter {
                 for (int z = 0; z < tempVoxels[0][0].length; z++) {
 //                    sum += (tempVoxels[x][y][z] = (byte) ((Float.floatToRawIntBits(noise.getConfiguredNoise(x, y, z, frame)) >> 31) & 81)); // gray-green
 //                    sum += (tempVoxels[x][y][z] = (byte) (~(Float.floatToRawIntBits(noise.getConfiguredNoise(x, y, z, frame) - 0.875f) >> 31) & 81)); // gray-green
-                    sum += (tempVoxels[x][y][z] = (byte) (~(Float.floatToRawIntBits(noise.getConfiguredNoise(x, y, z, frame) - 0.91f) >> 31) & 44)); // gray
+//                    sum += (tempVoxels[x][y][z] = (byte) (~(Float.floatToRawIntBits(noise.getConfiguredNoise(x, y, z, frame) - 0.91f) >> 31) & 44)); // gray
+//                    sum += (tempVoxels[x][y][z] = (byte) (~(Float.floatToRawIntBits(noise.getConfiguredNoise(x, y, z, frame) - 0.91f) >> 31) & 175)); // blue
+                    sum += (tempVoxels[x][y][z] = (byte) (~(Float.floatToRawIntBits(noise.getConfiguredNoise(x, y, z, frame) - 0.91f) >> 31) & (x + y + z + frame & 63))); // rainbow
                 }
             }
         }
         System.out.println(sum);
-        Tools3D.simpleScale(tempVoxels, voxels);
-        Tools3D.soakInPlace(voxels);
+        Tools3D.simpleScale(tempVoxels, midVoxels);
+//        Tools3D.simpleScale(midVoxels, voxels);
+        Tools3D.soakInPlace(midVoxels);
+        voxels = midVoxels;
         this.name = "Noise";
         if(renderer == null) {
             for (int i = 1; i < 256; i++) {
-                VoxIO.lastMaterials.put(i, new VoxMaterial());
+                VoxIO.lastMaterials.put(i, new VoxMaterial("Metal", "Roughness 0.4 Reflection 0.7"));
             }
             renderer = new SmudgeRenderer(voxels.length);
-            renderer.palette(VoxIO.lastPalette);
+            renderer.palette(Coloring.BETSY256);
             renderer.saturation(0f);
         }
     }
