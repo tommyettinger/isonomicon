@@ -342,8 +342,8 @@ public class Stuff {
 
     public static void evolve(byte[][][] model, int frame){
         evolve(STUFFS, model, frame);
-
     }
+
     public static void evolve(Stuff[] stuffs, byte[][][] model, int frame){
         for (int x = 0; x < model.length; x++) {
             for (int y = 0; y < model[x].length; y++) {

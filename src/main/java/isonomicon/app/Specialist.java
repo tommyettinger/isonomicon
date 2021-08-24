@@ -66,7 +66,8 @@ public class Specialist extends ApplicationAdapter {
 //            inputs = new String[]{"vox/Tree.vox"};
 //            inputs = new String[]{"vox/teapot.vox"};
 //            inputs = new String[]{"vox/Figure.vox"};
-            inputs = new String[]{"b/vox/Figure.vox"};
+//            inputs = new String[]{"b/vox/Figure.vox"};
+            inputs = new String[]{"b/vox/Figure.vox", "b/vox/Tree.vox"};
             if(!new File("specialized/" + inputs[0]).exists()) {
                 System.out.println("File not found: specialized/" + inputs[0]);
                 System.exit(0);
@@ -101,7 +102,7 @@ public class Specialist extends ApplicationAdapter {
                 Tools3D.deepCopyInto(evolving, voxels);
                 for (int f = 0; f < 4; f++) {
                     pixmap = renderer.drawSplats(evolving, i * 0.125f, f);
-                    Stuff.evolve(evolving, f);
+                    Stuff.evolve(Stuff.STUFFS_B, evolving, f);
                     Pixmap p = new Pixmap(pixmap.getWidth(), pixmap.getHeight(), pixmap.getFormat());
                     p.drawPixmap(pixmap, 0, 0);
                     pm.add(p);
