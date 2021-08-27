@@ -25,10 +25,10 @@ import static squidpony.ArrayTools.fill;
  */
 public class SpecialRenderer {
     public final Stuff[] stuffs;
-    public Pixmap pixmap, palettePixmap;
+    public Pixmap palettePixmap;
     public int[][] depths, voxels, render, outlines;
     public VoxMaterial[][] materials;
-    public float[][] shadeX, shadeZ, colorL, colorA, colorB, shading, outlineShading, saturation;
+    public float[][] shadeX, shadeZ, shading, outlineShading, saturation;
     public byte[][] indices, outlineIndices;
     public int[] palette;
     public float[] paletteL, paletteA, paletteB;
@@ -51,7 +51,6 @@ public class SpecialRenderer {
     public SpecialRenderer(final int size, Stuff[] stuffs) {
         this.size = size;
         final int w = size * 4 + 4, h = size * 5 + 4;
-        pixmap = new Pixmap(w>>>shrink, h>>>shrink, Pixmap.Format.RGBA8888);
         palettePixmap = new Pixmap(w>>>shrink, h>>>shrink, Pixmap.Format.RGBA8888);
         render =   new int[w][h];
         outlines = new int[w][h];
@@ -65,9 +64,6 @@ public class SpecialRenderer {
         voxels = fill(-1, w, h);
         shadeX = fill(-1f, size * 4, size * 4);
         shadeZ = fill(-1f, size * 4, size * 4);
-        colorL = fill(-1f, w, h);
-        colorA = fill(-1f, w, h);
-        colorB = fill(-1f, w, h);
         this.stuffs = stuffs;
     }
     
@@ -162,12 +158,9 @@ public class SpecialRenderer {
         for (int x = lowX, ax = xx; x < highX && ax < render.length; x++, ax++) {
             if(ax < 0) continue;
             for (int y = 0, ay = yy; y < 4 && ay < render[0].length; y++, ay++) {
-                if ((depth > depths[ax][ay] || (depth == depths[ax][ay] && colorL[ax][ay] < paletteL[voxel & 255])) && (alpha == 0f || bn(ax, ay, voxel) >= alpha)) {
+                if ((depth > depths[ax][ay] || (depth == depths[ax][ay] && (indices[ax][ay] & 255) < (voxel & 255))) && (alpha == 0f || bn(ax, ay, voxel) >= alpha)) {
                     drawn = true;
                     indices[ax][ay] = voxel;
-                    colorL[ax][ay] = paletteL[voxel & 255];
-                    colorA[ax][ay] = paletteA[voxel & 255];
-                    colorB[ax][ay] = paletteB[voxel & 255];
                     depths[ax][ay] = depth;
                     materials[ax][ay] = m;
                     if(alpha == 0f)
@@ -199,8 +192,6 @@ public class SpecialRenderer {
     }
     
     public SpecialRenderer clear() {
-        pixmap.setColor(0);
-        pixmap.fill();
         palettePixmap.setColor(0);
         palettePixmap.fill();
         fill(depths, 0);
@@ -214,9 +205,6 @@ public class SpecialRenderer {
         fill(shading, 0f);
         fill(saturation, 0f);
         fill(outlineShading, -1f);
-        fill(colorL, -1f);
-        fill(colorA, -1f);
-        fill(colorB, -1f);
         for (int i = 0; i < materials.length; i++) {
             Arrays.fill(materials[i], null);
         }
@@ -227,7 +215,7 @@ public class SpecialRenderer {
      * Compiles all of the individual voxels drawn with {@link #splat(float, float, float, int, int, int, byte, int)} into a
      * single Pixmap and returns it.
      * @param turns yaw in turns; like turning your head or making a turn in a car
-     * @return {@link #pixmap}, edited to contain the render of all the voxels put in this with {@link #splat(float, float, float, int, int, int, byte, int)}
+     * @return {@link #palettePixmap}, edited to contain the render of all the voxels put in this with {@link #splat(float, float, float, int, int, int, byte, int)}
      */
     public Pixmap blit(float turns, int frame) {
         return blit(turns, 0f, 0f, frame);
@@ -239,12 +227,10 @@ public class SpecialRenderer {
      * @param yaw in turns; like turning your head or making a turn in a car
      * @param pitch in turns; like looking up or down or making a nosedive in a plane
      * @param roll in turns; like tilting your head to one side or doing a barrel roll in a starship
-     * @return {@link #pixmap}, edited to contain the render of all the voxels put in this with {@link #splat(float, float, float, int, int, int, byte, int)}
+     * @return {@link #palettePixmap}, edited to contain the render of all the voxels put in this with {@link #splat(float, float, float, int, int, int, byte, int)}
      */
     public Pixmap blit(float yaw, float pitch, float roll, int frame) {
         final int threshold = 13;
-        pixmap.setColor(0);
-        pixmap.fill();
         palettePixmap.setColor(0);
         palettePixmap.fill();
         int xSize = render.length - 1, ySize = render[0].length - 1, depth;
@@ -380,14 +366,10 @@ public class SpecialRenderer {
 //        }
         for (int x = xSize; x >= 0; x--) {
             for (int y = ySize; y >= 0; y--) {
-                if (colorA[x][y] >= 0f) {
+                if (indices[x][y] != 0) {
                     float shade = Math.min(Math.max((shading[x][y]) * 0.625f + 0.1328125f, 0f), 1f);
 //                    float shade = Math.min(Math.max((shading[x][y]) * 0.625f + 0.125f, 0f), 1f);
                     float sat = Math.min(Math.max((saturation[x][y]) * 0.5f + 0.5f, 0f), 1f);
-                    pixmap.drawPixel(x >>> shrink, y >>> shrink, ColorTools.toRGBA8888(ColorTools.limitToGamut(
-                            colorL[x][y] + shade - 0.25f,
-                            (colorA[x][y] - 0.5f) * (sat * 2f) + 0.5f,
-                            (colorB[x][y] - 0.5f) * (sat * 2f) + 0.5f, 1f)));
                     palettePixmap.drawPixel(x >>> shrink, y >>> shrink, (indices[x][y] & 255) << 24 |
                             (int)(shade * 255.999f) << 16 |
                             (int)(sat * 255.999f) << 8 | 255);
@@ -402,30 +384,26 @@ public class SpecialRenderer {
 //            }
 //        }
         if (outline) {
-            int o, po;
+            int po;
             for (int x = step; x <= xSize - step; x+= step) {
 //                final int hx = x;
                 final int hx = x >>> shrink;
                 for (int y = step; y <= ySize - step; y+= step) {
 //                    final int hy = y;
                     int hy = y >>> shrink;
-                    if ((o = outlines[x][y]) != 0) {
+                    if ((outlines[x][y]) != 0) {
                         depth = depths[x][y];
                         po = (outlineIndices[x][y] & 255) << 24 | (int)MathUtils.clamp(64f * outlineShading[x][y], 0f, 255f) << 16 | 64 << 8 | 255;
                         if (outlines[x - step][y] == 0 || depths[x - step][y] < depth - threshold) {
-                            pixmap.drawPixel(hx - 1, hy    , o);
                             palettePixmap.drawPixel(hx - 1, hy    , po);
                         }
                         if (outlines[x + step][y] == 0 || depths[x + step][y] < depth - threshold) {
-                            pixmap.drawPixel(hx + 1, hy    , o);
                             palettePixmap.drawPixel(hx + 1, hy    , po);
                         }
                         if (outlines[x][y - step] == 0 || depths[x][y - step] < depth - threshold) {
-                            pixmap.drawPixel(hx    , hy - 1, o);
                             palettePixmap.drawPixel(hx, hy - 1, po);
                         }
                         if (outlines[x][y + step] == 0 || depths[x][y + step] < depth - threshold) {
-                            pixmap.drawPixel(hx    , hy + 1, o);
                             palettePixmap.drawPixel(hx, hy + 1, po);
                         }
                     }
@@ -444,13 +422,10 @@ public class SpecialRenderer {
         fill(voxels, -1);
         fill(shadeX, -1f);
         fill(shadeZ, -1f);
-        fill(colorL, -1f);
-        fill(colorA, -1f);
-        fill(colorB, -1f);
         for (int i = 0; i < materials.length; i++) {
             Arrays.fill(materials[i], null);
         }
-        return pixmap;
+        return palettePixmap;
     }
 
     // To move one x+ in voxels is x + 2, y - 1 in pixels.
