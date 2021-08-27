@@ -42,9 +42,9 @@ public class SpecialViewer extends ApplicationAdapter {
                 images[i++] = new Texture(Gdx.files.local("out/b/special_lab/"+name+"/"+name+"_angle"+a+"_"+f+".png"));
             }
         }
-        batch = new SpriteBatch();
         indexShader = new ShaderProgram(ShaderUtils.stuffSelectVertex, ShaderUtils.stuffSelectFragment);
         if (!indexShader.isCompiled()) throw new GdxRuntimeException("Error compiling shader: " + indexShader.getLog());
+        batch = new SpriteBatch(256, indexShader);
 
         startTime = TimeUtils.millis();
     }
@@ -52,7 +52,7 @@ public class SpecialViewer extends ApplicationAdapter {
     @Override
     public void render() {
         ScreenUtils.clear(0.5f, 0.5f, 0.5f, 1f);
-        batch.setShader(indexShader);
+//        batch.setShader(indexShader);
 //        Gdx.gl.glActiveTexture(GL20.GL_TEXTURE1);
         palettes.bind(1);
         batch.begin();

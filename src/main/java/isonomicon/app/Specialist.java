@@ -4,9 +4,13 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.PixmapIO;
+import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.github.tommyettinger.anim8.AnimatedGif;
 import com.github.tommyettinger.anim8.AnimatedPNG;
@@ -17,6 +21,7 @@ import isonomicon.io.VoxIO;
 import isonomicon.physical.Stuff;
 import isonomicon.physical.Tools3D;
 import isonomicon.visual.Coloring;
+import isonomicon.visual.ShaderUtils;
 import isonomicon.visual.SmudgeRenderer;
 import isonomicon.visual.SpecialRenderer;
 
@@ -35,6 +40,8 @@ public class Specialist extends ApplicationAdapter {
     private PixmapIO.PNG png;
     private AnimatedGif gif;
     private AnimatedPNG apng;
+    private SpriteBatch batch;
+    private Texture palette;
     public Specialist(String[] args){
         if(args != null && args.length > 0)
             inputs = args;
@@ -66,9 +73,9 @@ public class Specialist extends ApplicationAdapter {
 //            inputs = new String[]{"vox/Tree.vox"};
 //            inputs = new String[]{"vox/teapot.vox"};
 //            inputs = new String[]{"vox/Figure.vox"};
-//            inputs = new String[]{"b/vox/Figure.vox"};
 //            inputs = new String[]{"b/vox/Figure.vox", "b/vox/Tree.vox"};
-            inputs = new String[]{"b/vox/Damned.vox"};
+//            inputs = new String[]{"b/vox/Figure.vox", "TanClothDarkSkin.png"};
+            inputs = new String[]{"b/vox/Damned.vox", "palettes/b/CherrySkinDarkCloth.png"};
             if(!new File("specialized/" + inputs[0]).exists()) {
                 System.out.println("File not found: specialized/" + inputs[0]);
                 System.exit(0);
@@ -78,6 +85,11 @@ public class Specialist extends ApplicationAdapter {
     @Override
     public void create() {
         if (inputs == null) Gdx.app.exit();
+
+        ShaderProgram indexShader = new ShaderProgram(ShaderUtils.stuffSelectVertex, ShaderUtils.stuffSelectFragment);
+        if (!indexShader.isCompiled()) throw new GdxRuntimeException("Error compiling shader: " + indexShader.getLog());
+        batch = new SpriteBatch(256, indexShader);
+
         long startTime = TimeUtils.millis();
 //        Gdx.files.local("out/vox/").mkdirs();
         png = new PixmapIO.PNG();
@@ -91,7 +103,9 @@ public class Specialist extends ApplicationAdapter {
         gif.palette.setDitherStrength(0.25f);
 //        png8.palette = gif.palette;
         Gdx.files.local("out/vox").mkdirs();
-        for (String s : inputs) {
+        for (int n = 0; n < inputs.length; n++) {
+            String s = inputs[n++];
+            palette = new Texture(Gdx.files.local("assets/"+inputs[n]));
             System.out.println("Rendering " + s);
             load("specialized/"+s);
 //            VoxIO.writeVOX("out/" + s, voxels, renderer.palette, VoxIO.lastMaterials);
@@ -104,15 +118,31 @@ public class Specialist extends ApplicationAdapter {
                 for (int f = 0; f < 4; f++) {
                     pixmap = renderer.drawSplats(evolving, i * 0.125f, f);
                     Stuff.evolve(Stuff.STUFFS_B, evolving, f);
-                    Pixmap p = new Pixmap(pixmap.getWidth(), pixmap.getHeight(), pixmap.getFormat());
-                    p.drawPixmap(pixmap, 0, 0);
-                    pm.add(p);
+                    Texture t = new Texture(pixmap.getWidth(), pixmap.getHeight(), Pixmap.Format.RGBA8888);
+                    t.draw(renderer.palettePixmap, 0, 0);
+                    FrameBuffer fb = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), false);
+                    fb.begin();
+                    palette.bind(1);
+                    ScreenUtils.clear(Color.CLEAR);
+                    batch.begin();
+
+                    indexShader.setUniformi("u_texPalette", 1);
+                    Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
+                    batch.setColor(0f, 0.5f, 0.5f, 1f);
+
+                    batch.draw(t, 0, t.getHeight(), t.getWidth(), -t.getHeight());
+                    batch.end();
+                    pixmap = Pixmap.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
+                    fb.end();
+                    pm.add(pixmap);
                     try {
-                        png.write(Gdx.files.local("out/b/specialized/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), p);
+                        png.write(Gdx.files.local("out/b/specialized/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), pixmap);
                         png.write(Gdx.files.local("out/b/special_lab/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                    fb.dispose();
+                    t.dispose();
 //                png8.write(Gdx.files.local("out/" + name + '/' + name + "_angle" + i + ".png"), p, false, true);
                 }
                 pm.insertRange(pm.size - 4, 4);
