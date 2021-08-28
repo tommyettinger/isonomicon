@@ -18,23 +18,25 @@ import com.github.tommyettinger.anim8.Dithered;
 import com.github.tommyettinger.anim8.PaletteReducer;
 import isonomicon.io.LittleEndianDataInputStream;
 import isonomicon.io.VoxIO;
+import isonomicon.io.extended.VoxIOExtended;
+import isonomicon.io.extended.VoxModel;
 import isonomicon.physical.Stuff;
 import isonomicon.physical.Tools3D;
 import isonomicon.visual.Coloring;
 import isonomicon.visual.ShaderUtils;
-import isonomicon.visual.SmudgeRenderer;
 import isonomicon.visual.SpecialRenderer;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Specialist extends ApplicationAdapter {
     public static final int SCREEN_WIDTH = 512;//640;
     public static final int SCREEN_HEIGHT = 512;//720;
     private SpecialRenderer renderer;
-    private byte[][][] voxels;
+    private VoxModel voxels;
     private String name;
     private String[] inputs;
     private PixmapIO.PNG png;
@@ -112,12 +114,20 @@ public class Specialist extends ApplicationAdapter {
 //            load("out/"+s);
             Pixmap pixmap;
             Array<Pixmap> pm = new Array<>(32);
-            byte[][][] evolving = Tools3D.deepCopy(voxels);
+            ArrayList<byte[][][]> original = new ArrayList<>(voxels.grids);
+            for (int i = 0; i < voxels.grids.size(); i++) {
+                original.add(Tools3D.deepCopy(voxels.grids.get(i)));
+            }
             for (int i = 0; i < 8; i++) {
-                Tools3D.deepCopyInto(evolving, voxels);
+                voxels.grids.clear();
+                for (int j = 0; j < original.size(); j++) {
+                    voxels.grids.add(Tools3D.deepCopy(original.get(j)));
+                }
                 for (int f = 0; f < 4; f++) {
-                    pixmap = renderer.drawSplats(evolving, i * 0.125f, f);
-                    Stuff.evolve(Stuff.STUFFS_B, evolving, f);
+                    pixmap = renderer.drawModel2(voxels, i * 0.125f, 0f, 0f, f, 0, 0, 0);
+                    for (int j = 0; j < voxels.grids.size(); j++) {
+                        Stuff.evolve(Stuff.STUFFS_B, voxels.grids.get(j), f);
+                    }
                     Texture t = new Texture(pixmap.getWidth(), pixmap.getHeight(), Pixmap.Format.RGBA8888);
                     t.draw(renderer.palettePixmap, 0, 0);
                     FrameBuffer fb = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), false);
@@ -181,24 +191,24 @@ public class Specialist extends ApplicationAdapter {
     public void load(String name) {
         try {
             //// loads a file by its full path, which we get via a command-line arg
-            voxels = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream(name)));
+            voxels = VoxIOExtended.readVox(new LittleEndianDataInputStream(new FileInputStream(name)));
             if(voxels == null) {
-                voxels = new byte[][][]{{{1}}};
+                voxels = new VoxModel();
                 return;
             }
-            voxels = Tools3D.scaleAndSoak(voxels);
+//            voxels = Tools3D.scaleAndSoak(voxels);
 //            voxels = Tools3D.soak(voxels);
             int nameStart = Math.max(name.lastIndexOf('/'), name.lastIndexOf('\\')) + 1;
             this.name = name.substring(nameStart, name.indexOf('.', nameStart));
 //            renderer = new NextRenderer(voxels.length, QUALITY);
 //            renderer = new AngledRenderer(voxels.length);
             SpecialRenderer.shrink = 2;
-            renderer = new SpecialRenderer(voxels.length, Stuff.STUFFS_B);
+            renderer = new SpecialRenderer(voxels.grids.get(0).length, Stuff.STUFFS_B);
             renderer.palette(Coloring.BETTS64);
             renderer.saturation(0f);
             
         } catch (FileNotFoundException e) {
-            voxels = new byte[][][]{{{1}}}; 
+            voxels = new VoxModel();
         }
     }
 }
