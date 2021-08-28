@@ -114,7 +114,7 @@ public class Specialist extends ApplicationAdapter {
 //            load("out/"+s);
             Pixmap pixmap;
             Array<Pixmap> pm = new Array<>(32);
-            ArrayList<byte[][][]> original = new ArrayList<>(voxels.grids);
+            ArrayList<byte[][][]> original = new ArrayList<>(voxels.grids.size());
             for (int i = 0; i < voxels.grids.size(); i++) {
                 original.add(Tools3D.deepCopy(voxels.grids.get(i)));
             }
@@ -202,7 +202,7 @@ public class Specialist extends ApplicationAdapter {
             this.name = name.substring(nameStart, name.indexOf('.', nameStart));
 //            renderer = new NextRenderer(voxels.length, QUALITY);
 //            renderer = new AngledRenderer(voxels.length);
-            SpecialRenderer.shrink = 2;
+            SpecialRenderer.shrink = 1;
             renderer = new SpecialRenderer(voxels.grids.get(0).length, Stuff.STUFFS_B);
             renderer.palette(Coloring.BETTS64);
             renderer.saturation(0f);

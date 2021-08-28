@@ -16,6 +16,7 @@ import squidpony.squidmath.BlueNoise;
 import squidpony.squidmath.FastNoise;
 import squidpony.squidmath.IntPointHash;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import static squidpony.ArrayTools.fill;
@@ -507,15 +508,16 @@ public class SpecialRenderer {
         return blit(yaw, pitch, roll, frame);
     }
 
-    protected void subDraw(VoxModel model, byte[][][] g, IntMap<float[]> link, float yaw, float pitch, float roll, int frame,
+    protected void subDraw(ArrayList<byte[][][]> grids, ArrayList<IntMap<float[]>> links,
+                           byte[][][] g, IntMap<float[]> link, float yaw, float pitch, float roll, int frame,
                            float translateX, float translateY, float translateZ){
         splatOnly(g, yaw, pitch, roll, frame, translateX, translateY, translateZ);
 
         for(IntMap.Entry<float[]> ent : link) {
             if(ent.key == -1) continue;
-            for (int j = 0; j < model.links.size(); j++) {
-                if(model.links.get(j).containsKey(ent.key)) {
-                    subDraw(model, model.grids.remove(j), model.links.remove(j), yaw, pitch, roll, frame,
+            for (int j = 0; j < links.size(); j++) {
+                if(links.get(j).containsKey(ent.key)) {
+                    subDraw(grids, links, grids.remove(j), links.remove(j), yaw, pitch, roll, frame,
                             translateX + ent.value[0], translateY + ent.value[1], translateZ + ent.value[2]);
                 }
             }
@@ -525,15 +527,27 @@ public class SpecialRenderer {
 
     public Pixmap drawModel2(VoxModel model, float yaw, float pitch, float roll, int frame,
                             float translateX, float translateY, float translateZ){
+        boolean foundAnything = false;
+        ArrayList<byte[][][]> grids = new ArrayList<>(model.grids.size());
+        ArrayList<IntMap<float[]>> links = new ArrayList<>(model.links.size());
         for (int i = 0; i < model.grids.size(); i++) {
-            IntMap<float[]> link = model.links.get(i);
+            grids.add(Tools3D.deepCopy(model.grids.get(i)));
+            links.add(new IntMap<>(model.links.get(i)));
+        }
+        for (int i = 0; i < grids.size(); i++) {
+            IntMap<float[]> link = links.get(i);
             if(link.containsKey(-1))
             {
                 //root grid
-                subDraw(model, model.grids.remove(i), model.links.remove(i), yaw, pitch, roll, frame,
+                subDraw(grids, links, grids.remove(i), links.remove(i), yaw, pitch, roll, frame,
                         translateX, translateY, translateZ);
+                foundAnything = true;
                 break;
             }
+        }
+        if(!foundAnything){
+            subDraw(grids, links, grids.remove(0), links.remove(0), yaw, pitch, roll, frame,
+                    translateX, translateY, translateZ);
         }
         return blit(yaw, pitch, roll, frame);
     }
