@@ -2,6 +2,7 @@ package isonomicon.visual;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.utils.IntMap;
 import com.github.tommyettinger.anim8.PaletteReducer;
 import com.github.tommyettinger.colorful.oklab.ColorTools;
 import isonomicon.io.extended.GroupChunk;
@@ -491,6 +492,7 @@ public class SpecialRenderer {
 
     public Pixmap drawModel(VoxModel model, float yaw, float pitch, float roll, int frame,
                             float translateX, float translateY, float translateZ){
+
         for(GroupChunk gc : model.groupChunks.values()) {
             for(int ch : gc.childIds) {
                 TransformChunk tc = model.transformChunks.get(ch);
@@ -500,6 +502,37 @@ public class SpecialRenderer {
                         splatOnly(g, yaw, pitch, roll, frame, translateX, translateY, translateZ);
                     }
                 }
+            }
+        }
+        return blit(yaw, pitch, roll, frame);
+    }
+
+    protected void subDraw(VoxModel model, byte[][][] g, IntMap<float[]> link, float yaw, float pitch, float roll, int frame,
+                           float translateX, float translateY, float translateZ){
+        splatOnly(g, yaw, pitch, roll, frame, translateX, translateY, translateZ);
+
+        for(IntMap.Entry<float[]> ent : link) {
+            if(ent.key == -1) continue;
+            for (int j = 0; j < model.links.size(); j++) {
+                if(model.links.get(j).containsKey(ent.key)) {
+                    subDraw(model, model.grids.remove(j), model.links.remove(j), yaw, pitch, roll, frame,
+                            translateX + ent.value[0], translateY + ent.value[1], translateZ + ent.value[2]);
+                }
+            }
+        }
+
+    }
+
+    public Pixmap drawModel2(VoxModel model, float yaw, float pitch, float roll, int frame,
+                            float translateX, float translateY, float translateZ){
+        for (int i = 0; i < model.grids.size(); i++) {
+            IntMap<float[]> link = model.links.get(i);
+            if(link.containsKey(-1))
+            {
+                //root grid
+                subDraw(model, model.grids.remove(i), model.links.remove(i), yaw, pitch, roll, frame,
+                        translateX, translateY, translateZ);
+                break;
             }
         }
         return blit(yaw, pitch, roll, frame);
