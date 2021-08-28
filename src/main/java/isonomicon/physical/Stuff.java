@@ -276,22 +276,22 @@ public class Stuff {
 
             new Stuff("dark glass", 64, 0, 0L, "Transparency 0.3 Roughness 0.0 Reflection 0.4"),
             new Stuff("dark eye", 65, 0, 0L, "Roughness 0.0 Reflection 0.1"), /*black*/
-            new Stuff("shadow", 66, 0, 0L, "Roughness 0.0 Reflection 0.0"),
+            new Stuff("shadow", 66, 0, 0L, "Roughness 0.0 Reflection 0.0 Emission -0.25 Transparency 1.0"),
             new Stuff("smoke", 67, 0, 0L, "Roughness 0.5 Reflection 0.0 Missing 0.1 Rise 0.4 Dapple -0.15", 0, 2, 67, 7),
             new Stuff("gray glass", 68, 0, 0L, "Transparency 0.5 Roughness 0.0 Reflection 0.65"),
             new Stuff("dead eye", 69, 0, 0L, "Roughness 0.5 Reflection 0.0"),
             new Stuff("steam", 70, 0, 0L, "Transparency 0.5 Roughness 0.3 Missing 0.2 Flow 0.3 Rise 0.7", 0, 3, 70, 5),
             new Stuff("light eye", 71, 0, 0L, "Roughness 1.0 Reflection 1.0"), /*white*/
-            new Stuff("radioactive glow", 72, 0, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.6 Flow 0.3"), /*light lime*/
+            new Stuff("radioactive glow", 72, 0, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.6 Transparency 1.0"), /*light lime*/
             new Stuff("miasma", 73, 0, 0L, "Roughness 0.3 Reflection 0.0 Flow 0.5 Rise -0.1 Missing 0.05", 75, 2, 73, 5),
             new Stuff("rustling leaf", 74, 0, 0L, "Roughness 0.4 Reflection 0.05 Dapple -0.35 Missing 0.2"),
             new Stuff("miasma spawner", 75, 0, 0L, "Transparency 1.0", 75, 7, 73, 1), /*dark lime*/
-            new Stuff("vigor spawner", 76, 0, 0L, "Transparency 1.0", 81, 1, 76, 6), /*dark green*/
-            new Stuff("confirm spawner", 77, 0, 0L, "Transparency 1.0", 79, 1, 77, 4),
+            new Stuff("strobe off", 76, 0, 0L, "Roughness 0.03 Reflection 0.5", 80, 1), /*dark green*/
+            new Stuff("vigor spawner", 77, 0, 0L, "Transparency 1.0", 79, 1, 77, 4),
             new Stuff("green glass", 78, 0, 0L, "Transparency 0.5 Roughness 0.0 Reflection 0.65"),
-            new Stuff("confirm particle", 79, 0, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.7 Rise 0.9", 79, 1, 77, 1, 0, 1),
-            new Stuff("vigor fading", 80, 0, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.2 Missing 0.3 Vary 0.1", 0, 4, 80, 7, 81, 1),
-            new Stuff("vigor active", 81, 0, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.4 Vary 0.3", 81, 9, 80, 4, 0, 1), /*light green*/
+            new Stuff("vigor particle", 79, 0, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.45 Rise 0.9", 79, 1, 77, 1, 0, 1),
+            new Stuff("strobe on", 80, 0, 0L, "Roughness 0.03 Reflection 0.05 Emission 1.0", 76, 1),
+            new Stuff("constant light", 81, 0, 0L, "Roughness 0.0 Reflection 0.0 Emission 1.0"), /*light green*/
             new Stuff("ice glint", 82, 0, 0L, "Roughness 0.4 Reflection 0.95 Emission 0.4", 82, 1, 25, 20), /*light cyan*/
             new Stuff("chill particle", 83, 0, 0L, "Roughness 0.8 Reflection 0.0 Missing 0.2 Transparency 0.5 Rise -0.1", 83, 7, 84, 1),
             new Stuff("chill spawner", 84, 0, 0L, "Transparency 1.0", 84, 5, 83, 2), /*dark cyan*/
@@ -305,7 +305,7 @@ public class Stuff {
             new Stuff("speech spawner", 92, 0, 0L, "Transparency 1.0", 92, 3, 91, 4),
             new Stuff("dread spawner", 93, 0, 0L, "Transparency 1.0", 94, 1, 93, 11), /*dark blue*/
             new Stuff("dread particle", 94, 0, 0L, "Emission -0.4 Roughness 0.0 Reflection 0.0 Transparency 0.7 Missing 0.1", 94, 4, 93, 3), /*dark violet*/
-            new Stuff("stored energy", 95, 0, 0L, "Emission 0.4 Roughness 0.3 Reflection 0.0 Flow 0.7 Missing 0.4", 95, 5, 96, 1, 0, 1),
+            new Stuff("stored energy", 95, 0, 0L, "Emission 0.4 Roughness 0.3 Reflection 0.0 Flow 0.7 Missing 0.8", 95, 5, 96, 1, 0, 1),
             new Stuff("shock spawner", 96, 0, 0L, "Transparency 1.0", 97, 1, 96, 14),
             new Stuff("shock particle", 97, 0, 0L, "Emission 0.6 Roughness 0.4 Reflection 0.0 Missing 0.6", 97, 2, 96, 3),
             new Stuff("crystal glint", 98, 0, 0L, "Roughness 0.1 Reflection 1.0 Emission 0.65", 98, 1, 35, 8), /*light violet*/

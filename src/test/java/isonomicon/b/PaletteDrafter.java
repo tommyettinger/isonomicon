@@ -113,9 +113,10 @@ public class PaletteDrafter extends ApplicationAdapter {
         groups.put("Cloth", new int[]{41, 40, 42, 43, 124});
         groups.put("Eerie", new int[]{36, 38, 102, 66});
         groups.put("Gas", new int[]{17, 67, 70, 73});
-        groups.put("Emotion", new int[]{106, 79, 94, 91});
+        groups.put("Emotion", new int[]{106, 94, 91});
         groups.put("Fire", new int[]{114, 112, 113, 115, 127});
-        groups.put("Energy", new int[]{72, 80, 81, 95, 97});
+        groups.put("Light", new int[]{76, 80, 81});
+        groups.put("Energy", new int[]{72, 79, 95, 97});
     }
     @Override
     public void create() {
