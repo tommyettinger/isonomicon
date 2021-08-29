@@ -24,4 +24,9 @@ public class VoxModel {
         groupChunks = new IntMap<>(1);
         shapeChunks = new IntMap<>(8);
     }
+    public VoxModel mergeWith(VoxModel other) {
+        grids.addAll(other.grids);
+        links.addAll(other.links);
+        return this;
+    }
 }

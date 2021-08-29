@@ -17,7 +17,6 @@ import com.github.tommyettinger.anim8.AnimatedPNG;
 import com.github.tommyettinger.anim8.Dithered;
 import com.github.tommyettinger.anim8.PaletteReducer;
 import isonomicon.io.LittleEndianDataInputStream;
-import isonomicon.io.VoxIO;
 import isonomicon.io.extended.VoxIOExtended;
 import isonomicon.io.extended.VoxModel;
 import isonomicon.physical.Stuff;
@@ -76,8 +75,9 @@ public class Specialist extends ApplicationAdapter {
 //            inputs = new String[]{"vox/teapot.vox"};
 //            inputs = new String[]{"vox/Figure.vox"};
 //            inputs = new String[]{"b/vox/Figure.vox", "b/vox/Tree.vox"};
-            inputs = new String[]{"b/vox/Figure.vox", "palettes/b/TanClothDarkSkin.png"};
+//            inputs = new String[]{"b/vox/Figure.vox", "palettes/b/TanClothDarkSkin.png"};
 //            inputs = new String[]{"b/vox/Damned.vox", "palettes/b/CherrySkinDarkCloth.png"};
+            inputs = new String[]{"b/vox/Direction_Cube.vox", "palettes/b/TanClothDarkSkin.png"};
             if(!new File("specialized/" + inputs[0]).exists()) {
                 System.out.println("File not found: specialized/" + inputs[0]);
                 System.exit(0);
@@ -202,7 +202,7 @@ public class Specialist extends ApplicationAdapter {
             this.name = name.substring(nameStart, name.indexOf('.', nameStart));
 //            renderer = new NextRenderer(voxels.length, QUALITY);
 //            renderer = new AngledRenderer(voxels.length);
-            SpecialRenderer.shrink = 1;
+            SpecialRenderer.shrink = 0;
             renderer = new SpecialRenderer(voxels.grids.get(0).length, Stuff.STUFFS_B);
             renderer.palette(Coloring.BETTS64);
             renderer.saturation(0f);
