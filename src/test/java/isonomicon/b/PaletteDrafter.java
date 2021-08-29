@@ -131,8 +131,8 @@ public class PaletteDrafter extends ApplicationAdapter {
         previewTexture = new Texture(preview);
         png = new PixmapIO.PNG(1024);
 //        String name = "Eye_Tyrant";
-//        String name = "Lomuk";
-        String name = "Damned";
+        String name = "Lomuk";
+//        String name = "Damned";
 //        String name = "Figure";
 
         images = new Texture[32];
@@ -251,7 +251,7 @@ public class PaletteDrafter extends ApplicationAdapter {
             B = ColorTools.channelB(oklab);
             alpha = 1f - STUFFS[group[stuffIndex]].material.getTrait(VoxMaterial.MaterialTrait._alpha);
         }
-        float step = Math.min(Gdx.graphics.getDeltaTime(), 0.2f) * 0.25f;
+        float step = Math.min(Gdx.graphics.getDeltaTime(), 0.3f) * 0.125f;
         if(UIUtils.shift()) {
             //light
             if (Gdx.input.isKeyPressed(Input.Keys.L)) {
@@ -396,7 +396,7 @@ public class PaletteDrafter extends ApplicationAdapter {
         config.setTitle("Isonomicon Test: Special Viewer");
         config.setWindowedMode(400, 400);
         config.setIdleFPS(10);
-        config.setForegroundFPS(12);
+        config.setForegroundFPS(60);
         config.useVsync(true);
         config.setResizable(false);
         final PaletteDrafter app = new PaletteDrafter();

@@ -75,9 +75,10 @@ public class Specialist extends ApplicationAdapter {
 //            inputs = new String[]{"vox/teapot.vox"};
 //            inputs = new String[]{"vox/Figure.vox"};
 //            inputs = new String[]{"b/vox/Figure.vox", "b/vox/Tree.vox"};
-            inputs = new String[]{"b/vox/Figure_Split.vox", "palettes/b/TanClothDarkSkin.png"};
+//            inputs = new String[]{"b/vox/Figure_Split.vox", "palettes/b/TanClothDarkSkin.png"};
 //            inputs = new String[]{"b/vox/Damned.vox", "palettes/b/CherrySkinDarkCloth.png"};
 //            inputs = new String[]{"b/vox/Direction_Cube.vox", "palettes/b/TanClothDarkSkin.png"};
+            inputs = new String[]{"b/vox/Lomuk.vox", "palettes/b/BlueFurCyanCrystal.png"};
             if(!new File("specialized/" + inputs[0]).exists()) {
                 System.out.println("File not found: specialized/" + inputs[0]);
                 System.exit(0);
