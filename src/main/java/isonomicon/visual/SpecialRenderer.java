@@ -516,9 +516,10 @@ public class SpecialRenderer {
         for(IntMap.Entry<float[]> ent : link) {
             if(ent.key == -1) continue;
             for (int j = 0; j < links.size(); j++) {
-                if(links.get(j).containsKey(ent.key)) {
+                float[] got;
+                if((got = links.get(j).get(ent.key)) != null) {
                     subDraw(grids, links, grids.remove(j), links.remove(j), yaw, pitch, roll, frame,
-                            translateX + ent.value[0], translateY + ent.value[1], translateZ + ent.value[2]);
+                            translateX + ent.value[0] - got[0], translateY + ent.value[1] - got[1], translateZ + ent.value[2] - got[2]);
                 }
             }
         }
