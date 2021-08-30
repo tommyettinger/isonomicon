@@ -37,12 +37,11 @@ public class StuffNotes extends ApplicationAdapter {
 
     @Override
     public void create() {
-//        Texture fontTex = new Texture(Gdx.files.internal("canada1500.png"), true);
-//        fontTex.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
-//        font = new BitmapFont(Gdx.files.internal("canada1500.fnt"), new TextureRegion(fontTex));
-//        font.getData().setScale(0.2f);
-        font = new BitmapFont(Gdx.files.internal("Iosevka_Outlined.fnt"));
+        Texture fontTex = new Texture(Gdx.files.internal("canada1500.png"), true);
+        fontTex.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+        font = new BitmapFont(Gdx.files.internal("canada1500.fnt"), new TextureRegion(fontTex));
         font.setUseIntegerPositions(false);
+        font.getData().setScale(0.2f);
         Pixmap px = new Pixmap(3, 3, Pixmap.Format.RGBA8888);
         px.setColor(Color.WHITE);
         px.fill();
@@ -72,8 +71,8 @@ public class StuffNotes extends ApplicationAdapter {
             for (int n = 0; n < 8 && i < 128; n++, i++) {
                 batch.setColor(batch.getColor().set(Coloring.BETTS64[i]));
                 batch.draw(pixel, Gdx.graphics.getWidth() * n / 8f, Gdx.graphics.getHeight() * r / 16f, Gdx.graphics.getWidth() / 8f, Gdx.graphics.getHeight() / 16f);
-                font.setColor(Color.WHITE);
-//                font.setColor((batch.getColor().r + 0.4f) % 1f, (batch.getColor().g + 0.4f) % 1f, (batch.getColor().b + 0.4f) % 1f, 1f);
+//                font.setColor(batch.getColor().set(Color.rgba8888(batch.getColor()) ^ 0xffffff00));
+                font.setColor((batch.getColor().r + 0.4f) % 1f, (batch.getColor().g + 0.4f) % 1f, (batch.getColor().b + 0.4f) % 1f, 1f);
                 font.draw(batch, STUFFS[i].name, Gdx.graphics.getWidth() * n / 8f, Gdx.graphics.getHeight() * (r + 0.92f) / 16f, Gdx.graphics.getWidth() / 8f, Align.center, true);
             }
             r++;
