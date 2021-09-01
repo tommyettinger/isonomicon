@@ -262,8 +262,8 @@ public class Stuff {
             new Stuff("highlight fluff", 50, 50, -1L, "Roughness 0.4 Reflection 0.75 Dapple -0.04"), /*hot orange*/
             new Stuff("scar", 51, 51, 64L, "Roughness 0.7 Reflection 0.05"), /*light skin*/
             new Stuff("base skin", 52, 52, -1L, "Roughness 0.6 Reflection 0.2"),
-            new Stuff("freckle", 53, 53, 1L, "Roughness 0.6 Reflection 0.2 Vary -0.1"),
-            new Stuff("nose", 54, 54, -1L, "Roughness 0.6 Reflection 0.3"),
+            new Stuff("nose", 53, 53, 1L, "Roughness 0.6 Reflection 0.3"),
+            new Stuff("freckle", 54, 54, 1L, "Roughness 0.6 Reflection 0.2 Vary -0.1"),
             new Stuff("ears", 55, 55, 4L, "Roughness 0.5 Reflection 0.1"),
             new Stuff("overripe fruit or rot", 56, 56, -1L, "Roughness 0.2 Reflection 0.02 Dapple -0.15 Vary -0.1"), /*dark skin*/
             new Stuff("lips blood gore", 57, 57, 16L, "Roughness 0.04 Reflection 0.4"), /*gore*/
