@@ -512,14 +512,45 @@ public class SpecialRenderer {
                            byte[][][] g, IntMap<float[]> link, float yaw, float pitch, float roll, int frame,
                            float translateX, float translateY, float translateZ){
         splatOnly(g, yaw, pitch, roll, frame, translateX, translateY, translateZ);
+        final int size = g.length;
+        final float hs = size * 0.5f;
+        float ox, oy, oz; // offset x,y,z
+        final float cYaw = cos_(yaw), sYaw = sin_(yaw);
+        final float cPitch = cos_(pitch), sPitch = sin_(pitch);
+        final float cRoll = cos_(roll), sRoll = sin_(roll);
+        final float x_x = cYaw * cPitch, y_x = cYaw * sPitch * sRoll - sYaw * cRoll, z_x = cYaw * sPitch * cRoll + sYaw * sRoll;
+        final float x_y = sYaw * cPitch, y_y = sYaw * sPitch * sRoll + cYaw * cRoll, z_y = sYaw * sPitch * cRoll - cYaw * sRoll;
+        final float x_z = -sPitch, y_z = cPitch * sRoll, z_z = cPitch * cRoll;
+        for (int z = 0; z < size; z++) {
+            for (int x = 0; x < size; x++) {
+                for (int y = 0; y < size; y++) {
+                    final byte v = g[x][y][z];
+                    if(v != 0)
+                    {
+                        ox = x - hs;
+                        oy = y - hs;
+                        oz = z - hs;
+                        splat(  ox * x_x + oy * y_x + oz * z_x + size + translateX,
+                                ox * x_y + oy * y_y + oz * z_y + size + translateY,
+                                ox * x_z + oy * y_z + oz * z_z + hs + translateZ, x, y, z, v, frame);
+                    }
+                }
+            }
+        }
 
         for(IntMap.Entry<float[]> ent : link) {
             if(ent.key == -1) continue;
             for (int j = 0; j < links.size(); j++) {
                 float[] got;
                 if((got = links.get(j).get(ent.key)) != null) {
+                    ox = ent.value[0] - got[0];
+                    oy = ent.value[1] - got[1];
+                    oz = ent.value[2] - got[2];
+
                     subDraw(grids, links, grids.remove(j), links.remove(j), yaw, pitch, roll, frame,
-                            translateX + ent.value[0] - got[0], translateY + ent.value[1] - got[1], translateZ + ent.value[2] - got[2]);
+                            translateX + (ox * x_x + oy * y_x + oz * z_x),
+                            translateY + (ox * x_y + oy * y_y + oz * z_y),
+                            translateZ + (ox * x_z + oy * y_z + oz * z_z));
                 }
             }
         }
