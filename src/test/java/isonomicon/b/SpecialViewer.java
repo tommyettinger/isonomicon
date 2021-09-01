@@ -27,11 +27,12 @@ public class SpecialViewer extends ApplicationAdapter {
     public void create() {
 //        palettes = new Texture("palettes/palettes-b.png");
 //        palettes = new Texture("palettes/b/TanClothDarkSkin.png");
-        palettes = new Texture("palettes/b/CherrySkinDarkCloth.png");
+//        palettes = new Texture("palettes/b/CherrySkinDarkCloth.png");
+        palettes = new Texture("palettes/b/BlueFurCyanCrystal.png");
 //        palettes = new Texture("palettes/edited/NaturalWoodAndLeaves.png");
 //        String name = "Eye_Tyrant";
-//        String name = "Lomuk";
-        String name = "Damned";
+        String name = "Lomuk";
+//        String name = "Damned";
 //        String name = "Tree";
 //        String name = "Phantom_Wand";
 //        String name = "Figure";
