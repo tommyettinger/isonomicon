@@ -101,8 +101,8 @@ public class ColorGuardAssets extends ApplicationAdapter {
         gif = new AnimatedGif();
         apng = new AnimatedPNG();
         gif.setDitherAlgorithm(Dithered.DitherAlgorithm.SCATTER);
-        gif.palette = new PaletteReducer(Coloring.BETSY256);
-        gif.palette.setDitherStrength(0.25f);
+        gif.palette = new PaletteReducer(Coloring.BETSY256, Gdx.files.local("assets/BetsyPreload.dat").readBytes());
+        gif.palette.setDitherStrength(1f);
         for (int n = 0; n < inputs.length; n++) {
             String s = inputs[n++];
             palette = new Texture(Gdx.files.local("assets/"+inputs[n]));
@@ -114,13 +114,13 @@ public class ColorGuardAssets extends ApplicationAdapter {
             for (int i = 0; i < voxels.grids.size(); i++) {
                 original.add(Tools3D.deepCopy(voxels.grids.get(i)));
             }
-            for (int i = 0; i < 8; i++) {
+            for (int i = 0; i < 4; i++) {
                 voxels.grids.clear();
                 for (int j = 0; j < original.size(); j++) {
                     voxels.grids.add(Tools3D.deepCopy(original.get(j)));
                 }
                 for (int f = 0; f < 4; f++) {
-                    pixmap = renderer.drawModel2(voxels, i * 0.125f, 0f, 0f, f, 0, 0, 0);
+                    pixmap = renderer.drawModel2(voxels, i * 0.25f, 0f, 0f, f, 0, 0, 0);
                     for (int j = 0; j < voxels.grids.size(); j++) {
                         Stuff.evolve(Stuff.STUFFS_B, voxels.grids.get(j), f);
                     }
@@ -142,8 +142,8 @@ public class ColorGuardAssets extends ApplicationAdapter {
                     fb.end();
                     pm.add(pixmap);
                     try {
-                        png.write(Gdx.files.local("out/b/specialized/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), pixmap);
-                        png.write(Gdx.files.local("out/b/special_lab/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
+                        png.write(Gdx.files.local("out/color_guard/render/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), pixmap);
+                        png.write(Gdx.files.local("out/color_guard/lab/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -154,10 +154,10 @@ public class ColorGuardAssets extends ApplicationAdapter {
                 pm.insertRange(pm.size - 4, 4);
             }
 //                gif.palette.analyze(pm);
-            gif.write(Gdx.files.local("out/b/specialized/" + name + '/' + name + ".gif"), pm, 8);
+            gif.write(Gdx.files.local("out/color_guard/render/" + name + '/' + name + ".gif"), pm, 8);
 //                gif.palette.exact(Coloring.HALTONITE240, PRELOAD);
 //                gif.write(Gdx.files.local("out/" + name + '/' + name + "-256-color.gif"), pm, 1);
-            apng.write(Gdx.files.local("out/b/specialized/" + name + '/' + name + ".png"), pm, 8);
+            apng.write(Gdx.files.local("out/color_guard/render/" + name + '/' + name + ".png"), pm, 8);
             for (Pixmap pix : pm) {
                 if(!pix.isDisposed())
                     pix.dispose();

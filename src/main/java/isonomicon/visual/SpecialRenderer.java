@@ -286,19 +286,19 @@ public class SpecialRenderer {
                         int dist;
                         for (int i = -3, si = sx + i; i <= 3; i++, si++) {
                             for (int j = -3, sj = sy + j; j <= 3; j++, sj++) {
-                                if((dist = Math.abs(i) + Math.abs(j)) > 3 || si < 0 || sj < 0 || si > xSize || sj > ySize) continue;
-                                float change = spread * (4 - dist);
+                                if((dist = i * i + j * j) > 9 || si < 0 || sj < 0 || si > xSize || sj > ySize) continue;
+                                float change = spread * (4 - (float)Math.sqrt(dist));
                                 shading[si][sj] += change;
                             }
                         }
                     }
                     else if (Math.abs(shadeZ[fx][fy] - tz) <= limit) {
                         float spread = MathUtils.lerp(0.005f, 0.002f, rough);
-                        int dist;
+                        float dist;
                         for (int i = -3, si = sx + i; i <= 3; i++, si++) {
                             for (int j = -3, sj = sy + j; j <= 3; j++, sj++) {
-                                if((dist = Math.abs(i) + Math.abs(j)) > 3 || si < 0 || sj < 0 || si > xSize || sj > ySize) continue;
-                                float change = spread * (4 - dist);
+                                if((dist = i * i + j * j) > 9 || si < 0 || sj < 0 || si > xSize || sj > ySize) continue;
+                                float change = spread * (4 - (float)Math.sqrt(dist));
                                 shading[si][sj] += change;
                             }
                         }
