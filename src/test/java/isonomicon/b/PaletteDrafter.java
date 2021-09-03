@@ -131,16 +131,23 @@ public class PaletteDrafter extends ApplicationAdapter {
         previewTexture = new Texture(preview);
         png = new PixmapIO.PNG(1024);
 //        String name = "Eye_Tyrant";
-        String name = "Lomuk";
+//        String name = "Lomuk";
 //        String name = "Damned";
 //        String name = "Figure";
 
+        String name = "Tank";
+
         images = new Texture[32];
-        for (int a = 0, i = 0; a < 8; a++) {
+        for (int a = 0, i = 0; a < 4; a++) {
             for (int f = 0; f < 4; f++) {
-                images[i++] = new Texture(Gdx.files.local("out/b/special_lab/"+name+"/"+name+"_angle"+a+"_"+f+".png"));
+                images[i++] = new Texture(Gdx.files.local("out/color_guard/lab/"+name+"/"+name+"_angle"+a+"_"+f+".png"));
             }
         }
+//        for (int a = 0, i = 0; a < 8; a++) {
+//            for (int f = 0; f < 4; f++) {
+//                images[i++] = new Texture(Gdx.files.local("out/b/special_lab/"+name+"/"+name+"_angle"+a+"_"+f+".png"));
+//            }
+//        }
         float oklab = ColorTools.fromRGBA8888(workingPalette.getPixel(0, 0));
         L = ColorTools.channelL(oklab);
         A = ColorTools.channelA(oklab);
@@ -251,7 +258,7 @@ public class PaletteDrafter extends ApplicationAdapter {
             B = ColorTools.channelB(oklab);
             alpha = 1f - STUFFS[group[stuffIndex]].material.getTrait(VoxMaterial.MaterialTrait._alpha);
         }
-        float step = Math.min(Gdx.graphics.getDeltaTime(), 0.3f) * 0.125f;
+        float step = Math.min(Gdx.graphics.getDeltaTime(), 0.3f) * 0.0625f;
         if(UIUtils.shift()) {
             //light
             if (Gdx.input.isKeyPressed(Input.Keys.L)) {
@@ -265,22 +272,22 @@ public class PaletteDrafter extends ApplicationAdapter {
             }
             //red
             else if (Gdx.input.isKeyPressed(Input.Keys.R)) {
-                allA = 0.25f * step;
+                allA = 0.125f * step;
                 changed = true;
             }
             //green...ish
             else if (Gdx.input.isKeyPressed(Input.Keys.G)) {
-                allA = -0.25f * step;
+                allA = -0.125f * step;
                 changed = true;
             }
             //yellow
             else if (Gdx.input.isKeyPressed(Input.Keys.Y)) {
-                allB = 0.25f * step;
+                allB = 0.125f * step;
                 changed = true;
             }
             //blue
             else if (Gdx.input.isKeyPressed(Input.Keys.B)) {
-                allB = -0.25f * step;
+                allB = -0.125f * step;
                 changed = true;
             }
             //saturate
@@ -373,7 +380,7 @@ public class PaletteDrafter extends ApplicationAdapter {
         indexShader.setUniformi("u_texPalette", 1);
         Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
         batch.setColor(0f, 0.5f, 0.5f, 1f);
-        batch.draw(images[(int) (TimeUtils.timeSinceMillis(startTime) >>> 8) & 31], 0, 0);
+        batch.draw(images[(int) (TimeUtils.timeSinceMillis(startTime) >>> 8) & 15], 0, 0);
         batch.end();
 
         batch.setShader(regularShader);
