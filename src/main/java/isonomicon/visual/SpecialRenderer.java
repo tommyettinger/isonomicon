@@ -160,12 +160,12 @@ public class SpecialRenderer {
         for (int x = lowX, ax = xx; x < highX && ax < render.length; x++, ax++) {
             if(ax < 0) continue;
             for (int y = 0, ay = yy; y < 4 && ay < render[0].length; y++, ay++) {
-                if ((depth > depths[ax][ay] || (depth == depths[ax][ay] && (indices[ax][ay] & 255) < (voxel & 255))) && (alpha == 0f || bn(ax, ay, voxel) >= alpha)) {
+                if ((depth > depths[ax][ay] || (depth == depths[ax][ay] && (indices[ax][ay] & 255) < (voxel & 255)))) {
                     drawn = true;
                     indices[ax][ay] = voxel;
                     depths[ax][ay] = depth;
                     materials[ax][ay] = m;
-                    if(alpha == 0f)
+                    if(alpha < 1f)
                     {
                         outlines[ax][ay] = ColorTools.toRGBA8888(ColorTools.limitToGamut(outlineShading[ax][ay] = paletteL[voxel & 255] * (0.625f + emit), paletteA[voxel & 255], paletteB[voxel & 255], 1f));
                         outlineIndices[ax][ay] = voxel;
