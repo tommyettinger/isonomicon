@@ -290,8 +290,8 @@ public class Stuff {
             new Stuff("vigor spawner", 77, 0, 0L, "Transparency 1.0", 79, 1, 77, 4),
             new Stuff("green glass", 78, 0, 0L, "Transparency 0.5 Roughness 0.0 Reflection 0.65"),
             new Stuff("vigor particle", 79, 0, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.45 Rise 0.9", 79, 1, 77, 1, 0, 1),
-            new Stuff("strobe on", 80, 0, 0L, "Roughness 0.03 Reflection 0.05 Emission 1.0", 76, 1),
-            new Stuff("constant light", 81, 0, 0L, "Roughness 0.0 Reflection 0.0 Emission 1.0"), /*light green*/
+            new Stuff("strobe on", 80, 0, 0L, "Roughness 0.03 Reflection 0.05 Emission 0.75", 76, 1),
+            new Stuff("constant light", 81, 0, 0L, "Roughness 0.0 Reflection 0.0 Emission 0.8"), /*light green*/
             new Stuff("ice glint", 82, 0, 0L, "Roughness 0.4 Reflection 0.95 Emission 0.4", 82, 1, 25, 20), /*light cyan*/
             new Stuff("chill particle", 83, 0, 0L, "Roughness 0.8 Reflection 0.0 Missing 0.2 Transparency 0.5 Rise -0.1", 83, 7, 84, 1),
             new Stuff("chill spawner", 84, 0, 0L, "Transparency 1.0", 84, 5, 83, 2), /*dark cyan*/
