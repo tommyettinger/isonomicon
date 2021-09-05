@@ -63,7 +63,9 @@ public class VoxMaterial {
 		//12 causes random per-voxel lightening (or darkening, if negative)
 		_dapple("Dapple"),
 		//13 causes random per-voxel increases to saturation (or decreases, if negative).
-		_vary("Vary")
+		_vary("Vary"),
+		//14 can be 0.0 or 1.0, and causes this material to not be rendered on even or odd frames, respectively.
+		_frame("Frame")
 		;
 		
 		public String name;
@@ -98,12 +100,14 @@ public class VoxMaterial {
 		traits.put(9, 0.1f);
 		traits.put(5, 0.3f);
 		traits.put(4, 0.41f);
+		traits.put(14, 0.5f);
 	}
 	public VoxMaterial(String typeCode){
 		type = MaterialType.valueOf(typeCode);
 		traits.put(9, 0.1f);
 		traits.put(5, 0.3f);
 		traits.put(4, 0.41f);
+		traits.put(14, 0.5f);
 		if(type == MaterialType._media)
 			traits.put(0, 0.6f); // cloud materials are always partly transparent
 	}
@@ -113,6 +117,7 @@ public class VoxMaterial {
 		traits.put(9, 0.1f);
 		traits.put(5, 0.3f);
 		traits.put(4, 0.41f);
+		traits.put(14, 0.5f);
 		String[] split = traitMap.split("[ ,;]+");
 		for (int i = 1; i < (split.length & -2); i+=2) {
 			traits.put(TRAIT_MAP.get(split[i-1], -1), Float.parseFloat(split[i]));

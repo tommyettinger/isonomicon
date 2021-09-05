@@ -340,12 +340,12 @@ public class Stuff {
             new Stuff("fiery spark", 127, 0, 0L, "Emission 0.6 Roughness 0.4 Reflection 0.0 Missing 0.6", 127, 2, 0, 3), /*light yellow*/
 
             new Stuff("vanishing shadow", 128, 0, 0L, "Emission -0.5 Transparency 1.0", 0, 1),
-            new Stuff("matte leather swap 0", 129, 1, 1L, "Reflection 0.05 Roughness 0.6", 2, 1), /*black*/
-            new Stuff("matte leather swap 1", 130, 2, -1L, "Reflection 0.05 Roughness 0.6", 1, 1),
-            new Stuff("dull metal swap 0", 131, 3, -1L, "Metal", "Reflection 0.15 Roughness 0.8", 4, 1),
-            new Stuff("dull metal swap 1", 132, 4, 32L, "Metal", "Reflection 0.15 Roughness 0.8", 3, 1),
-            new Stuff("scratched metal swap 0", 133, 5, 2L, "Metal", "Reflection 0.5 Roughness 0.65", 6, 1),
-            new Stuff("scratched metal swap 1", 134, 6, 1L, "Metal", "Reflection 0.5 Roughness 0.65", 5, 1),
+            new Stuff("matte leather swap 0", 129, 1, 1L, "Reflection 0.05 Roughness 0.6 Frame 0.0"), /*black*/
+            new Stuff("matte leather swap 1", 130, 2, -1L, "Reflection 0.05 Roughness 0.6 Frame 1.0"),
+            new Stuff("dull metal swap 0", 131, 3, -1L, "Metal", "Reflection 0.15 Roughness 0.8 Frame 0.0"),
+            new Stuff("dull metal swap 1", 132, 4, 32L, "Metal", "Reflection 0.15 Roughness 0.8 Frame 1.0"),
+            new Stuff("scratched metal swap 0", 133, 5, 2L, "Metal", "Reflection 0.5 Roughness 0.65 Frame 0.0"),
+            new Stuff("scratched metal swap 1", 134, 6, 1L, "Metal", "Reflection 0.5 Roughness 0.65 Frame 1.0"),
             new Stuff("vanishing flash", 135, 7, 256L, "Emission 0.8 Transparency 1.0", 0, 1), /*white*/
 
 //            new Stuff("sickly leaf", 8, 8, 2L, "Roughness 0.2 Reflection 0.25 Vary -0.35"), /*light lime*/
