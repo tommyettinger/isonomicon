@@ -136,7 +136,7 @@ public class SpecialRenderer {
         if(xPos <= -1f || yPos <= -1f || zPos <= -1f
                 || xPos >= size * 2 || yPos >= size * 2 || zPos >= size * 2)
             return;
-        final Stuff stuff = stuffs[voxel & 127];
+        final Stuff stuff = stuffs[Math.min(voxel & 255, stuffs.length - 1)];
         final VoxMaterial m = stuff.material;
         if(Tools3D.randomizePointRare(vx, vy, vz, frame) < m.getTrait(VoxMaterial.MaterialTrait._metal))
             return;

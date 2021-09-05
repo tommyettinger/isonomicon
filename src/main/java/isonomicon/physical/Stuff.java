@@ -338,6 +338,72 @@ public class Stuff {
             new Stuff("yellow glass", 125, 0, 0L, "Transparency 0.5 Roughness 0.0 Reflection 0.65"), /*dark yellow*/
             new Stuff("gold glint", 126, 0, 0L, "Roughness 0.2 Reflection 1.0 Emission 0.5", 126, 1, 5, 61),
             new Stuff("fiery spark", 127, 0, 0L, "Emission 0.6 Roughness 0.4 Reflection 0.0 Missing 0.6", 127, 2, 0, 3), /*light yellow*/
+
+            new Stuff("vanishing shadow", 128, 0, 0L, "Emission -0.5 Transparency 1.0", 0, 1),
+            new Stuff("matte leather swap 0", 129, 1, 1L, "Reflection 0.05 Roughness 0.6", 2, 1), /*black*/
+            new Stuff("matte leather swap 1", 130, 2, -1L, "Reflection 0.05 Roughness 0.6", 1, 1),
+            new Stuff("dull metal swap 0", 131, 3, -1L, "Metal", "Reflection 0.15 Roughness 0.8", 4, 1),
+            new Stuff("dull metal swap 1", 132, 4, 32L, "Metal", "Reflection 0.15 Roughness 0.8", 3, 1),
+            new Stuff("scratched metal swap 0", 133, 5, 2L, "Metal", "Reflection 0.5 Roughness 0.65", 6, 1),
+            new Stuff("scratched metal swap 1", 134, 6, 1L, "Metal", "Reflection 0.5 Roughness 0.65", 5, 1),
+            new Stuff("vanishing flash", 135, 7, 256L, "Emission 0.8 Transparency 1.0", 0, 1), /*white*/
+
+//            new Stuff("sickly leaf", 8, 8, 2L, "Roughness 0.2 Reflection 0.25 Vary -0.35"), /*light lime*/
+//            new Stuff("unripe fruit or bud", 9, 9, 512L, "Roughness 0.6 Reflection 0.3 Dapple -0.1"),
+//            new Stuff("acid", 10, 10, 8L, "Roughness 0.5 Reflection 0.7 Flow 0.6"),
+//            new Stuff("mold", 11, 11, 8L, "Roughness 0.9 Reflection 0.0 Vary -0.5"), /*dark lime*/
+//            new Stuff("moss", 12, 12, 12L, "Roughness 0.9 Reflection 0.03"), /*dark green*/
+//            new Stuff("cactus plant", 13, 13, 12L, "Roughness 0.4 Reflection 0.2"),
+//            new Stuff("matte leaf", 14, 14, 0L, "Roughness 0.4 Reflection 0.05 Dapple -0.35"),
+//            new Stuff("glossy leaf", 15, 15, 512L, "Roughness 0.1 Reflection 0.85 Dapple -0.1"),
+//            new Stuff("succulent plant", 16, 16, 512L, "Roughness 0.8 Reflection 0.04"),
+//            new Stuff("gas", 17, 17, 4L, "Roughness 0.65 Reflection 0.0 Flow 0.4 Rise 0.1"), /*light green*/
+//            new Stuff("fine scales", 18, 18, 32L, "Roughness 0.15 Reflection 0.4"), /*light cyan*/
+//            new Stuff("base scales", 19, 19, 4L, "Roughness 0.05 Reflection 0.55"),
+//            new Stuff("accented scales", 20, 20, 32L, "Roughness 0.05 Reflection 0.65"), /*dark cyan*/
+//            new Stuff("deep water", 21, 21, 4L, "Roughness 0.3 Reflection 0.5"), /*dark azure*/
+//            new Stuff("slow water", 22, 22, 32L, "Roughness 0.1 Reflection 0.8 Flow 0.1"),
+//            new Stuff("fast water", 23, 23, 24L, "Roughness 0.2 Reflection 0.75 Flow 0.7"),
+//            new Stuff("wet stone", 24, 24, 0L, "Roughness 0.5 Reflection 0.2"),
+//            new Stuff("ice", 25, 25, 512L, "Roughness 0.05 Reflection 0.95", 25, 8, 82, 1), /*light azure*/
+//            new Stuff("shining mark", 26, 26, 32L, "Roughness 0.25 Reflection 0.9"), /*light blue*/
+//            new Stuff("accented mark", 27, 27, 4L, "Roughness 0.4 Reflection 0.5"),
+//            new Stuff("bold mark", 28, 28, 4L, "Roughness 0.4 Reflection 0.5"),
+//            new Stuff("deep mark", 29, 29, -1L, "Roughness 0.4 Reflection 0.5"), /*dark blue*/
+//            new Stuff("coal", 30, 30, -1L, "Roughness 0.1 Reflection 0.0"), /*dark violet*/
+//            new Stuff("ore", 31, 31, -1L, "Roughness 0.7 Reflection 0.1 Vary -0.3 Dapple 0.1"),
+//            new Stuff("raw stone", 32, 32, 32L, "Roughness 0.55 Reflection 0.15 Vary -0.1"),
+//            new Stuff("worked stone", 33, 33, 32L, "Roughness 0.25 Reflection 0.2"),
+//            new Stuff("chipped stone", 34, 34, 4L, "Roughness 0.8 Reflection 0.05"), /*light violet*/
+//            new Stuff("magic crystal", 35, 35, 32L, "Roughness 0.05 Reflection 0.85 Emission 0.35", 35, 7, 98, 1), /*light purple*/
+//            new Stuff("ectoplasm", 36, 36, 256L, "Roughness 0.2 Reflection 0.4 Flow 0.7 Emission 0.1"),
+//            new Stuff("tentacle", 37, 37, 64L, "Roughness 0.5 Reflection 0.02 Dapple 0.2"),
+//            new Stuff("apparition", 38, 38, 64L, "Roughness 0.6 Reflection 0.0 Flow 0.1 Emission -0.2"), /*dark purple*/
+//            new Stuff("drink", 39, 39, -1L, "Roughness 0.3 Reflection 0.5"), /*burgundy*/
+//            new Stuff("marked cloth", 40, 40, 64L, "Roughness 0.1 Reflection 0.04"), /*medium magenta*/
+//            new Stuff("base cloth", 41, 41, -1L, "Roughness 0.25 Reflection 0.06"),
+//            new Stuff("highlight cloth", 42, 42, 64L, "Roughness 0.15 Reflection 0.1"),
+//            new Stuff("shiny cloth", 43, 43, -1L, "Roughness 0.4 Reflection 0.75"), /*light pink*/
+//            new Stuff("sand", 44, 44, 64L, "Roughness 0.7 Reflection 0.0"), /*light tan*/
+//            new Stuff("rubble", 45, 45, 64L, "Roughness 0.55 Reflection 0.0 Dapple -0.4 Vary -0.3"),
+//            new Stuff("dry dirt", 46, 46, -1L, "Roughness 0.85 Reflection 0.0 Dapple -0.05"),
+//            new Stuff("wet dirt or mud", 47, 47, 64L, "Roughness 0.1 Reflection 0.05"), /*dark tan*/
+//            new Stuff("marked fluff", 48, 48, 64L, "Roughness 0.6 Reflection 0.15 Dapple -0.16"), /*dark orange*/
+//            new Stuff("base fluff", 49, 49, -1L, "Roughness 0.5 Reflection 0.4 Dapple -0.08"),
+//            new Stuff("highlight fluff", 50, 50, -1L, "Roughness 0.4 Reflection 0.75 Dapple -0.04"), /*hot orange*/
+//            new Stuff("scar", 51, 51, 64L, "Roughness 0.7 Reflection 0.05"), /*light skin*/
+//            new Stuff("base skin", 52, 52, -1L, "Roughness 0.6 Reflection 0.2"),
+//            new Stuff("nose", 53, 53, 1L, "Roughness 0.6 Reflection 0.3"),
+//            new Stuff("freckle", 54, 54, 1L, "Roughness 0.6 Reflection 0.2 Vary -0.1"),
+//            new Stuff("ears", 55, 55, 4L, "Roughness 0.5 Reflection 0.1"),
+//            new Stuff("overripe fruit or rot", 56, 56, -1L, "Roughness 0.2 Reflection 0.02 Dapple -0.15 Vary -0.1"), /*dark skin*/
+//            new Stuff("lips blood gore", 57, 57, 16L, "Roughness 0.04 Reflection 0.4"), /*gore*/
+//            new Stuff("knotted wood", 58, 58, 128L, "Roughness 0.5 Reflection 0.1 Dapple -0.1"), /*dark brown*/
+//            new Stuff("old wood", 59, 59, 2L, "Roughness 0.6 Reflection 0.0 Dapple -0.25 Vary -0.35"),
+//            new Stuff("fresh wood", 60, 60, 512L, "Roughness 0.4 Reflection 0.0 Dapple -0.15 Vary -0.1"), /*medium brown*/
+//            new Stuff("gold", 61, 61, 24L, "Roughness 0.5 Reflection 0.85", 126, 1, 5, 61), /*dark yellow*/
+//            new Stuff("ripe fruit or flower", 62, 62, 128L, "Roughness 0.2 Reflection 0.55 Dapple -0.2"),
+//            new Stuff("bone beak claw", 63, 63, 64L, "Roughness 0.4 Reflection 0.4"), /*light yellow*/
     };
 
     public static void evolve(byte[][][] model, int frame){
