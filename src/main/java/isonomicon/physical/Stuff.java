@@ -347,13 +347,12 @@ public class Stuff {
             new Stuff("scratched metal swap 0", 133, 5, 2L, "Metal", "Reflection 0.5 Roughness 0.65 Frame 0.0"),
             new Stuff("scratched metal swap 1", 134, 6, 1L, "Metal", "Reflection 0.5 Roughness 0.65 Frame 1.0"),
             new Stuff("vanishing flash", 135, 7, 256L, "Emission 0.8 Transparency 1.0", 0, 1), /*white*/
-
-//            new Stuff("sickly leaf", 8, 8, 2L, "Roughness 0.2 Reflection 0.25 Vary -0.35"), /*light lime*/
-//            new Stuff("unripe fruit or bud", 9, 9, 512L, "Roughness 0.6 Reflection 0.3 Dapple -0.1"),
-//            new Stuff("acid", 10, 10, 8L, "Roughness 0.5 Reflection 0.7 Flow 0.6"),
-//            new Stuff("mold", 11, 11, 8L, "Roughness 0.9 Reflection 0.0 Vary -0.5"), /*dark lime*/
-//            new Stuff("moss", 12, 12, 12L, "Roughness 0.9 Reflection 0.03"), /*dark green*/
-//            new Stuff("cactus plant", 13, 13, 12L, "Roughness 0.4 Reflection 0.2"),
+            new Stuff("radiation pulse 0", 136, 8, 16L, "Roughness 0.0 Reflection 0.0 Emission 0.2 Transparency 1.0", 137, 1), /*light lime*/
+            new Stuff("radiation pulse 1", 137, 9, 64L, "Roughness 0.0 Reflection 0.0 Emission 0.4 Transparency 1.0", 138, 1),
+            new Stuff("radiation pulse 2", 138, 10, 8L, "Roughness 0.0 Reflection 0.0 Emission 0.6 Transparency 1.0", 139, 1),
+            new Stuff("radiation pulse 3", 139, 11, 8L, "Roughness 0.0 Reflection 0.0 Emission 0.4 Transparency 1.0", 136, 1), /*dark lime*/
+            new Stuff("flickering light off", 140, 12, 12L, "Roughness 0.03 Reflection 0.5", 140, 14, 141, 1), /*dark green*/
+            new Stuff("flickering light on", 141, 13, 12L, "Roughness 0.0 Reflection 0.0 Emission 0.5", 141, 11, 140, 1),
 //            new Stuff("matte leaf", 14, 14, 0L, "Roughness 0.4 Reflection 0.05 Dapple -0.35"),
 //            new Stuff("glossy leaf", 15, 15, 512L, "Roughness 0.1 Reflection 0.85 Dapple -0.1"),
 //            new Stuff("succulent plant", 16, 16, 512L, "Roughness 0.8 Reflection 0.04"),
