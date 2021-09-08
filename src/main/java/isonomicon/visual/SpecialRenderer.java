@@ -138,6 +138,7 @@ public class SpecialRenderer {
             return;
         final Stuff stuff = stuffs[Math.min(voxel & 255, stuffs.length - 1)];
         final VoxMaterial m = stuff.material;
+        voxel = (byte) stuff.appearsAs;
         final float flip = m.getTrait(VoxMaterial.MaterialTrait._frame);
         if(Tools3D.randomizePointRare(vx, vy, vz, frame) < m.getTrait(VoxMaterial.MaterialTrait._metal) || (frame & 1) == flip)
             return;
@@ -558,8 +559,8 @@ public class SpecialRenderer {
 
     }
 
-    public Pixmap drawModel2(VoxModel model, float yaw, float pitch, float roll, int frame,
-                            float translateX, float translateY, float translateZ){
+    public Pixmap drawModelSimple(VoxModel model, float yaw, float pitch, float roll, int frame,
+                                  float translateX, float translateY, float translateZ){
         boolean foundAnything = false;
         ArrayList<byte[][][]> grids = new ArrayList<>(model.grids.size());
         ArrayList<IntMap<float[]>> links = new ArrayList<>(model.links.size());
