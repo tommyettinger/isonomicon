@@ -44,36 +44,6 @@ public class ColorGuardAssets extends ApplicationAdapter {
     private SpriteBatch batch;
     private Texture palette;
     public ColorGuardAssets() {
-//            inputs = new String[]{"vox/Box.vox", "vox/Damned.vox", "vox/Lomuk.vox", "vox/Eye_Tyrant.vox", "vox/Direction_Cube.vox", "vox/Infantry.vox", "vox/Infantry_Firing.vox", "vox/Tree.vox", "vox/teapot.vox"};
-//            inputs = new String[]{"vox/Eye_Tyrant_Floor.vox", "vox/Eye_Tyrant.vox", "vox/Bear.vox", "vox/Infantry_Firing.vox", "vox/Lomuk.vox", "vox/Tree.vox"};
-//            inputs = new String[]{"vox/Eye_Tyrant.vox", "vox/Bear.vox", "vox/Infantry_Firing.vox", "vox/Tree.vox"};
-//            inputs = new String[]{"vox/Eye_Tyrant.vox", "vox/Infantry_Firing.vox", "vox/Lomuk.vox", "vox/Tree.vox", "vox/LAB.vox"};
-//            inputs = new String[]{"vox/Lomuk.vox", "vox/Tree.vox", "vox/Eye_Tyrant.vox", "vox/IPT.vox", "vox/LAB.vox"};
-//            inputs = new String[]{"vox/Infantry_Firing.vox"};
-//            inputs = new String[]{"vox/Infantry.vox"};
-//            inputs = new String[]{"vox/Materials.vox"};
-//            inputs = new String[]{"vox/IPT_No_Pow.vox"};
-//            inputs = new String[]{"vox/Box.vox", "vox/Direction_Cube.vox"};
-//            inputs = new String[]{"vox/IPT_Original.vox"};
-//            inputs = new String[]{"vox/IPT.vox"};
-//            inputs = new String[]{"vox/LAB.vox"};
-//            inputs = new String[]{"vox/Oklab.vox"};
-//            inputs = new String[]{"vox/Oklab.vox", "vox/LAB.vox", "vox/IPT.vox"};
-//            inputs = new String[]{"vox/Eye_Tyrant.vox"};
-//            inputs = new String[]{"vox/Floor.vox"};
-//            inputs = new String[]{"vox/Bear.vox"};
-//            inputs = new String[]{"vox/Lomuk.vox"};
-//            inputs = new String[]{"vox/Lomuk.vox", "vox/Damned.vox"};
-//            inputs = new String[]{"vox/Damned.vox"};
-//            inputs = new String[]{"vox/Phantom_Wand.vox"};
-//            inputs = new String[]{"vox/Tree.vox"};
-//            inputs = new String[]{"vox/teapot.vox"};
-//            inputs = new String[]{"vox/Figure.vox"};
-//            inputs = new String[]{"b/vox/Figure.vox", "b/vox/Tree.vox"};
-//            inputs = new String[]{"b/vox/Figure_Split.vox", "palettes/b/TanClothDarkSkin.png"};
-//            inputs = new String[]{"b/vox/Damned.vox", "palettes/b/CherrySkinDarkCloth.png"};
-//            inputs = new String[]{"b/vox/Direction_Cube.vox", "palettes/b/TanClothDarkSkin.png"};
-//            inputs = new String[]{"b/vox/Lomuk.vox", "palettes/b/BlueFurCyanCrystal.png"};
         inputs = new String[]{
                 "Light_Tank.vox", "palettes/b/ColorGuardBaseDark.png",
                 "Light_Artillery.vox", "palettes/b/ColorGuardBaseDark.png",
@@ -86,6 +56,8 @@ public class ColorGuardAssets extends ApplicationAdapter {
                 "Infantry_Firing.vox", "palettes/b/ColorGuardBaseDark.png",
                 "Bazooka.vox", "palettes/b/ColorGuardBaseDark.png",
                 "Bazooka_Firing.vox", "palettes/b/ColorGuardBaseDark.png",
+                "Rifle_Sniper.vox", "palettes/b/ColorGuardBaseDark.png",
+//                "Rifle_Sniper_Firing.vox", "palettes/b/ColorGuardBaseDark.png",
                 "City.vox", "palettes/b/ColorGuardBaseDark.png",
         };
         if (!new File("specialized/b/vox/color_guard/" + inputs[0]).exists()) {
