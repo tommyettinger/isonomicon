@@ -61,6 +61,8 @@ public class ColorGuardAssets extends ApplicationAdapter {
                 "Bazooka_Firing.vox", "palettes/b/ColorGuardBaseDark.png",
                 "Rifle_Sniper.vox", "palettes/b/ColorGuardBaseDark.png",
                 "Rifle_Sniper_Firing.vox", "palettes/b/ColorGuardBaseDark.png",
+                "Mortar_Sniper.vox", "palettes/b/ColorGuardBaseDark.png",
+//                "Mortar_Sniper_Firing.vox", "palettes/b/ColorGuardBaseDark.png",
                 "City.vox", "palettes/b/ColorGuardBaseDark.png",
         };
         if (!new File("specialized/b/vox/color_guard/" + inputs[0]).exists()) {
