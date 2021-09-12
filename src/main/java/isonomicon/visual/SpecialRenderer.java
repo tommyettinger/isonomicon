@@ -138,6 +138,8 @@ public class SpecialRenderer {
             return;
         final Stuff stuff = stuffs[Math.min(voxel & 255, stuffs.length - 1)];
         final VoxMaterial m = stuff.material;
+        final float alpha = m.getTrait(VoxMaterial.MaterialTrait._alpha);
+        if(alpha >= 1f) return;
         voxel = (byte) stuff.appearsAs;
         final float flip = m.getTrait(VoxMaterial.MaterialTrait._frame);
         if(Tools3D.randomizePointRare(vx, vy, vz, frame) < m.getTrait(VoxMaterial.MaterialTrait._metal) || (frame & 1) == flip)
@@ -156,22 +158,17 @@ public class SpecialRenderer {
                 depth = (int)(0.5f + (xPos + yPos) * 2 + zPos * 3);
         boolean drawn = false;
         final float emit = m.getTrait(VoxMaterial.MaterialTrait._emit) * 0.75f;
-        final float alpha = m.getTrait(VoxMaterial.MaterialTrait._alpha);
-
         final float hs = size * 0.5f;
         for (int x = lowX, ax = xx; x < highX && ax < render.length; x++, ax++) {
-            if(ax < 0) continue;
+            if (ax < 0) continue;
             for (int y = 0, ay = yy; y < 4 && ay < render[0].length; y++, ay++) {
                 if ((depth > depths[ax][ay] || (depth == depths[ax][ay] && (indices[ax][ay] & 255) < (voxel & 255)))) {
                     drawn = true;
                     indices[ax][ay] = voxel;
                     depths[ax][ay] = depth;
                     materials[ax][ay] = m;
-                    if(alpha < 1f)
-                    {
-                        outlines[ax][ay] = ColorTools.toRGBA8888(ColorTools.limitToGamut(outlineShading[ax][ay] = paletteL[voxel & 255] * (0.625f + emit), paletteA[voxel & 255], paletteB[voxel & 255], 1f));
-                        outlineIndices[ax][ay] = voxel;
-                    }
+                    outlines[ax][ay] = ColorTools.toRGBA8888(ColorTools.limitToGamut(outlineShading[ax][ay] = paletteL[voxel & 255] * (0.625f + emit), paletteA[voxel & 255], paletteB[voxel & 255], 1f));
+                    outlineIndices[ax][ay] = voxel;
 //                                Coloring.darken(palette[voxel & 255], 0.375f - emit);
 //                                Coloring.adjust(palette[voxel & 255], 0.625f + emit, neutral);
 //                    else
