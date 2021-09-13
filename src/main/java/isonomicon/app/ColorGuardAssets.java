@@ -46,8 +46,9 @@ public class ColorGuardAssets extends ApplicationAdapter {
     public ColorGuardAssets() {
         inputs = new String[]{
                 "Light_Tank.vox", "palettes/b/ColorGuardBaseDark.png",
-                "AA_Gun.vox", "palettes/b/ColorGuardBaseDark.png",
                 "Heavy_Cannon.vox", "palettes/b/ColorGuardBaseDark.png",
+                "AA_Gun.vox", "palettes/b/ColorGuardBaseDark.png",
+                "Flamethrower.vox", "palettes/b/ColorGuardBaseDark.png",
                 "Light_Artillery.vox", "palettes/b/ColorGuardBaseDark.png",
                 "Rocket_Artillery.vox", "palettes/b/ColorGuardBaseDark.png",
                 "AA_Artillery.vox", "palettes/b/ColorGuardBaseDark.png",
