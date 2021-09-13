@@ -55,6 +55,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                 "Recon.vox", "palettes/b/ColorGuardBaseDark.png",
                 "Supply_Truck.vox", "palettes/b/ColorGuardBaseDark.png",
                 "Build_Rig.vox", "palettes/b/ColorGuardBaseDark.png",
+                "Jetpack.vox", "palettes/b/ColorGuardBaseDark.png",
                 "Transport_Copter.vox", "palettes/b/ColorGuardBaseDark.png",
                 "Blitz_Copter.vox", "palettes/b/ColorGuardBaseDark.png",
                 "Gunship_Copter.vox", "palettes/b/ColorGuardBaseDark.png",
