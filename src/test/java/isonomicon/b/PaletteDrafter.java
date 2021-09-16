@@ -121,8 +121,8 @@ public class PaletteDrafter extends ApplicationAdapter {
     @Override
     public void create() {
         font = new BitmapFont(Gdx.files.internal("font.fnt"));
-        workingPalette = new Pixmap(Gdx.files.internal("palettes/repeated-blocks-b.png"));
-//        workingPalette = new Pixmap(Gdx.files.internal("palettes/edited/NaturalWoodAndLeaves.png"));
+//        workingPalette = new Pixmap(Gdx.files.internal("palettes/repeated-blocks-b.png"));
+        workingPalette = new Pixmap(Gdx.files.internal("palettes/b/ColorGuardBaseDark.png"));
         workingOklab = new float[128];
         palettes = new Texture(workingPalette);
         preview = new Pixmap(16, 16, Pixmap.Format.RGBA8888);
@@ -135,12 +135,14 @@ public class PaletteDrafter extends ApplicationAdapter {
 //        String name = "Damned";
 //        String name = "Figure";
 
-        String name = "Tank";
+        String name = "Scout_Tank";
+        String name2 = "Mansion";
 
         images = new Texture[32];
         for (int a = 0, i = 0; a < 4; a++) {
             for (int f = 0; f < 4; f++) {
-                images[i++] = new Texture(Gdx.files.local("out/color_guard/lab/"+name+"/"+name+"_angle"+a+"_"+f+".png"));
+                images[i] = new Texture(Gdx.files.local("out/color_guard/lab/"+name+"/"+name+"_angle"+a+"_"+f+".png"));
+                images[16 + i++] = new Texture(Gdx.files.local("out/color_guard/lab/"+name2+"/"+name2+"_angle"+a+"_"+f+".png"));
             }
         }
 //        for (int a = 0, i = 0; a < 8; a++) {
@@ -152,7 +154,7 @@ public class PaletteDrafter extends ApplicationAdapter {
         L = ColorTools.channelL(oklab);
         A = ColorTools.channelA(oklab);
         B = ColorTools.channelB(oklab);
-        alpha = 1f - STUFFS[groups.getAt(groupIndex)[stuffIndex]].material.getTrait(VoxMaterial.MaterialTrait._alpha);
+        alpha = 1f;// - STUFFS[groups.getAt(groupIndex)[stuffIndex]].material.getTrait(VoxMaterial.MaterialTrait._alpha);
         for (int i = 1; i < 128; i++) {
             workingOklab[i] = ColorTools.fromRGBA8888(workingPalette.getPixel(i, 0));
         }
@@ -256,7 +258,7 @@ public class PaletteDrafter extends ApplicationAdapter {
             L = ColorTools.channelL(oklab);
             A = ColorTools.channelA(oklab);
             B = ColorTools.channelB(oklab);
-            alpha = 1f - STUFFS[group[stuffIndex]].material.getTrait(VoxMaterial.MaterialTrait._alpha);
+            alpha = 1f;// - STUFFS[group[stuffIndex]].material.getTrait(VoxMaterial.MaterialTrait._alpha);
         }
         float step = Math.min(Gdx.graphics.getDeltaTime(), 0.3f) * 0.0625f;
         if(UIUtils.shift()) {
@@ -306,7 +308,7 @@ public class PaletteDrafter extends ApplicationAdapter {
                     float l = MathUtils.clamp(ColorTools.channelL(oklab) + allL, 0f, 1f);
                     float a = MathUtils.clamp((ColorTools.channelA(oklab) - 0.5f) * (1f + allS * 3f) + 0.5f + allA, 0f, 1f);
                     float b = MathUtils.clamp((ColorTools.channelB(oklab) - 0.5f) * (1f + allS * 3f) + 0.5f + allB, 0f, 1f);
-                    float al = 1f - STUFFS[group[i]].material.getTrait(VoxMaterial.MaterialTrait._alpha);
+                    float al = 1f;// - STUFFS[group[i]].material.getTrait(VoxMaterial.MaterialTrait._alpha);
                     float edited;
                     workingOklab[group[i] - 1 & 127] = edited = ColorTools.limitToGamut(l, a, b, al);
                     int pre = ColorTools.toRGBA8888(edited);
@@ -380,7 +382,7 @@ public class PaletteDrafter extends ApplicationAdapter {
         indexShader.setUniformi("u_texPalette", 1);
         Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
         batch.setColor(0f, 0.5f, 0.5f, 1f);
-        batch.draw(images[(int) (TimeUtils.timeSinceMillis(startTime) >>> 8) & 15], 0, 0);
+        batch.draw(images[(int) (TimeUtils.timeSinceMillis(startTime) >>> 8) & 31], 0, 0);
         batch.end();
 
         batch.setShader(regularShader);
