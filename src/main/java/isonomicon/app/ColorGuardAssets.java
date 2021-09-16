@@ -88,6 +88,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                 "Factory.vox", "palettes/b/ColorGuardBaseDark.png",
                 "Airport.vox", "palettes/b/ColorGuardBaseDark.png",
                 "Farm.vox", "palettes/b/ColorGuardBaseDark.png",
+                "Laboratory.vox", "palettes/b/ColorGuardBaseDark.png",
         };
         if (!new File("specialized/b/vox/color_guard/" + inputs[0]).exists()) {
             System.out.println("File not found: specialized/b/vox/color_guard/" + inputs[0]);

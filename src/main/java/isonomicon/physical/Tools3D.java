@@ -643,16 +643,17 @@ public class Tools3D {
     }
 
     private static int isSurface(byte[][][] voxels, int x, int y, int z) {
+        int v;
         if(x < 0 || y < 0 || z < 0 ||
                 x >= voxels.length || y >= voxels[x].length || z >= voxels[x][y].length ||
                 voxels[x][y][z] == 0)
             return 0;
-        if(x <= 0 || voxels[x-1][y][z] == 0) return 1;
-        if(y <= 0 || voxels[x][y-1][z] == 0) return 2;
-        if(z <= 0 || voxels[x][y][z-1] == 0) return 3;
-        if(x >= voxels.length - 1 || voxels[x+1][y][z] == 0) return 4;
-        if(y >= voxels[x].length - 1 || voxels[x][y+1][z] == 0) return 5;
-        if(z >= voxels[x][y].length - 1 || voxels[x][y][z+1] == 0) return 6;
+        if(x <= 0 || (v = voxels[x-1][y][z] & 255) == 0 || Stuff.STUFFS_B[v].material.getTrait(VoxMaterial.MaterialTrait._alpha) >= 1f) return 1;
+        if(y <= 0 || (v = voxels[x][y-1][z] & 255) == 0 || Stuff.STUFFS_B[v].material.getTrait(VoxMaterial.MaterialTrait._alpha) >= 1f) return 2;
+        if(z <= 0 || (v = voxels[x][y][z-1] & 255) == 0 || Stuff.STUFFS_B[v].material.getTrait(VoxMaterial.MaterialTrait._alpha) >= 1f) return 3;
+        if(x >= voxels.length - 1       || (v = voxels[x+1][y][z] & 255) == 0 || Stuff.STUFFS_B[v].material.getTrait(VoxMaterial.MaterialTrait._alpha) >= 1f) return 4;
+        if(y >= voxels[x].length - 1    || (v = voxels[x][y+1][z] & 255) == 0 || Stuff.STUFFS_B[v].material.getTrait(VoxMaterial.MaterialTrait._alpha) >= 1f) return 5;
+        if(z >= voxels[x][y].length - 1 || (v = voxels[x][y][z+1] & 255) == 0 || Stuff.STUFFS_B[v].material.getTrait(VoxMaterial.MaterialTrait._alpha) >= 1f) return 6;
         return -1;
     }
 
