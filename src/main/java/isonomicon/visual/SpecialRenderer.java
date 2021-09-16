@@ -303,7 +303,7 @@ public class SpecialRenderer {
                         }
                     }
                     if (emit > 0) {
-                        float spread = emit * 0.003f;
+                        float spread = emit * 0.0015f;
                         for (int i = -12, si = sx + i; i <= 12; i++, si++) {
                             for (int j = -12, sj = sy + j; j <= 12; j++, sj++) {
                                 final int dist = i * i + j * j;
