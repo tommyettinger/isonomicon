@@ -342,10 +342,10 @@ public class Stuff {
             new Stuff("scratched metal swap 0", 133, 5, "Metal", "Reflection 0.5 Roughness 0.65 Frame 0.0"),
             new Stuff("scratched metal swap 1", 134, 5, "Metal", "Reflection 0.5 Roughness 0.65 Frame 1.0"),
             new Stuff("vanishing flash", 135, "Emission 0.8 Transparency 1.0", 0, 1), /*white*/
-            new Stuff("radiation pulse 0", 136, 72, "Roughness 0.0 Reflection 0.0 Emission 0.2 Transparency 1.0", 137, 1), /*light lime*/
-            new Stuff("radiation pulse 1", 137, 72, "Roughness 0.0 Reflection 0.0 Emission 0.4 Transparency 1.0", 138, 1),
-            new Stuff("radiation pulse 2", 138, 72, "Roughness 0.0 Reflection 0.0 Emission 0.6 Transparency 1.0", 139, 1),
-            new Stuff("radiation pulse 3", 139, 72, "Roughness 0.0 Reflection 0.0 Emission 0.4 Transparency 1.0", 136, 1), /*dark lime*/
+            new Stuff("radiation pulse 0", 136, 72, "Roughness 0.0 Reflection 0.0 Emission 0.2 Transparency 0.9", 137, 1), /*light lime*/
+            new Stuff("radiation pulse 1", 137, 72, "Roughness 0.0 Reflection 0.0 Emission 0.4 Transparency 0.9", 138, 1),
+            new Stuff("radiation pulse 2", 138, 72, "Roughness 0.0 Reflection 0.0 Emission 0.6 Transparency 0.9", 139, 1),
+            new Stuff("radiation pulse 3", 139, 72, "Roughness 0.0 Reflection 0.0 Emission 0.4 Transparency 0.9", 136, 1), /*dark lime*/
             new Stuff("flickering light off", 140, 76, "Roughness 0.03 Reflection 0.5", 140, 14, 141, 1), /*dark green*/
             new Stuff("flickering light on", 141, 81, "Roughness 0.0 Reflection 0.0 Emission 0.5", 141, 11, 140, 1),
 //            new Stuff("matte leaf", 14, 14, 0L, "Roughness 0.4 Reflection 0.05 Dapple -0.35"),
