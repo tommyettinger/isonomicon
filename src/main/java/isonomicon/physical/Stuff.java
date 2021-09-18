@@ -265,7 +265,7 @@ public class Stuff {
             new Stuff("knotted wood", 58, "Roughness 0.5 Reflection 0.1 Dapple -0.1"), /*dark brown*/
             new Stuff("old wood", 59, "Roughness 0.6 Reflection 0.0 Dapple -0.25 Vary -0.35"),
             new Stuff("fresh wood", 60, "Roughness 0.4 Reflection 0.0 Dapple -0.15 Vary -0.1"), /*medium brown*/
-            new Stuff("gold", 61, "Roughness 0.5 Reflection 0.85", 126, 1, 5, 61), /*dark yellow*/
+            new Stuff("gold", 61, "Roughness 0.5 Reflection 0.85", 126, 1, 61, 5), /*dark yellow*/
             new Stuff("ripe fruit or flower", 62, "Roughness 0.2 Reflection 0.55 Dapple -0.2"),
             new Stuff("bone beak claw", 63, "Roughness 0.4 Reflection 0.4"), /*light yellow*/
 
