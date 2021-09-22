@@ -37,7 +37,8 @@ public class ColorGuardAssets extends ApplicationAdapter {
     private SpecialRenderer renderer;
     private VoxModel voxels, head;
     private String name;
-    private String[] inputs;
+    private String[] inputs, armies;
+    private Texture[] palettes;
     private PixmapIO.PNG png;
     private AnimatedGif gif;
     private AnimatedPNG apng;
@@ -45,53 +46,63 @@ public class ColorGuardAssets extends ApplicationAdapter {
     private Texture palette;
     public ColorGuardAssets() {
         inputs = new String[]{
-                "Light_Tank.vox", "palettes/b/ColorGuardBaseDark.png",
-                "War_Tank.vox", "palettes/b/ColorGuardBaseDark.png",
-                "Scout_Tank.vox", "palettes/b/ColorGuardBaseDark.png",
-                "Heavy_Cannon.vox", "palettes/b/ColorGuardBaseDark.png",
-                "AA_Gun.vox", "palettes/b/ColorGuardBaseDark.png",
-                "Flamethrower.vox", "palettes/b/ColorGuardBaseDark.png",
-                "Light_Artillery.vox", "palettes/b/ColorGuardBaseDark.png",
-                "Rocket_Artillery.vox", "palettes/b/ColorGuardBaseDark.png",
-                "AA_Artillery.vox", "palettes/b/ColorGuardBaseDark.png",
-                "Recon.vox", "palettes/b/ColorGuardBaseDark.png",
-                "Supply_Truck.vox", "palettes/b/ColorGuardBaseDark.png",
-                "Amphi_Transport.vox", "palettes/b/ColorGuardBaseDark.png",
-                "Build_Rig.vox", "palettes/b/ColorGuardBaseDark.png",
-                "Jammer.vox", "palettes/b/ColorGuardBaseDark.png",
-                "Jetpack.vox", "palettes/b/ColorGuardBaseDark.png",
-                "Transport_Copter.vox", "palettes/b/ColorGuardBaseDark.png",
-                "Blitz_Copter.vox", "palettes/b/ColorGuardBaseDark.png",
-                "Gunship_Copter.vox", "palettes/b/ColorGuardBaseDark.png",
-                "Comm_Copter.vox", "palettes/b/ColorGuardBaseDark.png",
-                "Patrol_Boat.vox", "palettes/b/ColorGuardBaseDark.png",
-                "Battleship.vox", "palettes/b/ColorGuardBaseDark.png",
-                "Submarine.vox", "palettes/b/ColorGuardBaseDark.png",
-                "Cruiser.vox", "palettes/b/ColorGuardBaseDark.png",
-                "Fighter_Jet.vox", "palettes/b/ColorGuardBaseDark.png",
-                "Stealth_Jet.vox", "palettes/b/ColorGuardBaseDark.png",
-                "Legacy_Plane.vox", "palettes/b/ColorGuardBaseDark.png",
-                "Heavy_Bomber.vox", "palettes/b/ColorGuardBaseDark.png",
-                "Infantry.vox", "palettes/b/ColorGuardBaseDark.png",
-                "Infantry_Firing.vox", "palettes/b/ColorGuardBaseDark.png",
-                "Bazooka.vox", "palettes/b/ColorGuardBaseDark.png",
-                "Bazooka_Firing.vox", "palettes/b/ColorGuardBaseDark.png",
-                "Bike.vox", "palettes/b/ColorGuardBaseDark.png",
-                "Rifle_Sniper.vox", "palettes/b/ColorGuardBaseDark.png",
-                "Rifle_Sniper_Firing.vox", "palettes/b/ColorGuardBaseDark.png",
-                "Mortar_Sniper.vox", "palettes/b/ColorGuardBaseDark.png",
-                "Mortar_Sniper_Firing.vox", "palettes/b/ColorGuardBaseDark.png",
-                "Missile_Sniper.vox", "palettes/b/ColorGuardBaseDark.png",
-                "City.vox", "palettes/b/ColorGuardBaseDark.png",
-                "Mansion.vox", "palettes/b/ColorGuardBaseDark.png",
-                "Fort.vox", "palettes/b/ColorGuardBaseDark.png",
-                "Factory.vox", "palettes/b/ColorGuardBaseDark.png",
-                "Airport.vox", "palettes/b/ColorGuardBaseDark.png",
-                "Farm.vox", "palettes/b/ColorGuardBaseDark.png",
-                "Mining_Outpost.vox", "palettes/b/ColorGuardBaseDark.png",
-                "Oil_Well.vox", "palettes/b/ColorGuardBaseDark.png",
-                "Laboratory.vox", "palettes/b/ColorGuardBaseDark.png",
-                "Hospital.vox", "palettes/b/ColorGuardBaseDark.png",
+                "Light_Tank.vox",
+                "War_Tank.vox",
+                "Scout_Tank.vox",
+                "Heavy_Cannon.vox",
+                "AA_Gun.vox",
+                "Flamethrower.vox",
+                "Light_Artillery.vox",
+                "Rocket_Artillery.vox",
+                "AA_Artillery.vox",
+                "Recon.vox",
+                "Supply_Truck.vox",
+                "Amphi_Transport.vox",
+                "Build_Rig.vox",
+                "Jammer.vox",
+                "Jetpack.vox",
+                "Transport_Copter.vox",
+                "Blitz_Copter.vox",
+                "Gunship_Copter.vox",
+                "Comm_Copter.vox",
+                "Patrol_Boat.vox",
+                "Battleship.vox",
+                "Submarine.vox",
+                "Cruiser.vox",
+                "Fighter_Jet.vox",
+                "Stealth_Jet.vox",
+                "Legacy_Plane.vox",
+                "Heavy_Bomber.vox",
+                "Infantry.vox",
+                "Infantry_Firing.vox",
+                "Bazooka.vox",
+                "Bazooka_Firing.vox",
+                "Bike.vox",
+                "Rifle_Sniper.vox",
+                "Rifle_Sniper_Firing.vox",
+                "Mortar_Sniper.vox",
+                "Mortar_Sniper_Firing.vox",
+                "Missile_Sniper.vox",
+                "City.vox",
+                "Mansion.vox",
+                "Fort.vox",
+                "Factory.vox",
+                "Airport.vox",
+                "Farm.vox",
+                "Mining_Outpost.vox",
+                "Oil_Well.vox",
+                "Laboratory.vox",
+                "Hospital.vox",
+        };
+        armies = new String[]{
+                "Dark",
+                "White",
+                "Red",
+                "Orange",
+                "Yellow",
+                "Green",
+                "Blue",
+                "Purple",
         };
         if (!new File("specialized/b/vox/color_guard/" + inputs[0]).exists()) {
             System.out.println("File not found: specialized/b/vox/color_guard/" + inputs[0]);
@@ -107,6 +118,16 @@ public class ColorGuardAssets extends ApplicationAdapter {
     @Override
     public void create() {
         if (inputs == null) Gdx.app.exit();
+        palettes = new Texture[]{
+                new Texture(Gdx.files.local("assets/palettes/b/ColorGuardBaseDark.png")),
+                new Texture(Gdx.files.local("assets/palettes/b/ColorGuardBaseWhite.png")),
+                new Texture(Gdx.files.local("assets/palettes/b/ColorGuardBaseRed.png")),
+                new Texture(Gdx.files.local("assets/palettes/b/ColorGuardBaseOrange.png")),
+                new Texture(Gdx.files.local("assets/palettes/b/ColorGuardBaseYellow.png")),
+                new Texture(Gdx.files.local("assets/palettes/b/ColorGuardBaseGreen.png")),
+                new Texture(Gdx.files.local("assets/palettes/b/ColorGuardBaseBlue.png")),
+                new Texture(Gdx.files.local("assets/palettes/b/ColorGuardBasePurple.png")),
+        };
 
         ShaderProgram indexShader = new ShaderProgram(ShaderUtils.stuffSelectVertex, ShaderUtils.stuffSelectFragment);
         if (!indexShader.isCompiled()) throw new GdxRuntimeException("Error compiling shader: " + indexShader.getLog());
@@ -117,16 +138,18 @@ public class ColorGuardAssets extends ApplicationAdapter {
         png.setCompression(2); // we are likely to compress these with something better, like oxipng.
         gif = new AnimatedGif();
         apng = new AnimatedPNG();
+        apng.setCompression(2);
         gif.setDitherAlgorithm(Dithered.DitherAlgorithm.SCATTER);
         gif.palette = new PaletteReducer(Coloring.BETSY256, Gdx.files.local("assets/BetsyPreload.dat").readBytes());
         gif.palette.setDitherStrength(1f);
+        FrameBuffer fb = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), false);
         for (int n = 0; n < inputs.length; n++) {
-            String s = inputs[n++];
-            palette = new Texture(Gdx.files.local("assets/"+inputs[n]));
+            String s = inputs[n];
             System.out.println("Rendering " + s);
             load("specialized/b/vox/color_guard/"+s);
             Pixmap pixmap;
-            Array<Pixmap> pm = new Array<>(32);
+            Array<Pixmap> pm = new Array<>(32 * armies.length);
+            pm.setSize(32 * armies.length);
             ArrayList<byte[][][]> original = new ArrayList<>(voxels.grids.size());
             for (int i = 0; i < voxels.grids.size(); i++) {
                 original.add(Tools3D.deepCopy(voxels.grids.get(i)));
@@ -143,43 +166,45 @@ public class ColorGuardAssets extends ApplicationAdapter {
                     pixmap = renderer.drawModelSimple(voxels, i * 0.25f, 0f, 0f, f, 0, 0, 0);
                     Texture t = new Texture(pixmap.getWidth(), pixmap.getHeight(), Pixmap.Format.RGBA8888);
                     t.draw(renderer.palettePixmap, 0, 0);
-                    FrameBuffer fb = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), false);
-                    fb.begin();
-                    palette.bind(1);
-                    ScreenUtils.clear(Color.CLEAR);
-                    batch.begin();
+                    for (int j = 0; j < armies.length; j++) {
+                        palette = palettes[j];
+                        fb.begin();
+                        palette.bind(1);
+                        ScreenUtils.clear(Color.CLEAR);
+                        batch.begin();
 
-                    indexShader.setUniformi("u_texPalette", 1);
-                    Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
-                    batch.setColor(0f, 0.5f, 0.5f, 1f);
+                        indexShader.setUniformi("u_texPalette", 1);
+                        Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
+                        batch.setColor(0f, 0.5f, 0.5f, 1f);
 
-                    batch.draw(t, 0, t.getHeight(), t.getWidth(), -t.getHeight());
-                    batch.end();
-                    pixmap = Pixmap.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
-                    fb.end();
-                    pm.add(pixmap);
-                    try {
-                        png.write(Gdx.files.local("out/color_guard/render/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), pixmap);
-                        png.write(Gdx.files.local("out/color_guard/lab/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                        batch.draw(t, 0, t.getHeight(), t.getWidth(), -t.getHeight());
+                        batch.end();
+                        pixmap = Pixmap.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
+                        fb.end();
+                        pm.set(j * 32 + i * 8 + f, pixmap);
+                        pm.set(j * 32 + i * 8 + f + 4, pixmap);
+                        try {
+                            png.write(Gdx.files.local("out/color_guard/"+armies[j]+"/" + name + '/' + armies[j] + '_' + name + "_angle" + i + "_" + f + ".png"), pixmap);
+                            png.write(Gdx.files.local("out/color_guard/lab/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
-                    fb.dispose();
                     t.dispose();
 //                png8.write(Gdx.files.local("out/" + name + '/' + name + "_angle" + i + ".png"), p, false, true);
                 }
-                pm.insertRange(pm.size - 4, 4);
             }
 //                gif.palette.analyze(pm);
-            gif.write(Gdx.files.local("out/color_guard/render/" + name + '/' + name + ".gif"), pm, 8);
+            gif.write(Gdx.files.local("out/color_guard/animated/" + name + '/' + name + ".gif"), pm, 8);
 //                gif.palette.exact(Coloring.HALTONITE240, PRELOAD);
 //                gif.write(Gdx.files.local("out/" + name + '/' + name + "-256-color.gif"), pm, 1);
-            apng.write(Gdx.files.local("out/color_guard/render/" + name + '/' + name + ".png"), pm, 8);
+            apng.write(Gdx.files.local("out/color_guard/animated/" + name + '/' + name + ".png"), pm, 8);
             for (Pixmap pix : pm) {
                 if(!pix.isDisposed())
                     pix.dispose();
             }
         }
+        fb.dispose();
         System.out.println("Finished in " + TimeUtils.timeSinceMillis(startTime) * 0.001 + " seconds.");
         Gdx.app.exit();
     }
