@@ -1,15 +1,26 @@
 package isonomicon.physical;
 
+import com.badlogic.gdx.math.MathUtils;
+import squidpony.squidmath.IntPointHash;
+import squidpony.squidmath.StatefulRNG;
+import squidpony.squidmath.TangleRNG;
+
+import static squidpony.squidmath.Noise.fastCeil;
+import static squidpony.squidmath.Noise.fastFloor;
+
 public class EffectGenerator {
     public static byte[][][][] fireballAnimation(byte[][][] initial, int frames, int trimLevel, int blowback){
         final int xSize = initial.length, ySize = initial[0].length, zSize = initial[0][0].length;
+        StatefulRNG r = new StatefulRNG(xSize + ySize + zSize + frames + trimLevel + blowback);
         byte[][][][] result = new byte[frames][xSize][ySize][zSize];
-        for (int f = 0; f <= frames; f++) {
+//        byte[][][] working = new byte[xSize][ySize][zSize];
+        for (int f = 0, f1 = 1; f < frames; f++, f1++) {
+            byte[][][] vls;
             if(f == 0)
-                Tools3D.deepCopyInto(initial, result[0]);
+                vls = initial;
             else
-                Tools3D.deepCopyInto(result[f-1], result[f]);
-            byte[][][] vls = result[f];
+                vls = result[f-1];
+            byte[][][] working = result[f];
             int xLimitLow = Integer.MAX_VALUE, xLimitHigh = Integer.MIN_VALUE;
             int yLimitLow = Integer.MAX_VALUE, yLimitHigh = Integer.MIN_VALUE;
             int zLimitLow = Integer.MAX_VALUE, zLimitHigh = Integer.MIN_VALUE;
@@ -88,6 +99,78 @@ public class EffectGenerator {
             int xRange = xLimitHigh - xLimitLow;
             int yRange = yLimitHigh - yLimitLow;
             int zRange = zLimitHigh - zLimitLow;
+
+            for (int x = 0; x < xSize; x++) {
+                for (int y = 0; y < ySize; y++) {
+                    for (int z = 0; z < zSize; z++) {
+                        byte color = vls[x][y][z];
+                        if ((color - 1 & 255) < 191) {
+                            float zMove = f1 * 1.1f;
+                            float xMove = r.nextFloat(2.5f) - 1.25f;
+                            float yMove = r.nextFloat(2.5f) - 1.25f;
+                            float magnitude = (float)Math.sqrt(xMove * xMove + yMove * yMove);
+                            int usedX = x, usedY = y, usedZ = z;
+                            if(xMove > 0)
+                            {
+                                float nv = x + r.nextFloat((xMove / magnitude) * 35f / f1) + (r.nextFloat(8f) - 4f);
+                                if(nv < 1) nv = 1;
+                                else if(nv > xSize - 2) nv = xSize - 2;
+                                usedX = ((blowback <= 0) ? fastFloor(nv) : fastCeil(nv));
+                            }
+                            else if(xMove < 0)
+                            {
+                                float nv = x - r.nextFloat((xMove / magnitude) * -35f / f1) + (r.nextFloat(8f) - 4f);
+                                if(nv < 1) nv = 1;
+                                else if(nv > xSize - 2) nv = xSize - 2;
+                                usedX = ((blowback > 0) ? fastFloor(nv) : fastCeil(nv));
+                            }
+                            else
+                            {
+                                if(x < 1) usedX = 1;
+                                else if(x > xSize - 2) usedX = xSize - 2;
+                            }
+                            if(yMove > 0)
+                            {
+                                float nv = y + r.nextFloat((yMove / magnitude) * 35f / f1) + (r.nextFloat(8f) - 4f);
+                                if(nv < 1) nv = 1;
+                                else if(nv > ySize - 2) nv = ySize - 2;
+                                usedY = ((blowback <= 0) ? fastFloor(nv) : fastCeil(nv));
+                            }
+                            else if(yMove < 0)
+                            {
+                                float nv = y - r.nextFloat((yMove / magnitude) * -35f / f1) + (r.nextFloat(8f) - 4f);
+                                if(nv < 1) nv = 1;
+                                else if(nv > ySize - 2) nv = ySize - 2;
+                                usedY = ((blowback > 0) ? fastFloor(nv) : fastCeil(nv));
+                            }
+                            else
+                            {
+                                if(y < 1) usedY = 1;
+                                else if(y > ySize - 2) usedY = ySize - 2;
+                            }
+                            if(zMove != 0)
+                            {
+                                float nv = (z + (zMove / (0.35f + 0.14f * (f1 + 3f))));
+
+                                /*if(nv <= 0 && f1 < frames && NOT_FIRE) nv = r.next(1); //bounce
+                                else*/ if(nv < 0) nv = 0;
+
+                                if(nv > zSize - 1)
+                                {
+                                    continue;
+                                }
+                                usedZ = MathUtils.roundPositive(nv);
+                            }
+                            working[usedX][usedY][usedZ] = color;
+
+//                            if(r.nextInt(frames) > f1 + frames / 6 && r.nextInt(frames) > f1 + 2)
+//                                working.AddRange(VoxelLogic.Adjacent(mvd, new int[] { orange_fire, yellow_fire, orange_fire, yellow_fire, smoke }));
+
+                        }
+                    }
+                }
+            }
+            Stuff.evolve(Stuff.STUFFS_B, working, f);
         }
         return result;
     }
