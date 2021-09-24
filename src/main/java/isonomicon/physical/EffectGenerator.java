@@ -1,9 +1,7 @@
 package isonomicon.physical;
 
 import com.badlogic.gdx.math.MathUtils;
-import squidpony.squidmath.IntPointHash;
-import squidpony.squidmath.StatefulRNG;
-import squidpony.squidmath.TangleRNG;
+import squidpony.squidmath.*;
 
 import static squidpony.squidmath.Noise.fastCeil;
 import static squidpony.squidmath.Noise.fastFloor;
@@ -96,9 +94,9 @@ public class EffectGenerator {
             float xMiddle = (xLimitHigh + xLimitLow) * 0.5f;
             float yMiddle = (yLimitHigh + yLimitLow) * 0.5f;
             float zMiddle = (zLimitHigh + zLimitLow) * 0.5f;
-            int xRange = xLimitHigh - xLimitLow;
-            int yRange = yLimitHigh - yLimitLow;
-            int zRange = zLimitHigh - zLimitLow;
+            float xRange = 1.5f / (xLimitHigh - xLimitLow);
+            float yRange = 1.5f / (yLimitHigh - yLimitLow);
+            float zRange = 1.5f / (zLimitHigh - zLimitLow);
 
             for (int x = 0; x < xSize; x++) {
                 for (int y = 0; y < ySize; y++) {
@@ -161,11 +159,23 @@ public class EffectGenerator {
                                 }
                                 usedZ = MathUtils.roundPositive(nv);
                             }
-                            working[usedX][usedY][usedZ] = color;
+                            if(randomChoice(r, trimLevel, usedX, usedY, usedZ, xMiddle, yMiddle, zMiddle, xRange, yRange, zRange))
+                                working[usedX][usedY][usedZ] = color;
 
-//                            if(r.nextInt(frames) > f1 + frames / 6 && r.nextInt(frames) > f1 + 2)
-//                                working.AddRange(VoxelLogic.Adjacent(mvd, new int[] { orange_fire, yellow_fire, orange_fire, yellow_fire, smoke }));
-
+                            if(r.nextInt(frames) > f1 + frames / 6 && r.nextInt(frames) > f1 + 2) {
+                                if(usedX > 0 && (working[usedX - 1][usedY][usedZ] == 0) && randomChoice(r, trimLevel, usedX - 1, usedY, usedZ, xMiddle, yMiddle, zMiddle, xRange, yRange, zRange))
+                                    working[usedX - 1][usedY][usedZ] = randomFire(r);
+                                if(usedX < xSize - 1 && (working[usedX + 1][usedY][usedZ] == 0) && randomChoice(r, trimLevel, usedX + 1, usedY, usedZ, xMiddle, yMiddle, zMiddle, xRange, yRange, zRange))
+                                    working[usedX + 1][usedY][usedZ] = randomFire(r);
+                                if(usedY > 0 && (working[usedX][usedY - 1][usedZ] == 0) && randomChoice(r, trimLevel, usedX, usedY - 1, usedZ, xMiddle, yMiddle, zMiddle, xRange, yRange, zRange))
+                                    working[usedX][usedY - 1][usedZ] = randomFire(r);
+                                if(usedY < ySize - 1 && (working[usedX][usedY + 1][usedZ] == 0) && randomChoice(r, trimLevel, usedX, usedY + 1, usedZ, xMiddle, yMiddle, zMiddle, xRange, yRange, zRange))
+                                    working[usedX][usedY + 1][usedZ] = randomFire(r);
+                                if(usedZ > 0 && (working[usedX][usedY][usedZ - 1] == 0) && randomChoice(r, trimLevel, usedX, usedY, usedZ - 1, xMiddle, yMiddle, zMiddle, xRange, yRange, zRange))
+                                    working[usedX][usedY][usedZ - 1] = randomFire(r);
+                                if(usedZ < zSize - 1 && (working[usedX][usedY][usedZ + 1] == 0) && randomChoice(r, trimLevel, usedX, usedY, usedZ + 1, xMiddle, yMiddle, zMiddle, xRange, yRange, zRange))
+                                    working[usedX][usedY][usedZ + 1] = randomFire(r);
+                            }
                         }
                     }
                 }
@@ -173,6 +183,41 @@ public class EffectGenerator {
             Stuff.evolve(Stuff.STUFFS_B, working, f);
         }
         return result;
+    }
+
+    public static boolean randomChoice(RNG r, int trim, int x, int y, int z,
+                                float midX, float midY, float midZ, float rangeX, float rangeY, float rangeZ){
+        return r.nextInt(9) < 9f - trim && r.nextInt(12) < 13f
+                - Math.abs(x - midX) * rangeX
+                - Math.abs(y - midY) * rangeY
+                - Math.abs(z - midZ) * rangeZ;
+    }
+    //67, 67, 67, 113, 114, 114, 114, 114, 114, 115, 115, 115, 115, 119, 119, 127
+    public static byte randomFire(RandomnessSource r){
+        switch (r.next(4)){
+            case 0:
+            case 1:
+            case 2:
+                return 67;
+            case 3:
+                return 113;
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+                return 114;
+            case 9:
+            case 10:
+            case 11:
+            case 12:
+                return 115;
+            case 13:
+            case 14:
+                return 119;
+            default:
+                return 127;
+        }
     }
     //// from PixVoxelAssets
     /*
