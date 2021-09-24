@@ -333,7 +333,7 @@ public class Stuff {
             new Stuff("yellow glass", 125, "Transparency 0.5 Roughness 0.0 Reflection 0.65"), /*dark yellow*/
             new Stuff("gold glint", 126, "Roughness 0.2 Reflection 1.0 Emission 0.2", 126, 1, 61, 20),
             new Stuff("fiery spark", 127, "Emission 0.6 Roughness 0.4 Reflection 0.0 Missing 0.6", 127, 2, 0, 3), /*light yellow*/
-// fire: 67, 67, 67, 113, 114, 114, 114, 114, 114, 115, 115, 115, 115, 119, 119, 127
+
             new Stuff("vanishing shadow", 128, "Emission -0.5 Transparency 1.0", 0, 1),
             new Stuff("matte leather swap 0", 129, 2, "Reflection 0.05 Roughness 0.6 Frame 0.0"), /*black*/
             new Stuff("matte leather swap 1", 130, 2, "Reflection 0.05 Roughness 0.6 Frame 1.0"),

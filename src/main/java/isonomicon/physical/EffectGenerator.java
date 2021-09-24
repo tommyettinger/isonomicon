@@ -98,26 +98,28 @@ public class EffectGenerator {
             float yRange = 1.5f / (yLimitHigh - yLimitLow);
             float zRange = 1.5f / (zLimitHigh - zLimitLow);
 
+            final float SPREAD = 24f;
+
             for (int x = 0; x < xSize; x++) {
                 for (int y = 0; y < ySize; y++) {
                     for (int z = 0; z < zSize; z++) {
                         byte color = vls[x][y][z];
                         if ((color - 1 & 255) < 191) {
-                            float zMove = f1 * 1.1f;
-                            float xMove = r.nextFloat(2.5f) - 1.25f;
-                            float yMove = r.nextFloat(2.5f) - 1.25f;
+                            float zMove = f1 * ((r.nextFloat() + r.nextFloat()) * 0.8f + 0.3f);
+                            float xMove = r.nextFloat(2f) - 1f;
+                            float yMove = r.nextFloat(2f) - 1f;
                             float magnitude = (float)Math.sqrt(xMove * xMove + yMove * yMove);
                             int usedX = x, usedY = y, usedZ = z;
                             if(xMove > 0)
                             {
-                                float nv = x + r.nextFloat((xMove / magnitude) * 35f / f1) + (r.nextFloat(8f) - 4f);
+                                float nv = x + r.nextFloat((xMove / magnitude) * SPREAD / f1) + (r.nextFloat(4f) - 2f);
                                 if(nv < 1) nv = 1;
                                 else if(nv > xSize - 2) nv = xSize - 2;
                                 usedX = ((blowback <= 0) ? fastFloor(nv) : fastCeil(nv));
                             }
                             else if(xMove < 0)
                             {
-                                float nv = x - r.nextFloat((xMove / magnitude) * -35f / f1) + (r.nextFloat(8f) - 4f);
+                                float nv = x - r.nextFloat((xMove / magnitude) * -SPREAD / f1) + (r.nextFloat(4f) - 2f);
                                 if(nv < 1) nv = 1;
                                 else if(nv > xSize - 2) nv = xSize - 2;
                                 usedX = ((blowback > 0) ? fastFloor(nv) : fastCeil(nv));
@@ -129,14 +131,14 @@ public class EffectGenerator {
                             }
                             if(yMove > 0)
                             {
-                                float nv = y + r.nextFloat((yMove / magnitude) * 35f / f1) + (r.nextFloat(8f) - 4f);
+                                float nv = y + r.nextFloat((yMove / magnitude) * SPREAD / f1) + (r.nextFloat(4f) - 2f);
                                 if(nv < 1) nv = 1;
                                 else if(nv > ySize - 2) nv = ySize - 2;
                                 usedY = ((blowback <= 0) ? fastFloor(nv) : fastCeil(nv));
                             }
                             else if(yMove < 0)
                             {
-                                float nv = y - r.nextFloat((yMove / magnitude) * -35f / f1) + (r.nextFloat(8f) - 4f);
+                                float nv = y - r.nextFloat((yMove / magnitude) * -SPREAD / f1) + (r.nextFloat(4f) - 2f);
                                 if(nv < 1) nv = 1;
                                 else if(nv > ySize - 2) nv = ySize - 2;
                                 usedY = ((blowback > 0) ? fastFloor(nv) : fastCeil(nv));
@@ -187,7 +189,7 @@ public class EffectGenerator {
 
     public static boolean randomChoice(RNG r, int trim, int x, int y, int z,
                                 float midX, float midY, float midZ, float rangeX, float rangeY, float rangeZ){
-        return r.nextInt(9) < 9f - trim && r.nextInt(12) < 13f
+        return r.nextInt(9) < 10f - trim && r.nextInt(12) < 14f
                 - Math.abs(x - midX) * rangeX
                 - Math.abs(y - midY) * rangeY
                 - Math.abs(z - midZ) * rangeZ;
@@ -195,12 +197,7 @@ public class EffectGenerator {
     //67, 67, 67, 113, 114, 114, 114, 114, 114, 115, 115, 115, 115, 119, 119, 127
     public static byte randomFire(RandomnessSource r){
         switch (r.next(4)){
-            case 0:
-            case 1:
-            case 2:
-                return 67;
             case 3:
-                return 113;
             case 4:
             case 5:
             case 6:
@@ -211,12 +208,10 @@ public class EffectGenerator {
             case 10:
             case 11:
             case 12:
-                return 115;
             case 13:
-            case 14:
-                return 119;
+                return 115;
             default:
-                return 127;
+                return 67;
         }
     }
     //// from PixVoxelAssets

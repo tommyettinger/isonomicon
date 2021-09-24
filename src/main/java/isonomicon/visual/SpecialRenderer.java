@@ -167,8 +167,10 @@ public class SpecialRenderer {
                     indices[ax][ay] = voxel;
                     depths[ax][ay] = depth;
                     materials[ax][ay] = m;
-                    outlines[ax][ay] = ColorTools.toRGBA8888(ColorTools.limitToGamut(outlineShading[ax][ay] = paletteL[voxel & 255] * (0.625f + emit), paletteA[voxel & 255], paletteB[voxel & 255], 1f));
-                    outlineIndices[ax][ay] = voxel;
+                    if((voxel & 0xC0) == 0) {
+                        outlines[ax][ay] = ColorTools.toRGBA8888(ColorTools.limitToGamut(outlineShading[ax][ay] = paletteL[voxel & 255] * (0.625f + emit), paletteA[voxel & 255], paletteB[voxel & 255], 1f));
+                        outlineIndices[ax][ay] = voxel;
+                    }
 //                                Coloring.darken(palette[voxel & 255], 0.375f - emit);
 //                                Coloring.adjust(palette[voxel & 255], 0.625f + emit, neutral);
 //                    else
