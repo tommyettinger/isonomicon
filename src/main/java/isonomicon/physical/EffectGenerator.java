@@ -1,0 +1,308 @@
+package isonomicon.physical;
+
+public class EffectGenerator {
+    public static byte[][][][] fireballAnimation(byte[][][] initial, int frames, int trimLevel, int blowback){
+        final int xSize = initial.length, ySize = initial[0].length, zSize = initial[0][0].length;
+        byte[][][][] result = new byte[frames][xSize][ySize][zSize];
+        for (int f = 0; f <= frames; f++) {
+            if(f == 0)
+                Tools3D.deepCopyInto(initial, result[0]);
+            else
+                Tools3D.deepCopyInto(result[f-1], result[f]);
+            byte[][][] vls = result[f];
+            int xLimitLow = Integer.MAX_VALUE, xLimitHigh = Integer.MIN_VALUE;
+            int yLimitLow = Integer.MAX_VALUE, yLimitHigh = Integer.MIN_VALUE;
+            int zLimitLow = Integer.MAX_VALUE, zLimitHigh = Integer.MIN_VALUE;
+            OUTER:
+            for (int x = 0; x < xSize; x++) {
+                for (int y = 0; y < ySize; y++) {
+                    for (int z = 0; z < zSize; z++) {
+                        if((vls[x][y][z] - 1 & 255) < 191){
+                            xLimitLow = x;
+                            break OUTER;
+                        }
+                    }
+                }
+            }
+            OUTER:
+            for (int y = 0; y < ySize; y++) {
+                for (int x = 0; x < xSize; x++) {
+                    for (int z = 0; z < zSize; z++) {
+                        if((vls[x][y][z] - 1 & 255) < 191){
+                            yLimitLow = y;
+                            break OUTER;
+                        }
+                    }
+                }
+            }
+            OUTER:
+            for (int z = 0; z < zSize; z++) {
+                for (int y = 0; y < ySize; y++) {
+                    for (int x = 0; x < xSize; x++) {
+                        if((vls[x][y][z] - 1 & 255) < 191){
+                            zLimitLow = z;
+                            break OUTER;
+                        }
+                    }
+                }
+            }
+
+            OUTER:
+            for (int x = xSize - 1; x >= 0; x--) {
+                for (int y = 0; y < ySize; y++) {
+                    for (int z = 0; z < zSize; z++) {
+                        if((vls[x][y][z] - 1 & 255) < 191){
+                            xLimitHigh = x;
+                            break OUTER;
+                        }
+                    }
+                }
+            }
+
+            OUTER:
+            for (int y = ySize - 1; y >= 0; y--) {
+                for (int x = 0; x < xSize; x++) {
+                    for (int z = 0; z < zSize; z++) {
+                        if((vls[x][y][z] - 1 & 255) < 191){
+                            yLimitHigh = y;
+                            break OUTER;
+                        }
+                    }
+                }
+            }
+            OUTER:
+            for (int z = zSize - 1; z>= 0; z--) {
+                for (int x = 0; x < xSize; x++) {
+                    for (int y = 0; y < ySize; y++) {
+                        if((vls[x][y][z] - 1 & 255) < 191){
+                            zLimitHigh = z;
+                            break OUTER;
+                        }
+                    }
+                }
+            }
+
+            float xMiddle = (xLimitHigh + xLimitLow) * 0.5f;
+            float yMiddle = (yLimitHigh + yLimitLow) * 0.5f;
+            float zMiddle = (zLimitHigh + zLimitLow) * 0.5f;
+            int xRange = xLimitHigh - xLimitLow;
+            int yRange = yLimitHigh - yLimitLow;
+            int zRange = zLimitHigh - zLimitLow;
+        }
+        return result;
+    }
+    //// from PixVoxelAssets
+    /*
+            public static MagicaVoxelData[][] FireballSwitchable(MagicaVoxelData[] voxels, int blowback, int maxFrames, int trimLevel, int xSize, int ySize, int zSize)
+        {
+            MagicaVoxelData[][] voxelFrames = new MagicaVoxelData[maxFrames + 1][];
+            voxelFrames[0] = new MagicaVoxelData[voxels.Length];
+            voxels.CopyTo(voxelFrames[0], 0);
+
+            for(int f = 1; f <= maxFrames; f++)
+            {
+                List<MagicaVoxelData> altered = new List<MagicaVoxelData>(voxelFrames[f - 1].Length), working = new List<MagicaVoxelData>(voxelFrames[f - 1].Length * 2);
+                MagicaVoxelData[] vls = new MagicaVoxelData[voxelFrames[f - 1].Length]; //.OrderBy(v => v.x * 32 - v.y + v.z * 32 * 128)
+                voxelFrames[f - 1].CopyTo(vls, 0);
+                if(vls.Count() == 0)
+                {
+                    voxelFrames[f] = new MagicaVoxelData[0];
+                    continue;
+                }
+
+
+                int xLimitLow = vls.Min(v => v.x * (v.color <= emitter0 ? 1000 : 1)),
+                    xLimitHigh = vls.Max(v => v.x * (v.color <= emitter0 ? 0 : 1)),
+                    xMiddle = (xLimitHigh + xLimitLow) / 2,
+                    xRange = xLimitHigh - xLimitLow,
+                    yLimitLow = vls.Min(v => v.y * (v.color <= emitter0 ? 1000 : 1)),
+                    yLimitHigh = vls.Max(v => v.y * (v.color <= emitter0 ? 0 : 1)),
+                    yMiddle = (yLimitHigh + yLimitLow) / 2,
+                    yRange = yLimitHigh - yLimitLow,
+                    zLimitLow = vls.Min(v => v.z * (v.color <= emitter0 ? 1000 : 1)),
+                    zLimitHigh = vls.Max(v => v.z * (v.color <= emitter0 ? 0 : 1)),
+                    zMiddle = (zLimitHigh + zLimitLow) / 2,
+                    zRange = zLimitHigh - zLimitLow;
+
+                int[] minX = new int[zSize];
+                int[] maxX = new int[zSize];
+                float[] midX = new float[zSize];
+                for(int level = 0; level < zSize; level++)
+                {
+                    minX[level] = vls.Min(v => v.x * ((v.z != level || v.color < VoxelLogic.clear) ? 1000 : 1));
+                    maxX[level] = vls.Max(v => v.x * ((v.z != level || v.color < VoxelLogic.clear) ? 0 : 1));
+                    midX[level] = (maxX[level] + minX[level]) / 2F;
+                }
+
+                int[] minY = new int[zSize];
+                int[] maxY = new int[zSize];
+                float[] midY = new float[zSize];
+                for(int level = 0; level < zSize; level++)
+                {
+                    minY[level] = vls.Min(v => v.y * ((v.z != level || v.color < VoxelLogic.clear) ? 1000 : 1));
+                    maxY[level] = vls.Max(v => v.y * ((v.z != level || v.color < VoxelLogic.clear) ? 0 : 1));
+                    midY[level] = (maxY[level] + minY[level]) / 2F;
+                }
+
+                int minZ = vls.Min(v => v.z * ((v.color < VoxelLogic.clear) ? 1000 : 1));
+                int maxZ = vls.Max(v => v.z * ((v.color < VoxelLogic.clear) ? 0 : 1));
+                float midZ = (maxZ + minZ) / 2F;
+
+                foreach(MagicaVoxelData v in vls)
+                {
+                    MagicaVoxelData mvd = new MagicaVoxelData();
+                    int c = ((255 - v.color) % 4 == 0) ? (255 - v.color) / 4 + VoxelLogic.wcolorcount : (253 - v.color) / 4;
+                    if(c == 8 || c == 9) //flesh
+                        mvd.color = (byte)((r.Next(f) == 0) ? 253 - 34 * 4 : (r.Next(6) == 0 && f < 10) ? 253 - 19 * 4 : v.color); //random transform to guts
+                    else if(c == 34) //guts
+                        mvd.color = (byte)((r.Next(20) == 0 && f < 10) ? 253 - 19 * 4 : v.color); //random transform to orange fire
+                    else if(c == VoxelLogic.wcolorcount - 1) //clear and markers
+                        mvd.color = (byte)VoxelLogic.clear; //clear stays clear
+                    else if(c == 16)
+                        mvd.color = VoxelLogic.clear; //clear inner shadow
+                    else if(c == 25)
+                        mvd.color = 253 - 25 * 4; //shadow stays shadow
+                    else if(c == 27)
+                        mvd.color = 253 - 27 * 4; //water stays water
+                    else if(c >= VoxelLogic.wcolorcount && c < VoxelLogic.wcolorcount + 5)
+                        mvd.color = (byte)(255 - (c - VoxelLogic.wcolorcount) * 4); // falling water stays falling water
+                    else if(c == 40)
+                        mvd.color = 253 - 20 * 4; //flickering sparks become normal sparks
+                    else if(c >= 21 && c <= 24) //lights
+                        mvd.color = 253 - 35 * 4; //glass color for broken lights
+                    else if(c == 35) //windows
+                        mvd.color = (byte)((r.Next(3) == 0) ? VoxelLogic.clear : v.color); //random transform to clear
+                    else if(c == 36) //rotor contrast
+                        mvd.color = 253 - 0 * 4; //"foot contrast" color for broken rotors contrast
+                    else if(c == 37) //rotor
+                        mvd.color = 253 - 1 * 4; //"foot" color for broken rotors
+                    else if(c == 38 || c == 39)
+                        mvd.color = VoxelLogic.clear; //clear non-active rotors
+                    else if(c == 19) //orange fire
+                        mvd.color = (byte)((r.Next(9) + 2 <= f) ? 253 - 17 * 4 : ((r.Next(3) <= 1) ? 253 - 18 * 4 : ((r.Next(3) == 0) ? 253 - 17 * 4 : v.color))); //random transform to yellow fire or smoke
+                    else if(c == 18) //yellow fire
+                        mvd.color = (byte)((r.Next(9) + 1 <= f) ? 253 - 17 * 4 : ((r.Next(3) <= 1) ? 253 - 19 * 4 : ((r.Next(4) == 0) ? 253 - 17 * 4 : ((r.Next(4) == 0) ? 253 - 20 * 4 : v.color)))); //random transform to orange fire, smoke, or sparks
+                    else if(c == 20) //sparks
+                        mvd.color = (byte)((r.Next(4) > 0 && r.Next(12) > f) ? v.color : VoxelLogic.clear); //random transform to clear
+                    else if(c == 17) //smoke
+                        mvd.color = (byte)((r.Next(10) + 3 <= f) ? VoxelLogic.clear : 253 - 17 * 4); //random transform to clear
+                    else
+                        mvd.color = (byte)((r.Next(f * 4) <= 6) ? 253 - ((r.Next(4) == 0) ? 18 * 4 : 19 * 4) : v.color); //random transform to orange or yellow fire
+
+                    float xMove = 0, yMove = 0, zMove = 0;
+                    if(mvd.color == orange_fire || mvd.color == yellow_fire || mvd.color == smoke)
+                    {
+                        zMove = f * 1.1f;
+                        xMove = (float)(r.NextDouble() * 2.0 - 1.0);
+                        yMove = (float)(r.NextDouble() * 2.0 - 1.0);
+                    }
+                    else
+                    {
+                        if(v.x > midX[v.z])
+                            xMove = ((blowback * 0.3f - r.Next(3) + (v.x - midX[v.z])) / (f + 8) * 25F * ((v.z - minZ + 1) / (maxZ - minZ + 1F)));
+                        else if(v.x < midX[v.z])
+                            xMove = ((blowback * 0.3f + r.Next(3) - midX[v.z] + v.x) / (f + 8) * 25F * ((v.z - minZ + 1) / (maxZ - minZ + 1F)));
+                        if(v.y > midY[v.z])
+                            yMove = ((0 - r.Next(3) + (v.y - midY[v.z])) / (f + 8) * 25F * ((v.z - minZ + 1) / (maxZ - minZ + 1F)));
+                        else if(v.y < midY[v.z])
+                            yMove = ((0 + r.Next(3) - midY[v.z] + v.y) / (f + 8) * 25F * ((v.z - minZ + 1) / (maxZ - minZ + 1F)));
+
+                        if(mvd.color == 253 - 20 * 4)
+                        {
+                            zMove = 0.1f;
+                            xMove *= 2;
+                            yMove *= 2;
+                        }
+                        else if(mvd.color == orange_fire || mvd.color == yellow_fire || mvd.color == smoke)
+                            zMove = f * 0.55F;
+                        else if(f < (maxFrames - 4) && minZ <= 1)
+                            zMove = (v.z / ((maxZ + 1) * (0.3F))) * ((maxFrames - 3) - f) * 0.8F;
+                        else
+                            zMove = (1 - f * 2.1F);
+                    }
+                    float magnitude = (float)Math.Sqrt(xMove * xMove + yMove * yMove);
+
+                    if(xMove > 0)
+                    {
+                        //float nv = (v.x + (xMove / (0.2f * (f + 4)))) - Math.Abs((yMove / (0.5f * (f + 3))));
+                        float nv = v.x + (float)r.NextDouble() * ((xMove / magnitude) * 35F / f) + (float)(r.NextDouble() * 8.0 - 4.0);
+                        if(nv < 1) nv = 1;
+                        if(nv > xSize - 2) nv = xSize - 2;
+                        mvd.x = (byte)((blowback <= 0) ? Math.Floor(nv) : (Math.Ceiling(nv)));
+                    }
+                    else if(xMove < 0)
+                    {
+                        //float nv = (v.x + (xMove / (0.2f * (f + 4)))) + Math.Abs((yMove / (0.5f * (f + 3))));
+                        float nv = v.x - (float)r.NextDouble() * ((xMove / magnitude) * -35F / f) + (float)(r.NextDouble() * 8.0 - 4.0);
+
+                        if(nv < 1) nv = 1;
+                        if(nv > xSize - 2) nv = xSize - 2;
+                        mvd.x = (byte)((blowback > 0) ? Math.Floor(nv) : (Math.Ceiling(nv)));
+                    }
+                    else
+                    {
+                        if(v.x < 1) mvd.x = 1;
+                        if(v.x > xSize - 2) mvd.x = (byte)(xSize - 2);
+                        else mvd.x = v.x;
+                    }
+                    if(yMove > 0)
+                    {
+                        //float nv = (v.y + (yMove / (0.2f * (f + 4)))) - Math.Abs((xMove / (0.5f * (f + 3))));
+                        float nv = v.y + (float)r.NextDouble() * ((yMove / magnitude) * 35F / f) + (float)(r.NextDouble() * 8.0 - 4.0);
+
+                        if(nv < 1) nv = 1;
+                        if(nv > ySize - 2) nv = ySize - 2;
+                        mvd.y = (byte)(Math.Floor(nv));
+                    }
+                    else if(yMove < 0)
+                    {
+                        //float nv = (v.y + (yMove / (0.2f * (f + 4)))) + Math.Abs((xMove / (0.5f * (f + 3))));
+                        float nv = v.y - (float)r.NextDouble() * ((yMove / magnitude) * -35F / f) + (float)(r.NextDouble() * 8.0 - 4.0);
+
+                        if(nv < 1) nv = 1;
+                        if(nv > ySize - 2) nv = ySize - 2;
+                        mvd.y = (byte)(Math.Ceiling(nv));
+                    }
+                    else
+                    {
+                        mvd.y = v.y;
+                    }
+                    if(zMove != 0)
+                    {
+                        float nv = (v.z + (zMove / (0.35f + 0.14f * (f + 3))));
+
+                        if(nv <= 0 && f < maxFrames && !(mvd.color == orange_fire || mvd.color == yellow_fire || mvd.color == smoke)) nv = r.Next(2); //bounce
+                        else if(nv < 0) nv = 0;
+
+                        if(nv > zSize - 1)
+                        {
+                            nv = zSize - 1;
+                            mvd.color = VoxelLogic.clear;
+                        }
+                        mvd.z = (byte)Math.Round(nv);
+                    }
+                    else
+                    {
+                        mvd.z = v.z;
+                    }
+                    working.Add(mvd);
+                    if(r.Next(maxFrames) > f + maxFrames / 6 && r.Next(maxFrames) > f + 2) working.AddRange(VoxelLogic.Adjacent(mvd, new int[] { orange_fire, yellow_fire, orange_fire, yellow_fire, smoke }));
+                }
+                working = working.Where(mvd => r.Next(9) < 9f - trimLevel && r.Next(12) < 13f
+                - Math.Abs(mvd.x - xMiddle) * 1.5f / xRange
+                - Math.Abs(mvd.y - yMiddle) * 1.5f / yRange
+                - Math.Abs(mvd.z - zMiddle) * 1.5f / zRange).ToList();
+                voxelFrames[f] = new MagicaVoxelData[working.Count];
+                working.CopyTo(voxelFrames[f], 0);
+            }
+            MagicaVoxelData[][] frames = new MagicaVoxelData[maxFrames][];
+
+            for(int f = 1; f <= maxFrames; f++)
+            {
+                frames[f - 1] = new MagicaVoxelData[voxelFrames[f].Length];
+                voxelFrames[f].CopyTo(frames[f - 1], 0);
+            }
+            return frames;
+        }
+     */
+}
