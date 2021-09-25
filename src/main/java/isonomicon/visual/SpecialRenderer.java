@@ -148,11 +148,11 @@ public class SpecialRenderer {
         final float flow = m.getTrait(VoxMaterial.MaterialTrait._flow);
         final float emit = m.getTrait(VoxMaterial.MaterialTrait._emit) * 0.75f;
         int lowX = 0, highX = 4, lowY = 0, highY = 4;
-        if(emit != 0f){
-            lowX = lowY = 1;
-            highX = highY = 3;
-        }
-        else if(flow != 0f){
+//        if(emit != 0f) {
+//            lowX = lowY = 1;
+//            highX = highY = 3;
+//        } else
+            if(flow != 0f){
             float ns = noise.getConfiguredNoise(xPos, yPos, zPos, frame * flow);
             if(ns > 0) highX = (int)(4.5 + ns * (3 << shrink));
             else if(ns < 0) lowX = Math.round(lowX + ns * (3 << shrink));
@@ -172,7 +172,7 @@ public class SpecialRenderer {
                     depths[ax][ay] = depth;
                     materials[ax][ay] = m;
                     outlines[ax][ay] = 1;
-                    outlineShading[ax][ay] = paletteL[voxel & 255] * (0.625f + emit * 1.5f);
+                    outlineShading[ax][ay] = paletteL[voxel & 255] * (0.625f + emit * 2.5f);
                     outlineIndices[ax][ay] = voxel;
 //                                Coloring.darken(palette[voxel & 255], 0.375f - emit);
 //                                Coloring.adjust(palette[voxel & 255], 0.625f + emit, neutral);

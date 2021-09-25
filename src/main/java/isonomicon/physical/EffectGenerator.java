@@ -13,6 +13,7 @@ public class EffectGenerator {
         byte[][][][] result = new byte[frames][xSize][ySize][zSize];
 //        byte[][][] working = new byte[xSize][ySize][zSize];
         for (int f = 0, f1 = 1; f < frames; f++, f1++) {
+            final float fr = f1 / (float)frames;
             byte[][][] vls;
             if(f == 0)
                 vls = initial;
@@ -98,7 +99,9 @@ public class EffectGenerator {
             float yRange = 1.5f / (yLimitHigh - yLimitLow);
             float zRange = 1.5f / (zLimitHigh - zLimitLow);
 
-            final float SPREAD = 24f;
+            final float SPREAD = 42f;
+            final float magnitude = SPREAD * 0.04f / (fr * fr);
+            final float LIMIT = 6.5f;
 
             for (int x = 0; x < xSize; x++) {
                 for (int y = 0; y < ySize; y++) {
@@ -108,18 +111,18 @@ public class EffectGenerator {
                             float zMove = f1 * ((r.nextFloat() + r.nextFloat()) * 0.8f + 0.3f);
                             float xMove = r.nextFloat(2f) - 1f;
                             float yMove = r.nextFloat(2f) - 1f;
-                            float magnitude = (float)Math.sqrt(xMove * xMove + yMove * yMove);
+//                            final float magnitude = (float)Math.sqrt(xMove * xMove + yMove * yMove);
                             int usedX = x, usedY = y, usedZ = z;
                             if(xMove > 0)
                             {
-                                float nv = x + r.nextFloat((xMove / magnitude) * SPREAD / f1) + (r.nextFloat(4f) - 2f);
+                                float nv = x + r.nextFloat(Math.min(LIMIT, xMove * magnitude)) + (r.nextFloat(3f) - 1.5f);
                                 if(nv < 1) nv = 1;
                                 else if(nv > xSize - 2) nv = xSize - 2;
                                 usedX = ((blowback <= 0) ? fastFloor(nv) : fastCeil(nv));
                             }
                             else if(xMove < 0)
                             {
-                                float nv = x - r.nextFloat((xMove / magnitude) * -SPREAD / f1) + (r.nextFloat(4f) - 2f);
+                                float nv = x - r.nextFloat(Math.min(LIMIT, xMove * -magnitude)) + (r.nextFloat(3f) - 1.5f);
                                 if(nv < 1) nv = 1;
                                 else if(nv > xSize - 2) nv = xSize - 2;
                                 usedX = ((blowback > 0) ? fastFloor(nv) : fastCeil(nv));
@@ -131,14 +134,14 @@ public class EffectGenerator {
                             }
                             if(yMove > 0)
                             {
-                                float nv = y + r.nextFloat((yMove / magnitude) * SPREAD / f1) + (r.nextFloat(4f) - 2f);
+                                float nv = y + r.nextFloat(Math.min(LIMIT, yMove * magnitude)) + (r.nextFloat(3f) - 1.5f);
                                 if(nv < 1) nv = 1;
                                 else if(nv > ySize - 2) nv = ySize - 2;
                                 usedY = ((blowback <= 0) ? fastFloor(nv) : fastCeil(nv));
                             }
                             else if(yMove < 0)
                             {
-                                float nv = y - r.nextFloat((yMove / magnitude) * -SPREAD / f1) + (r.nextFloat(4f) - 2f);
+                                float nv = y - r.nextFloat(Math.min(LIMIT, yMove * -magnitude)) + (r.nextFloat(3f) - 1.5f);
                                 if(nv < 1) nv = 1;
                                 else if(nv > ySize - 2) nv = ySize - 2;
                                 usedY = ((blowback > 0) ? fastFloor(nv) : fastCeil(nv));
