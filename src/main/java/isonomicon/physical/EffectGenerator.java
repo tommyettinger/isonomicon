@@ -101,7 +101,7 @@ public class EffectGenerator {
 
             final float SPREAD = 42f;
             final float magnitude = SPREAD * 0.04f / (fr * fr);
-            final float LIMIT = 6.5f;
+            final float LIMIT = xSize * 0.1f;
 
             for (int x = 0; x < xSize; x++) {
                 for (int y = 0; y < ySize; y++) {
@@ -164,21 +164,21 @@ public class EffectGenerator {
                                 }
                                 usedZ = MathUtils.roundPositive(nv);
                             }
-                            if(randomChoice(r, trimLevel, usedX, usedY, usedZ, xMiddle, yMiddle, zMiddle, xRange, yRange, zRange))
+                            if(randomChoice(r, trimLevel, fr, usedX, usedY, usedZ, xMiddle, yMiddle, zMiddle, xRange, yRange, zRange))
                                 working[usedX][usedY][usedZ] = color;
 
                             if(r.nextInt(frames) > f1 + frames / 6 && r.nextInt(frames) > f1 + 2) {
-                                if(usedX > 0 && (working[usedX - 1][usedY][usedZ] == 0) && randomChoice(r, trimLevel, usedX - 1, usedY, usedZ, xMiddle, yMiddle, zMiddle, xRange, yRange, zRange))
+                                if(usedX > 0 && (working[usedX - 1][usedY][usedZ] == 0) && randomChoice(r, trimLevel, fr, usedX - 1, usedY, usedZ, xMiddle, yMiddle, zMiddle, xRange, yRange, zRange))
                                     working[usedX - 1][usedY][usedZ] = randomFire(r);
-                                if(usedX < xSize - 1 && (working[usedX + 1][usedY][usedZ] == 0) && randomChoice(r, trimLevel, usedX + 1, usedY, usedZ, xMiddle, yMiddle, zMiddle, xRange, yRange, zRange))
+                                if(usedX < xSize - 1 && (working[usedX + 1][usedY][usedZ] == 0) && randomChoice(r, trimLevel, fr, usedX + 1, usedY, usedZ, xMiddle, yMiddle, zMiddle, xRange, yRange, zRange))
                                     working[usedX + 1][usedY][usedZ] = randomFire(r);
-                                if(usedY > 0 && (working[usedX][usedY - 1][usedZ] == 0) && randomChoice(r, trimLevel, usedX, usedY - 1, usedZ, xMiddle, yMiddle, zMiddle, xRange, yRange, zRange))
+                                if(usedY > 0 && (working[usedX][usedY - 1][usedZ] == 0) && randomChoice(r, trimLevel, fr, usedX, usedY - 1, usedZ, xMiddle, yMiddle, zMiddle, xRange, yRange, zRange))
                                     working[usedX][usedY - 1][usedZ] = randomFire(r);
-                                if(usedY < ySize - 1 && (working[usedX][usedY + 1][usedZ] == 0) && randomChoice(r, trimLevel, usedX, usedY + 1, usedZ, xMiddle, yMiddle, zMiddle, xRange, yRange, zRange))
+                                if(usedY < ySize - 1 && (working[usedX][usedY + 1][usedZ] == 0) && randomChoice(r, trimLevel, fr, usedX, usedY + 1, usedZ, xMiddle, yMiddle, zMiddle, xRange, yRange, zRange))
                                     working[usedX][usedY + 1][usedZ] = randomFire(r);
-                                if(usedZ > 0 && (working[usedX][usedY][usedZ - 1] == 0) && randomChoice(r, trimLevel, usedX, usedY, usedZ - 1, xMiddle, yMiddle, zMiddle, xRange, yRange, zRange))
+                                if(usedZ > 0 && (working[usedX][usedY][usedZ - 1] == 0) && randomChoice(r, trimLevel, fr, usedX, usedY, usedZ - 1, xMiddle, yMiddle, zMiddle, xRange, yRange, zRange))
                                     working[usedX][usedY][usedZ - 1] = randomFire(r);
-                                if(usedZ < zSize - 1 && (working[usedX][usedY][usedZ + 1] == 0) && randomChoice(r, trimLevel, usedX, usedY, usedZ + 1, xMiddle, yMiddle, zMiddle, xRange, yRange, zRange))
+                                if(usedZ < zSize - 1 && (working[usedX][usedY][usedZ + 1] == 0) && randomChoice(r, trimLevel, fr, usedX, usedY, usedZ + 1, xMiddle, yMiddle, zMiddle, xRange, yRange, zRange))
                                     working[usedX][usedY][usedZ + 1] = randomFire(r);
                             }
                         }
@@ -190,9 +190,10 @@ public class EffectGenerator {
         return result;
     }
 
-    public static boolean randomChoice(RNG r, int trim, int x, int y, int z,
-                                float midX, float midY, float midZ, float rangeX, float rangeY, float rangeZ){
-        return r.nextInt(9) < 10f - trim && r.nextInt(12) < 14f
+    public static boolean randomChoice(RNG r, int trim, float fr, int x, int y, int z,
+                                       float midX, float midY, float midZ,
+                                       float rangeX, float rangeY, float rangeZ){
+        return r.nextInt(9) < 10 - trim && r.nextFloat(12f) < 15f * (1.125f - fr * fr)
                 - Math.abs(x - midX) * rangeX
                 - Math.abs(y - midY) * rangeY
                 - Math.abs(z - midZ) * rangeZ;

@@ -206,8 +206,8 @@ public class ColorGuardAssets extends ApplicationAdapter {
         }
         {
             voxels = new VoxModel();
-            SpecialRenderer.shrink = 1;
-            renderer = new SpecialRenderer(60, Stuff.STUFFS_B);
+            SpecialRenderer.shrink = 2;
+            renderer = new SpecialRenderer(120, Stuff.STUFFS_B);
             renderer.palette(Coloring.BETTS64);
             renderer.saturation(0f);
             voxels.links.clear();
@@ -215,21 +215,36 @@ public class ColorGuardAssets extends ApplicationAdapter {
             links.put(-1, new float[]{0, 0, 0});
             voxels.links.add(links);
             name = "Explosion";
-            byte[][][] fireSeed = new byte[60][60][60];
-            float xx = -4.5f;
-            for (int x = 25; x < 34; x++, xx++) {
-                float yy = -4.5f;
-                for (int y = 25; y < 34; y++, yy++) {
+            byte[][][] fireSeed = new byte[120][120][120];
+            float xx = -9.5f;
+            for (int x = 50; x < 69; x++, xx++) {
+                float yy = -9.5f;
+                for (int y = 50; y < 69; y++, yy++) {
                     float zz = 0f;
-                    for (int z = 0; z < 5; z++, zz++) {
+                    for (int z = 0; z < 9; z++, zz++) {
                         float dist = xx * xx + yy * yy + zz * zz;
-                        if (dist <= 6f)
+                        if (dist <= 24f)
                             fireSeed[x][y][z] = 115;
-                        else if (dist < 16f)
+                        else if (dist < 64f)
                             fireSeed[x][y][z] = 114;
                     }
                 }
             }
+//            byte[][][] fireSeed = new byte[60][60][60];
+//            float xx = -4.5f;
+//            for (int x = 25; x < 34; x++, xx++) {
+//                float yy = -4.5f;
+//                for (int y = 25; y < 34; y++, yy++) {
+//                    float zz = 0f;
+//                    for (int z = 0; z < 5; z++, zz++) {
+//                        float dist = xx * xx + yy * yy + zz * zz;
+//                        if (dist <= 6f)
+//                            fireSeed[x][y][z] = 115;
+//                        else if (dist < 16f)
+//                            fireSeed[x][y][z] = 114;
+//                    }
+//                }
+//            }
             Stuff.evolve(Stuff.STUFFS_B, fireSeed, -1);
             byte[][][][] explosion = EffectGenerator.fireballAnimation(fireSeed, 12, 3, 0);
             Pixmap pixmap;
@@ -312,7 +327,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
             this.name = name.substring(nameStart, name.indexOf('.', nameStart));
 //            renderer = new NextRenderer(voxels.length, QUALITY);
 //            renderer = new AngledRenderer(voxels.length);
-            SpecialRenderer.shrink = 1;
+            SpecialRenderer.shrink = 2;
             renderer = new SpecialRenderer(voxels.grids.get(0).length, Stuff.STUFFS_B);
             renderer.palette(Coloring.BETTS64);
             renderer.saturation(0f);

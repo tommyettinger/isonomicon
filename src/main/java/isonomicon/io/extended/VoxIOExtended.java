@@ -154,12 +154,12 @@ public class VoxIOExtended {
                                 linkage.put(color, ln);
                             }
                         }
-                        model.grids.add(Tools3D.soak(voxelData));
+                        model.grids.add(Tools3D.scaleAndSoak(voxelData));
                         for(IntMap.Entry<float[]> e : linkage){
-                            float div = e.value[3];
-                            e.value[0] /= div;
-                            e.value[1] /= div;
-                            e.value[2] /= div;
+                            float div = 2f / e.value[3];
+                            e.value[0] *= div;
+                            e.value[1] *= div;
+                            e.value[2] *= div;
                         }
                         model.links.add(linkage);
                     } else if (chunkName.equals("RGBA")) {
