@@ -146,8 +146,13 @@ public class SpecialRenderer {
             return;
         final float rise = m.getTrait(VoxMaterial.MaterialTrait._rise) * (1.25f + IntPointHash.hash256(vx, vy, vz, 12345) * 0x1.Cp-8f);
         final float flow = m.getTrait(VoxMaterial.MaterialTrait._flow);
-        int lowX = 0, highX = 4;
-        if(flow != 0f){
+        final float emit = m.getTrait(VoxMaterial.MaterialTrait._emit) * 0.75f;
+        int lowX = 0, highX = 4, lowY = 0, highY = 4;
+        if(emit != 0f){
+            lowX = lowY = 1;
+            highX = highY = 3;
+        }
+        else if(flow != 0f){
             float ns = noise.getConfiguredNoise(xPos, yPos, zPos, frame * flow);
             if(ns > 0) highX = (int)(4.5 + ns * (3 << shrink));
             else if(ns < 0) lowX = Math.round(lowX + ns * (3 << shrink));
@@ -157,20 +162,18 @@ public class SpecialRenderer {
                 yy = (int)(0.5f + Math.max(0, (zPos * 3 + size * 3 - xPos - yPos) + 1 + rise * frame)),
                 depth = (int)(0.5f + (xPos + yPos) * 2 + zPos * 3);
         boolean drawn = false;
-        final float emit = m.getTrait(VoxMaterial.MaterialTrait._emit) * 0.75f;
         final float hs = size * 0.5f;
         for (int x = lowX, ax = xx; x < highX && ax < render.length; x++, ax++) {
             if (ax < 0) continue;
-            for (int y = 0, ay = yy; y < 4 && ay < render[0].length; y++, ay++) {
+            for (int y = lowY, ay = yy; y < highY && ay < render[0].length; y++, ay++) {
                 if ((depth > depths[ax][ay] || (depth == depths[ax][ay] && (indices[ax][ay] & 255) < (voxel & 255)))) {
                     drawn = true;
                     indices[ax][ay] = voxel;
                     depths[ax][ay] = depth;
                     materials[ax][ay] = m;
-                    if((voxel & 0xC0) == 0) {
-                        outlines[ax][ay] = ColorTools.toRGBA8888(ColorTools.limitToGamut(outlineShading[ax][ay] = paletteL[voxel & 255] * (0.625f + emit), paletteA[voxel & 255], paletteB[voxel & 255], 1f));
-                        outlineIndices[ax][ay] = voxel;
-                    }
+                    outlines[ax][ay] = 1;
+                    outlineShading[ax][ay] = paletteL[voxel & 255] * (0.625f + emit * 1.5f);
+                    outlineIndices[ax][ay] = voxel;
 //                                Coloring.darken(palette[voxel & 255], 0.375f - emit);
 //                                Coloring.adjust(palette[voxel & 255], 0.625f + emit, neutral);
 //                    else

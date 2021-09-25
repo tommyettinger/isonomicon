@@ -197,13 +197,16 @@ public class EffectGenerator {
     //67, 67, 67, 113, 114, 114, 114, 114, 114, 115, 115, 115, 115, 119, 119, 127
     public static byte randomFire(RandomnessSource r){
         switch (r.next(4)){
+            case 0:
+            case 1:
+            case 2:
             case 3:
             case 4:
             case 5:
             case 6:
             case 7:
-            case 8:
                 return 114;
+            case 8:
             case 9:
             case 10:
             case 11:
