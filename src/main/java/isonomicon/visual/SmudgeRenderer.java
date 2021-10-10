@@ -88,7 +88,7 @@ public class SmudgeRenderer {
      * @return this, for chaining
      */
     public SmudgeRenderer saturation(float saturationModifier) {
-        neutral = 1f + MathUtils.clamp(saturationModifier, -1f, 0.5f);
+        neutral = (1f + MathUtils.clamp(saturationModifier, -1f, 0.5f)) * 0.875f;
         return this;
     }
 
@@ -292,7 +292,7 @@ public class SmudgeRenderer {
                     for (int xx = -distance; xx <= distance; xx++) {
                         if (x + xx < 0 || x + xx > xSize) continue;
                         for (int yy = -distance; yy <= distance; yy++) {
-                            if ((xx & yy) != 0 || y + yy < 0 || y + yy > ySize || colorA[x + xx][y + yy] <= 0f)
+                            if ((xx & yy) != 0 || y + yy < 0 || y + yy > ySize || colorA[x + xx][y + yy] < 0f)
                                 continue;
                             current = colorL[x + xx][y + yy];
                             maxL = Math.max(maxL, current);

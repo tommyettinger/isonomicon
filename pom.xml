@@ -47,11 +47,11 @@
         </repository>
     </distributionManagement>
     <repositories>
-        <repository>
-            <id>sonatype-nexus-snapshots</id>
-            <name>Sonatype Nexus Snapshots</name>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </repository>
+<!--        <repository>-->
+<!--            <id>sonatype-nexus-snapshots</id>-->
+<!--            <name>Sonatype Nexus Snapshots</name>-->
+<!--            <url>https://oss.sonatype.org/content/repositories/snapshots</url>-->
+<!--        </repository>-->
 	    <repository>
 		    <id>jitpack.io</id>
            <name>JitPack.io</name>
@@ -62,7 +62,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.version>3.8.1</maven.compiler.version>
         <maven.javadoc.version>3.2.0</maven.javadoc.version>
-        <maven.resources.version>3.1.0</maven.resources.version>
+        <maven.resources.version>3.2.0</maven.resources.version>
         <maven.source.version>3.2.1</maven.source.version>
         <maven.gpg.version>1.6</maven.gpg.version>
         <jdk.version>1.8</jdk.version>
@@ -75,7 +75,8 @@
 <!--        <squidlib.version>f8173091c3</squidlib.version>-->
 
         <!--        <colorful.version>9f572e0c89</colorful.version>-->
-        <colorful.version>0.6.1</colorful.version>
+<!--        <colorful.version>8b62b61252</colorful.version>-->
+        <colorful.version>v0.6.1</colorful.version>
     </properties>
 
 
@@ -96,17 +97,17 @@
             <version>${anim8.version}</version>
         </dependency>
         <!-- JitPack -->
-<!--        <dependency>-->
-<!--            <groupId>com.github.tommyettinger.colorful-gdx</groupId>-->
-<!--            <artifactId>colorful</artifactId>-->
-<!--            <version>${colorful.version}</version>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>com.github.tommyettinger.colorful-gdx</groupId>
+            <artifactId>colorful</artifactId>
+            <version>${colorful.version}</version>
+        </dependency>
         <!-- Maven Central -->
-                <dependency>
-                    <groupId>com.github.tommyettinger</groupId>
-                    <artifactId>colorful</artifactId>
-                    <version>${colorful.version}</version>
-                </dependency>
+<!--                <dependency>-->
+<!--                    <groupId>com.github.tommyettinger</groupId>-->
+<!--                    <artifactId>colorful</artifactId>-->
+<!--                    <version>${colorful.version}</version>-->
+<!--                </dependency>-->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
