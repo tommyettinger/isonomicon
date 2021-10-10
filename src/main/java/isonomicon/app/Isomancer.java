@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.github.tommyettinger.anim8.*;
 import isonomicon.io.LittleEndianDataInputStream;
 import isonomicon.io.VoxIO;
+import isonomicon.physical.Stuff;
 import isonomicon.physical.Tools3D;
 import isonomicon.visual.SmudgeRenderer;
 
@@ -29,12 +30,13 @@ public class Isomancer extends ApplicationAdapter {
 //    private PNG8 png8;
 //    private AnimatedPNG apng;
     public Isomancer(String[] args){
+        Tools3D.STUFFS = Stuff.STUFFS;
         if(args != null && args.length > 0)
             inputs = args;
         else 
         {
             System.out.println("INVALID ARGUMENTS. Please supply space-separated absolute paths to .vox models, or use the .bat file.");
-            inputs = new String[]{"vox/Eye_Tyrant_Floor.vox", "vox/Eye_Tyrant.vox", "vox/Damned.vox", "vox/Bear.vox", "vox/Infantry.vox", "vox/Infantry_Firing.vox", "vox/Lomuk.vox", "vox/Tree.vox", "vox/Box.vox", "vox/Direction_Cube.vox", "vox/teapot.vox"};
+//            inputs = new String[]{"vox/Eye_Tyrant_Floor.vox", "vox/Eye_Tyrant.vox", "vox/Damned.vox", "vox/Bear.vox", "vox/Infantry.vox", "vox/Infantry_Firing.vox", "vox/Lomuk.vox", "vox/Tree.vox", "vox/Box.vox", "vox/Direction_Cube.vox", "vox/teapot.vox"};
 //            inputs = new String[]{"vox/Eye_Tyrant_Floor.vox", "vox/Eye_Tyrant.vox", "vox/Bear.vox", "vox/Infantry_Firing.vox", "vox/Lomuk.vox", "vox/Tree.vox"};
 //            inputs = new String[]{"vox/Eye_Tyrant.vox", "vox/Bear.vox", "vox/Infantry_Firing.vox", "vox/Tree.vox"};
 //            inputs = new String[]{"vox/Eye_Tyrant.vox", "vox/Infantry_Firing.vox", "vox/Lomuk.vox", "vox/Tree.vox", "vox/LAB.vox"};
@@ -49,6 +51,7 @@ public class Isomancer extends ApplicationAdapter {
 //            inputs = new String[]{"vox/Oklab.vox"};
 //            inputs = new String[]{"vox/Oklab.vox", "vox/LAB.vox", "vox/IPT.vox"};
 //            inputs = new String[]{"vox/Eye_Tyrant_Floor.vox"};
+            inputs = new String[]{"vox/Eye_Tyrant.vox"};
 //            inputs = new String[]{"vox/Floor.vox"};
 //            inputs = new String[]{"vox/Bear.vox"};
 //            inputs = new String[]{"vox/Lomuk.vox"};
