@@ -3,13 +3,16 @@ package isonomicon.visual;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.IntMap;
+import com.badlogic.gdx.utils.NumberUtils;
 import com.github.tommyettinger.anim8.PaletteReducer;
+import com.github.tommyettinger.colorful.TrigTools;
 import com.github.tommyettinger.colorful.oklab.ColorTools;
 import isonomicon.physical.Tools3D;
 import isonomicon.physical.VoxMaterial;
 
 import java.util.Arrays;
 
+import static com.github.tommyettinger.colorful.oklab.ColorTools.getRawGamutValue;
 import static isonomicon.visual.SpecialRenderer.cos_;
 import static isonomicon.visual.SpecialRenderer.sin_;
 import static squidpony.ArrayTools.fill;
@@ -52,7 +55,25 @@ public class SmudgeRenderer {
         colorB = fill(-1f, w, h);
 //        remade = new byte[size << 1][size << 1][size << 1];
     }
-    
+    public static float limitToGamut(float L, float A, float B, float alpha) {
+        L = Math.min(Math.max(L, 0f), 1f);
+        A = Math.min(Math.max(A, 0f), 1f);
+        B = Math.min(Math.max(B, 0f), 1f);
+        alpha = Math.min(Math.max(alpha, 0f), 1f);
+        final float A2 = (A - 0.5f);
+        final float B2 = (B - 0.5f);
+        final float hue = TrigTools.atan2_(B2, A2);
+        final int idx = (int) (L * 255.999f) << 8 | (int)(256f * hue);
+        final float dist = getRawGamutValue(idx) * 0.5f;
+        if(dist * dist * 0x1p-16f >= (A2 * A2 + B2 * B2))
+            return ColorTools.oklab(L, A, B, alpha);
+        return NumberUtils.intBitsToFloat(
+                (int) (alpha * 127.999f) << 25 |
+                        (int) (TrigTools.sin_(hue) * dist + 128f) << 16 |
+                        (int) (TrigTools.cos_(hue) * dist + 128f) << 8 |
+                        (int) (L * 255f));
+    }
+
     protected float bn(int x, int y) {
 //        final float result = (((x | ~y) & 1) + (x + ~y & 1) + (x & y & 1)) * 0.333f;
 //        System.out.println(result);
@@ -88,7 +109,7 @@ public class SmudgeRenderer {
      * @return this, for chaining
      */
     public SmudgeRenderer saturation(float saturationModifier) {
-        neutral = (1f + MathUtils.clamp(saturationModifier, -1f, 0.5f)) * 0.875f;
+        neutral = (1f + MathUtils.clamp(saturationModifier, -1f, 0.5f));
         return this;
     }
 
@@ -149,7 +170,7 @@ public class SmudgeRenderer {
                     depths[ax][ay] = depth;
                     materials[ax][ay] = m;
                     if(alpha == 0f)
-                        outlines[ax][ay] = ColorTools.toRGBA8888(ColorTools.limitToGamut(paletteL[voxel & 255] * (0.8f + emit), paletteA[voxel & 255], paletteB[voxel & 255], 1f));
+                        outlines[ax][ay] = ColorTools.toRGBA8888(limitToGamut(paletteL[voxel & 255] * (0.8f + emit), paletteA[voxel & 255], paletteB[voxel & 255], 1f));
 //                                Coloring.darken(palette[voxel & 255], 0.375f - emit);
 //                                Coloring.adjust(palette[voxel & 255], 0.625f + emit, neutral);
 //                    else
@@ -318,7 +339,7 @@ public class SmudgeRenderer {
                     avgL /= div;
                     avgA /= div;
                     avgB /= div;
-                    render[x][y] = ColorTools.toRGBA8888(ColorTools.limitToGamut(
+                    render[x][y] = ColorTools.toRGBA8888(limitToGamut(
                             Math.min(Math.max(((avgL - minL) < (maxL - avgL) ? minL : maxL) - 0.15625f, 0f), 1f),
                             (avgA - 0.5f) * neutral + 0.5f,
                             (avgB - 0.5f) * neutral + 0.5f, 1f));

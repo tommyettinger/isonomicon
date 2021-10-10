@@ -12,6 +12,7 @@ import com.github.tommyettinger.anim8.AnimatedGif;
 import com.github.tommyettinger.anim8.Dithered;
 import com.github.tommyettinger.anim8.PNG8;
 import com.github.tommyettinger.anim8.PaletteReducer;
+import com.github.tommyettinger.colorful.TrigTools;
 import isonomicon.io.LittleEndianDataInputStream;
 import isonomicon.io.VoxIO;
 import isonomicon.physical.Tools3D;
@@ -32,7 +33,7 @@ public class NoiseRenderer extends ApplicationAdapter {
     public static final int SCREEN_WIDTH = 512;//640;
     public static final int SCREEN_HEIGHT = 512;//720;
     private SmudgeRenderer renderer;
-    private FastNoise noise;
+    private FastNoise noise, noise2;
 
     private static final int SMALL_SIZE = 64, MID_SIZE = SMALL_SIZE << 1, LARGE_SIZE = SMALL_SIZE << 2;
     private byte[][][] tempVoxels = new byte[SMALL_SIZE][SMALL_SIZE][SMALL_SIZE];
@@ -49,8 +50,9 @@ public class NoiseRenderer extends ApplicationAdapter {
     public void create() {
         System.out.println("Setting up...");
         noise = new FastNoise(123456789, 0x1p-3f, FastNoise.CUBIC_FRACTAL, 1);
+        noise2 = new FastNoise(-4321, 0x1p-4f, FastNoise.PERLIN_FRACTAL, 2);
         noise.setFractalType(FastNoise.RIDGED_MULTI);
-        noise.setPointHash(new CubeHash(1234, 16));
+        noise.setPointHash(new CubeHash(1234, 8));
         long startTime = TimeUtils.millis();
 //        Gdx.files.local("out/vox/").mkdirs();
 //        png = new PixmapIO.PNG();
@@ -130,7 +132,9 @@ public class NoiseRenderer extends ApplicationAdapter {
 //                    sum += (tempVoxels[x][y][z] = (byte) (~(Float.floatToRawIntBits(noise.getConfiguredNoise(x, y, z, frame) - 0.875f) >> 31) & 81)); // gray-green
 //                    sum += (tempVoxels[x][y][z] = (byte) (~(Float.floatToRawIntBits(noise.getConfiguredNoise(x, y, z, frame) - 0.91f) >> 31) & 44)); // gray
 //                    sum += (tempVoxels[x][y][z] = (byte) (~(Float.floatToRawIntBits(noise.getConfiguredNoise(x, y, z, frame) - 0.91f) >> 31) & 175)); // blue
-                    sum += (tempVoxels[x][y][z] = (byte) (~(Float.floatToRawIntBits(noise.getConfiguredNoise(x, y, z, frame) - 0.91f) >> 31) & (x + y + z + frame & 63))); // rainbow
+//                    sum += (tempVoxels[x][y][z] = (byte) ((~(Float.floatToRawIntBits(noise.getConfiguredNoise(x, y, z, frame) - 0.91f) >> 31) & 68))); // orange
+                    sum += (tempVoxels[x][y][z] = (byte) ((~(Float.floatToRawIntBits(noise.getConfiguredNoise(x, y, z, frame) - 0.91f) >> 31) & (int)(12 + 2f * noise2.getConfiguredNoise(x, y, z, TrigTools.sin_(frame * 0x1p-6f), TrigTools.cos_(frame * 0x1p-6f)))))); // jungle greenery
+//                    sum += (tempVoxels[x][y][z] = (byte) (~(Float.floatToRawIntBits(noise.getConfiguredNoise(x, y, z, frame) - 0.91f) >> 31) & (x + y + z + frame & 63))); // rainbow
                 }
             }
         }
@@ -142,7 +146,7 @@ public class NoiseRenderer extends ApplicationAdapter {
         this.name = "Noise";
         if(renderer == null) {
             for (int i = 1; i < 256; i++) {
-                VoxIO.lastMaterials.put(i, new VoxMaterial("Metal", "Roughness 0.4 Reflection 0.7"));
+                VoxIO.lastMaterials.put(i, new VoxMaterial("Metal", "Roughness 0.6 Reflection 0.2"));
             }
             renderer = new SmudgeRenderer(voxels.length);
             renderer.palette(Coloring.BETSY256);
