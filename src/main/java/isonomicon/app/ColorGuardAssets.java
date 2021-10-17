@@ -138,11 +138,12 @@ public class ColorGuardAssets extends ApplicationAdapter {
         apng = new AnimatedPNG();
         apng.setCompression(2);
         gif.setDitherAlgorithm(Dithered.DitherAlgorithm.SCATTER);
-        gif.palette = new PaletteReducer(Coloring.TETRA256, Gdx.files.local("assets/TetraPreload.dat").readBytes());
+        gif.palette = new PaletteReducer(Coloring.TATER255, Gdx.files.local("assets/TaterPreload.dat").readBytes());
+//        gif.palette = new PaletteReducer(Coloring.TETRA256, Gdx.files.local("assets/TetraPreload.dat").readBytes());
 //        gif.palette = new PaletteReducer(Coloring.BETSY256, Gdx.files.local("assets/BetsyPreload.dat").readBytes());
-        gif.palette.setDitherStrength(1f);
+        gif.palette.setDitherStrength(1.125f);
         FrameBuffer fb = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), false);
-        if(false)
+        if(true)
         {
             for (int n = 0; n < inputs.length; n++) {
                 String s = inputs[n];
