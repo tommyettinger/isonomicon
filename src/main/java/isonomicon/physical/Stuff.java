@@ -253,8 +253,8 @@ public class Stuff {
             new Stuff("dry dirt", 46, "Roughness 0.85 Reflection 0.0 Dapple -0.05"),
             new Stuff("wet dirt or mud", 47, "Roughness 0.1 Reflection 0.05"), /*dark tan*/
             new Stuff("marked fluff", 48, "Roughness 0.6 Reflection 0.15 Dapple -0.16"), /*dark orange*/
-            new Stuff("base fluff", 49, "Roughness 0.5 Reflection 0.4 Dapple -0.08"),
-            new Stuff("highlight fluff", 50, "Roughness 0.4 Reflection 0.75 Dapple -0.04"), /*hot orange*/
+            new Stuff("base fluff", 49, "Roughness 0.5 Reflection 0.4"),                        // Dapple -0.08
+            new Stuff("highlight fluff", 50, "Roughness 0.4 Reflection 0.75"), /*hot orange*/   // Dapple -0.04
             new Stuff("scar", 51, "Roughness 0.7 Reflection 0.05"), /*light skin*/
             new Stuff("base skin", 52, "Roughness 0.6 Reflection 0.2"),
             new Stuff("nose", 53, "Roughness 0.6 Reflection 0.3"),

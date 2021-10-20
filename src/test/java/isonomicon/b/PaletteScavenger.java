@@ -46,14 +46,20 @@ public class PaletteScavenger extends ApplicationAdapter {
                 new Pixmap(Gdx.files.internal("palettes/b/ColorGuardBasePurple.png")),
         };
         workingPalette = new Pixmap(256, 256, Pixmap.Format.RGBA8888);
+        int hairA, hairB, scar, skin, nose, freckle, ears;
         for (int appearance = 0; appearance < 201; appearance+=8) {
-            int hairA = oldPalette.getPixel(223, appearance); // 49
-            int hairB = oldPalette.getPixel(224, appearance); // 50
-            int scar = oldPalette.getPixel(217, appearance); // 51
-            int skin = oldPalette.getPixel(215, appearance); // 52
-            int nose = oldPalette.getPixel(221, appearance); // 53
-            int freckle = oldPalette.getPixel(218, appearance); // 54
-            int ears = oldPalette.getPixel(220, appearance); // 55
+            if(appearance == 24 || appearance == 64 || appearance == 88 || appearance == 144 || appearance == 168 || appearance == 200){
+                hairB = hairA = oldPalette.getPixel(216, appearance);
+            }
+            else {
+                hairA = oldPalette.getPixel(225, appearance); // 49
+                hairB = oldPalette.getPixel(223, appearance); // 50
+            }
+            scar = oldPalette.getPixel(217, appearance); // 51
+            skin = oldPalette.getPixel(216, appearance); // 52
+            nose = oldPalette.getPixel(221, appearance); // 53
+            freckle = oldPalette.getPixel(218, appearance); // 54
+            ears = oldPalette.getPixel(220, appearance); // 55
             for (int faction = 0; faction < 8; faction++) {
                 workingPalette.drawPixmap(palettes[faction], 0, appearance + faction);
                 workingPalette.drawPixel(49-1, appearance + faction, hairA);
@@ -68,7 +74,7 @@ public class PaletteScavenger extends ApplicationAdapter {
         png = new PixmapIO.PNG(1024);
         png.setFlipY(false);
         try {
-            png.write(Gdx.files.local("bigPalette.png"), workingPalette);
+            png.write(Gdx.files.local("ColorGuardMasterPalette.png"), workingPalette);
         } catch (IOException e) {
             e.printStackTrace();
         }
