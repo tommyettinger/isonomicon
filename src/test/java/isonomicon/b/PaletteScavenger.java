@@ -48,24 +48,25 @@ public class PaletteScavenger extends ApplicationAdapter {
         workingPalette = new Pixmap(256, 256, Pixmap.Format.RGBA8888);
         for (int appearance = 0; appearance < 201; appearance+=8) {
             int hairA = oldPalette.getPixel(223, appearance); // 49
-            int hairB = oldPalette.getPixel(228, appearance); // 50
+            int hairB = oldPalette.getPixel(224, appearance); // 50
             int scar = oldPalette.getPixel(217, appearance); // 51
-            int skin = oldPalette.getPixel(216, appearance); // 52
+            int skin = oldPalette.getPixel(215, appearance); // 52
             int nose = oldPalette.getPixel(221, appearance); // 53
             int freckle = oldPalette.getPixel(218, appearance); // 54
             int ears = oldPalette.getPixel(220, appearance); // 55
             for (int faction = 0; faction < 8; faction++) {
                 workingPalette.drawPixmap(palettes[faction], 0, appearance + faction);
-                workingPalette.drawPixel(49, appearance + faction, hairA);
-                workingPalette.drawPixel(50, appearance + faction, hairB);
-                workingPalette.drawPixel(51, appearance + faction, scar);
-                workingPalette.drawPixel(52, appearance + faction, skin);
-                workingPalette.drawPixel(53, appearance + faction, nose);
-                workingPalette.drawPixel(54, appearance + faction, freckle);
-                workingPalette.drawPixel(55, appearance + faction, ears);
+                workingPalette.drawPixel(49-1, appearance + faction, hairA);
+                workingPalette.drawPixel(50-1, appearance + faction, hairB);
+                workingPalette.drawPixel(51-1, appearance + faction, scar);
+                workingPalette.drawPixel(52-1, appearance + faction, skin);
+                workingPalette.drawPixel(53-1, appearance + faction, nose);
+                workingPalette.drawPixel(54-1, appearance + faction, freckle);
+                workingPalette.drawPixel(55-1, appearance + faction, ears);
             }
         }
         png = new PixmapIO.PNG(1024);
+        png.setFlipY(false);
         try {
             png.write(Gdx.files.local("bigPalette.png"), workingPalette);
         } catch (IOException e) {

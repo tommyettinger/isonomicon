@@ -36,7 +36,6 @@ public class ColorGuardAssets extends ApplicationAdapter {
     private VoxModel voxels, head;
     private String name;
     private String[] inputs, armies;
-    private Texture[] palettes;
     private PixmapIO.PNG png;
     private AnimatedGif gif;
     private AnimatedPNG apng;
@@ -116,16 +115,17 @@ public class ColorGuardAssets extends ApplicationAdapter {
     @Override
     public void create() {
         if (inputs == null) Gdx.app.exit();
-        palettes = new Texture[]{
-                new Texture(Gdx.files.local("assets/palettes/b/ColorGuardBaseDark.png")),
-                new Texture(Gdx.files.local("assets/palettes/b/ColorGuardBaseWhite.png")),
-                new Texture(Gdx.files.local("assets/palettes/b/ColorGuardBaseRed.png")),
-                new Texture(Gdx.files.local("assets/palettes/b/ColorGuardBaseOrange.png")),
-                new Texture(Gdx.files.local("assets/palettes/b/ColorGuardBaseYellow.png")),
-                new Texture(Gdx.files.local("assets/palettes/b/ColorGuardBaseGreen.png")),
-                new Texture(Gdx.files.local("assets/palettes/b/ColorGuardBaseBlue.png")),
-                new Texture(Gdx.files.local("assets/palettes/b/ColorGuardBasePurple.png")),
-        };
+        palette = new Texture(Gdx.files.local("assets/palettes/b/ColorGuardMasterPalette.png"));
+//        palettes = new Texture[]{
+//                new Texture(Gdx.files.local("assets/palettes/b/ColorGuardBaseDark.png")),
+//                new Texture(Gdx.files.local("assets/palettes/b/ColorGuardBaseWhite.png")),
+//                new Texture(Gdx.files.local("assets/palettes/b/ColorGuardBaseRed.png")),
+//                new Texture(Gdx.files.local("assets/palettes/b/ColorGuardBaseOrange.png")),
+//                new Texture(Gdx.files.local("assets/palettes/b/ColorGuardBaseYellow.png")),
+//                new Texture(Gdx.files.local("assets/palettes/b/ColorGuardBaseGreen.png")),
+//                new Texture(Gdx.files.local("assets/palettes/b/ColorGuardBaseBlue.png")),
+//                new Texture(Gdx.files.local("assets/palettes/b/ColorGuardBasePurple.png")),
+//        };
 
         ShaderProgram indexShader = new ShaderProgram(ShaderUtils.stuffSelectVertex, ShaderUtils.stuffSelectFragment);
         if (!indexShader.isCompiled()) throw new GdxRuntimeException("Error compiling shader: " + indexShader.getLog());
@@ -168,28 +168,33 @@ public class ColorGuardAssets extends ApplicationAdapter {
                         pixmap = renderer.drawModelSimple(voxels, i * 0.25f, 0f, 0f, f, 0, 0, 0);
                         Texture t = new Texture(pixmap.getWidth(), pixmap.getHeight(), Pixmap.Format.RGBA8888);
                         t.draw(renderer.palettePixmap, 0, 0);
-                        for (int j = 0; j < armies.length; j++) {
-                            palette = palettes[j];
-                            fb.begin();
-                            palette.bind(1);
-                            ScreenUtils.clear(Color.CLEAR);
-                            batch.begin();
+                        for (int look = 0, lk = 0; look < 201; look+=8, lk++) {
 
-                            indexShader.setUniformi("u_texPalette", 1);
-                            Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
-                            batch.setColor(0f, 0.5f, 0.5f, 1f);
+                            for (int j = 0; j < armies.length; j++) {
+                                fb.begin();
+                                palette.bind(1);
+                                ScreenUtils.clear(Color.CLEAR);
+                                batch.begin();
 
-                            batch.draw(t, 0, t.getHeight(), t.getWidth(), -t.getHeight());
-                            batch.end();
-                            pixmap = Pixmap.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
-                            fb.end();
-                            pm.set(j * 32 + i * 8 + f, pixmap);
-                            pm.set(j * 32 + i * 8 + f + 4, pixmap);
-                            try {
-                                png.write(Gdx.files.local("out/color_guard/" + armies[j] + "/" + name + '/' + armies[j] + '_' + name + "_angle" + i + "_" + f + ".png"), pixmap);
-                                png.write(Gdx.files.local("out/color_guard/lab/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
-                            } catch (IOException e) {
-                                e.printStackTrace();
+                                indexShader.setUniformi("u_texPalette", 1);
+                                Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
+                                batch.setColor((look + j) / 255f, 0.5f, 0.5f, 1f);
+
+                                batch.draw(t, 0, t.getHeight(), t.getWidth(), -t.getHeight());
+                                batch.end();
+                                pixmap = Pixmap.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
+                                fb.end();
+                                if(lk == j * 3) {
+                                    pm.set(j * 32 + i * 8 + f, pixmap);
+                                    pm.set(j * 32 + i * 8 + f + 4, pixmap);
+                                }
+                                try {
+                                    png.write(Gdx.files.local("out/color_guard/" + armies[j] + "/" + name + '/' + armies[j] + "_look" + lk + '_' + name + "_angle" + i + "_" + f + ".png"), pixmap);
+                                    if(look + j == 0)
+                                        png.write(Gdx.files.local("out/color_guard/lab/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }
                         t.dispose();
@@ -260,7 +265,6 @@ public class ColorGuardAssets extends ApplicationAdapter {
                     pixmap = renderer.drawModelSimple(voxels, i * 0.25f, 0f, 0f, f, 0, 0, 0);
                     Texture t = new Texture(pixmap.getWidth(), pixmap.getHeight(), Pixmap.Format.RGBA8888);
                     t.draw(renderer.palettePixmap, 0, 0);
-                    palette = palettes[0];
                     fb.begin();
                     palette.bind(1);
                     ScreenUtils.clear(Color.CLEAR);
