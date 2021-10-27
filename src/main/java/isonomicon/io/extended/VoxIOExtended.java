@@ -136,11 +136,10 @@ public class VoxIOExtended {
                             int z = stream.read();
                             byte color = stream.readByte();
                             //If you are using this as a general .vox parser, use the following one line:
-                            //voxelData[x][y][z] = color;
-                            //If you are using this as Isonomicon's special parser, use the following if/else:
-                            if((color & 0xC0) != 0xC0) // The last 64 indices are used for link markers, and don't show.
-                                voxelData[x][y][z] = color;
-                            else {
+                            voxelData[x][y][z] = color;
+                            //If you are using this as Isonomicon's special parser, also use the following if/else:
+                            if((color & 0xC0) == 0xC0) // The last 64 indices are used for link markers, and don't show.
+                            {
                                 float[] ln;
                                 if((ln = linkage.get(color)) == null){
                                     ln = new float[]{x, y, z, 1f};
