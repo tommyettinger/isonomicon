@@ -281,11 +281,11 @@ public class Stuff {
             new Stuff("miasma", 73, "Roughness 0.3 Reflection 0.0 Flow 0.5 Rise -0.1 Missing 0.05", 75, 2, 73, 5),
             new Stuff("rustling leaf", 74, "Roughness 0.4 Reflection 0.05 Dapple -0.35 Missing 0.2"),
             new Stuff("miasma spawner", 75, "Transparency 1.0", 75, 7, 73, 1), /*dark lime*/
-            new Stuff("strobe off", 76, "Roughness 0.03 Reflection 0.5", 80, 1), /*dark green*/
+            new Stuff("strobe off", 76, "Roughness 0.03 Reflection 0.5 Rate 0.5", 80, 1), /*dark green*/
             new Stuff("vigor spawner", 77, "Transparency 1.0", 79, 1, 77, 4),
             new Stuff("green glass", 78, "Transparency 0.5 Roughness 0.0 Reflection 0.65"),
             new Stuff("vigor particle", 79, "Roughness 0.0 Reflection 0.0 Emission 0.45 Rise 0.9", 79, 1, 77, 1, 0, 1),
-            new Stuff("strobe on", 80, "Roughness 0.03 Reflection 0.05 Emission 0.75", 76, 1),
+            new Stuff("strobe on", 80, "Roughness 0.03 Reflection 0.05 Emission 0.75 Rate 0.5", 76, 1),
             new Stuff("constant light", 81, "Roughness 0.0 Reflection 0.0 Emission 0.8"), /*light green*/
             new Stuff("ice glint", 82, "Roughness 0.4 Reflection 0.95 Emission 0.4", 82, 1, 25, 20), /*light cyan*/
             new Stuff("chill particle", 83, "Roughness 0.8 Reflection 0.0 Missing 0.2 Transparency 0.5 Rise -0.1", 83, 7, 84, 1),
@@ -524,7 +524,10 @@ public class Stuff {
             for (int y = 0; y < model[x].length; y++) {
                 for (int z = 0; z < model[x][y].length; z++) {
                     int v = model[x][y][z] & 255;
-                    model[x][y][z] = stuffs[v].transitionIDs[stuffs[v].transitions.random(HastyPointHash.hash64(x, y, z, frame))];
+                    float rate = stuffs[v].material.traits.get(VoxMaterial.MaterialTrait._rate.ordinal(), 1f);
+                    int rf = (int)(rate * frame);
+                    if(rf != (int)(rate * (frame + 1)))
+                        model[x][y][z] = stuffs[v].transitionIDs[stuffs[v].transitions.random(HastyPointHash.hash64(x, y, z, rf))];
                 }
             }
         }

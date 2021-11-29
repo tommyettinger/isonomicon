@@ -65,7 +65,9 @@ public class VoxMaterial {
 		//13 causes random per-voxel increases to saturation (or decreases, if negative).
 		_vary("Vary"),
 		//14 can be 0.0 or 1.0, and causes this material to not be rendered on even or odd frames, respectively.
-		_frame("Frame")
+		_frame("Frame"),
+		//15 Typically 0.5 or 0.25; multiplied with the frame rate when determining transitions
+		_rate("Rate")
 		;
 		
 		public String name;
