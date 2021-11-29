@@ -67,16 +67,16 @@
         <maven.gpg.version>1.6</maven.gpg.version>
         <jdk.version>17</jdk.version>
         <junit.version>4.13.2</junit.version>
-        <anim8.version>0.2.12</anim8.version>
-        <squidlib.version>3a4e5a5cf8</squidlib.version>
+        <anim8.version>d39d4749c1</anim8.version>
+        <squidlib.version>12d0e8e03c</squidlib.version>
         <gdx.version>1.10.0</gdx.version>
 
 <!--        <anim8.version>0.2.10</anim8.version>-->
 <!--        <squidlib.version>f8173091c3</squidlib.version>-->
 
         <!--        <colorful.version>9f572e0c89</colorful.version>-->
-<!--        <colorful.version>b223ef3c32</colorful.version>-->
-        <colorful.version>0.6.1</colorful.version>
+        <colorful.version>b223ef3c32</colorful.version>
+<!--        <colorful.version>0.6.1</colorful.version>-->
     </properties>
 
 
@@ -97,17 +97,17 @@
             <version>${anim8.version}</version>
         </dependency>
         <!-- JitPack -->
-<!--        <dependency>-->
-<!--            <groupId>com.github.tommyettinger.colorful-gdx</groupId>-->
-<!--            <artifactId>colorful</artifactId>-->
-<!--            <version>${colorful.version}</version>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>com.github.tommyettinger.colorful-gdx</groupId>
+            <artifactId>colorful</artifactId>
+            <version>${colorful.version}</version>
+        </dependency>
         <!-- Maven Central -->
-                <dependency>
-                    <groupId>com.github.tommyettinger</groupId>
-                    <artifactId>colorful</artifactId>
-                    <version>${colorful.version}</version>
-                </dependency>
+<!--                <dependency>-->
+<!--                    <groupId>com.github.tommyettinger</groupId>-->
+<!--                    <artifactId>colorful</artifactId>-->
+<!--                    <version>${colorful.version}</version>-->
+<!--                </dependency>-->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
