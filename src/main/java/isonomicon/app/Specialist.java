@@ -106,7 +106,7 @@ public class Specialist extends ApplicationAdapter {
         apng = new AnimatedPNG();
         gif.setDitherAlgorithm(Dithered.DitherAlgorithm.SCATTER);
 //        png8.setDitherAlgorithm(Dithered.DitherAlgorithm.SCATTER);
-        gif.palette = new PaletteReducer(Coloring.BETSY256);
+        gif.palette = new PaletteReducer(Coloring.YAM2, Gdx.files.local("assets/Yam2Preload.dat").readBytes());
         gif.palette.setDitherStrength(0.25f);
 //        png8.palette = gif.palette;
         Gdx.files.local("out/vox").mkdirs();

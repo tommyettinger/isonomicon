@@ -63,7 +63,7 @@ public class NoiseRenderer extends ApplicationAdapter {
 //        apng = new AnimatedPNG();
         gif.setDitherAlgorithm(Dithered.DitherAlgorithm.SCATTER);
         png.setDitherAlgorithm(Dithered.DitherAlgorithm.SCATTER);
-        gif.palette = new PaletteReducer(Coloring.BETSY256, Gdx.files.internal("BetsyPreload.dat").readBytes());
+        gif.palette = new PaletteReducer(Coloring.YAM2, Gdx.files.local("assets/Yam2Preload.dat").readBytes());
         gif.palette.setDitherStrength(0.75f);
         png.palette = gif.palette;
         Gdx.files.local("out/vox").mkdirs();
