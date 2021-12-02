@@ -137,12 +137,12 @@ public class ColorGuardAssets extends ApplicationAdapter {
         gif = new AnimatedGif();
         apng = new AnimatedPNG();
         apng.setCompression(2);
-        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.SCATTER);
+        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.NEUE);
         gif.palette = new PaletteReducer(Coloring.YAM2, Gdx.files.local("assets/Yam2Preload.dat").readBytes());
 //        gif.palette = new PaletteReducer(Coloring.TATER255, Gdx.files.local("assets/TaterPreload.dat").readBytes());
 //        gif.palette = new PaletteReducer(Coloring.TETRA256, Gdx.files.local("assets/TetraPreload.dat").readBytes());
 //        gif.palette = new PaletteReducer(Coloring.BETSY256, Gdx.files.local("assets/BetsyPreload.dat").readBytes());
-        gif.palette.setDitherStrength(1.125f);
+        gif.palette.setDitherStrength(1f);
         FrameBuffer fb = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), false);
         // just a single skin/hair combination
         if(true)
