@@ -1545,61 +1545,6 @@ public abstract class Colorizer {
         }
     };
 
-    public static final Colorizer ZigguratColorizer = new Colorizer(new PaletteReducer(Coloring.ZIGGURAT64)) {
-        private final byte[] primary = {
-                27, 32, 34, 39, 49, 55,
-        }, grays = {
-                1, 11, 19, 21, 22, 23
-        };
-
-        @Override
-        public byte[] mainColors() {
-            return primary;
-        }
-
-        /**
-         * @return An array of grayscale or close-to-grayscale color indices, with the darkest first and lightest last.
-         */
-        @Override
-        public byte[] grayscale() {
-            return grays;
-        }
-
-        @Override
-        public byte brighten(byte voxel) {
-            return Coloring.ZIGGURAT_RAMPS[voxel & 0x3F][3];
-        }
-
-        @Override
-        public byte darken(byte voxel) {
-            // the second half of voxels (with bit 0x40 set) don't shade visually, but Colorizer uses this method to
-            // denote a structural change to the voxel's makeup, so this uses the first 64 voxel colors to shade both
-            // halves, then marks voxels from the second half back to being an unshaded voxel as the last step.
-            return Coloring.ZIGGURAT_RAMPS[voxel & 0x3F][1];
-        }
-
-        @Override
-        public byte blacken(byte voxel) {
-            return Coloring.ZIGGURAT_RAMPS[voxel & 0x3F][0];
-        }
-
-        @Override
-        public int dimmer(int brightness, byte voxel) {
-            if(brightness < 0) return Coloring.ZIGGURAT64[1];
-            if(brightness > 3) return Coloring.ZIGGURAT64[23];
-            return Coloring.ZIGGURAT64[Coloring.ZIGGURAT_RAMPS[voxel & 0x3F][brightness] & 0xFF];
-        }
-
-        @Override
-        public int getShadeBit() {
-            return 0;
-        }
-        @Override
-        public int getWaveBit() {
-            return 0;
-        }
-    };
-
     public static final Colorizer ManosColorizer = new Colorizer(new PaletteReducer(Coloring.MANOS64, Coloring.ENCODED_MANOS)) {
         private final byte[] primary = {
                 11, 17, 23, 32, 45, 53

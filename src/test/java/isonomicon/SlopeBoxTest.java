@@ -64,7 +64,6 @@ public class SlopeBoxTest extends ApplicationAdapter {
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.UNSEVEN);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.CW_PALETTE);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.JAPANESE_WOODBLOCK);
-//        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.FLESURRECT);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.GB_GREEN);
 //        colorizer = Colorizer.FlesurrectColorizer;
 //        colorizer = Colorizer.AzurestarColorizer;
@@ -194,18 +193,6 @@ public class SlopeBoxTest extends ApplicationAdapter {
 //                        System.out.println("(0x7F) before: " + Tools3D.count(seq.data[1], 0x7F));
                         seq.clockwise();
 //                        System.out.println("(0xBF) after : " + Tools3D.count(seq.data[1], 0xBF));
-                        break;
-                    case Input.Keys.A: //  a-z, aurora and ziggurat colorizers
-                        if (UIUtils.shift())
-                        {
-                            renderer.colorizer(Colorizer.ZigguratColorizer);
-                            maker.setColorizer(Colorizer.ZigguratColorizer);
-                        }
-                        else
-                        {
-                            renderer.colorizer(Colorizer.AuroraColorizer);
-                            maker.setColorizer(Colorizer.AuroraColorizer);
-                        }
                         break;
                     case Input.Keys.S: // smaller palette, 64 colors
                         if (UIUtils.shift())

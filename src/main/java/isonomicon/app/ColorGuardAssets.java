@@ -138,7 +138,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
         apng = new AnimatedPNG();
         apng.setCompression(2);
         gif.setDitherAlgorithm(Dithered.DitherAlgorithm.NEUE);
-        gif.palette = new PaletteReducer(Coloring.YAM2, Gdx.files.local("assets/Yam2Preload.dat").readBytes());
+        gif.palette = new PaletteReducer(Coloring.YAM3, Gdx.files.local("assets/Yam3Preload.dat").readBytes());
 //        gif.palette = new PaletteReducer(Coloring.TATER255, Gdx.files.local("assets/TaterPreload.dat").readBytes());
 //        gif.palette = new PaletteReducer(Coloring.TETRA256, Gdx.files.local("assets/TetraPreload.dat").readBytes());
 //        gif.palette = new PaletteReducer(Coloring.BETSY256, Gdx.files.local("assets/BetsyPreload.dat").readBytes());
