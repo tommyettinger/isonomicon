@@ -6,5 +6,8 @@
   -->
 <module>
     <inherits name="squidlib-util"/>
-	<source path="isonomicon" />
+    <inherits name="jdkgdxds"/>
+    <inherits name="com.github.tommyettinger.colorful.colorful" />
+    <inherits name="anim8" />
+    <source path="isonomicon" />
 </module>

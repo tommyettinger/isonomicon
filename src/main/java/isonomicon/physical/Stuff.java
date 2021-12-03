@@ -10,9 +10,8 @@ public class Stuff {
     public final String name;
     /**
      * The Material's index in the static array of Materials (if positive); this also carries some semantic information.
-     * If id is greater than 63 (as a signed byte, so the range of 64 to 127 inclusive), then this marks a non-sided
-     * Material, that is, one that ignores most of the {@link SlopeBox#SIDES} information. In that case, transparent
-     * side values (0) remain transparent, but all other values are considered 1.
+     * If id is 192 or greater (as an unsigned byte, so the range of 192 to 255 inclusive), then this is an invisible
+     * marker voxel, used for some purpose by non-rendering code.
      */
     public final byte id;
 
