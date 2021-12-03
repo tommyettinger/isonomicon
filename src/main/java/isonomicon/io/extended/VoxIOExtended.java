@@ -3,6 +3,7 @@ package isonomicon.io.extended;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.IntFloatMap;
 import com.badlogic.gdx.utils.IntMap;
+import com.github.tommyettinger.ds.LongOrderedSet;
 import isonomicon.io.LittleEndianDataInputStream;
 import isonomicon.physical.Tools3D;
 import isonomicon.physical.VoxMaterial;
@@ -129,6 +130,7 @@ public class VoxIOExtended {
                         // XYZI contains n voxels
                         int numVoxels = stream.readInt();
                         IntMap<float[]> linkage = new IntMap<>(8);
+                        IntMap<LongOrderedSet> markers = new IntMap<>(8);
                         // each voxel has x, y, z and color index values
                         for (int i = 0; i < numVoxels; i++) {
                             int x = stream.read() + offX;
@@ -152,6 +154,13 @@ public class VoxIOExtended {
                                     ln[3]++;
                                 }
                                 linkage.put(color, ln);
+
+                                LongOrderedSet ls;
+                                if((ls = markers.get(color)) == null){
+                                    ls = new LongOrderedSet(16);
+                                }
+                                ls.add((x & 0xFFFFFL) | (y & 0xFFFFFL) << 20 | (z & 0xFFFFFL) << 40);
+                                markers.put(color, ls);
                             }
                         }
                         model.grids.add(Tools3D.scaleAndSoak(voxelData));
@@ -162,6 +171,7 @@ public class VoxIOExtended {
                             e.value[2] *= div;
                         }
                         model.links.add(linkage);
+                        model.markers.add(markers);
                     } else if (chunkName.equals("RGBA")) {
                         for (int i = 1; i < 256; i++) {
                             lastPalette[i] = Integer.reverseBytes(stream.readInt());
