@@ -3,15 +3,14 @@ package isonomicon.physical;
 import com.badlogic.gdx.math.MathUtils;
 import squidpony.squidmath.*;
 
-import static squidpony.squidmath.Noise.fastCeil;
-import static squidpony.squidmath.Noise.fastFloor;
+import static com.badlogic.gdx.math.MathUtils.ceil;
+import static com.badlogic.gdx.math.MathUtils.floor;
 
 public class EffectGenerator {
     public static byte[][][][] fireballAnimation(byte[][][] initial, int frames, int trimLevel, int blowback){
         final int xSize = initial.length, ySize = initial[0].length, zSize = initial[0][0].length;
         StatefulRNG r = new StatefulRNG(xSize + ySize + zSize + frames + trimLevel + blowback);
         byte[][][][] result = new byte[frames][xSize][ySize][zSize];
-//        byte[][][] working = new byte[xSize][ySize][zSize];
         for (int f = 0, f1 = 1; f < frames; f++, f1++) {
             final float fr = f1 / (float)frames;
             byte[][][] vls;
@@ -118,14 +117,14 @@ public class EffectGenerator {
                                 float nv = x + r.nextFloat(Math.min(LIMIT, xMove * magnitude)) + (r.nextFloat(3f) - 1.5f);
                                 if(nv < 1) nv = 1;
                                 else if(nv > xSize - 2) nv = xSize - 2;
-                                usedX = ((blowback <= 0) ? fastFloor(nv) : fastCeil(nv));
+                                usedX = ((blowback <= 0) ? floor(nv) : ceil(nv));
                             }
                             else if(xMove < 0)
                             {
                                 float nv = x - r.nextFloat(Math.min(LIMIT, xMove * -magnitude)) + (r.nextFloat(3f) - 1.5f);
                                 if(nv < 1) nv = 1;
                                 else if(nv > xSize - 2) nv = xSize - 2;
-                                usedX = ((blowback > 0) ? fastFloor(nv) : fastCeil(nv));
+                                usedX = ((blowback > 0) ? floor(nv) : ceil(nv));
                             }
                             else
                             {
@@ -137,14 +136,14 @@ public class EffectGenerator {
                                 float nv = y + r.nextFloat(Math.min(LIMIT, yMove * magnitude)) + (r.nextFloat(3f) - 1.5f);
                                 if(nv < 1) nv = 1;
                                 else if(nv > ySize - 2) nv = ySize - 2;
-                                usedY = ((blowback <= 0) ? fastFloor(nv) : fastCeil(nv));
+                                usedY = ((blowback <= 0) ? floor(nv) : ceil(nv));
                             }
                             else if(yMove < 0)
                             {
                                 float nv = y - r.nextFloat(Math.min(LIMIT, yMove * -magnitude)) + (r.nextFloat(3f) - 1.5f);
                                 if(nv < 1) nv = 1;
                                 else if(nv > ySize - 2) nv = ySize - 2;
-                                usedY = ((blowback > 0) ? fastFloor(nv) : fastCeil(nv));
+                                usedY = ((blowback > 0) ? floor(nv) : ceil(nv));
                             }
                             else
                             {
