@@ -90,4 +90,19 @@ public class ShapeGenerator {
         }
         return into;
     }
+
+    public static byte[][][] box(byte[][][] into, int lowerX, int lowerY, int lowerZ, int upperX, int upperY, int upperZ, int color) {
+        return box(into, lowerX, lowerY, lowerZ, upperX, upperY, upperZ, color, (x, y, z) -> true);
+    }
+    public static byte[][][] box(byte[][][] into, int lowerX, int lowerY, int lowerZ, int upperX, int upperY, int upperZ, int color, Choice choice) {
+        byte c = (byte) color;
+        for (int x = Math.max(0, lowerX); x <= Math.min(into.length - 1, upperX); x++) {
+            for (int y = Math.max(0, lowerY); y <= Math.min(into[x].length - 1, upperY); y++) {
+                for (int z = Math.max(0, lowerZ); z <= Math.min(into[x][y].length - 1, upperZ); z++) {
+                    writeIfEmpty(into, x, y, z, c, choice);
+                }
+            }
+        }
+        return into;
+    }
 }
