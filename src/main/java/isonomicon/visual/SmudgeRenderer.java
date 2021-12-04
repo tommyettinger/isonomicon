@@ -2,11 +2,11 @@ package isonomicon.visual;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.NumberUtils;
 import com.github.tommyettinger.anim8.PaletteReducer;
 import com.github.tommyettinger.colorful.TrigTools;
 import com.github.tommyettinger.colorful.oklab.ColorTools;
+import com.github.tommyettinger.ds.IntObjectMap;
 import isonomicon.physical.Tools3D;
 import isonomicon.physical.VoxMaterial;
 
@@ -32,7 +32,7 @@ public class SmudgeRenderer {
     public int size;
     public int shrink = 2;
     public float neutral = 1f;
-    public IntMap<VoxMaterial> materialMap;
+    public IntObjectMap<VoxMaterial> materialMap;
 //    public long seed;
 
     protected SmudgeRenderer() {
@@ -422,7 +422,7 @@ public class SmudgeRenderer {
     // To move one z+ in voxels is y + 3 in pixels.
     // To move one z- in voxels is y - 3 in pixels.
 
-    public Pixmap drawSplats(byte[][][] colors, float angleTurns, int frame, IntMap<VoxMaterial> materialMap) {
+    public Pixmap drawSplats(byte[][][] colors, float angleTurns, int frame, IntObjectMap<VoxMaterial> materialMap) {
         this.materialMap = materialMap;
 //        Tools3D.fill(remade, 0);
 //        seed = Tools3D.hash64(colors) + NumberUtils.floatToRawIntBits(angleTurns);

@@ -1,7 +1,7 @@
 package isonomicon.physical;
 
-import com.badlogic.gdx.utils.IntFloatMap;
-import com.badlogic.gdx.utils.ObjectIntMap;
+import com.github.tommyettinger.ds.IntFloatMap;
+import com.github.tommyettinger.ds.ObjectIntMap;
 
 /**
  * Represents the physical qualities of a given material, like how reflective it is or how much light it emits.
@@ -115,19 +115,19 @@ public class VoxMaterial {
 	}
 
 	public VoxMaterial(String typeName, String traitMap) {
-		type = ALL_TYPES[TYPE_MAP.get(typeName, 0)];
+		type = ALL_TYPES[TYPE_MAP.getOrDefault(typeName, 0)];
 		traits.put(9, 0.1f);
 		traits.put(5, 0.3f);
 		traits.put(4, 0.41f);
 		traits.put(14, 0.5f);
 		String[] split = traitMap.split("[ ,;]+");
 		for (int i = 1; i < (split.length & -2); i+=2) {
-			traits.put(TRAIT_MAP.get(split[i-1], -1), Float.parseFloat(split[i]));
+			traits.put(TRAIT_MAP.getOrDefault(split[i-1], -1), Float.parseFloat(split[i]));
 		}
 	}
 
 	public float getTrait(MaterialTrait trait){
-		return traits.get(trait.ordinal(), 0.0f);
+		return traits.getOrDefault(trait.ordinal(), 0.0f);
 	}
 	public void putTrait(MaterialTrait trait, float value){
 		int ord = trait.ordinal();
@@ -143,7 +143,7 @@ public class VoxMaterial {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder("VoxMaterial{").append(type.name).append(": ");
-		for(IntFloatMap.Entry e : traits.entries())
+		for(IntFloatMap.Entry e : traits.entrySet())
 			sb.append(ALL_TRAITS[e.key]).append('=').append(e.value).append(", ");
 		sb.setLength(sb.length() - 1);
 		sb.setCharAt(sb.length() - 1, '}');

@@ -13,6 +13,7 @@ import com.github.tommyettinger.anim8.AnimatedGif;
 import com.github.tommyettinger.anim8.AnimatedPNG;
 import com.github.tommyettinger.anim8.Dithered;
 import com.github.tommyettinger.anim8.PaletteReducer;
+import com.github.tommyettinger.ds.IntObjectMap;
 import isonomicon.io.LittleEndianDataInputStream;
 import isonomicon.io.extended.VoxIOExtended;
 import isonomicon.io.extended.VoxModel;
@@ -284,7 +285,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
             renderer.palette(Coloring.BETTS64);
             renderer.saturation(0f);
             voxels.links.clear();
-            IntMap<float[]> links = new IntMap<>(1);
+            IntObjectMap<float[]> links = new IntObjectMap<>(1);
             links.put(-1, new float[]{0, 0, 0});
             voxels.links.add(links);
             name = "Explosion";

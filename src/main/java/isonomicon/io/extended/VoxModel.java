@@ -1,6 +1,6 @@
 package isonomicon.io.extended;
 
-import com.badlogic.gdx.utils.IntMap;
+import com.github.tommyettinger.ds.IntObjectMap;
 import com.github.tommyettinger.ds.LongOrderedSet;
 import isonomicon.io.VoxIO;
 import isonomicon.physical.Tools3D;
@@ -12,21 +12,21 @@ import java.util.Arrays;
 public class VoxModel {
     public int[] palette;
     public ArrayList<byte[][][]> grids;
-    public ArrayList<IntMap<float[]>> links;
-    public ArrayList<IntMap<LongOrderedSet>> markers;
-    public IntMap<VoxMaterial> materials;
-    public IntMap<TransformChunk> transformChunks;
-    public IntMap<GroupChunk> groupChunks;
-    public IntMap<ShapeChunk> shapeChunks;
+    public ArrayList<IntObjectMap<float[]>> links;
+    public ArrayList<IntObjectMap<LongOrderedSet>> markers;
+    public IntObjectMap<VoxMaterial> materials;
+    public IntObjectMap<TransformChunk> transformChunks;
+    public IntObjectMap<GroupChunk> groupChunks;
+    public IntObjectMap<ShapeChunk> shapeChunks;
     public VoxModel(){
         palette = Arrays.copyOf(VoxIO.defaultPalette, 256);
         grids = new ArrayList<>(1);
         links = new ArrayList<>(1);
         markers = new ArrayList<>(1);
-        materials = new IntMap<>(256);
-        transformChunks = new IntMap<>(8);
-        groupChunks = new IntMap<>(1);
-        shapeChunks = new IntMap<>(8);
+        materials = new IntObjectMap<>(256);
+        transformChunks = new IntObjectMap<>(8);
+        groupChunks = new IntObjectMap<>(1);
+        shapeChunks = new IntObjectMap<>(8);
     }
     public VoxModel mergeWith(VoxModel other) {
         grids.addAll(other.grids);
@@ -39,18 +39,18 @@ public class VoxModel {
         VoxModel next = new VoxModel();
         next.palette = Arrays.copyOf(palette, palette.length);
         ArrayList<byte[][][]> nextGrids = new ArrayList<>(grids.size());
-        ArrayList<IntMap<float[]>> nextLinks = new ArrayList<>(links.size());
-        ArrayList<IntMap<LongOrderedSet>> nextMarkers = new ArrayList<>(markers.size());
+        ArrayList<IntObjectMap<float[]>> nextLinks = new ArrayList<>(links.size());
+        ArrayList<IntObjectMap<LongOrderedSet>> nextMarkers = new ArrayList<>(markers.size());
         for (int i = 0; i < grids.size(); i++) {
             nextGrids.add(Tools3D.deepCopy(grids.get(i)));
         }
         next.grids = nextGrids;
         for (int i = 0; i < links.size(); i++) {
-            nextLinks.add(new IntMap<>(links.get(i)));
+            nextLinks.add(new IntObjectMap<>(links.get(i)));
         }
         next.links = nextLinks;
         for (int i = 0; i < markers.size(); i++) {
-            nextMarkers.add(new IntMap<>(markers.get(i)));
+            nextMarkers.add(new IntObjectMap<>(markers.get(i)));
         }
         next.markers = nextMarkers;
         return next;

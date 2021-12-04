@@ -523,7 +523,7 @@ public class Stuff {
             for (int y = 0; y < model[x].length; y++) {
                 for (int z = 0; z < model[x][y].length; z++) {
                     int v = model[x][y][z] & 255;
-                    float rate = stuffs[v].material.traits.get(VoxMaterial.MaterialTrait._rate.ordinal(), 1f);
+                    float rate = stuffs[v].material.traits.getOrDefault(VoxMaterial.MaterialTrait._rate.ordinal(), 1f);
                     int rf = (int)(rate * frame);
                     if(rf != (int)(rate * (frame + 1)))
                         model[x][y][z] = stuffs[v].transitionIDs[stuffs[v].transitions.random(HastyPointHash.hash64(x, y, z, rf))];

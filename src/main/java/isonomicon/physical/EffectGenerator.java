@@ -1,16 +1,16 @@
 package isonomicon.physical;
 
 import com.badlogic.gdx.math.MathUtils;
+import com.github.tommyettinger.ds.support.EnhancedRandom;
+import com.github.tommyettinger.ds.support.FourWheelRandom;
 import isonomicon.io.extended.VoxModel;
-import squidpony.squidmath.*;
 
-import static com.badlogic.gdx.math.MathUtils.ceil;
-import static com.badlogic.gdx.math.MathUtils.floor;
+import static com.badlogic.gdx.math.MathUtils.*;
 
 public class EffectGenerator {
+    public static final EnhancedRandom r = new FourWheelRandom(123456789L);
     public static byte[][][][] fireballAnimation(byte[][][] initial, int frames, int trimLevel, int blowback){
         final int xSize = initial.length, ySize = initial[0].length, zSize = initial[0][0].length;
-        StatefulRNG r = new StatefulRNG(xSize + ySize + zSize + frames + trimLevel + blowback);
         byte[][][][] result = new byte[frames][xSize][ySize][zSize];
         for (int f = 0, f1 = 1; f < frames; f++, f1++) {
             final float fr = f1 / (float)frames;
@@ -190,16 +190,16 @@ public class EffectGenerator {
         return result;
     }
 
-    public static boolean randomChoice(RNG r, int trim, float fr, int x, int y, int z,
+    public static boolean randomChoice(EnhancedRandom r, int trim, float fr, int x, int y, int z,
                                        float midX, float midY, float midZ,
                                        float rangeX, float rangeY, float rangeZ){
-        return r.nextInt(9) < 10 - trim && r.nextFloat(12f) < 15f * (1.125f - fr * fr)
+        return r.nextInt(9) < 10 - trim && r.nextExclusiveFloat(12f) < 15f * (1.125f - fr * fr)
                 - Math.abs(x - midX) * rangeX
                 - Math.abs(y - midY) * rangeY
                 - Math.abs(z - midZ) * rangeZ;
     }
     //67, 67, 67, 113, 114, 114, 114, 114, 114, 115, 115, 115, 115, 119, 119, 127
-    public static byte randomFire(RandomnessSource r){
+    public static byte randomFire(EnhancedRandom r){
         switch (r.next(4)){
             case 0:
             case 1:

@@ -1,8 +1,8 @@
 package isonomicon.io.extended;
 
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.IntFloatMap;
-import com.badlogic.gdx.utils.IntMap;
+import com.github.tommyettinger.ds.IntFloatMap;
+import com.github.tommyettinger.ds.IntObjectMap;
 import com.github.tommyettinger.ds.LongOrderedSet;
 import isonomicon.io.LittleEndianDataInputStream;
 import isonomicon.physical.Tools3D;
@@ -129,8 +129,8 @@ public class VoxIOExtended {
                     } else if (chunkName.equals("XYZI") && voxelData != null) {
                         // XYZI contains n voxels
                         int numVoxels = stream.readInt();
-                        IntMap<float[]> linkage = new IntMap<>(8);
-                        IntMap<LongOrderedSet> markers = new IntMap<>(8);
+                        IntObjectMap<float[]> linkage = new IntObjectMap<>(8);
+                        IntObjectMap<LongOrderedSet> markers = new IntObjectMap<>(8);
                         // each voxel has x, y, z and color index values
                         for (int i = 0; i < numVoxels; i++) {
                             int x = stream.read() + offX;
@@ -164,7 +164,7 @@ public class VoxIOExtended {
                             }
                         }
                         model.grids.add(Tools3D.scaleAndSoak(voxelData));
-                        for(IntMap.Entry<float[]> e : linkage){
+                        for(IntObjectMap.Entry<float[]> e : linkage){
                             float div = 2f / e.value[3];
                             e.value[0] *= div;
                             e.value[1] *= div;
@@ -245,7 +245,7 @@ public class VoxIOExtended {
         writeVOX(filename, voxelData, palette, null);
     }
 
-    public static void writeVOX(String filename, byte[][][] voxelData, int[] palette, IntMap<VoxMaterial> materials) {
+    public static void writeVOX(String filename, byte[][][] voxelData, int[] palette, IntObjectMap<VoxMaterial> materials) {
         // check out https://github.com/ephtracy/voxel-model/blob/master/MagicaVoxel-file-format-vox.txt for the file format used below
         try {
             int xSize = voxelData.length, ySize = voxelData[0].length, zSize = voxelData[0][0].length;
@@ -304,13 +304,13 @@ public class VoxIOExtended {
             if(materials != null && materials.notEmpty()) {
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream(128);
                 DataOutputStream dos = new DataOutputStream(bytes);
-                for(IntMap.Entry<VoxMaterial> ent : materials) {
+                for(IntObjectMap.Entry<VoxMaterial> ent : materials) {
                     bin.writeBytes("MATL");
                     dos.flush();
                     bytes.reset();
                     // here we write to dos, which writes to bytes, so we know the length of the chunk.
                     writeInt(dos, ent.key);
-                    writeInt(dos, ent.value.traits.size + 1);
+                    writeInt(dos, ent.value.traits.size() + 1);
                     writeInt(dos, 5);
                     dos.writeBytes("_type");
                     String term = ent.value.type.name();

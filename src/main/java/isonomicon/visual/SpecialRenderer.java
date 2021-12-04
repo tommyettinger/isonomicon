@@ -2,9 +2,9 @@ package isonomicon.visual;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.utils.IntMap;
 import com.github.tommyettinger.anim8.PaletteReducer;
 import com.github.tommyettinger.colorful.oklab.ColorTools;
+import com.github.tommyettinger.ds.IntObjectMap;
 import isonomicon.io.extended.GroupChunk;
 import isonomicon.io.extended.ShapeModel;
 import isonomicon.io.extended.TransformChunk;
@@ -512,8 +512,8 @@ public class SpecialRenderer {
         return blit(yaw, pitch, roll, frame);
     }
 
-    protected void subDraw(ArrayList<byte[][][]> grids, ArrayList<IntMap<float[]>> links,
-                           byte[][][] g, IntMap<float[]> link, float yaw, float pitch, float roll, int frame,
+    protected void subDraw(ArrayList<byte[][][]> grids, ArrayList<IntObjectMap<float[]>> links,
+                           byte[][][] g, IntObjectMap<float[]> link, float yaw, float pitch, float roll, int frame,
                            float translateX, float translateY, float translateZ){
         splatOnly(g, yaw, pitch, roll, frame, translateX, translateY, translateZ);
         final int size = g.length;
@@ -542,7 +542,7 @@ public class SpecialRenderer {
             }
         }
 
-        for(IntMap.Entry<float[]> ent : link) {
+        for(IntObjectMap.Entry<float[]> ent : link) {
             if(ent.key == -1) continue;
             for (int j = 0; j < links.size(); j++) {
                 float[] got;
@@ -565,13 +565,13 @@ public class SpecialRenderer {
                                   float translateX, float translateY, float translateZ){
         boolean foundAnything = false;
         ArrayList<byte[][][]> grids = new ArrayList<>(model.grids.size());
-        ArrayList<IntMap<float[]>> links = new ArrayList<>(model.links.size());
+        ArrayList<IntObjectMap<float[]>> links = new ArrayList<>(model.links.size());
         for (int i = 0; i < model.grids.size(); i++) {
             grids.add(Tools3D.deepCopy(model.grids.get(i)));
-            links.add(new IntMap<>(model.links.get(i)));
+            links.add(new IntObjectMap<>(model.links.get(i)));
         }
         for (int i = 0; i < grids.size(); i++) {
-            IntMap<float[]> link = links.get(i);
+            IntObjectMap<float[]> link = links.get(i);
             if(link.containsKey(-1))
             {
                 //root grid

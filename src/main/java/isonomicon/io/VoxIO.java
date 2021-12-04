@@ -1,7 +1,7 @@
 package isonomicon.io;
 
-import com.badlogic.gdx.utils.IntFloatMap;
-import com.badlogic.gdx.utils.IntMap;
+import com.github.tommyettinger.ds.IntFloatMap;
+import com.github.tommyettinger.ds.IntObjectMap;
 import isonomicon.physical.VoxMaterial;
 
 import java.io.*;
@@ -52,7 +52,7 @@ public class VoxIO {
             0xbbbbbbff, 0xaaaaaaff, 0x888888ff, 0x777777ff, 0x555555ff, 0x444444ff, 0x222222ff, 0x111111ff
     };
     public static int[] lastPalette = Arrays.copyOf(defaultPalette, 256);
-    public static final IntMap<VoxMaterial> lastMaterials = new IntMap<>(256);
+    public static final IntObjectMap<VoxMaterial> lastMaterials = new IntObjectMap<>(256);
 
     public static byte[][][] readVox(InputStream stream) {
         return readVox(new LittleEndianDataInputStream(stream));
@@ -138,7 +138,7 @@ public class VoxIO {
         writeVOX(filename, voxelData, palette, null);
     }
 
-    public static void writeVOX(String filename, byte[][][] voxelData, int[] palette, IntMap<VoxMaterial> materials) {
+    public static void writeVOX(String filename, byte[][][] voxelData, int[] palette, IntObjectMap<VoxMaterial> materials) {
         // check out https://github.com/ephtracy/voxel-model/blob/master/MagicaVoxel-file-format-vox.txt for the file format used below
         try {
             int xSize = voxelData.length, ySize = voxelData[0].length, zSize = voxelData[0][0].length;
@@ -197,13 +197,13 @@ public class VoxIO {
             if(materials != null && materials.notEmpty()) {
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream(128);
                 DataOutputStream dos = new DataOutputStream(bytes);
-                for(IntMap.Entry<VoxMaterial> ent : materials) {
+                for(IntObjectMap.Entry<VoxMaterial> ent : materials) {
                     bin.writeBytes("MATL");
                     dos.flush();
                     bytes.reset();
                     // here we write to dos, which writes to bytes, so we know the length of the chunk.
                     writeInt(dos, ent.key);
-                    writeInt(dos, ent.value.traits.size + 1);
+                    writeInt(dos, ent.value.traits.size() + 1);
                     writeInt(dos, 5);
                     dos.writeBytes("_type");
                     String term = ent.value.type.name();
