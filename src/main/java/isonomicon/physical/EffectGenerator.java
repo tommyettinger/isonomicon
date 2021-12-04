@@ -1,6 +1,8 @@
 package isonomicon.physical;
 
 import com.badlogic.gdx.math.MathUtils;
+import com.github.tommyettinger.ds.LongList;
+import com.github.tommyettinger.ds.LongOrderedSet;
 import com.github.tommyettinger.ds.support.EnhancedRandom;
 import com.github.tommyettinger.ds.support.FourWheelRandom;
 import isonomicon.io.extended.VoxModel;
@@ -437,10 +439,59 @@ public class EffectGenerator {
      */
 
     public static VoxModel[] machineGunAnimation(VoxModel[] frames, int which){
-        VoxModel[] next = new VoxModel[frames.length];
-        for (int i = 0; i < frames.length; i++) {
+        int count = frames.length;
+        VoxModel[] next = new VoxModel[count];
+        for (int i = 0; i < count; i++) {
             next[i] = frames[i].copy();
         }
+        LongList launchers = next[0].markers.get(0).get(201 + which * 8).order();
+        Choice majorLimit = ((x, y, z) -> r.nextInt(10) > 2);
+        Choice minorLimit = ((x, y, z) -> r.nextInt(10) > 1);
+        for(int f = 0; f < count - 2; f++)
+        {
+            byte[][][] grid = next[f].grids.get(0);
+            int currentlyFiring = f % ((launchers.size() >>> 2) + 1);
+            if((currentlyFiring & 1) == 0)
+            {
+                for (int ln = 0; ln < launchers.size(); ln++) {
+                    long launcher = launchers.get(ln);
+                    if(currentlyFiring != 0)
+                    {
+                        currentlyFiring = (currentlyFiring + 1) % ((launchers.size() >>> 2) + 1);
+                        continue;
+                    }
+                    int lx = (int)(launcher) & 0xFFFFF, ly = (int)(launcher >>> 20) & 0xFFFFF, lz = (int)(launcher >>> 40) & 0xFFFFF;
+                    ShapeGenerator.line(grid, lx, ly, lz, lx + 7, ly, lz, 127, minorLimit);
+
+                    ShapeGenerator.line(grid, lx, ly, lz, lx + 5, ly    , lz + 2, 127, minorLimit);
+                    ShapeGenerator.line(grid, lx, ly, lz, lx + 5, ly    , lz - 2, 127, minorLimit);
+                    ShapeGenerator.line(grid, lx, ly, lz, lx + 5, ly + 2, lz    , 127, minorLimit);
+                    ShapeGenerator.line(grid, lx, ly, lz, lx + 5, ly - 2, lz    , 127, minorLimit);
+
+                    ShapeGenerator.line(grid, lx, ly, lz, lx + 3, ly + 2, lz + 2, 127, minorLimit);
+                    ShapeGenerator.line(grid, lx, ly, lz, lx + 3, ly - 2, lz + 2, 127, minorLimit);
+                    ShapeGenerator.line(grid, lx, ly, lz, lx + 3, ly + 2, lz - 2, 127, minorLimit);
+                    ShapeGenerator.line(grid, lx, ly, lz, lx + 3, ly - 2, lz - 2, 127, minorLimit);
+                }
+            }
+            else
+            {
+                for (int ln = 0; ln < launchers.size(); ln++) {
+                    long launcher = launchers.get(ln);
+                    if(currentlyFiring < 2 && launchers.size() > 8)
+                    {
+                        currentlyFiring = (currentlyFiring + 1) % ((launchers.size() >>> 2) + 1);
+                        continue;
+                    }
+                    int lx = (int)(launcher) & 0xFFFFF, ly = (int)(launcher >>> 20) & 0xFFFFF, lz = (int)(launcher >>> 40) & 0xFFFFF;
+                    ShapeGenerator.line(grid, lx + 2, ly, lz, lx + 9, ly, lz, 115, majorLimit);
+
+                    currentlyFiring = (currentlyFiring + 1) % ((launchers.size() >>> 2) + 1);
+                }
+            }
+
+        }
+
 
         return next;
     }
