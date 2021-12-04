@@ -3,6 +3,7 @@ package isonomicon.io.extended;
 import com.badlogic.gdx.utils.IntMap;
 import com.github.tommyettinger.ds.LongOrderedSet;
 import isonomicon.io.VoxIO;
+import isonomicon.physical.Tools3D;
 import isonomicon.physical.VoxMaterial;
 
 import java.util.ArrayList;
@@ -32,5 +33,26 @@ public class VoxModel {
         links.addAll(other.links);
         markers.addAll(other.markers);
         return this;
+    }
+
+    public VoxModel copy(){
+        VoxModel next = new VoxModel();
+        next.palette = Arrays.copyOf(palette, palette.length);
+        ArrayList<byte[][][]> nextGrids = new ArrayList<>(grids.size());
+        ArrayList<IntMap<float[]>> nextLinks = new ArrayList<>(links.size());
+        ArrayList<IntMap<LongOrderedSet>> nextMarkers = new ArrayList<>(markers.size());
+        for (int i = 0; i < grids.size(); i++) {
+            nextGrids.add(Tools3D.deepCopy(grids.get(i)));
+        }
+        next.grids = nextGrids;
+        for (int i = 0; i < links.size(); i++) {
+            nextLinks.add(new IntMap<>(links.get(i)));
+        }
+        next.links = nextLinks;
+        for (int i = 0; i < markers.size(); i++) {
+            nextMarkers.add(new IntMap<>(markers.get(i)));
+        }
+        next.markers = nextMarkers;
+        return next;
     }
 }

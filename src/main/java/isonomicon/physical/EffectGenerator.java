@@ -1,6 +1,7 @@
 package isonomicon.physical;
 
 import com.badlogic.gdx.math.MathUtils;
+import isonomicon.io.extended.VoxModel;
 import squidpony.squidmath.*;
 
 import static com.badlogic.gdx.math.MathUtils.ceil;
@@ -433,5 +434,94 @@ public class EffectGenerator {
             }
             return frames;
         }
+     */
+
+    public static VoxModel[] machineGunAnimation(VoxModel[] frames, int which){
+        VoxModel[] next = new VoxModel[frames.length];
+        for (int i = 0; i < frames.length; i++) {
+            next[i] = frames[i].copy();
+        }
+
+        return next;
+    }
+    /*
+        public static MagicaVoxelData[][] MachineGunAnimationLarge(MagicaVoxelData[][] parsedFrames, int unit, int which)
+        {
+            MagicaVoxelData[][] voxelFrames = new MagicaVoxelData[parsedFrames.Length][];
+            voxelFrames[0] = new MagicaVoxelData[parsedFrames[0].Length];
+            voxelFrames[parsedFrames.Length - 1] = new MagicaVoxelData[parsedFrames[parsedFrames.Length - 1].Length];
+            parsedFrames[0].CopyTo(voxelFrames[0], 0);
+            parsedFrames[parsedFrames.Length - 1].CopyTo(voxelFrames[parsedFrames.Length - 1], 0);
+            List<MagicaVoxelData> launchers = new List<MagicaVoxelData>(40);
+            List<MagicaVoxelData>[] extra = new List<MagicaVoxelData>[voxelFrames.Length - 2];
+
+            List<int> known = new List<int>(30);
+            foreach(MagicaVoxelData mvd in voxelFrames[0])
+            {
+                if(mvd.color == emitter0 - which * 8)
+                {
+                    launchers.Add(mvd);
+                }
+            }
+
+            for(int f = 0; f < voxelFrames.Length - 2; f++)
+            {
+
+                int currentlyFiring = f % (launchers.Count / 4 + 1);
+                extra[f] = new List<MagicaVoxelData>(1024);
+                if(currentlyFiring % 2 == 0)
+                {
+
+                    foreach(MagicaVoxelData launcher in launchers)
+                    {
+                        if(currentlyFiring != 0)
+                        {
+                            currentlyFiring = (currentlyFiring + 1) % (launchers.Count / 4 + 1);
+                            continue;
+                        }
+                        extra[f].AddRange(VoxelLogic.generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 7), y = launcher.y, z = launcher.z, color = (byte)(yellow_fire) }, yellow_fire));
+
+                        extra[f].AddRange(VoxelLogic.generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 5), y = launcher.y, z = (byte)(launcher.z + 2), color = yellow_fire }, orange_fire));
+                        extra[f].AddRange(VoxelLogic.generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 5), y = launcher.y, z = (byte)(launcher.z - 2), color = yellow_fire }, orange_fire));
+                        extra[f].AddRange(VoxelLogic.generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 5), y = (byte)(launcher.y + 2), z = launcher.z, color = yellow_fire }, orange_fire));
+                        extra[f].AddRange(VoxelLogic.generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 5), y = (byte)(launcher.y - 2), z = launcher.z, color = yellow_fire }, orange_fire));
+
+                        extra[f].AddRange(VoxelLogic.generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 3), y = (byte)(launcher.y + 2), z = (byte)(launcher.z + 2), color = yellow_fire }, orange_fire));
+                        extra[f].AddRange(VoxelLogic.generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 3), y = (byte)(launcher.y - 2), z = (byte)(launcher.z + 2), color = yellow_fire }, orange_fire));
+                        extra[f].AddRange(VoxelLogic.generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 3), y = (byte)(launcher.y + 2), z = (byte)(launcher.z - 2), color = yellow_fire }, orange_fire));
+                        extra[f].AddRange(VoxelLogic.generateStraightLine(launcher, new MagicaVoxelData { x = (byte)(launcher.x + 3), y = (byte)(launcher.y - 2), z = (byte)(launcher.z - 2), color = yellow_fire }, orange_fire));
+
+                    }
+                    extra[f] = extra[f].Where(v => r.Next(10) > 1).ToList();
+
+                }
+                else
+                {
+                    foreach(MagicaVoxelData launcher in launchers)
+                    {
+                        if(currentlyFiring < 2 && launchers.Count > 8)
+                        {
+                            currentlyFiring = (currentlyFiring + 1) % (launchers.Count / 4 + 1);
+                            continue;
+                        }
+                        extra[f].AddRange(VoxelLogic.generateStraightLine(new MagicaVoxelData { x = (byte)(launcher.x + 2), y = launcher.y, z = launcher.z, color = orange_fire }
+                            , new MagicaVoxelData { x = (byte)(launcher.x + 9), y = launcher.y, z = launcher.z, color = orange_fire }, orange_fire));
+
+                        currentlyFiring = (currentlyFiring + 1) % (launchers.Count / 4 + 1);
+                    }
+                    extra[f] = extra[f].Where(v => r.Next(10) > 2).ToList();
+
+                }
+
+            }
+            for(int f = 1; f < voxelFrames.Length - 1; f++)
+            {
+                List<MagicaVoxelData> working = new List<MagicaVoxelData>(parsedFrames[f]);
+                working.AddRange(extra[f - 1]);
+                voxelFrames[f] = working.ToArray();
+            }
+            return voxelFrames;
+        }
+
      */
 }
