@@ -156,7 +156,7 @@ public class VoxIOExtended {
                                 linkage.put(color, ln);
 
                                 LongOrderedSet ls;
-                                if((ls = markers.get(color)) == null){
+                                if((ls = markers.get(color & 255)) == null){
                                     ls = new LongOrderedSet(16);
                                 }
                                 ls.add(((x & 0xFFFFFL) | (y & 0xFFFFFL) << 20 | (z & 0xFFFFFL) << 40) << 1);
