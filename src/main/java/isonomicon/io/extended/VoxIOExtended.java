@@ -159,8 +159,8 @@ public class VoxIOExtended {
                                 if((ls = markers.get(color)) == null){
                                     ls = new LongOrderedSet(16);
                                 }
-                                ls.add((x & 0xFFFFFL) | (y & 0xFFFFFL) << 20 | (z & 0xFFFFFL) << 40);
-                                markers.put(color, ls);
+                                ls.add(((x & 0xFFFFFL) | (y & 0xFFFFFL) << 20 | (z & 0xFFFFFL) << 40) << 1);
+                                markers.put(color & 255, ls);
                             }
                         }
                         model.grids.add(Tools3D.scaleAndSoak(voxelData));

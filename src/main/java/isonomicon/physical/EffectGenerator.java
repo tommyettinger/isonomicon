@@ -456,7 +456,8 @@ public class EffectGenerator {
             next[i] = frames[i].copy();
         }
         LongOrderedSet ls = next[0].markers.get(0).get(201 + which * 8);
-        if(ls == null) return next;
+        if(ls == null)
+            return next;
         LongList launchers = ls.order();
         Choice majorLimit = ((x, y, z) -> r.nextInt(10) > 2);
         Choice minorLimit = ((x, y, z) -> r.nextInt(10) > 1);
