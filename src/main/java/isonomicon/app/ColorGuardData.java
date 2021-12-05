@@ -83,7 +83,7 @@ public class ColorGuardData {
     };
     public static Unit[] units = {
             new Unit("Infantry", "Machine_Gun", true),
-            new Unit("Bazooka", "Handgun", false, "Forward_Rocket", true),
+            new Unit("Bazooka", "Handgun", false, "Forward_Missile", true),
             new Unit("Bike", "Machine_Gun"),
             new Unit("Rifle_Sniper", "Handgun", false, "Handgun", true),
             new Unit("Mortar_Sniper", "Arc_Cannon", true),

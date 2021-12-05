@@ -31,10 +31,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class ColorGuardAssets extends ApplicationAdapter {
+    public static boolean DIVERSE = false;
+    public static boolean ATTACKS = true;
+    public static boolean EXPLOSION = false;
+
     public static final int SCREEN_WIDTH = 512;//640;
     public static final int SCREEN_HEIGHT = 512;//720;
     private SpecialRenderer renderer;
     private VoxModel voxels, head;
+    private VoxModel[] frames = new VoxModel[8];
     private String name;
     private String[] inputs, armies;
     private PixmapIO.PNG png;
@@ -98,71 +103,8 @@ public class ColorGuardAssets extends ApplicationAdapter {
         gif.palette.setDitherStrength(0.625f);
         FrameBuffer fb = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), false);
         // just a single skin/hair combination
-        if(true)
-        {
-            for (int n = 0; n < inputs.length; n++) {
-                String s = inputs[n];
-                System.out.println("Rendering " + s);
-                load("specialized/b/vox/color_guard/" + s);
-                Pixmap pixmap;
-                Array<Pixmap> pm = new Array<>(32 * armies.length);
-                pm.setSize(32 * armies.length);
-                ArrayList<byte[][][]> original = new ArrayList<>(voxels.grids.size());
-                for (int i = 0; i < voxels.grids.size(); i++) {
-                    original.add(Tools3D.deepCopy(voxels.grids.get(i)));
-                }
-                for (int i = 0; i < 4; i++) {
-                    voxels.grids.clear();
-                    for (int j = 0; j < original.size(); j++) {
-                        voxels.grids.add(Tools3D.deepCopy(original.get(j)));
-                    }
-                    for (int f = 0; f < 4; f++) {
-                        for (int j = 0; j < voxels.grids.size(); j++) {
-                            Stuff.evolve(Stuff.STUFFS_B, voxels.grids.get(j), f);
-                        }
-                        pixmap = renderer.drawModelSimple(voxels, i * 0.25f, 0f, 0f, f, 0, 0, 0);
-                        Texture t = new Texture(pixmap.getWidth(), pixmap.getHeight(), Pixmap.Format.RGBA8888);
-                        t.draw(renderer.palettePixmap, 0, 0);
-                        int look = 0;
-                        for (int j = 0; j < armies.length; j++) {
-                            fb.begin();
-                            palette.bind(1);
-                            ScreenUtils.clear(Color.CLEAR);
-                            batch.begin();
-
-                            indexShader.setUniformi("u_texPalette", 1);
-                            Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
-                            batch.setColor((look + j) / 255f, 0.5f, 0.5f, 1f);
-
-                            batch.draw(t, 0, t.getHeight(), t.getWidth(), -t.getHeight());
-                            batch.end();
-                            pixmap = Pixmap.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
-                            fb.end();
-                            pm.set(j * 32 + i * 8 + f, pixmap);
-                            pm.set(j * 32 + i * 8 + f + 4, pixmap);
-                            try {
-                                png.write(Gdx.files.local("out/color_guard/" + armies[j] + "/" + name + '/' + armies[j] + "_look0_" + name + "_angle" + i + "_" + f + ".png"), pixmap);
-                                if (look + j == 0)
-                                    png.write(Gdx.files.local("out/color_guard/lab/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        t.dispose();
-//                png8.write(Gdx.files.local("out/" + name + '/' + name + "_angle" + i + ".png"), p, false, true);
-                    }
-                }
-//                gif.palette.analyze(pm);
-                gif.write(Gdx.files.local("out/color_guard/animated/" + name + '/' + name + ".gif"), pm, 8);
-                apng.write(Gdx.files.local("out/color_guard/animated/" + name + '/' + name + ".png"), pm, 8);
-                for (Pixmap pix : pm) {
-                    if (!pix.isDisposed())
-                        pix.dispose();
-                }
-            }
-        }
         // many skin and hair colors
-        if(false)
+        if(DIVERSE)
         {
             Gdx.files.local("out/color_guard/animated_diverse/" + name + '/').mkdirs();
             for (int n = 0; n < inputs.length; n++) {
@@ -172,15 +114,9 @@ public class ColorGuardAssets extends ApplicationAdapter {
                 Pixmap pixmap;
                 Array<Pixmap> pm = new Array<>(32 * armies.length);
                 pm.setSize(32 * armies.length);
-                ArrayList<byte[][][]> original = new ArrayList<>(voxels.grids.size());
-                for (int i = 0; i < voxels.grids.size(); i++) {
-                    original.add(Tools3D.deepCopy(voxels.grids.get(i)));
-                }
+                VoxModel original = voxels.copy();
                 for (int i = 0; i < 4; i++) {
-                    voxels.grids.clear();
-                    for (int j = 0; j < original.size(); j++) {
-                        voxels.grids.add(Tools3D.deepCopy(original.get(j)));
-                    }
+                    voxels = original.copy();
                     for (int f = 0; f < 4; f++) {
                         for (int j = 0; j < voxels.grids.size(); j++) {
                             Stuff.evolve(Stuff.STUFFS_B, voxels.grids.get(j), f);
@@ -229,7 +165,116 @@ public class ColorGuardAssets extends ApplicationAdapter {
                 }
             }
         }
-        if(false)
+        else {
+            for (int n = 0; n < inputs.length; n++) {
+                String s = inputs[n];
+                System.out.println("Rendering " + s);
+                load("specialized/b/vox/color_guard/" + s);
+                Pixmap pixmap;
+                Array<Pixmap> pm = new Array<>(32 * armies.length);
+                pm.setSize(32 * armies.length);
+                VoxModel original = voxels.copy();
+                for (int i = 0; i < 4; i++) {
+                    voxels = original.copy();
+                    for (int f = 0; f < 4; f++) {
+                        for (int j = 0; j < voxels.grids.size(); j++) {
+                            Stuff.evolve(Stuff.STUFFS_B, voxels.grids.get(j), f);
+                        }
+                        pixmap = renderer.drawModelSimple(voxels, i * 0.25f, 0f, 0f, f, 0, 0, 0);
+                        Texture t = new Texture(pixmap.getWidth(), pixmap.getHeight(), Pixmap.Format.RGBA8888);
+                        t.draw(renderer.palettePixmap, 0, 0);
+                        int look = 0;
+                        for (int j = 0; j < armies.length; j++) {
+                            fb.begin();
+                            palette.bind(1);
+                            ScreenUtils.clear(Color.CLEAR);
+                            batch.begin();
+
+                            indexShader.setUniformi("u_texPalette", 1);
+                            Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
+                            batch.setColor((look + j) / 255f, 0.5f, 0.5f, 1f);
+
+                            batch.draw(t, 0, t.getHeight(), t.getWidth(), -t.getHeight());
+                            batch.end();
+                            pixmap = Pixmap.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
+                            fb.end();
+                            pm.set(j * 32 + i * 8 + f, pixmap);
+                            pm.set(j * 32 + i * 8 + f + 4, pixmap);
+                            try {
+                                png.write(Gdx.files.local("out/color_guard/" + armies[j] + "/" + name + '/' + armies[j] + "_look0_" + name + "_angle" + i + "_" + f + ".png"), pixmap);
+                                if (look + j == 0)
+                                    png.write(Gdx.files.local("out/color_guard/lab/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        t.dispose();
+//                png8.write(Gdx.files.local("out/" + name + '/' + name + "_angle" + i + ".png"), p, false, true);
+                    }
+                }
+//                gif.palette.analyze(pm);
+                gif.write(Gdx.files.local("out/color_guard/animated/" + name + '/' + name + "_Primary" + ".gif"), pm, 8);
+                apng.write(Gdx.files.local("out/color_guard/animated/" + name + '/' + name + "_Primary" + ".png"), pm, 8);
+                for (Pixmap pix : pm) {
+                    if (!pix.isDisposed())
+                        pix.dispose();
+                }
+                pm.clear();
+                pm.setSize(32 * armies.length);
+
+                if (ATTACKS) {
+                    for (int i = 0; i < 4; i++) {
+                        frames[0] = original.copy();
+                        for (int f = 0; f < frames.length; f++) {
+                            if (f > 0) frames[f] = frames[f - 1].copy();
+                            for (int j = 0; j < frames[f].grids.size(); j++) {
+                                Stuff.evolve(Stuff.STUFFS_B, frames[f].grids.get(j), f);
+                            }
+                        }
+                        frames = EffectGenerator.machineGunAnimation(frames, 0);
+                        for (int f = 0; f < frames.length; f++) {
+                            pixmap = renderer.drawModelSimple(frames[f], i * 0.25f, 0f, 0f, f, 0, 0, 0);
+                            Texture t = new Texture(pixmap.getWidth(), pixmap.getHeight(), Pixmap.Format.RGBA8888);
+                            t.draw(renderer.palettePixmap, 0, 0);
+                            int look = 0;
+                            for (int j = 0; j < armies.length; j++) {
+                                fb.begin();
+                                palette.bind(1);
+                                ScreenUtils.clear(Color.CLEAR);
+                                batch.begin();
+
+                                indexShader.setUniformi("u_texPalette", 1);
+                                Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
+                                batch.setColor((look + j) / 255f, 0.5f, 0.5f, 1f);
+
+                                batch.draw(t, 0, t.getHeight(), t.getWidth(), -t.getHeight());
+                                batch.end();
+                                pixmap = Pixmap.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
+                                fb.end();
+                                pm.set(j * 32 + i * 8 + f, pixmap);
+                                try {
+                                    png.write(Gdx.files.local("out/color_guard/" + armies[j] + "/" + name + '/' + armies[j] + "_look0_" + name + "_" + "Primary" + "_angle" + i + "_" + f + ".png"), pixmap);
+                                    if (look + j == 0)
+                                        png.write(Gdx.files.local("out/color_guard/lab/" + name + '/' + name + "_" + "Primary" + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            t.dispose();
+//                png8.write(Gdx.files.local("out/" + name + '/' + name + "_angle" + i + ".png"), p, false, true);
+                        }
+                    }
+//                gif.palette.analyze(pm);
+                    gif.write(Gdx.files.local("out/color_guard/animated/" + name + '/' + name + "_Primary" + ".gif"), pm, 8);
+                    apng.write(Gdx.files.local("out/color_guard/animated/" + name + '/' + name + "_Primary" + ".png"), pm, 8);
+                    for (Pixmap pix : pm) {
+                        if (!pix.isDisposed())
+                            pix.dispose();
+                    }
+                }
+            }
+        }
+        if(EXPLOSION)
         {
             voxels = new VoxModel();
             SpecialRenderer.shrink = 2;

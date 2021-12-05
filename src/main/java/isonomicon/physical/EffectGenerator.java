@@ -3,6 +3,7 @@ package isonomicon.physical;
 import com.badlogic.gdx.math.MathUtils;
 import com.github.tommyettinger.ds.LongList;
 import com.github.tommyettinger.ds.LongOrderedSet;
+import com.github.tommyettinger.ds.ObjectObjectOrderedMap;
 import com.github.tommyettinger.ds.support.EnhancedRandom;
 import com.github.tommyettinger.ds.support.FourWheelRandom;
 import isonomicon.io.extended.VoxModel;
@@ -10,6 +11,16 @@ import isonomicon.io.extended.VoxModel;
 import static com.badlogic.gdx.math.MathUtils.*;
 
 public class EffectGenerator {
+
+    @FunctionalInterface
+    public interface Effect {
+        VoxModel[] runEffect(VoxModel[] frames, int which);
+    }
+
+    public static final ObjectObjectOrderedMap<String, Effect> KNOWN_EFFECTS = ObjectObjectOrderedMap.with(
+            "Machine_Gun", EffectGenerator::machineGunAnimation
+    );
+
     public static final EnhancedRandom r = new FourWheelRandom(123456789L);
     public static byte[][][][] fireballAnimation(byte[][][] initial, int frames, int trimLevel, int blowback){
         final int xSize = initial.length, ySize = initial[0].length, zSize = initial[0][0].length;
@@ -444,7 +455,9 @@ public class EffectGenerator {
         for (int i = 0; i < count; i++) {
             next[i] = frames[i].copy();
         }
-        LongList launchers = next[0].markers.get(0).get(201 + which * 8).order();
+        LongOrderedSet ls = next[0].markers.get(0).get(201 + which * 8);
+        if(ls == null) return next;
+        LongList launchers = ls.order();
         Choice majorLimit = ((x, y, z) -> r.nextInt(10) > 2);
         Choice minorLimit = ((x, y, z) -> r.nextInt(10) > 1);
         for(int f = 0; f < count - 2; f++)
