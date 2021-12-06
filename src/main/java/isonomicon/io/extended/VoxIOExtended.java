@@ -11,6 +11,8 @@ import squidpony.StringKit;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.Iterator;
+import java.util.PrimitiveIterator;
 
 import static isonomicon.io.VoxIO.lastMaterials;
 import static isonomicon.io.VoxIO.lastPalette;
@@ -316,12 +318,15 @@ public class VoxIOExtended {
                     String term = ent.value.type.name();
                     writeInt(dos, term.length());
                     dos.writeBytes(term);
-                    for(IntFloatMap.Entry et : ent.value.traits) {
-                        VoxMaterial.MaterialTrait mt = VoxMaterial.ALL_TRAITS[et.key];
+                    PrimitiveIterator.OfInt it = ent.value.traits.keySet().iterator();
+                    for(int k; it.hasNext();) {
+                        k = it.nextInt();
+                        float v = ent.value.traits.get(k);
+                        VoxMaterial.MaterialTrait mt = VoxMaterial.ALL_TRAITS[k];
                         term = mt.name();
                         writeInt(dos, term.length());
                         dos.writeBytes(term);
-                        term = Float.toString(et.value);
+                        term = Float.toString(v);
                         if(term.length() > 8) term = term.substring(0, 8);
                         writeInt(dos, term.length());
                         dos.writeBytes(term);

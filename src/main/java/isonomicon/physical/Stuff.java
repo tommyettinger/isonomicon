@@ -1,5 +1,6 @@
 package isonomicon.physical;
 
+import com.github.tommyettinger.ds.IntObjectMap;
 import squidpony.squidmath.HastyPointHash;
 import squidpony.squidmath.WeightedTable;
 
@@ -513,6 +514,17 @@ public class Stuff {
 //            new Stuff("ripe fruit or flower", 62, 62, 128L, "Roughness 0.2 Reflection 0.55 Dapple -0.2"),
 //            new Stuff("bone beak claw", 63, 63, 64L, "Roughness 0.4 Reflection 0.4"), /*light yellow*/
     };
+
+    public static final IntObjectMap<VoxMaterial> MATERIALS_A = new IntObjectMap<>(256);
+    public static final IntObjectMap<VoxMaterial> MATERIALS_B = new IntObjectMap<>(256);
+    static {
+        for (int i = 0; i < STUFFS.length; i++) {
+            MATERIALS_A.put(i, STUFFS[i].material);
+        }
+        for (int i = 0; i < STUFFS.length; i++) {
+            MATERIALS_B.put(i, STUFFS_B[i].material);
+        }
+    }
 
     public static void evolve(byte[][][] model, int frame){
         evolve(STUFFS, model, frame);
