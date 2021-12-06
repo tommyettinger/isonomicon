@@ -48,8 +48,8 @@ public class ColorGuardAssets extends ApplicationAdapter {
     private SpriteBatch batch;
     private Texture palette;
     public ColorGuardAssets() {
-        inputs = new String[]{"AA_Gun.vox",};
-                //ColorGuardData.allVoxModels;
+        inputs = //new String[]{"AA_Gun.vox",};
+                ColorGuardData.allVoxModels;
         armies = new String[]{
                 "Dark",
                 "White",
@@ -267,7 +267,9 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                 Tools3D.deepCopyInto(g, frames[f].grids.get(j));
                             }
                             Gdx.files.local("out/temp/" + name + '/').mkdirs();
-                            VoxIOExtended.writeVOX("out/temp/" + name + '/' + name + "_Machine_Gun_angle" + i + "_" + f + ".vox", g, Coloring.BETTS64, Stuff.MATERIALS_B);
+
+//                            VoxIOExtended.writeVOX("out/temp/" + name + '/' + name + "_Machine_Gun_angle" + i + "_" + f + ".vox", g, Coloring.BETTS64, Stuff.MATERIALS_B);
+
 //                png8.write(Gdx.files.local("out/" + name + '/' + name + "_angle" + i + ".png"), p, false, true);
                         }
                     }

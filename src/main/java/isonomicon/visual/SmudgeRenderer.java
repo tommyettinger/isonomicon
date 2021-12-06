@@ -290,12 +290,12 @@ public class SmudgeRenderer {
                         }
                     }
                     if (emit > 0) {
-                        float spread = emit * 0.5f;
-                        int radius = 12;
+                        float spread = emit * 0.003f;
+                        final int radius = 14;
                         for (int i = -radius, si = sx + i; i <= radius; i++, si++) {
                             for (int j = -radius, sj = sy + j; j <= radius; j++, sj++) {
                                 final int dist = i * i + j * j;
-                                if(dist > 144 || si < 0 || sj < 0 || si > xSize || sj > ySize) continue;
+                                if(dist > radius * radius || si < 0 || sj < 0 || si > xSize || sj > ySize) continue;
                                 colorL[si][sj] += spread * (radius - (float) Math.sqrt(dist));
                             }
                         }

@@ -321,8 +321,9 @@ public class VoxIOExtended {
                     PrimitiveIterator.OfInt it = ent.value.traits.keySet().iterator();
                     for(int k; it.hasNext();) {
                         k = it.nextInt();
-                        float v = ent.value.traits.get(k);
+                        if(k > 9) continue;
                         VoxMaterial.MaterialTrait mt = VoxMaterial.ALL_TRAITS[k];
+                        float v = ent.value.traits.get(k);
                         term = mt.name();
                         writeInt(dos, term.length());
                         dos.writeBytes(term);

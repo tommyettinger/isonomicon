@@ -308,12 +308,13 @@ public class SpecialRenderer {
                         }
                     }
                     if (emit > 0) {
-                        float spread = emit * 0.0015f;
-                        for (int i = -12, si = sx + i; i <= 12; i++, si++) {
-                            for (int j = -12, sj = sy + j; j <= 12; j++, sj++) {
+                        float spread = emit * 0.003f;
+                        final int radius = 14;
+                        for (int i = -radius, si = sx + i; i <= radius; i++, si++) {
+                            for (int j = -radius, sj = sy + j; j <= radius; j++, sj++) {
                                 final int dist = i * i + j * j;
-                                if(dist > 144 || si < 0 || sj < 0 || si > xSize || sj > ySize) continue;
-                                float change = spread * (12f - (float) Math.sqrt(dist));
+                                if(dist > radius * radius || si < 0 || sj < 0 || si > xSize || sj > ySize) continue;
+                                float change = spread * (radius - (float) Math.sqrt(dist));
                                 shading[si][sj] += change;
                             }
                         }
