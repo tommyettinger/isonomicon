@@ -457,7 +457,7 @@ public class EffectGenerator {
         }
         LongOrderedSet ls = next[0].markers.get(0).get(201 + which * 8);
         if(ls == null)
-            return next;
+            return null;
         LongList launchers = ls.order();
         Choice majorLimit = ((x, y, z) -> r.nextInt(10) > 2);
         Choice minorLimit = ((x, y, z) -> r.nextInt(10) > 1);
@@ -474,7 +474,7 @@ public class EffectGenerator {
                         currentlyFiring = (currentlyFiring + 1) % ((launchers.size() >>> 2) + 1);
                         continue;
                     }
-                    int lx = (int)(launcher) & 0xFFFFF, ly = (int)(launcher >>> 20) & 0xFFFFF, lz = (int)(launcher >>> 40) & 0xFFFFF;
+                    int lx = ((int)(launcher) & 0xFFFFF), ly = ((int)(launcher >>> 20) & 0xFFFFF), lz = (int)(launcher >>> 40) & 0xFFFFF;
                     ShapeGenerator.line(grid, lx, ly, lz, lx + 7, ly, lz, 127, minorLimit);
 
                     ShapeGenerator.line(grid, lx, ly, lz, lx + 5, ly    , lz + 2, 127, minorLimit);
@@ -497,7 +497,7 @@ public class EffectGenerator {
                         currentlyFiring = (currentlyFiring + 1) % ((launchers.size() >>> 2) + 1);
                         continue;
                     }
-                    int lx = (int)(launcher) & 0xFFFFF, ly = (int)(launcher >>> 20) & 0xFFFFF, lz = (int)(launcher >>> 40) & 0xFFFFF;
+                    int lx = ((int)(launcher) & 0xFFFFF), ly = ((int)(launcher >>> 20) & 0xFFFFF), lz = (int)(launcher >>> 40) & 0xFFFFF;
                     ShapeGenerator.line(grid, lx + 2, ly, lz, lx + 9, ly, lz, 115, majorLimit);
 
                     currentlyFiring = (currentlyFiring + 1) % ((launchers.size() >>> 2) + 1);

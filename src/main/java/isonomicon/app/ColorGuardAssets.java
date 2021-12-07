@@ -167,6 +167,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
             }
         }
         else {
+            EACH_INPUT:
             for (int n = 0; n < inputs.length; n++) {
                 String s = inputs[n];
                 System.out.println("Rendering " + s);
@@ -232,7 +233,10 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                 Stuff.evolve(Stuff.STUFFS_B, frames[f].grids.get(j), f);
                             }
                         }
-                        frames = EffectGenerator.machineGunAnimation(frames, 0);
+                        VoxModel[] anim = EffectGenerator.machineGunAnimation(frames, 0);
+                        if(anim == null) continue EACH_INPUT;
+                        else frames = anim;
+
                         for (int f = 0; f < frames.length; f++) {
                             pixmap = renderer.drawModelSimple(frames[f], i * 0.25f, 0f, 0f, f, 0, 0, 0);
                             Texture t = new Texture(pixmap.getWidth(), pixmap.getHeight(), Pixmap.Format.RGBA8888);
