@@ -48,8 +48,8 @@ public class ColorGuardAssets extends ApplicationAdapter {
     private SpriteBatch batch;
     private Texture palette;
     public ColorGuardAssets() {
-        inputs = //new String[]{"AA_Gun.vox",};
-                ColorGuardData.allVoxModels;
+        inputs = new String[]{"AA_Gun.vox",};
+//                ColorGuardData.allVoxModels;
         armies = new String[]{
                 "Dark",
                 "White",
