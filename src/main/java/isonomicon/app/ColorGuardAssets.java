@@ -41,15 +41,13 @@ public class ColorGuardAssets extends ApplicationAdapter {
     private VoxModel voxels, head;
     private VoxModel[] frames = new VoxModel[8];
     private String name;
-    private String[] inputs, armies;
+    private String[] armies;
     private PixmapIO.PNG png;
     private AnimatedGif gif;
     private AnimatedPNG apng;
     private SpriteBatch batch;
     private Texture palette;
     public ColorGuardAssets() {
-        inputs = new String[]{"AA_Gun.vox",};
-//                ColorGuardData.allVoxModels;
         armies = new String[]{
                 "Dark",
                 "White",
@@ -60,20 +58,21 @@ public class ColorGuardAssets extends ApplicationAdapter {
                 "Blue",
                 "Purple",
         };
-        if (!new File("specialized/b/vox/color_guard/" + inputs[0]).exists()) {
-            System.out.println("File not found: specialized/b/vox/color_guard/" + inputs[0]);
-            System.exit(0);
-        }
+//        if (!new File("specialized/b/vox/color_guard/" + inputs[0]).exists()) {
+//            System.out.println("File not found: specialized/b/vox/color_guard/" + inputs[0]);
+//            System.exit(0);
+//        }
         try {
             head = VoxIOExtended.readVox(new LittleEndianDataInputStream(new FileInputStream("specialized/b/vox/color_guard/human/Head.vox")));
         }
         catch (FileNotFoundException ignored){
+            System.out.println("Head model not found; this was run from the wrong path. Exiting.");
             System.exit(0);
         }
     }
     @Override
     public void create() {
-        if (inputs == null) Gdx.app.exit();
+//        if (inputs == null) Gdx.app.exit();
         palette = new Texture(Gdx.files.local("assets/palettes/b/ColorGuardMasterPalette.png"));
 //        palettes = new Texture[]{
 //                new Texture(Gdx.files.local("assets/palettes/b/ColorGuardBaseDark.png")),
@@ -103,13 +102,13 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //        gif.palette = new PaletteReducer(Coloring.BETSY256, Gdx.files.local("assets/BetsyPreload.dat").readBytes());
         gif.palette.setDitherStrength(0.625f);
         FrameBuffer fb = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), false);
-        // just a single skin/hair combination
         // many skin and hair colors
         if(DIVERSE)
         {
             Gdx.files.local("out/color_guard/animated_diverse/" + name + '/').mkdirs();
-            for (int n = 0; n < inputs.length; n++) {
-                String s = inputs[n];
+            for (int n = 0; n < ColorGuardData.units.length; n++) {
+                ColorGuardData.Unit unit = ColorGuardData.units[n];
+                String s = unit.name;
                 System.out.println("Rendering " + s);
                 load("specialized/b/vox/color_guard/" + s);
                 Pixmap pixmap;
@@ -166,12 +165,14 @@ public class ColorGuardAssets extends ApplicationAdapter {
                 }
             }
         }
+        // just a single skin/hair combination
         else {
             EACH_INPUT:
-            for (int n = 0; n < inputs.length; n++) {
-                String s = inputs[n];
+            for (int n = 0; n < ColorGuardData.units.length; n++) {
+                ColorGuardData.Unit unit = ColorGuardData.units[n];
+                String s = unit.name;
                 System.out.println("Rendering " + s);
-                load("specialized/b/vox/color_guard/" + s);
+                load("specialized/b/vox/color_guard/" + s + ".vox");
                 Pixmap pixmap;
                 Array<Pixmap> pm = new Array<>(32 * armies.length);
                 pm.setSize(32 * armies.length);
@@ -225,6 +226,27 @@ public class ColorGuardAssets extends ApplicationAdapter {
                 pm.setSize(32 * armies.length);
 
                 if (ATTACKS) {
+                    String attack = unit.primary;
+                    int which = 0;
+                    if(attack == null) continue EACH_INPUT;
+                    if(!EffectGenerator.KNOWN_EFFECTS.containsKey(attack)) {
+                        attack = unit.secondary;
+                        which = 1;
+                        if (attack == null || !EffectGenerator.KNOWN_EFFECTS.containsKey(attack))
+                            continue EACH_INPUT;
+                        if (unit.secondaryPose) {
+                            load("specialized/b/vox/color_guard/" + unit.name + "_Firing.vox");
+                            name = unit.name;
+                            original = voxels.copy();
+                        }
+                    }
+                    else {
+                        if (unit.primaryPose) {
+                            load("specialized/b/vox/color_guard/" + unit.name + "_Firing.vox");
+                            name = unit.name;
+                            original = voxels.copy();
+                        }
+                    }
                     for (int i = 0; i < 4; i++) {
                         frames[0] = original.copy();
                         for (int f = 0; f < frames.length; f++) {
@@ -233,7 +255,9 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                 Stuff.evolve(Stuff.STUFFS_B, frames[f].grids.get(j), f);
                             }
                         }
-                        VoxModel[] anim = EffectGenerator.machineGunAnimation(frames, 0);
+                        EffectGenerator.Effect effect = EffectGenerator.KNOWN_EFFECTS.get(attack);
+                        if(effect == null) continue EACH_INPUT;
+                        VoxModel[] anim = effect.runEffect(frames, which);
                         if(anim == null) continue EACH_INPUT;
                         else frames = anim;
 
