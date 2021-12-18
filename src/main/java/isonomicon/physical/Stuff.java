@@ -210,7 +210,7 @@ public class Stuff {
             new Stuff("rusted metal", 3, "Metal", "Reflection 0.04 Roughness 0.4 Vary -0.4"),
             new Stuff("dull metal", 4, "Metal", "Reflection 0.15 Roughness 0.8"),
             new Stuff("scratched metal", 5, "Metal", "Reflection 0.5 Roughness 0.65"),
-            new Stuff("polished metal", 6, "Metal", "Reflection 0.8 Roughness 0.2", 89, 1, 6, 16),
+            new Stuff("polished metal", 6, "Metal", "Reflection 0.8 Roughness 0.2"),
             new Stuff("snow", 7, "Roughness 0.9 Reflection 0.4"), /*white*/
             new Stuff("sickly leaf", 8, "Roughness 0.2 Reflection 0.25 Vary -0.35"), /*light lime*/
             new Stuff("unripe fruit or bud", 9, "Roughness 0.6 Reflection 0.3 Dapple -0.1"),
@@ -294,7 +294,7 @@ public class Stuff {
             new Stuff("splash rise", 86, "Roughness 0.6 Reflection 0.6 Flow 0.4 Rise 0.1", 86, 2, 87, 6, 85, 1),
             new Stuff("splash highest", 87, "Roughness 0.7 Reflection 0.95 Flow 0.6", 87, 2, 88, 6, 86, 1),
             new Stuff("splash curl", 88, "Roughness 0.5 Reflection 0.5 Flow 0.5 Rise -0.1", 88, 2, 85, 6, 87, 1),
-            new Stuff("metal glint", 89, "Roughness 0.2 Reflection 1.0 Emission 0.5", 89, 1, 6, 14), /*light azure*/
+            new Stuff("metal glint", 89, "Roughness 0.2 Reflection 1.0 Emission 0.5", 89, 1, 146, 14), /*light azure*/
             new Stuff("blue glass", 90, "Transparency 0.5 Roughness 0.0 Reflection 0.65"), /*light blue*/
             new Stuff("speech particle", 91, "Roughness 0.0 Reflection 0.0 Flow 0.2 Rise 0.6 Missing 0.08", 91, 1, 92, 1),
             new Stuff("speech spawner", 92, "Transparency 1.0", 92, 3, 91, 4),
@@ -351,8 +351,8 @@ public class Stuff {
             new Stuff("unused 142", 142, "Transparency 1.0"),
             new Stuff("unused 143", 143, "Transparency 1.0"),
             new Stuff("unused 144", 144, "Transparency 1.0"),
-            new Stuff("unused 145", 145, "Transparency 1.0"),
-            new Stuff("unused 146", 146, "Transparency 1.0"),
+            new Stuff("unused 145", 145, "Transparency 1.0"),/*light green*/
+            new Stuff("gleaming metal", 146, 6, "Metal", "Reflection 0.9 Roughness 0.15", 89, 1, 146, 16),/*light cyan*/
             new Stuff("unused 147", 147, "Transparency 1.0"),
             new Stuff("unused 148", 148, "Transparency 1.0"),
             new Stuff("unused 149", 149, "Transparency 1.0"),

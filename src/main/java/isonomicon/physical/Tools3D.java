@@ -1,6 +1,5 @@
 package isonomicon.physical;
 
-import com.github.tommyettinger.anim8.PaletteReducer;
 import squidpony.StringKit;
 import squidpony.squidmath.CrossHash;
 

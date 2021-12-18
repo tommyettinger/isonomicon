@@ -24,11 +24,9 @@ import isonomicon.visual.Coloring;
 import isonomicon.visual.ShaderUtils;
 import isonomicon.visual.SpecialRenderer;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class ColorGuardAssets extends ApplicationAdapter {
     public static boolean DIVERSE = false;
@@ -222,10 +220,9 @@ public class ColorGuardAssets extends ApplicationAdapter {
                     if (!pix.isDisposed())
                         pix.dispose();
                 }
-                pm.clear();
-                pm.setSize(32 * armies.length);
-
                 if (ATTACKS) {
+                    pm.clear();
+                    pm.setSize(32 * armies.length);
                     String attack = unit.primary;
                     int which = 0;
                     if(attack == null) continue EACH_INPUT;

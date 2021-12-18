@@ -18,7 +18,6 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.github.tommyettinger.colorful.oklab.ColorTools;
 import isonomicon.physical.Stuff;
-import isonomicon.physical.VoxMaterial;
 import squidpony.ArrayTools;
 import squidpony.squidmath.OrderedMap;
 

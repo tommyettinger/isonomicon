@@ -1,7 +1,6 @@
 package isonomicon.io.extended;
 
 import com.badlogic.gdx.math.Vector3;
-import com.github.tommyettinger.ds.IntFloatMap;
 import com.github.tommyettinger.ds.IntObjectMap;
 import com.github.tommyettinger.ds.LongOrderedSet;
 import isonomicon.io.LittleEndianDataInputStream;
@@ -11,7 +10,6 @@ import squidpony.StringKit;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.Iterator;
 import java.util.PrimitiveIterator;
 
 import static isonomicon.io.VoxIO.lastMaterials;
