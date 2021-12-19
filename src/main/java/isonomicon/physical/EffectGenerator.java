@@ -23,6 +23,12 @@ public class EffectGenerator {
     );
 
     public static final EnhancedRandom r = new FourWheelRandom(123456789L);
+
+    public static final int smoke = 67;
+    public static final int hotFire = 114;
+    public static final int yellowFire = 115;
+    public static final int sparks = 127;
+
     public static byte[][][][] fireballAnimation(byte[][][] initial, int frames, int trimLevel, int blowback){
         final int xSize = initial.length, ySize = initial[0].length, zSize = initial[0][0].length;
         byte[][][][] result = new byte[frames][xSize][ySize][zSize];
@@ -263,17 +269,17 @@ public class EffectGenerator {
                             continue;
                         }
                         int lx = ((int) (launcher) & 0xFFFFF), ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) (launcher >>> 40) & 0xFFFFF;
-                        ShapeGenerator.line(grid, lx, ly, lz, lx + 7, ly, lz, 127, minorLimit);
+                        ShapeGenerator.line(grid, lx, ly, lz, lx + 7, ly, lz, sparks, minorLimit);
 
-                        ShapeGenerator.line(grid, lx, ly, lz, lx + 5, ly, lz + 2, 127, minorLimit);
-                        ShapeGenerator.line(grid, lx, ly, lz, lx + 5, ly, lz - 2, 127, minorLimit);
-                        ShapeGenerator.line(grid, lx, ly, lz, lx + 5, ly + 2, lz, 127, minorLimit);
-                        ShapeGenerator.line(grid, lx, ly, lz, lx + 5, ly - 2, lz, 127, minorLimit);
+                        ShapeGenerator.line(grid, lx, ly, lz, lx + 5, ly, lz + 2, sparks, minorLimit);
+                        ShapeGenerator.line(grid, lx, ly, lz, lx + 5, ly, lz - 2, sparks, minorLimit);
+                        ShapeGenerator.line(grid, lx, ly, lz, lx + 5, ly + 2, lz, sparks, minorLimit);
+                        ShapeGenerator.line(grid, lx, ly, lz, lx + 5, ly - 2, lz, sparks, minorLimit);
 
-                        ShapeGenerator.line(grid, lx, ly, lz, lx + 3, ly + 2, lz + 2, 127, minorLimit);
-                        ShapeGenerator.line(grid, lx, ly, lz, lx + 3, ly - 2, lz + 2, 127, minorLimit);
-                        ShapeGenerator.line(grid, lx, ly, lz, lx + 3, ly + 2, lz - 2, 127, minorLimit);
-                        ShapeGenerator.line(grid, lx, ly, lz, lx + 3, ly - 2, lz - 2, 127, minorLimit);
+                        ShapeGenerator.line(grid, lx, ly, lz, lx + 3, ly + 2, lz + 2, sparks, minorLimit);
+                        ShapeGenerator.line(grid, lx, ly, lz, lx + 3, ly - 2, lz + 2, sparks, minorLimit);
+                        ShapeGenerator.line(grid, lx, ly, lz, lx + 3, ly + 2, lz - 2, sparks, minorLimit);
+                        ShapeGenerator.line(grid, lx, ly, lz, lx + 3, ly - 2, lz - 2, sparks, minorLimit);
                     }
                 } else {
                     for (int ln = 0; ln < launchers.size(); ln++) {
@@ -283,7 +289,7 @@ public class EffectGenerator {
                             continue;
                         }
                         int lx = ((int) (launcher) & 0xFFFFF), ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) (launcher >>> 40) & 0xFFFFF;
-                        ShapeGenerator.line(grid, lx + 2, ly, lz, lx + 9, ly, lz, 115, majorLimit);
+                        ShapeGenerator.line(grid, lx + 2, ly, lz, lx + 9, ly, lz, yellowFire, majorLimit);
 
                         currentlyFiring = (currentlyFiring + 1) % ((launchers.size() >>> 2) + 1);
                     }
@@ -395,17 +401,17 @@ public class EffectGenerator {
                 {
                     long launcher = launchers.get(currentlyFiring);
                     int lx = ((int) (launcher) & 0xFFFFF), ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) (launcher >>> 40) & 0xFFFFF;
-                    ShapeGenerator.box(grid, lx, ly-1, lz-1, lx+8, ly+1, lz+1, 115);
-                    ShapeGenerator.box(grid, lx+2, ly+1, lz-1, lx+4, ly+3, lz+1, 114);
-                    ShapeGenerator.box(grid, lx+2, ly-3, lz-1, lx+4, ly-1, lz+1, 114);
-                    ShapeGenerator.box(grid, lx+2, ly-1, lz+1, lx+4, ly+1, lz+3, 114);
-                    ShapeGenerator.box(grid, lx+2, ly-1, lz-3, lx+4, ly+1, lz-1, 114);
+                    ShapeGenerator.box(grid, lx, ly-1, lz-1, lx+8, ly+1, lz+1, yellowFire);
+                    ShapeGenerator.box(grid, lx+2, ly+1, lz-1, lx+4, ly+3, lz+1, hotFire);
+                    ShapeGenerator.box(grid, lx+2, ly-3, lz-1, lx+4, ly-1, lz+1, hotFire);
+                    ShapeGenerator.box(grid, lx+2, ly-1, lz+1, lx+4, ly+1, lz+3, hotFire);
+                    ShapeGenerator.box(grid, lx+2, ly-1, lz-3, lx+4, ly+1, lz-1, hotFire);
                 }
                 if(currentlyFiring <= launchers.size() && currentlyFiring > 0)
                 {
                     long launcher = launchers.get(currentlyFiring-1);
                     int lx = ((int) (launcher) & 0xFFFFF), ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) (launcher >>> 40) & 0xFFFFF;
-                    ShapeGenerator.box(grid, lx+4, ly-1, lz-1, lx+10, ly+1, lz+1, 115);
+                    ShapeGenerator.box(grid, lx+4, ly-1, lz-1, lx+10, ly+1, lz+1, yellowFire);
                 }
             }
         }
@@ -470,6 +476,7 @@ public class EffectGenerator {
         final int gridLimit = next[0].grids.size();
         boolean foundAny = false;
         Choice choose1of10 = ((x, y, z) -> r.nextInt(10) != 0);
+        Choice choose1of2 = ((x, y, z) -> r.nextLong() < 0L);
 
         for (int g = 0; g < gridLimit; g++) {
             LongOrderedSet ls = next[0].markers.get(g).get(201 + which * 8);
@@ -484,23 +491,58 @@ public class EffectGenerator {
                     for (int ln = 0; ln < launchers.size(); ln++) {
                         long launcher = launchers.get(ln);
                         int lx = ((int) (launcher) & 0xFFFFF), ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) (launcher >>> 40) & 0xFFFFF;
-                        ShapeGenerator.line(grid, lx, ly, lz, lx + 12, ly, lz, 115 - r.next(1), choose1of10);
-                        ShapeGenerator.line(grid, lx, ly, lz, lx + 10, ly, lz + 8, 115 - r.next(1), choose1of10);
-                        ShapeGenerator.line(grid, lx, ly, lz, lx + 10, ly, lz - 8, 115 - r.next(1), choose1of10);
-                        ShapeGenerator.line(grid, lx, ly, lz, lx + 10, ly + 8, lz, 115 - r.next(1), choose1of10);
-                        ShapeGenerator.line(grid, lx, ly, lz, lx + 10, ly - 8, lz, 115 - r.next(1), choose1of10);
-                        ShapeGenerator.line(grid, lx, ly, lz, lx + 10, ly + 5, lz + 5, 115 - r.next(1), choose1of10);
-                        ShapeGenerator.line(grid, lx, ly, lz, lx + 10, ly + 5, lz - 5, 115 - r.next(1), choose1of10);
-                        ShapeGenerator.line(grid, lx, ly, lz, lx + 10, ly - 5, lz + 5, 115 - r.next(1), choose1of10);
-                        ShapeGenerator.line(grid, lx, ly, lz, lx + 10, ly - 5, lz - 5, 115 - r.next(1), choose1of10);
-                        ShapeGenerator.line(grid, lx, ly, lz, lx + 10, ly + 3, lz + 5, 115 - r.next(1), choose1of10);
-                        ShapeGenerator.line(grid, lx, ly, lz, lx + 10, ly + 3, lz - 5, 115 - r.next(1), choose1of10);
-                        ShapeGenerator.line(grid, lx, ly, lz, lx + 10, ly - 3, lz + 5, 115 - r.next(1), choose1of10);
-                        ShapeGenerator.line(grid, lx, ly, lz, lx + 10, ly - 3, lz - 5, 115 - r.next(1), choose1of10);
-                        ShapeGenerator.line(grid, lx, ly, lz, lx + 10, ly + 5, lz + 3, 115 - r.next(1), choose1of10);
-                        ShapeGenerator.line(grid, lx, ly, lz, lx + 10, ly + 5, lz - 3, 115 - r.next(1), choose1of10);
-                        ShapeGenerator.line(grid, lx, ly, lz, lx + 10, ly - 5, lz + 3, 115 - r.next(1), choose1of10);
-                        ShapeGenerator.line(grid, lx, ly, lz, lx + 10, ly - 5, lz - 3, 115 - r.next(1), choose1of10);
+                        ShapeGenerator.line(grid, lx, ly, lz, lx + 12, ly, lz, yellowFire - r.next(1), choose1of10);
+                        ShapeGenerator.line(grid, lx, ly, lz, lx + 10, ly, lz + 8, yellowFire - r.next(1), choose1of10);
+                        ShapeGenerator.line(grid, lx, ly, lz, lx + 10, ly, lz - 8, yellowFire - r.next(1), choose1of10);
+                        ShapeGenerator.line(grid, lx, ly, lz, lx + 10, ly + 8, lz, yellowFire - r.next(1), choose1of10);
+                        ShapeGenerator.line(grid, lx, ly, lz, lx + 10, ly - 8, lz, yellowFire - r.next(1), choose1of10);
+                        ShapeGenerator.line(grid, lx, ly, lz, lx + 10, ly + 5, lz + 5, yellowFire - r.next(1), choose1of10);
+                        ShapeGenerator.line(grid, lx, ly, lz, lx + 10, ly + 5, lz - 5, yellowFire - r.next(1), choose1of10);
+                        ShapeGenerator.line(grid, lx, ly, lz, lx + 10, ly - 5, lz + 5, yellowFire - r.next(1), choose1of10);
+                        ShapeGenerator.line(grid, lx, ly, lz, lx + 10, ly - 5, lz - 5, yellowFire - r.next(1), choose1of10);
+                        ShapeGenerator.line(grid, lx, ly, lz, lx + 10, ly + 3, lz + 5, yellowFire - r.next(1), choose1of10);
+                        ShapeGenerator.line(grid, lx, ly, lz, lx + 10, ly + 3, lz - 5, yellowFire - r.next(1), choose1of10);
+                        ShapeGenerator.line(grid, lx, ly, lz, lx + 10, ly - 3, lz + 5, yellowFire - r.next(1), choose1of10);
+                        ShapeGenerator.line(grid, lx, ly, lz, lx + 10, ly - 3, lz - 5, yellowFire - r.next(1), choose1of10);
+                        ShapeGenerator.line(grid, lx, ly, lz, lx + 10, ly + 5, lz + 3, yellowFire - r.next(1), choose1of10);
+                        ShapeGenerator.line(grid, lx, ly, lz, lx + 10, ly + 5, lz - 3, yellowFire - r.next(1), choose1of10);
+                        ShapeGenerator.line(grid, lx, ly, lz, lx + 10, ly - 5, lz + 3, yellowFire - r.next(1), choose1of10);
+                        ShapeGenerator.line(grid, lx, ly, lz, lx + 10, ly - 5, lz - 3, yellowFire - r.next(1), choose1of10);
+                    }
+                }
+
+                if(f == 1 || f == 2) {
+                    for (int ln = 0; ln < launchers.size(); ln++) {
+                        long launcher = launchers.get(ln);
+                        int lx = ((int) (launcher) & 0xFFFFF), ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) (launcher >>> 40) & 0xFFFFF;
+                        ShapeGenerator.line(grid, lx, ly, lz, lx + 10, ly, lz, yellowFire - r.next(1), choose1of10);
+                        ShapeGenerator.line(grid, lx, ly, lz, lx + 8, ly, lz + 6, yellowFire - r.next(1), choose1of10);
+                        ShapeGenerator.line(grid, lx, ly, lz, lx + 8, ly, lz - 6, yellowFire - r.next(1), choose1of10);
+                        ShapeGenerator.line(grid, lx, ly, lz, lx + 8, ly + 6, lz, yellowFire - r.next(1), choose1of10);
+                        ShapeGenerator.line(grid, lx, ly, lz, lx + 8, ly - 6, lz, yellowFire - r.next(1), choose1of10);
+                        ShapeGenerator.line(grid, lx, ly, lz, lx + 8, ly + 4, lz + 4, yellowFire - r.next(1), choose1of10);
+                        ShapeGenerator.line(grid, lx, ly, lz, lx + 8, ly + 4, lz - 4, yellowFire - r.next(1), choose1of10);
+                        ShapeGenerator.line(grid, lx, ly, lz, lx + 8, ly - 4, lz + 4, yellowFire - r.next(1), choose1of10);
+                        ShapeGenerator.line(grid, lx, ly, lz, lx + 8, ly - 4, lz - 4, yellowFire - r.next(1), choose1of10);
+                        ShapeGenerator.line(grid, lx, ly, lz, lx + 8, ly + 2, lz + 4, yellowFire - r.next(1), choose1of10);
+                        ShapeGenerator.line(grid, lx, ly, lz, lx + 8, ly + 2, lz - 4, yellowFire - r.next(1), choose1of10);
+                        ShapeGenerator.line(grid, lx, ly, lz, lx + 8, ly - 2, lz + 4, yellowFire - r.next(1), choose1of10);
+                        ShapeGenerator.line(grid, lx, ly, lz, lx + 8, ly - 2, lz - 4, yellowFire - r.next(1), choose1of10);
+                        ShapeGenerator.line(grid, lx, ly, lz, lx + 8, ly + 4, lz + 2, yellowFire - r.next(1), choose1of10);
+                        ShapeGenerator.line(grid, lx, ly, lz, lx + 8, ly + 4, lz - 2, yellowFire - r.next(1), choose1of10);
+                        ShapeGenerator.line(grid, lx, ly, lz, lx + 8, ly - 4, lz + 2, yellowFire - r.next(1), choose1of10);
+                        ShapeGenerator.line(grid, lx, ly, lz, lx + 8, ly - 4, lz - 2, yellowFire - r.next(1), choose1of10);
+                    }
+                }
+                else if(f == 3) {
+                    for (int ln = 0; ln < launchers.size(); ln++) {
+                        long launcher = launchers.get(ln);
+                        int lx = ((int) (launcher) & 0xFFFFF), ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) (launcher >>> 40) & 0xFFFFF;
+                        ShapeGenerator.line(grid, lx, ly, lz, lx + 5, ly, lz, smoke, choose1of2);
+                        ShapeGenerator.line(grid, lx, ly, lz, lx + 5, ly + 2, lz + 2, smoke, choose1of2);
+                        ShapeGenerator.line(grid, lx, ly, lz, lx + 5, ly + 2, lz, smoke, choose1of2);
+                        ShapeGenerator.line(grid, lx, ly, lz, lx + 5, ly - 2, lz + 2, smoke, choose1of2);
+                        ShapeGenerator.line(grid, lx, ly, lz, lx + 5, ly - 2, lz, smoke, choose1of2);
                     }
                 }
             }
