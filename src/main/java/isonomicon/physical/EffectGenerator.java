@@ -590,16 +590,22 @@ public class EffectGenerator {
                         ShapeGenerator.ball(grid, lx + 5, ly - r.nextInt(3, 9), lz + 10, 1.45, smoke, choose1of16);
                     }
                 }
-                if(f == 2 || f == 4){
-                    next[f].grids.set(g, Tools3D.translateCopy(grid, -1, 0, 0));
+                if(f == 2){
+                    next[f].grids.set(g, Tools3D.translateCopy(grid, -3, 0, 0));
                     for(float[] fa : next[f].links.get(g).values()){
-                        fa[0] -= 1f;
+                        fa[0] -= 3f;
                     }
                 }
                 else if(f == 3){
                     next[f].grids.set(g, Tools3D.translateCopy(grid, -2, 0, 0));
                     for(float[] fa : next[f].links.get(g).values()){
                         fa[0] -= 2f;
+                    }
+                }
+                else if(f == 4){
+                    next[f].grids.set(g, Tools3D.translateCopy(grid, -1, 0, 0));
+                    for(float[] fa : next[f].links.get(g).values()){
+                        fa[0] -= 1f;
                     }
                 }
             }
