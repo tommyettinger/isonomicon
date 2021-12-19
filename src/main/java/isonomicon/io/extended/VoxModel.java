@@ -46,11 +46,19 @@ public class VoxModel {
         }
         next.grids = nextGrids;
         for (int i = 0; i < links.size(); i++) {
-            nextLinks.add(new IntObjectMap<>(links.get(i)));
+            IntObjectMap<float[]> ls = new IntObjectMap<>(links.get(i).size());
+            for(IntObjectMap.Entry<float[]> e : links.get(i)){
+                ls.put(e.key, Arrays.copyOf(e.value, 4));
+            }
+            nextLinks.add(ls);
         }
         next.links = nextLinks;
         for (int i = 0; i < markers.size(); i++) {
-            nextMarkers.add(new IntObjectMap<>(markers.get(i)));
+            IntObjectMap<LongOrderedSet> ms = new IntObjectMap<>(markers.get(i));
+            for(IntObjectMap.Entry<LongOrderedSet> e : markers.get(i)){
+                ms.put(e.key, new LongOrderedSet(e.value));
+            }
+            nextMarkers.add(ms);
         }
         next.markers = nextMarkers;
         return next;
