@@ -30,7 +30,7 @@ public class SpecialRenderer {
     public Pixmap palettePixmap;
     public int[][] depths, voxels, render, outlines;
     public VoxMaterial[][] materials;
-    public float[][] shadeX, shadeZ, shading, outlineShading, saturation;
+    public float[][] shadeX, shadeZ, shading, midShading, outlineShading, saturation;
     public byte[][] indices, outlineIndices;
     public int[] palette;
     public float[] paletteL, paletteA, paletteB;
@@ -60,6 +60,7 @@ public class SpecialRenderer {
         indices =  new byte[w][h];
         outlineIndices =  new byte[w][h];
         shading =  new float[w][h];
+        midShading =  new float[w][h];
         saturation =  new float[w][h];
         outlineShading = new float[w][h];
         materials = new VoxMaterial[w][h];
@@ -209,6 +210,7 @@ public class SpecialRenderer {
         fill(shadeX, -1f);
         fill(shadeZ, -1f);
         fill(shading, 0f);
+        fill(midShading, 0f);
         fill(saturation, 0f);
         fill(outlineShading, -1f);
         for (int i = 0; i < materials.length; i++) {
@@ -315,7 +317,7 @@ public class SpecialRenderer {
                                 final int dist = i * i + j * j;
                                 if(dist > radius * radius || si < 0 || sj < 0 || si > xSize || sj > ySize) continue;
                                 float change = spread * (radius - (float) Math.sqrt(dist));
-                                shading[si][sj] += change;
+                                midShading[si][sj] = Math.min(midShading[si][sj] + change, 0.3f);
                             }
                         }
                     }
@@ -374,7 +376,7 @@ public class SpecialRenderer {
         for (int x = xSize; x >= 0; x--) {
             for (int y = ySize; y >= 0; y--) {
                 if (indices[x][y] != 0) {
-                    float shade = Math.min(Math.max((shading[x][y]) * 0.625f + 0.1328125f, 0f), 1f);
+                    float shade = Math.min(Math.max((shading[x][y] + midShading[x][y]) * 0.625f + 0.1328125f, 0f), 1f);
 //                    float shade = Math.min(Math.max((shading[x][y]) * 0.625f + 0.125f, 0f), 1f);
                     float sat = Math.min(Math.max((saturation[x][y]) * 0.5f + 0.5f, 0f), 1f);
                     palettePixmap.drawPixel(x >>> shrink, y >>> shrink, (indices[x][y] & 255) << 24 |
@@ -421,6 +423,7 @@ public class SpecialRenderer {
         fill(depths, 0);
         fill(render, 0);
         fill(shading, 0f);
+        fill(midShading, 0f);
         fill(saturation, 0f);
         fill(outlineShading, 0f);
         fill(outlines, (byte) 0);
