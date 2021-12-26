@@ -259,7 +259,7 @@ public class EffectGenerator {
             Choice majorLimit = ((x, y, z) -> r.nextInt(10) > 2);
             Choice minorLimit = ((x, y, z) -> r.nextInt(10) > 1);
             for (int f = 0; f < count - 2; f++) {
-                byte[][][] grid = next[f].grids.get(g);
+                byte[][][] grid = next[f+1].grids.get(g);
                 int currentlyFiring = f % ((launchers.size() >>> 2) + 1);
                 if ((currentlyFiring & 1) == 0) {
                     for (int ln = 0; ln < launchers.size(); ln++) {
@@ -395,7 +395,7 @@ public class EffectGenerator {
             foundAny = true;
             LongList launchers = ls.order();
             for (int f = 0; f < count - 2; f++) {
-                byte[][][] grid = next[f].grids.get(g);
+                byte[][][] grid = next[f+1].grids.get(g);
                 int currentlyFiring = f & 3;
                 if(currentlyFiring < launchers.size())
                 {
@@ -489,7 +489,7 @@ public class EffectGenerator {
             foundAny = true;
             LongList launchers = ls.order();
             for (int f = 0; f < count - 2; f++) {
-                byte[][][] grid = next[f].grids.get(g);
+                byte[][][] grid = next[f+1].grids.get(g);
 
                 if(f == 0 || f == 1) {
                     for (int ln = 0; ln < launchers.size(); ln++) {
@@ -591,20 +591,20 @@ public class EffectGenerator {
                     }
                 }
                 if(f == 2){
-                    next[f].grids.set(g, Tools3D.translateCopy(grid, -3, 0, 0));
-                    for(float[] fa : next[f].links.get(g).values()){
+                    next[f+1].grids.set(g, Tools3D.translateCopy(grid, -3, 0, 0));
+                    for(float[] fa : next[f+1].links.get(g).values()){
                         fa[0] -= 3f;
                     }
                 }
                 else if(f == 3){
-                    next[f].grids.set(g, Tools3D.translateCopy(grid, -2, 0, 0));
-                    for(float[] fa : next[f].links.get(g).values()){
+                    next[f+1].grids.set(g, Tools3D.translateCopy(grid, -2, 0, 0));
+                    for(float[] fa : next[f+1].links.get(g).values()){
                         fa[0] -= 2f;
                     }
                 }
                 else if(f == 4){
-                    next[f].grids.set(g, Tools3D.translateCopy(grid, -1, 0, 0));
-                    for(float[] fa : next[f].links.get(g).values()){
+                    next[f+1].grids.set(g, Tools3D.translateCopy(grid, -1, 0, 0));
+                    for(float[] fa : next[f+1].links.get(g).values()){
                         fa[0] -= 1f;
                     }
                 }
@@ -614,7 +614,6 @@ public class EffectGenerator {
 
         return next;
     }
-
 
     /*
             public static MagicaVoxelData[][] CannonAnimationLarge(MagicaVoxelData[][] parsedFrames, int unit, int which)
