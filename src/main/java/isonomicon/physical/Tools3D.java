@@ -512,6 +512,7 @@ public class Tools3D {
             }
         }
     }
+    
     public static int flood(byte[][][] base, byte[][][] bounds)
     {
         final int xs = base.length, ys = base[0].length, zs = base[0][0].length;
@@ -615,7 +616,7 @@ public class Tools3D {
             return next;
         for (int x = xStart, xx = 0; x < xs && xx < xLimit && xx < xs; x++, xx++) {
             for (int y = yStart, yy = 0; y < ys && yy < yLimit && yy < ys; y++, yy++) {
-                System.arraycopy(voxels[x][y], 0, next[xx][yy], zStart, zLimit);
+                System.arraycopy(voxels[x][y], zStart, next[xx][yy], 0, zLimit);
             }
         }
         return next;
