@@ -1126,7 +1126,6 @@ public class EffectGenerator {
             LongOrderedSet ts = next[0].markers.get(g).get(trail + which * 8);
             foundAny = true;
             LongList launchers = new LongList(ls.size() >>> 3);
-            int size = next[0].grids.get(g).length;
             for (int i = 0; i < ls.size(); i++) {
                 long launcher = ls.getAt(i);
                 int lx = ((int) (launcher) & 0xFFFFF), ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) (launcher >>> 40) & 0xFFFFF;
@@ -1405,4 +1404,242 @@ public class EffectGenerator {
             return voxelFrames;
         }
      */
+    public static VoxModel[] arcMissileAnimation(VoxModel[] frames, int which){
+        int count = frames.length;
+        VoxModel[] next = new VoxModel[count];
+        for (int i = 0; i < count; i++) {
+            next[i] = frames[i].copy();
+        }
+        final int gridLimit = next[0].grids.size();
+        boolean foundAny = false;
+        Choice choose3of4 = ((x, y, z) -> r.next(2) != 0);
+        Choice choose4of5 = ((x, y, z) -> r.nextInt(5) != 0);
+        Choice choose1of20 = ((x, y, z) -> r.nextInt(20) == 0);
+        Choice choose1of5 = ((x, y, z) -> r.nextInt(5) == 0);
+        Choice choose1of512 = ((x, y, z) -> r.next(9) == 0);
+        Choice choose1of2 = ((x, y, z) -> r.nextLong() < 0L);
+
+        for (int g = 0; g < gridLimit; g++) {
+            LongOrderedSet ls = next[0].markers.get(g).get(launch + which * 8);
+            if (ls == null)
+                continue;
+            LongOrderedSet ts = next[0].markers.get(g).get(trail + which * 8);
+            foundAny = true;
+            LongList launchers = new LongList(ls.size() >>> 3);
+            for (int i = 0; i < ls.size(); i++) {
+                long launcher = ls.getAt(i);
+                int lx = ((int) (launcher) & 0xFFFFF), ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) (launcher >>> 40) & 0xFFFFF;
+                // dependent on whether the model was doubled in resolution or more; this assumes doubled.
+                if(((lx | ly | lz) & 1L) == 0) {
+                    launchers.add(launcher);
+                }
+            }
+            LongList trails = ts == null ? new LongList() : ts.order();
+            for (int f = 0; f < count - 2; f++) {
+                byte[][][] grid = next[f+1].grids.get(g);
+
+                if(f == 0) {
+                    for (int ln = 0; ln < launchers.size(); ln++) {
+                        long launcher = launchers.get(ln);
+                        int lx = ((int) (launcher) & 0xFFFFF), ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) (launcher >>> 40) & 0xFFFFF;
+                        ShapeGenerator.box(grid, lx - 4, ly + 1, lz - 4, lx + 2, ly + 6, lz + 2, missileHead);
+                    }
+                }
+                else if(f == 1) {
+                    for (int ln = 0; ln < launchers.size(); ln++) {
+                        long launcher = launchers.get(ln);
+                        int lx = ((int) (launcher) & 0xFFFFF), ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) (launcher >>> 40) & 0xFFFFF;
+                        ShapeGenerator.box(grid, lx + 4, ly + 1, lz + 4, lx + 10, ly + 6, lz + 10, missileHead);
+                        for (int y = 1; y <= 6; y++) {
+                            for (int d = 0; d < 6; d++) {
+                                ShapeGenerator.line(grid, lx-4+d, ly+y, lz-4-d, lx + 10 + d, ly + y, lz + 10 - d, missileBody);
+                            }
+                        }
+                    }
+                }
+                else if(f == 2) {
+                    for (int ln = 0; ln < launchers.size(); ln++) {
+                        long launcher = launchers.get(ln);
+                        int lx = ((int) (launcher) & 0xFFFFF), ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) (launcher >>> 40) & 0xFFFFF;
+                        ShapeGenerator.box(grid, lx + 28, ly, lz, lx + 31, ly + 3, lz + 3, missileHead);
+                        ShapeGenerator.box(grid, lx, ly, lz, lx + 27, ly + 3, lz + 3, missileBody);
+                    }
+                    for (int tr = 0; tr < trails.size(); tr++) {
+                        long trail = trails.get(tr);
+                        int lx = ((int) (trail) & 0xFFFFF), ly = ((int) (trail >>> 20) & 0xFFFFF), lz = (int) (trail >>> 40) & 0xFFFFF;
+                        ShapeGenerator.line(grid, lx - 8, ly, lz, lx - 2, ly, lz, yellowFire);
+                        ShapeGenerator.box(grid, lx - 6, ly-1, lz-1, lx, ly+1, lz+1, hotFire);
+                        ShapeGenerator.box(grid, lx - 4, ly-2, lz, lx-1, ly+2, lz, hotFire);
+                        ShapeGenerator.box(grid, lx - 4, ly, lz-2, lx-1, ly, lz+2, hotFire);
+
+                        ShapeGenerator.ball(grid, lx - 8, ly + 4, lz, 1.45, smoke, choose3of4);
+                        ShapeGenerator.ball(grid, lx - 8, ly - 4, lz, 1.45, smoke, choose3of4);
+                        ShapeGenerator.box(grid, lx - 12, ly - 4, lz - 1, lx - 8, ly + 4, lz + 1, smoke, choose1of2);
+
+                        ShapeGenerator.ball(grid, lx - 4, ly + 4, lz + 2, 1.45, smoke, choose3of4);
+                        ShapeGenerator.ball(grid, lx - 4, ly - 4, lz + 2, 1.45, smoke, choose3of4);
+                        ShapeGenerator.box(grid, lx - 12, ly - 4, lz + 1, lx - 4, ly + 4, lz + 3, smoke, choose1of2);
+                    }
+                }
+                else if(f == 3) {
+                    for (int ln = 0; ln < launchers.size(); ln++) {
+                        long launcher = launchers.get(ln);
+                        int lx = ((int) (launcher) & 0xFFFFF), ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) (launcher >>> 40) & 0xFFFFF;
+                        ShapeGenerator.box(grid, lx + 44, ly, lz, lx + 47, ly + 3, lz + 3, missileHead);
+                        ShapeGenerator.box(grid, lx + 16, ly, lz, lx + 43, ly + 3, lz + 3, missileBody);
+                        ShapeGenerator.box(grid, lx + 4, ly, lz, lx + 15, ly + 3, lz + 3, yellowFire);
+                    }
+                    for (int tr = 0; tr < trails.size(); tr++) {
+                        long trail = trails.get(tr);
+                        int lx = ((int) (trail) & 0xFFFFF), ly = ((int) (trail >>> 20) & 0xFFFFF), lz = (int) (trail >>> 40) & 0xFFFFF;
+                        ShapeGenerator.line(grid, lx - 8, ly, lz, lx - 2, ly, lz, yellowFire);
+                        ShapeGenerator.box(grid, lx - 6, ly-1, lz-1, lx, ly+1, lz+1, hotFire);
+                        ShapeGenerator.box(grid, lx - 4, ly-2, lz, lx-1, ly+2, lz, hotFire);
+                        ShapeGenerator.box(grid, lx - 4, ly, lz-2, lx-1, ly, lz+2, hotFire);
+
+                        ShapeGenerator.box(grid, lx - 10, ly - 2, lz - 2, lx - 5, ly + 2, lz + 2, hotFire, choose4of5);
+                        ShapeGenerator.box(grid, lx - 12, ly - 5, lz - 1, lx - 8, ly + 5, lz + 1, hotFire, choose4of5);
+                        ShapeGenerator.box(grid, lx - 12, ly - 1, lz - 5, lx - 8, ly + 1, lz + 5, hotFire, choose4of5);
+
+                        ShapeGenerator.box(grid, lx - 16, ly - 4, lz, lx - 11, ly + 4, lz + 7, smoke, choose4of5);
+                    }
+                }
+                else if(f == 4) {
+                    for (int ln = 0; ln < launchers.size(); ln++) {
+                        long launcher = launchers.get(ln);
+                        int lx = ((int) (launcher) & 0xFFFFF), ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) (launcher >>> 40) & 0xFFFFF;
+                        ShapeGenerator.box(grid, lx + 44 + 16, ly, lz, lx + 47 + 16, ly + 3, lz + 3, missileHead);
+                        ShapeGenerator.box(grid, lx + 16 + 16, ly, lz, lx + 43 + 16, ly + 3, lz + 3, missileBody);
+                        ShapeGenerator.box(grid, lx + 4 + 16, ly, lz, lx + 15 + 16, ly + 3, lz + 3, yellowFire);
+                    }
+                    for (int tr = 0; tr < trails.size(); tr++) {
+                        long trail = trails.get(tr);
+                        int lx = ((int) (trail) & 0xFFFFF), ly = ((int) (trail >>> 20) & 0xFFFFF), lz = (int) (trail >>> 40) & 0xFFFFF;
+                        ShapeGenerator.ball(grid, lx - 12, ly + 4 + r.nextInt(-4, 5), lz, 1.45, smoke, choose3of4);
+                        ShapeGenerator.ball(grid, lx - 12, ly - 4 + r.nextInt(-4, 5), lz, 1.45, smoke, choose3of4);
+                        ShapeGenerator.ball(grid, lx - 12, ly + 4 + r.nextInt(-4, 5), lz + 2, 1.45, smoke, choose3of4);
+                        ShapeGenerator.ball(grid, lx - 12, ly - 4 + r.nextInt(-4, 5), lz + 2, 1.45, smoke, choose3of4);
+
+                        ShapeGenerator.ball(grid, lx - 16, ly + 4 + r.nextInt(-4, 5), lz + 1, 1.45, smoke, choose3of4);
+                        ShapeGenerator.ball(grid, lx - 16, ly - 4 + r.nextInt(-4, 5), lz + 1, 1.45, smoke, choose3of4);
+                        ShapeGenerator.ball(grid, lx - 16, ly + 4 + r.nextInt(-4, 5), lz + 3, 1.45, smoke, choose3of4);
+                        ShapeGenerator.ball(grid, lx - 16, ly - 4 + r.nextInt(-4, 5), lz + 3, 1.45, smoke, choose3of4);
+                    }
+                }
+                else if(f == 5) {
+                    for (int ln = 0; ln < launchers.size(); ln++) {
+                        long launcher = launchers.get(ln);
+                        int lx = ((int) (launcher) & 0xFFFFF), ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) (launcher >>> 40) & 0xFFFFF;
+                        ShapeGenerator.box(grid, lx + 44 + 16*2, ly, lz, lx + 47 + 16*2, ly + 3, lz + 3, missileHead);
+                        ShapeGenerator.box(grid, lx + 16 + 16*2, ly, lz, lx + 43 + 16*2, ly + 3, lz + 3, missileBody);
+                        ShapeGenerator.box(grid, lx + 4 + 16*2, ly, lz, lx + 15 + 16*2, ly + 3, lz + 3, yellowFire);
+                    }
+                    for (int tr = 0; tr < trails.size(); tr++) {
+                        long trail = trails.get(tr);
+                        int lx = ((int) (trail) & 0xFFFFF), ly = ((int) (trail >>> 20) & 0xFFFFF), lz = (int) (trail >>> 40) & 0xFFFFF;
+                        ShapeGenerator.ball(grid, lx - 16, ly + 4 + r.nextInt(-4, 5), lz + 4, 1.45, smoke, choose3of4);
+                        ShapeGenerator.ball(grid, lx - 16, ly - 4 + r.nextInt(-4, 5), lz + 4, 1.45, smoke, choose3of4);
+                        ShapeGenerator.ball(grid, lx - 20, ly + 4 + r.nextInt(-4, 5), lz + 6, 1.45, smoke, choose3of4);
+                        ShapeGenerator.ball(grid, lx - 20, ly - 4 + r.nextInt(-4, 5), lz + 6, 1.45, smoke, choose3of4);
+                    }
+                }
+            }
+        }
+        if(!foundAny) return null;
+
+        return next;
+    }
+
+/*
+        public static MagicaVoxelData[][] ArcMissileAnimationLarge(MagicaVoxelData[][] parsedFrames, int unit, int which)
+        {
+            MagicaVoxelData[][] voxelFrames = new MagicaVoxelData[parsedFrames.Length][];
+            voxelFrames[0] = new MagicaVoxelData[parsedFrames[0].Length];
+            voxelFrames[parsedFrames.Length - 1] = new MagicaVoxelData[parsedFrames[parsedFrames.Length - 1].Length];
+            parsedFrames[0].CopyTo(voxelFrames[0], 0);
+            parsedFrames[parsedFrames.Length - 1].CopyTo(voxelFrames[parsedFrames.Length - 1], 0);
+            List<MagicaVoxelData> launchers = new List<MagicaVoxelData>(4), trails = new List<MagicaVoxelData>(4);
+            List<MagicaVoxelData>[] extra = new List<MagicaVoxelData>[voxelFrames.Length - 2], missile = new List<MagicaVoxelData>[voxelFrames.Length - 2];
+            foreach(MagicaVoxelData mvd in voxelFrames[0])
+            {
+                if(mvd.color == emitter0 - which * 8)
+                {
+                    launchers.Add(mvd);
+                }
+            }
+            int maxY = launchers.Max(v => v.y);
+            int minY = launchers.Min(v => v.y);
+            int midY = (maxY + minY) / 2;
+            MagicaVoxelData launcher = launchers.OrderBy(mvd => mvd.z * 3 + mvd.x + mvd.y).First();
+            launcher.y = (byte)midY;
+            for(int f = 0; f < voxelFrames.Length - 2; f++) //going only through the middle
+            {
+                extra[f] = new List<MagicaVoxelData>(160);
+                missile[f] = new List<MagicaVoxelData>(160);
+                if(f == 0)
+    {
+        missile[f].AddRange(generateMissileLarge(launcher, 0));
+    }
+                if(f == 1)
+    {
+        missile[f].AddRange(generateMissileLarge(new MagicaVoxelData { x = (byte)(launcher.x + 4), y = launcher.y, z = (byte)(launcher.z + 4), color = bold_paint }, 4));
+    }
+                else if(f == 2)
+    {
+        missile[f].AddRange(generateMissileLarge(new MagicaVoxelData { x = (byte)(launcher.x + 12), y = launcher.y, z = (byte)(launcher.z + 12), color = bold_paint }, 12));
+    }
+                else if(f == 3)
+    {
+        missile[f].AddRange(generateMissileFieryTrailLarge(new MagicaVoxelData { x = (byte)(launcher.x + 20), y = launcher.y, z = (byte)(launcher.z + 20), color = bold_paint }, 12));
+    }
+                else if(f == 4)
+    {
+        missile[f].AddRange(generateMissileFieryTrailLarge(new MagicaVoxelData { x = (byte)(launcher.x + 28), y = launcher.y, z = (byte)(launcher.z + 28), color = bold_paint }, 12));
+
+        extra[f].AddRange(VoxelLogic.generateCube(new MagicaVoxelData { x = launcher.x, y = (byte)(launcher.y - 1), z = launcher.z, color = smoke }, 6, smoke));
+
+        extra[f] = extra[f].Where(v => r.Next(5) == 0).ToList();
+
+
+    }
+                else if(f == 5)
+    {
+        missile[f].AddRange(generateMissileFieryTrailLarge(new MagicaVoxelData { x = (byte)(launcher.x + 36), y = launcher.y, z = (byte)(launcher.z + 36), color = bold_paint }, 12));
+
+        extra[f].AddRange(VoxelLogic.generateCube(new MagicaVoxelData { x = launcher.x, y = (byte)(launcher.y - 1), z = launcher.z, color = smoke }, 6, smoke));
+
+        extra[f] = extra[f].Where(v => r.Next(7) == 0).ToList();
+        //extra[f].AddRange(generateCone(new MagicaVoxelData { x = (byte)(launcher.x + 6), y = (byte)(launcher.y), z = (byte)(launcher.z + 6), color = smoke }, 4, 249 - 120));
+
+    }
+                else if(f == 6)
+    {
+        missile[f].AddRange(generateMissileFieryTrailLarge(new MagicaVoxelData { x = (byte)(launcher.x + 44), y = launcher.y, z = (byte)(launcher.z + 44), color = bold_paint }, 12));
+
+        extra[f].AddRange(VoxelLogic.generateCube(new MagicaVoxelData { x = launcher.x, y = (byte)(launcher.y - 2), z = launcher.z, color = smoke }, 8, smoke));
+
+        extra[f] = extra[f].Where(v => r.Next(20) == 0).ToList();
+
+    }
+                else if(f > 6)
+    {
+        missile[f].AddRange(generateMissileFieryTrailLarge(new MagicaVoxelData { x = (byte)(launcher.x + 8 + f * 8), y = launcher.y, z = (byte)(launcher.z + 8 + f * 8), color = bold_paint }, 12));
+    }
+                if(f >= 4)
+    {
+        extra[f].AddRange(generateConeLarge(new MagicaVoxelData { x = (byte)(launcher.x + 3 * (f - 3)), y = (byte)(launcher.y), z = (byte)(launcher.z + 3 * (f - 3)), color = smoke }, (f * 3) / 2, smoke).
+        Where(v => r.Next(15) > f && r.Next(15) > f));
+    }
+}
+            for(int f = 1; f < voxelFrames.Length - 1; f++)
+        {
+        List<MagicaVoxelData> working = new List<MagicaVoxelData>(parsedFrames[f]);
+        working.AddRange(missile[f - 1]);
+        working.AddRange(extra[f - 1]);
+        voxelFrames[f] = working.ToArray();
+        }
+        return voxelFrames;
+        }
+
+ */
 }
