@@ -1461,47 +1461,34 @@ public class EffectGenerator {
                     for (int ln = 0; ln < launchers.size(); ln++) {
                         long launcher = launchers.get(ln);
                         int lx = ((int) (launcher) & 0xFFFFF), ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) (launcher >>> 40) & 0xFFFFF;
-                        ShapeGenerator.box(grid, lx + 28, ly, lz, lx + 31, ly + 3, lz + 3, missileHead);
-                        ShapeGenerator.box(grid, lx, ly, lz, lx + 27, ly + 3, lz + 3, missileBody);
-                    }
-                    for (int tr = 0; tr < trails.size(); tr++) {
-                        long trail = trails.get(tr);
-                        int lx = ((int) (trail) & 0xFFFFF), ly = ((int) (trail >>> 20) & 0xFFFFF), lz = (int) (trail >>> 40) & 0xFFFFF;
-                        ShapeGenerator.line(grid, lx - 8, ly, lz, lx - 2, ly, lz, yellowFire);
-                        ShapeGenerator.box(grid, lx - 6, ly-1, lz-1, lx, ly+1, lz+1, hotFire);
-                        ShapeGenerator.box(grid, lx - 4, ly-2, lz, lx-1, ly+2, lz, hotFire);
-                        ShapeGenerator.box(grid, lx - 4, ly, lz-2, lx-1, ly, lz+2, hotFire);
-
-                        ShapeGenerator.ball(grid, lx - 8, ly + 4, lz, 1.45, smoke, choose3of4);
-                        ShapeGenerator.ball(grid, lx - 8, ly - 4, lz, 1.45, smoke, choose3of4);
-                        ShapeGenerator.box(grid, lx - 12, ly - 4, lz - 1, lx - 8, ly + 4, lz + 1, smoke, choose1of2);
-
-                        ShapeGenerator.ball(grid, lx - 4, ly + 4, lz + 2, 1.45, smoke, choose3of4);
-                        ShapeGenerator.ball(grid, lx - 4, ly - 4, lz + 2, 1.45, smoke, choose3of4);
-                        ShapeGenerator.box(grid, lx - 12, ly - 4, lz + 1, lx - 4, ly + 4, lz + 3, smoke, choose1of2);
+                        ShapeGenerator.box(grid, lx + 4 + 12, ly + 1, lz + 4 + 12, lx + 10 + 12, ly + 6, lz + 10 + 12, missileHead);
+                        for (int y = 1; y <= 6; y++) {
+                            for (int d = 0; d < 6; d++) {
+                                ShapeGenerator.line(grid, lx-4+d, ly+y, lz-4-d, lx + 12 + 10 + d, ly + y, lz + 12 + 10 - d, missileBody);
+                            }
+                        }
                     }
                 }
                 else if(f == 3) {
                     for (int ln = 0; ln < launchers.size(); ln++) {
                         long launcher = launchers.get(ln);
                         int lx = ((int) (launcher) & 0xFFFFF), ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) (launcher >>> 40) & 0xFFFFF;
-                        ShapeGenerator.box(grid, lx + 44, ly, lz, lx + 47, ly + 3, lz + 3, missileHead);
-                        ShapeGenerator.box(grid, lx + 16, ly, lz, lx + 43, ly + 3, lz + 3, missileBody);
-                        ShapeGenerator.box(grid, lx + 4, ly, lz, lx + 15, ly + 3, lz + 3, yellowFire);
-                    }
-                    for (int tr = 0; tr < trails.size(); tr++) {
-                        long trail = trails.get(tr);
-                        int lx = ((int) (trail) & 0xFFFFF), ly = ((int) (trail >>> 20) & 0xFFFFF), lz = (int) (trail >>> 40) & 0xFFFFF;
-                        ShapeGenerator.line(grid, lx - 8, ly, lz, lx - 2, ly, lz, yellowFire);
-                        ShapeGenerator.box(grid, lx - 6, ly-1, lz-1, lx, ly+1, lz+1, hotFire);
-                        ShapeGenerator.box(grid, lx - 4, ly-2, lz, lx-1, ly+2, lz, hotFire);
-                        ShapeGenerator.box(grid, lx - 4, ly, lz-2, lx-1, ly, lz+2, hotFire);
-
-                        ShapeGenerator.box(grid, lx - 10, ly - 2, lz - 2, lx - 5, ly + 2, lz + 2, hotFire, choose4of5);
-                        ShapeGenerator.box(grid, lx - 12, ly - 5, lz - 1, lx - 8, ly + 5, lz + 1, hotFire, choose4of5);
-                        ShapeGenerator.box(grid, lx - 12, ly - 1, lz - 5, lx - 8, ly + 1, lz + 5, hotFire, choose4of5);
-
-                        ShapeGenerator.box(grid, lx - 16, ly - 4, lz, lx - 11, ly + 4, lz + 7, smoke, choose4of5);
+                        ShapeGenerator.box(grid, lx + 4 + 12 * 2, ly + 1, lz + 4 + 12 * 2, lx + 10 + 12 * 2, ly + 6, lz + 10 + 12 * 2, missileHead);
+                        for (int y = 1; y <= 6; y++) {
+                            for (int d = 0; d < 6; d++) {
+                                ShapeGenerator.line(grid, lx+8+d, ly+y, lz+8-d, lx + 12 * 2 + 10 + d, ly + y, lz + 12 * 2 + 10 - d, missileBody);
+                            }
+                        }
+                        for (int y = 2; y <= 5; y++) {
+                            for (int d = 1; d < 5; d++) {
+                                ShapeGenerator.line(grid, lx-4+d, ly+y, lz-4-d, lx+8+d, ly+y, lz+8-d, yellowFire);
+                            }
+                        }
+                        for (int y = 1; y <= 6; y++) {
+                            for (int d = 0; d < 6; d++) {
+                                ShapeGenerator.line(grid, lx-2+d, ly+y, lz-2-d, lx+8+d, ly+y, lz+8-d, hotFire, choose3of4);
+                            }
+                        }
                     }
                 }
                 else if(f == 4) {
