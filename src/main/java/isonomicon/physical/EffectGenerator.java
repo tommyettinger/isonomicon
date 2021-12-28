@@ -1441,14 +1441,14 @@ public class EffectGenerator {
                 if(f == 0) {
                     for (int ln = 0; ln < launchers.size(); ln++) {
                         long launcher = launchers.get(ln);
-                        int lx = ((int) (launcher) & 0xFFFFF), ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) (launcher >>> 40) & 0xFFFFF;
+                        int lx = ((int) (launcher) & 0xFFFFF) - 2, ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) ((launcher >>> 40) & 0xFFFFF) + 2;
                         ShapeGenerator.box(grid, lx - 4, ly + 1, lz - 4, lx + 2, ly + 6, lz + 2, missileHead);
                     }
                 }
                 else if(f == 1) {
                     for (int ln = 0; ln < launchers.size(); ln++) {
                         long launcher = launchers.get(ln);
-                        int lx = ((int) (launcher) & 0xFFFFF), ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) (launcher >>> 40) & 0xFFFFF;
+                        int lx = ((int) (launcher) & 0xFFFFF) - 2, ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) ((launcher >>> 40) & 0xFFFFF) + 2;
                         ShapeGenerator.box(grid, lx + 4, ly + 1, lz + 4, lx + 10, ly + 6, lz + 10, missileHead);
                         for (int y = 1; y <= 6; y++) {
                             for (int d = 0; d < 6; d++) {
@@ -1460,7 +1460,7 @@ public class EffectGenerator {
                 else if(f == 2) {
                     for (int ln = 0; ln < launchers.size(); ln++) {
                         long launcher = launchers.get(ln);
-                        int lx = ((int) (launcher) & 0xFFFFF), ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) (launcher >>> 40) & 0xFFFFF;
+                        int lx = ((int) (launcher) & 0xFFFFF) - 2, ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) ((launcher >>> 40) & 0xFFFFF) + 2;
                         ShapeGenerator.box(grid, lx + 4 + 16, ly + 1, lz + 4 + 16, lx + 10 + 16, ly + 6, lz + 10 + 16, missileHead);
                         for (int y = 1; y <= 6; y++) {
                             for (int d = 0; d < 6; d++) {
@@ -1472,7 +1472,7 @@ public class EffectGenerator {
                 else if(f == 3) {
                     for (int ln = 0; ln < launchers.size(); ln++) {
                         long launcher = launchers.get(ln);
-                        int lx = ((int) (launcher) & 0xFFFFF), ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) (launcher >>> 40) & 0xFFFFF;
+                        int lx = ((int) (launcher) & 0xFFFFF) - 2, ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) ((launcher >>> 40) & 0xFFFFF) + 2;
                         ShapeGenerator.box(grid, lx + 4 + 16*2, ly + 1, lz + 4 + 16*2, lx + 10 + 16*2, ly + 6, lz + 10 + 16*2, missileHead);
                         for (int y = 1; y <= 6; y++) {
                             for (int d = 0; d < 6; d++) {
@@ -1494,7 +1494,7 @@ public class EffectGenerator {
                 else if(f == 4) {
                     for (int ln = 0; ln < launchers.size(); ln++) {
                         long launcher = launchers.get(ln);
-                        int lx = ((int) (launcher) & 0xFFFFF), ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) (launcher >>> 40) & 0xFFFFF;
+                        int lx = ((int) (launcher) & 0xFFFFF) - 2, ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) ((launcher >>> 40) & 0xFFFFF) + 2;
                         ShapeGenerator.box(grid, lx + 4 + 16*3, ly + 1, lz + 4 + 16*3, lx + 10 + 16*3, ly + 6, lz + 10 + 16*3, missileHead);
                         for (int y = 1; y <= 6; y++) {
                             for (int d = 0; d < 6; d++) {
@@ -1518,7 +1518,7 @@ public class EffectGenerator {
                 else if(f == 5) {
                     for (int ln = 0; ln < launchers.size(); ln++) {
                         long launcher = launchers.get(ln);
-                        int lx = ((int) (launcher) & 0xFFFFF), ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) (launcher >>> 40) & 0xFFFFF;
+                        int lx = ((int) (launcher) & 0xFFFFF) - 2, ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) ((launcher >>> 40) & 0xFFFFF) + 2;
                         ShapeGenerator.box(grid, lx + 4 + 16*4, ly + 1, lz + 4 + 16*4, lx + 10 + 16*4, ly + 6, lz + 10 + 16*4, missileHead);
                         for (int y = 1; y <= 6; y++) {
                             for (int d = 0; d < 6; d++) {
@@ -1544,7 +1544,7 @@ public class EffectGenerator {
                 else if(f == 6) {
                     for (int ln = 0; ln < launchers.size(); ln++) {
                         long launcher = launchers.get(ln);
-                        int lx = ((int) (launcher) & 0xFFFFF), ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) (launcher >>> 40) & 0xFFFFF;
+                        int lx = ((int) (launcher) & 0xFFFFF) - 2, ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) ((launcher >>> 40) & 0xFFFFF) + 2;
                         ShapeGenerator.box(grid, lx + 4 + 16*5, ly + 1, lz + 4 + 16*5, lx + 10 + 16*5, ly + 6, lz + 10 + 16*5, missileHead);
                         for (int y = 1; y <= 6; y++) {
                             for (int d = 0; d < 6; d++) {
