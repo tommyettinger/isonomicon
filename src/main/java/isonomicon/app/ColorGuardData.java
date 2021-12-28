@@ -1,5 +1,9 @@
 package isonomicon.app;
 
+import com.github.tommyettinger.ds.ObjectList;
+
+import java.util.List;
+
 public class ColorGuardData {
     public static class Unit {
         public String name;
@@ -30,6 +34,10 @@ public class ColorGuardData {
             this.primaryPose = primaryPose;
             this.secondary = secondary;
             this.secondaryPose = secondaryPose;
+        }
+
+        public boolean hasWeapon(String type){
+            return type != null && (type.equals(primary) || type.equals(secondary));
         }
     }
     public static final String[] allVoxModels = {
@@ -81,7 +89,7 @@ public class ColorGuardData {
             "Laboratory.vox",
             "Hospital.vox",
     };
-    public static Unit[] units = {
+    public static List<Unit> units = ObjectList.with(
             new Unit("Infantry", "Machine_Gun", true),
             new Unit("Bazooka", "Handgun", false, "Forward_Missile", true),
             new Unit("Bike", "Machine_Gun"),
@@ -124,6 +132,6 @@ public class ColorGuardData {
             new Unit("Mining_Outpost"),
             new Unit("Oil_Well"),
             new Unit("Laboratory"),
-            new Unit("Hospital"),
-    };
+            new Unit("Hospital")
+            );
 }

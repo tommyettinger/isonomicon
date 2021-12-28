@@ -12,7 +12,6 @@ import com.badlogic.gdx.utils.*;
 import com.github.tommyettinger.anim8.AnimatedGif;
 import com.github.tommyettinger.anim8.AnimatedPNG;
 import com.github.tommyettinger.anim8.Dithered;
-import com.github.tommyettinger.anim8.PaletteReducer;
 import com.github.tommyettinger.ds.IntObjectMap;
 import isonomicon.io.LittleEndianDataInputStream;
 import isonomicon.io.extended.VoxIOExtended;
@@ -56,10 +55,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                 "Blue",
                 "Purple",
         };
-//        if (!new File("specialized/b/vox/color_guard/" + inputs[0]).exists()) {
-//            System.out.println("File not found: specialized/b/vox/color_guard/" + inputs[0]);
-//            System.exit(0);
-//        }
+        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Arc_Missile")).toList();
         try {
             head = VoxIOExtended.readVox(new LittleEndianDataInputStream(new FileInputStream("specialized/b/vox/color_guard/human/Head.vox")));
         }
@@ -104,8 +100,8 @@ public class ColorGuardAssets extends ApplicationAdapter {
         if(DIVERSE)
         {
             Gdx.files.local("out/color_guard/animated_diverse/" + name + '/').mkdirs();
-            for (int n = 0; n < ColorGuardData.units.length; n++) {
-                ColorGuardData.Unit unit = ColorGuardData.units[n];
+            for (int n = 0; n < ColorGuardData.units.size(); n++) {
+                ColorGuardData.Unit unit = ColorGuardData.units.get(n);
                 String s = unit.name;
                 System.out.println("Rendering " + s);
                 load("specialized/b/vox/color_guard/" + s);
@@ -166,8 +162,8 @@ public class ColorGuardAssets extends ApplicationAdapter {
         // just a single skin/hair combination
         else {
             EACH_INPUT:
-            for (int n = 0; n < ColorGuardData.units.length; n++) {
-                ColorGuardData.Unit unit = ColorGuardData.units[n];
+            for (int n = 0; n < ColorGuardData.units.size(); n++) {
+                ColorGuardData.Unit unit = ColorGuardData.units.get(n);
                 String s = unit.name;
                 System.out.println("Rendering " + s);
                 load("specialized/b/vox/color_guard/" + s + ".vox");
