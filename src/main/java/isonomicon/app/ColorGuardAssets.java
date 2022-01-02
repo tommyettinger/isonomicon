@@ -56,7 +56,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                 "Blue",
                 "Purple",
         };
-        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Arc_Missile")).toList();
+//        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Arc_Missile")).toList();
         try {
             head = VoxIOExtended.readVox(new LittleEndianDataInputStream(new FileInputStream("specialized/b/vox/color_guard/human/Head.vox")));
         }
@@ -93,16 +93,16 @@ public class ColorGuardAssets extends ApplicationAdapter {
         //// Using Neue on a null palette takes 146.797 seconds with just the five units with an arc missile.
         //// (with fastAnalysis=false.)
         //// Now with fastAnalysis=true, 34.407 seconds.
-        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.NEUE);
+//        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.NEUE);
         //// Using Scatter with the below YAM3 preloaded palette, dither strength 0.75f, takes 25.596 seconds.
 //        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.SCATTER);
         //// Neue with the preloaded YAM3 palette, dither strength 0.5f, looks a little better, and takes similar time.
-//        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.NEUE);
-//        gif.palette = new PaletteReducer(Coloring.YAM3, Gdx.files.local("assets/Yam3Preload.dat").readBytes());
+        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.NEUE);
+        gif.palette = new PaletteReducer(Coloring.YAM3, Gdx.files.local("assets/Yam3Preload.dat").readBytes());
 //        gif.palette = new PaletteReducer(Coloring.TATER255, Gdx.files.local("assets/TaterPreload.dat").readBytes());
 //        gif.palette = new PaletteReducer(Coloring.TETRA256, Gdx.files.local("assets/TetraPreload.dat").readBytes());
 //        gif.palette = new PaletteReducer(Coloring.BETSY256, Gdx.files.local("assets/BetsyPreload.dat").readBytes());
-//        gif.palette.setDitherStrength(0.5f);
+        gif.palette.setDitherStrength(0.5f);
         FrameBuffer fb = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), false);
         // many skin and hair colors
         if(DIVERSE)
