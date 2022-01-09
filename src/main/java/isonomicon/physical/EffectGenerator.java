@@ -19,10 +19,12 @@ public class EffectGenerator {
 
     public static final ObjectObjectOrderedMap<String, Effect> KNOWN_EFFECTS = new ObjectObjectOrderedMap<>(
             new String[]{"Handgun", "Machine_Gun", "Forward_Cannon", "Arc_Cannon",
-                    "Forward_Missile", "Arc_Missile"},
+                    "Forward_Missile", "Arc_Missile", "Flame_Wave"},
             new Effect[]{EffectGenerator::handgunAnimation, EffectGenerator::machineGunAnimation,
                     EffectGenerator::forwardCannonAnimation, EffectGenerator::arcCannonAnimation,
-                    EffectGenerator::forwardMissileAnimation, EffectGenerator::arcMissileAnimation}
+                    EffectGenerator::forwardMissileAnimation, EffectGenerator::arcMissileAnimation,
+                    EffectGenerator::flameWaveAnimation
+            }
     );
 
     public static final EnhancedRandom r = new FourWheelRandom(123456789L);
@@ -1780,9 +1782,9 @@ public class EffectGenerator {
                             for (int z = 0; z < zs; z++) {
                                 if(previousBonus[x][y][z] != 0 && r.nextInt(10 - f) > 0)
                                 {
-                                    int xx = x + 12 + r.next(2), yy = y, zz = z + r.nextInt(3) - 1;
+                                    int xx = x + 12 + r.next(2), zz = z + r.nextInt(3) - 1;
                                     if(xx < xs && zz >= 0 && zz < zs) {
-                                        previousBonus[xx][yy][zz] = previousBonus[x][y][z];
+                                        previousBonus[xx][y][zz] = previousBonus[x][y][z];
                                         previousBonus[x][y][z] = 0;
                                     }
                                 }
@@ -1840,24 +1842,6 @@ public class EffectGenerator {
                         ShapeGenerator.ball(grid, lx + 5, ly - 7, lz + r.nextInt(6, 10), 1.45, smoke, choose1of512);
                         ShapeGenerator.ball(grid, lx + 5, ly + r.nextInt(3, 9), lz + r.nextInt(9, 16), 1.45, smoke, choose1of512);
                         ShapeGenerator.ball(grid, lx + 5, ly - r.nextInt(3, 9), lz + r.nextInt(9, 16), 1.45, smoke, choose1of512);
-                    }
-                }
-                if(f == 2){
-                    next[f+1].grids.set(g, Tools3D.translateCopy(grid, -3, 0, 0));
-                    for(float[] fa : next[f+1].links.get(g).values()){
-                        fa[0] -= 3f;
-                    }
-                }
-                else if(f == 3){
-                    next[f+1].grids.set(g, Tools3D.translateCopy(grid, -2, 0, 0));
-                    for(float[] fa : next[f+1].links.get(g).values()){
-                        fa[0] -= 2f;
-                    }
-                }
-                else if(f == 4){
-                    next[f+1].grids.set(g, Tools3D.translateCopy(grid, -1, 0, 0));
-                    for(float[] fa : next[f+1].links.get(g).values()){
-                        fa[0] -= 1f;
                     }
                 }
             }
