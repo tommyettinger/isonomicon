@@ -19,11 +19,11 @@ public class EffectGenerator {
 
     public static final ObjectObjectOrderedMap<String, Effect> KNOWN_EFFECTS = new ObjectObjectOrderedMap<>(
             new String[]{"Handgun", "Machine_Gun", "Forward_Cannon", "Arc_Cannon",
-                    "Forward_Missile", "Arc_Missile", "Flame_Wave"},
+                    "Forward_Missile", "Arc_Missile", "Torpedo", "Flame_Wave"},
             new Effect[]{EffectGenerator::handgunAnimation, EffectGenerator::machineGunAnimation,
                     EffectGenerator::forwardCannonAnimation, EffectGenerator::arcCannonAnimation,
                     EffectGenerator::forwardMissileAnimation, EffectGenerator::arcMissileAnimation,
-                    EffectGenerator::flameWaveAnimation
+                    EffectGenerator::torpedoAnimation, EffectGenerator::flameWaveAnimation
             }
     );
 
