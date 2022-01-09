@@ -1688,8 +1688,11 @@ public class EffectGenerator {
                 continue;
             foundAny = true;
             LongList launchers = ls.order();
+            byte[][][] previousBonus = null;
             for (int f = 0; f < count - 2; f++) {
                 byte[][][] grid = next[f+1].grids.get(g);
+                if(f == 2) previousBonus = new byte[grid.length][grid.length][grid.length];
+
                 if(f == 0) {
                     for (int ln = 0; ln < launchers.size(); ln++) {
                         long launcher = launchers.get(ln);
@@ -1740,26 +1743,54 @@ public class EffectGenerator {
                     for (int ln = 0; ln < launchers.size(); ln++) {
                         long launcher = launchers.get(ln);
                         int lx = ((int) (launcher) & 0xFFFFF), ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) (launcher >>> 40) & 0xFFFFF;
-                        ShapeGenerator.line(grid, lx, ly, lz, lx + 40, ly, lz + 2 , yellowFire - r.next(1), choose9of10);
-                        ShapeGenerator.line(grid, lx, ly, lz, lx + 36, ly, lz + 10, yellowFire - r.next(1), choose9of10);
-                        ShapeGenerator.line(grid, lx, ly, lz, lx + 36, ly, lz     , yellowFire - r.next(1), choose9of10);
-                        ShapeGenerator.line(grid, lx, ly, lz, lx + 36, ly + 6, lz + 5, yellowFire - r.next(1), choose9of10);
-                        ShapeGenerator.line(grid, lx, ly, lz, lx + 36, ly - 6, lz + 5, yellowFire - r.next(1), choose9of10);
-                        ShapeGenerator.line(grid, lx, ly, lz, lx + 36, ly + 4, lz + 10, yellowFire - r.next(1), choose9of10);
-                        ShapeGenerator.line(grid, lx, ly, lz, lx + 36, ly + 4, lz + 4, yellowFire - r.next(1), choose9of10);
-                        ShapeGenerator.line(grid, lx, ly, lz, lx + 36, ly - 4, lz + 10, yellowFire - r.next(1), choose9of10);
-                        ShapeGenerator.line(grid, lx, ly, lz, lx + 36, ly - 4, lz + 4, yellowFire - r.next(1), choose9of10);
-                        ShapeGenerator.line(grid, lx, ly, lz, lx + 36, ly + 2, lz + 10, yellowFire - r.next(1), choose9of10);
-                        ShapeGenerator.line(grid, lx, ly, lz, lx + 36, ly + 2, lz + 4, yellowFire - r.next(1), choose9of10);
-                        ShapeGenerator.line(grid, lx, ly, lz, lx + 36, ly - 2, lz + 10, yellowFire - r.next(1), choose9of10);
-                        ShapeGenerator.line(grid, lx, ly, lz, lx + 36, ly - 2, lz + 4, yellowFire - r.next(1), choose9of10);
-                        ShapeGenerator.line(grid, lx, ly, lz, lx + 36, ly + 4, lz + 8, yellowFire - r.next(1), choose9of10);
-                        ShapeGenerator.line(grid, lx, ly, lz, lx + 36, ly + 4, lz + 2, yellowFire - r.next(1), choose9of10);
-                        ShapeGenerator.line(grid, lx, ly, lz, lx + 36, ly - 4, lz + 8, yellowFire - r.next(1), choose9of10);
-                        ShapeGenerator.line(grid, lx, ly, lz, lx + 36, ly - 4, lz + 2, yellowFire - r.next(1), choose9of10);
+                        ShapeGenerator.line(previousBonus, lx, ly, lz, lx + 40, ly, lz + 2 , yellowFire - r.next(1), choose9of10);
+                        ShapeGenerator.line(previousBonus, lx, ly, lz, lx + 36, ly, lz + 10, yellowFire - r.next(1), choose9of10);
+                        ShapeGenerator.line(previousBonus, lx, ly, lz, lx + 36, ly, lz     , yellowFire - r.next(1), choose9of10);
+                        ShapeGenerator.line(previousBonus, lx, ly, lz, lx + 36, ly + 6, lz + 5, yellowFire - r.next(1), choose9of10);
+                        ShapeGenerator.line(previousBonus, lx, ly, lz, lx + 36, ly - 6, lz + 5, yellowFire - r.next(1), choose9of10);
+                        ShapeGenerator.line(previousBonus, lx, ly, lz, lx + 36, ly + 4, lz + 10, yellowFire - r.next(1), choose9of10);
+                        ShapeGenerator.line(previousBonus, lx, ly, lz, lx + 36, ly + 4, lz + 4, yellowFire - r.next(1), choose9of10);
+                        ShapeGenerator.line(previousBonus, lx, ly, lz, lx + 36, ly - 4, lz + 10, yellowFire - r.next(1), choose9of10);
+                        ShapeGenerator.line(previousBonus, lx, ly, lz, lx + 36, ly - 4, lz + 4, yellowFire - r.next(1), choose9of10);
+                        ShapeGenerator.line(previousBonus, lx, ly, lz, lx + 36, ly + 2, lz + 10, yellowFire - r.next(1), choose9of10);
+                        ShapeGenerator.line(previousBonus, lx, ly, lz, lx + 36, ly + 2, lz + 4, yellowFire - r.next(1), choose9of10);
+                        ShapeGenerator.line(previousBonus, lx, ly, lz, lx + 36, ly - 2, lz + 10, yellowFire - r.next(1), choose9of10);
+                        ShapeGenerator.line(previousBonus, lx, ly, lz, lx + 36, ly - 2, lz + 4, yellowFire - r.next(1), choose9of10);
+                        ShapeGenerator.line(previousBonus, lx, ly, lz, lx + 36, ly + 4, lz + 8, yellowFire - r.next(1), choose9of10);
+                        ShapeGenerator.line(previousBonus, lx, ly, lz, lx + 36, ly + 4, lz + 2, yellowFire - r.next(1), choose9of10);
+                        ShapeGenerator.line(previousBonus, lx, ly, lz, lx + 36, ly - 4, lz + 8, yellowFire - r.next(1), choose9of10);
+                        ShapeGenerator.line(previousBonus, lx, ly, lz, lx + 36, ly - 4, lz + 2, yellowFire - r.next(1), choose9of10);
                     }
                 }
-                else if(f == 3) {
+                if(f >= 2 && f <= 6 && previousBonus != null){
+                    int xs, ys, zs;
+                    xs = grid.length;
+                    ys = grid[0].length;
+                    zs = grid[0][0].length;
+                    for (int x = 0; x < xs; x++) {
+                        for (int y = 0; y < ys; y++) {
+                            for (int z = 0; z < zs; z++) {
+                                if (grid[x][y][z] == 0)
+                                    grid[x][y][z] = previousBonus[x][y][z];
+                            }
+                        }
+                    }
+                    for (int x = 0; x < xs; x++) {
+                        for (int y = 0; y < ys; y++) {
+                            for (int z = 0; z < zs; z++) {
+                                if(previousBonus[x][y][z] != 0 && r.nextInt(10 - f) > 0)
+                                {
+                                    int xx = x + 12 + r.next(2), yy = y, zz = z + r.nextInt(3) - 1;
+                                    if(xx < xs && zz >= 0 && zz < zs) {
+                                        previousBonus[xx][yy][zz] = previousBonus[x][y][z];
+                                        previousBonus[x][y][z] = 0;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                if(f == 3) {
                     for (int ln = 0; ln < launchers.size(); ln++) {
                         long launcher = launchers.get(ln);
                         int lx = ((int) (launcher) & 0xFFFFF), ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) (launcher >>> 40) & 0xFFFFF;
