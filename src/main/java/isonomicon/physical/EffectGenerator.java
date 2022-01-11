@@ -2165,7 +2165,7 @@ public class EffectGenerator {
                             for (int z = 0; z < gs; z++) {
                                 byte v = grid[x][y][z];
                                 if(v != 0 && (v < shock || v > shock + 1)
-                                        && ((f & 1) != Stuff.STUFFS_B[v & 255].material.getTrait(VoxMaterial.MaterialTrait._frame))){
+                                        && (1 - (f & 1) != Stuff.STUFFS_B[v & 255].material.getTrait(VoxMaterial.MaterialTrait._frame))){
                                     int h = HastyPointHash.hash256(x, y, z, 1234567L);
                                     if(h < f * f * 11)
                                         grid[x][y][z] = (byte) (flicker + (h & 1));
@@ -2180,7 +2180,7 @@ public class EffectGenerator {
                             for (int z = 0; z < gs; z++) {
                                 byte v = grid[x][y][z];
                                 if(v != 0 && (v < shock || v > shock + 1)
-                                        && ((f & 1) != Stuff.STUFFS_B[v & 255].material.getTrait(VoxMaterial.MaterialTrait._frame))){
+                                        && (1 - (f & 1) != Stuff.STUFFS_B[v & 255].material.getTrait(VoxMaterial.MaterialTrait._frame))){
                                     int h = HastyPointHash.hash256(x, y, z, 1234567L), fr = 16 - f - f;
                                     if(h < fr * fr * 11)
                                         grid[x][y][z] = (byte) (flicker + (h & 1));
