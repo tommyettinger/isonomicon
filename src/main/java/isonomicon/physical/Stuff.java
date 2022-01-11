@@ -538,7 +538,7 @@ public class Stuff {
                     float rate = stuffs[v].material.traits.getOrDefault(VoxMaterial.MaterialTrait._rate.ordinal(), 1f);
                     int rf = (int)(rate * frame);
                     if(rf != (int)(rate * (frame + 1)))
-                        model[x][y][z] = stuffs[v].transitionIDs[stuffs[v].transitions.random(HastyPointHash.hash64(x, y, z, rf))];
+                        model[x][y][z] = stuffs[v].transitionIDs[stuffs[v].transitions.random(HastyPointHash.hashAll(x, y, z, rf))];
                 }
             }
         }

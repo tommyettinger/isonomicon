@@ -7,6 +7,7 @@ import com.github.tommyettinger.ds.ObjectObjectOrderedMap;
 import com.github.tommyettinger.ds.support.EnhancedRandom;
 import com.github.tommyettinger.ds.support.FourWheelRandom;
 import isonomicon.io.extended.VoxModel;
+import squidpony.squidmath.HastyPointHash;
 
 import static com.badlogic.gdx.math.MathUtils.*;
 
@@ -33,9 +34,11 @@ public class EffectGenerator {
     public static final int missileHead = 27;
     public static final int shadow = 66;
     public static final int smoke = 67;
+    public static final int shockSpawner = 96;
     public static final int hotFire = 114;
     public static final int yellowFire = 115;
     public static final int sparks = 127;
+    public static final int flicker = 140;
     public static final int launch = 201;
     public static final int trail = 202;
 
@@ -2111,6 +2114,62 @@ public class EffectGenerator {
                         long launcher = launchers.get(ln);
                         int lx = ((int) (launcher) & 0xFFFFF), ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) (launcher >>> 40) & 0xFFFFF;
                         ShapeGenerator.box(grid, lx + 12 + 12*2, ly, lz, lx + 43 + 12*2, ly + 3, lz, shadow);
+                    }
+                }
+            }
+        }
+        if(!foundAny) return null;
+
+        return next;
+    }
+    public static VoxModel[] hackAnimation(VoxModel[] frames, int which){
+        int count = frames.length;
+        VoxModel[] next = new VoxModel[count];
+        for (int i = 0; i < count; i++) {
+            next[i] = frames[i].copy();
+        }
+        final int gridLimit = next[0].grids.size();
+        boolean foundAny = false;
+
+        Choice choose1of2 = ((x, y, z) -> r.nextLong() < 0L);
+        Choice choose1of4 = ((x, y, z) -> r.next(2) == 0);
+        for (int g = 0; g < gridLimit; g++) {
+            LongOrderedSet ls = next[0].markers.get(g).get(launch + which * 8);
+            if (ls == null)
+                continue;
+            foundAny = true;
+            LongList launchers = ls.order();
+            for (int f = 0; f < count - 2; f++) {
+                byte[][][] grid = next[f+1].grids.get(g);
+                int gs = grid.length;
+
+                if(f == 0) {
+                    for (int ln = 0; ln < launchers.size(); ln++) {
+                        long launcher = launchers.get(ln);
+                        int lx = ((int) (launcher) & 0xFFFFF), ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) (launcher >>> 40) & 0xFFFFF;
+                        ShapeGenerator.ball(grid, lx, ly, lz, 12, sparks, choose1of2);
+                    }
+                }
+                if(f == 1) {
+                    for (int ln = 0; ln < launchers.size(); ln++) {
+                        long launcher = launchers.get(ln);
+                        int lx = ((int) (launcher) & 0xFFFFF), ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) (launcher >>> 40) & 0xFFFFF;
+                        ShapeGenerator.ball(grid, lx, ly, lz, 14, sparks, choose1of4);
+                        ShapeGenerator.ball(grid, lx, ly, lz, 18, sparks, choose1of4);
+                    }
+                }
+                else if(f >= 3 && f <= 5) {
+                    for (int x = 0; x < gs; x++) {
+                        for (int y = 0; y < gs; y++) {
+                            for (int z = 0; z < gs; z++) {
+                                byte v = grid[x][y][z];
+                                if(v != 0 && (v < shockSpawner || v > shockSpawner + 1)){
+                                    int h = HastyPointHash.hash256(x, y, z, 1234567L);
+                                    if(h < f * f * 11)
+                                        grid[x][y][z] = (byte) (flicker + (h & 1));
+                                }
+                            }
+                        }
                     }
                 }
             }
