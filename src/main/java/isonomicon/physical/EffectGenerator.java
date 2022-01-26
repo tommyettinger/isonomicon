@@ -2275,15 +2275,9 @@ public class EffectGenerator {
     public static VoxModel[] bombDropAnimation(VoxModel[] frames, int which){
         int count = frames.length;
         VoxModel[] next = flyover(frames);
-        final int gridLimit = next[0].grids.size();
+        final int gridLimit = next[0].grids.size(), gridSize = next[0].grids.get(0).length;
         boolean foundAny = false;
         Choice choose3of4 = ((x, y, z) -> r.next(2) != 0);
-        Choice choose4of5 = ((x, y, z) -> r.nextInt(5) != 0);
-        Choice choose1of20 = ((x, y, z) -> r.nextInt(20) == 0);
-        Choice choose1of5 = ((x, y, z) -> r.nextInt(5) == 0);
-        Choice choose1of512 = ((x, y, z) -> r.next(9) == 0);
-        Choice choose1of2 = ((x, y, z) -> r.nextLong() < 0L);
-        Choice choose1of4 = ((x, y, z) -> r.next(2) == 0);
 
         for (int g = 0; g < gridLimit; g++) {
             LongOrderedSet ls = next[0].markers.get(g).get(launch + which * 8);
@@ -2295,23 +2289,35 @@ public class EffectGenerator {
                 long launcher = ls.getAt(i);
                 int lx = ((int) (launcher) & 0xFFFFF), ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) (launcher >>> 40) & 0xFFFFF;
                 // dependent on whether the model was doubled in resolution or more; this assumes doubled.
-                if(((lx | ly | lz) & 1L) == 0) {
+                if (((lx | ly | lz) & 1L) == 0) {
                     launchers.add(launcher);
                 }
             }
-            for (int f = 0; f < count - 1; f++) {
-                byte[][][] grid = next[f+1].grids.get(g);
+            int f = 0;
+            for (; f < count - 1; f++) {
+                byte[][][] grid = next[f + 1].grids.get(g);
 
                 for (int ln = 0; ln < launchers.size(); ln++) {
                     long launcher = launchers.get(ln);
                     int lx = ((int) (launcher) & 0xFFFFF), ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) ((launcher >>> 40) & 0xFFFFF);
-                    lz -= 2 + r.next(1) + r.next(1) + r.next(1);
-                    if(lz - 2 <= 1){
+                    lz -= 6 + r.next(1) + r.next(1) + r.next(1);
+                    if (lz - 2 <= 1) {
                         break;
                     }
                     ShapeGenerator.box(grid, lx - 1, ly - 1, lz - 2, lx + 4, ly + 4, lz + 4, missileHead);
                     launchers.set(ln, (long) lx | (long) ly << 20 | (long) lz << 40);
                 }
+            }
+            byte[][][] fireStart = new byte[gridSize][gridSize][gridSize];
+            for (int ln = 0; ln < launchers.size(); ln++) {
+                long launcher = launchers.get(ln);
+                int lx = ((int) (launcher) & 0xFFFFF), ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) ((launcher >>> 40) & 0xFFFFF);
+                ShapeGenerator.ball(fireStart, lx + 1, ly + 1, lz, 6.5, yellowFire, choose3of4);
+            }
+            byte[][][][] explosion = fireballAnimation(fireStart, count - 2 - f, 2, 0);
+            for (int i = 0; f < count - 1 && i < explosion.length; f++, i++) {
+                byte[][][] grid = next[f + 1].grids.get(g);
+                Tools3D.translateCopyInto(explosion[i], grid, 0, 0, i + i);
             }
         }
         if(!foundAny) return null;
