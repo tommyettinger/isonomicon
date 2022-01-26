@@ -611,12 +611,12 @@ public class Tools3D {
         byte[][][] next = new byte[xs = voxels.length][ys = voxels[0].length][zs = voxels[0][0].length];
         final int xLimit = xs - Math.abs(xMove), xStart = Math.max(0, -xMove);
         final int yLimit = ys - Math.abs(yMove), yStart = Math.max(0, -yMove);
-        final int zLimit = zs - Math.abs(zMove), zStart = Math.max(0, -zMove);
+        final int zLimit = zs - Math.abs(zMove), zStart = Math.max(0, -zMove), zShift = Math.max(0, zMove);
         if(zLimit <= 0)
             return next;
         for (int x = xStart, xx = 0; x < xs && xx < xLimit && xx < xs; x++, xx++) {
             for (int y = yStart, yy = 0; y < ys && yy < yLimit && yy < ys; y++, yy++) {
-                System.arraycopy(voxels[x][y], zStart, next[xx][yy], 0, zLimit);
+                System.arraycopy(voxels[x][y], zStart, next[xx][yy], zShift, zLimit);
             }
         }
         return next;

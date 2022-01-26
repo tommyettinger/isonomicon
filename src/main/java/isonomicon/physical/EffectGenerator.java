@@ -21,12 +21,12 @@ public class EffectGenerator {
 
     public static final ObjectObjectOrderedMap<String, Effect> KNOWN_EFFECTS = new ObjectObjectOrderedMap<>(
             new String[]{"Handgun", "Machine_Gun", "Forward_Cannon", "Arc_Cannon",
-                    "Forward_Missile", "Arc_Missile", "Torpedo", "Flame_Wave", "Hack"},
+                    "Forward_Missile", "Arc_Missile", "Torpedo", "Flame_Wave", "Bomb_Drop", "Hack"},
             new Effect[]{EffectGenerator::handgunAnimation, EffectGenerator::machineGunAnimation,
                     EffectGenerator::forwardCannonAnimation, EffectGenerator::arcCannonAnimation,
                     EffectGenerator::forwardMissileAnimation, EffectGenerator::arcMissileAnimation,
                     EffectGenerator::torpedoAnimation, EffectGenerator::flameWaveAnimation,
-                    EffectGenerator::hackAnimation
+                    EffectGenerator::bombDropAnimation, EffectGenerator::hackAnimation
             }
     );
 
@@ -2205,21 +2205,20 @@ public class EffectGenerator {
             next[i] = frames[i].copy();
         }
         final int gridLimit = next[0].grids.size();
-        boolean foundAny = false;
 
         for (int g = 0; g < gridLimit; g++) {
-            for (int f = 0; f < halfCount - 1; f++) {
-                byte[][][] grid = next[f+1].grids.get(g);
-                next[f + 1].grids.set(g, Tools3D.translateCopy(grid, 0, 0, 4));
+            for (int f = 0; f < halfCount; f++) {
+                byte[][][] grid = next[f].grids.get(g);
+                next[f + 1].grids.set(g, Tools3D.translateCopy(grid, 0, 0, 3));
                 for (float[] fa : next[f + 1].links.get(g).values()) {
-                    fa[2] += 4f;
+                    fa[2] += 3;
                 }
             }
-            for (int f = 0; f < count - 2; f++) {
-                byte[][][] grid = next[f+1].grids.get(g);
-                next[f + 1].grids.set(g, Tools3D.translateCopy(grid, 0, 0, -4));
+            for (int f = halfCount; f < count - 1; f++) {
+                byte[][][] grid = next[f].grids.get(g);
+                next[f + 1].grids.set(g, Tools3D.translateCopy(grid, 0, 0, -3));
                 for (float[] fa : next[f + 1].links.get(g).values()) {
-                    fa[2] -= 4f;
+                    fa[2] -= 3;
                 }
             }
         }
@@ -2294,6 +2293,7 @@ public class EffectGenerator {
                 }
             }
             int f = 0;
+            ALL:
             for (; f < count - 1; f++) {
                 byte[][][] grid = next[f + 1].grids.get(g);
 
@@ -2302,7 +2302,7 @@ public class EffectGenerator {
                     int lx = ((int) (launcher) & 0xFFFFF), ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) ((launcher >>> 40) & 0xFFFFF);
                     lz -= 6 + r.next(1) + r.next(1) + r.next(1);
                     if (lz - 2 <= 1) {
-                        break;
+                        break ALL;
                     }
                     ShapeGenerator.box(grid, lx - 1, ly - 1, lz - 2, lx + 4, ly + 4, lz + 4, missileHead);
                     launchers.set(ln, (long) lx | (long) ly << 20 | (long) lz << 40);
@@ -2312,9 +2312,9 @@ public class EffectGenerator {
             for (int ln = 0; ln < launchers.size(); ln++) {
                 long launcher = launchers.get(ln);
                 int lx = ((int) (launcher) & 0xFFFFF), ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) ((launcher >>> 40) & 0xFFFFF);
-                ShapeGenerator.ball(fireStart, lx + 1, ly + 1, lz, 6.5, yellowFire, choose3of4);
+                ShapeGenerator.ball(fireStart, lx + 1, ly + 1, lz, 15.5, yellowFire, choose3of4);
             }
-            byte[][][][] explosion = fireballAnimation(fireStart, count - 2 - f, 2, 0);
+            byte[][][][] explosion = fireballAnimation(fireStart, count - 2 - f, 0, 0);
             for (int i = 0; f < count - 1 && i < explosion.length; f++, i++) {
                 byte[][][] grid = next[f + 1].grids.get(g);
                 Tools3D.translateCopyInto(explosion[i], grid, 0, 0, i + i);
