@@ -67,7 +67,9 @@ public class VoxMaterial {
 		//14 can be 0.0 or 1.0, and causes this material to not be rendered on even or odd frames, respectively.
 		_frame("Frame"),
 		//15 Typically 0.5 or 0.25; multiplied with the frame rate when determining transitions
-		_rate("Rate")
+		_rate("Rate"),
+		//16 Parsed as a float but cast to a byte, referring to an index in the Stuff table that this changes to when an effect damages it.
+		_damage("Damage")
 		;
 		
 		public String name;

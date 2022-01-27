@@ -50,6 +50,7 @@ public class Stuff {
         this.name = name;
         this.id = (byte)id;
         this.material = new VoxMaterial(type, traits);
+        this.material.traits.putIfAbsent(VoxMaterial.MaterialTrait._damage.ordinal(), id);
         this.appearsAs = appearsAs;
         if(transitions != null && transitions.length >= 2){
             double[] weights = new double[transitions.length >>> 1];
@@ -354,50 +355,50 @@ public class Stuff {
             new Stuff("unused 145", 145, "Transparency 1.0"),/*light green*/
             new Stuff("gleaming metal", 146, 6, "Metal", "Reflection 0.9 Roughness 0.15", 89, 1, 146, 16),/*light cyan*/
             new Stuff("unused 147", 147, "Transparency 1.0"),
-            new Stuff("unused 148", 148, "Transparency 1.0"),
-            new Stuff("unused 149", 149, "Transparency 1.0"),
+            new Stuff("unused 148", 148, "Transparency 1.0"), /*dark cyan*/
+            new Stuff("unused 149", 149, "Transparency 1.0"), /*dark azure*/
             new Stuff("unused 150", 150, "Transparency 1.0"),
             new Stuff("unused 151", 151, "Transparency 1.0"),
             new Stuff("unused 152", 152, "Transparency 1.0"),
-            new Stuff("unused 153", 153, "Transparency 1.0"),
-            new Stuff("unused 154", 154, "Transparency 1.0"),
+            new Stuff("broken glass", 153, 82, "Roughness 0.7 Reflection 0.45", 0, 2, 153, 3), /*light azure*/
+            new Stuff("unused 154", 154, "Transparency 1.0"), /*light blue*/
             new Stuff("unused 155", 155, "Transparency 1.0"),
             new Stuff("unused 156", 156, "Transparency 1.0"),
-            new Stuff("unused 157", 157, "Transparency 1.0"),
-            new Stuff("unused 158", 158, "Transparency 1.0"),
+            new Stuff("unused 157", 157, "Transparency 1.0"), /*dark blue*/
+            new Stuff("unused 158", 158, "Transparency 1.0"), /*dark violet*/
             new Stuff("unused 159", 159, "Transparency 1.0"),
             new Stuff("unused 160", 160, "Transparency 1.0"),
             new Stuff("unused 161", 161, "Transparency 1.0"),
-            new Stuff("unused 162", 162, "Transparency 1.0"),
-            new Stuff("unused 163", 163, "Transparency 1.0"),
+            new Stuff("unused 162", 162, "Transparency 1.0"), /*light violet*/
+            new Stuff("unused 163", 163, "Transparency 1.0"), /*light purple*/
             new Stuff("unused 164", 164, "Transparency 1.0"),
             new Stuff("unused 165", 165, "Transparency 1.0"),
-            new Stuff("unused 166", 166, "Transparency 1.0"),
-            new Stuff("unused 167", 167, "Transparency 1.0"),
-            new Stuff("unused 168", 168, "Transparency 1.0"),
+            new Stuff("unused 166", 166, "Transparency 1.0"), /*dark purple*/
+            new Stuff("unused 167", 167, "Transparency 1.0"), /*burgundy*/
+            new Stuff("unused 168", 168, "Transparency 1.0"), /*medium magenta*/
             new Stuff("unused 169", 169, "Transparency 1.0"),
             new Stuff("unused 170", 170, "Transparency 1.0"),
-            new Stuff("unused 171", 171, "Transparency 1.0"),
-            new Stuff("unused 172", 172, "Transparency 1.0"),
+            new Stuff("unused 171", 171, "Transparency 1.0"), /*light pink*/
+            new Stuff("unused 172", 172, "Transparency 1.0"), /*light tan*/
             new Stuff("unused 173", 173, "Transparency 1.0"),
             new Stuff("unused 174", 174, "Transparency 1.0"),
-            new Stuff("unused 175", 175, "Transparency 1.0"),
-            new Stuff("unused 176", 176, "Transparency 1.0"),
+            new Stuff("unused 175", 175, "Transparency 1.0"), /*dark tan*/
+            new Stuff("unused 176", 176, "Transparency 1.0"), /*dark orange*/
             new Stuff("unused 177", 177, "Transparency 1.0"),
-            new Stuff("unused 178", 178, "Transparency 1.0"),
-            new Stuff("unused 179", 179, "Transparency 1.0"),
+            new Stuff("unused 178", 178, "Transparency 1.0"), /*hot orange*/
+            new Stuff("unused 179", 179, "Transparency 1.0"), /*light skin*/
             new Stuff("unused 180", 180, "Transparency 1.0"),
             new Stuff("unused 181", 181, "Transparency 1.0"),
             new Stuff("unused 182", 182, "Transparency 1.0"),
             new Stuff("unused 183", 183, "Transparency 1.0"),
-            new Stuff("unused 184", 184, "Transparency 1.0"),
-            new Stuff("unused 185", 185, "Transparency 1.0"),
-            new Stuff("unused 186", 186, "Transparency 1.0"),
+            new Stuff("unused 184", 184, "Transparency 1.0"), /*dark skin*/
+            new Stuff("unused 185", 185, "Transparency 1.0"), /*gore*/
+            new Stuff("unused 186", 186, "Transparency 1.0"), /*dark brown*/
             new Stuff("unused 187", 187, "Transparency 1.0"),
-            new Stuff("unused 188", 188, "Transparency 1.0"),
-            new Stuff("unused 189", 189, "Transparency 1.0"),
+            new Stuff("unused 188", 188, "Transparency 1.0"), /*medium brown*/
+            new Stuff("unused 189", 189, "Transparency 1.0"), /*dark yellow*/
             new Stuff("unused 190", 190, "Transparency 1.0"),
-            new Stuff("unused 191", 191, "Transparency 1.0"),
+            new Stuff("unused 191", 191, "Transparency 1.0"), /*light yellow*/
             
             new Stuff("unused 192", 192, "Transparency 1.0"),
             new Stuff("head to neck", 193, "Transparency 1.0"),
