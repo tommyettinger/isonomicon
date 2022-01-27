@@ -135,8 +135,8 @@ public class EffectGenerator {
             float zRange = 1.5f / (zLimitHigh - zLimitLow);
 
             final float SPREAD = 42f;
-            final float magnitude = SPREAD * 0.04f / (fr * fr);
-            final float LIMIT = xSize * 0.1f;
+            final float magnitude = SPREAD * 0.2f / (fr * fr);
+            final float LIMIT = xSize * 0.15f;
 
             for (int x = 0; x < xSize; x++) {
                 for (int y = 0; y < ySize; y++) {
@@ -2304,7 +2304,7 @@ public class EffectGenerator {
                     if (lz - 2 <= 1) {
                         break ALL;
                     }
-                    ShapeGenerator.box(grid, lx - 1, ly - 1, lz - 2, lx + 4, ly + 4, lz + 4, missileHead);
+                    ShapeGenerator.box(grid, lx - 2, ly-1, lz-1, lx + 5, ly + 1, lz + 1, missileHead);
                     launchers.set(ln, (long) lx | (long) ly << 20 | (long) lz << 40);
                 }
             }
