@@ -1,8 +1,8 @@
 package isonomicon.physical;
 
 import com.github.tommyettinger.ds.IntObjectMap;
-import squidpony.squidmath.HastyPointHash;
-import squidpony.squidmath.WeightedTable;
+import com.github.yellowstonegames.core.WeightedTable;
+import com.github.yellowstonegames.grid.LongPointHash;
 
 /**
  * Created by Tommy Ettinger on 5/2/2020.
@@ -539,7 +539,7 @@ public class Stuff {
                     float rate = stuffs[v].material.traits.getOrDefault(VoxMaterial.MaterialTrait._rate.ordinal(), 1f);
                     int rf = (int)(rate * frame);
                     if(rf != (int)(rate * (frame + 1)))
-                        model[x][y][z] = stuffs[v].transitionIDs[stuffs[v].transitions.random(HastyPointHash.hashAll(x, y, z, rf))];
+                        model[x][y][z] = stuffs[v].transitionIDs[stuffs[v].transitions.random(LongPointHash.hashAll(x, y, z, rf))];
                 }
             }
         }

@@ -7,6 +7,7 @@ import com.github.tommyettinger.anim8.PaletteReducer;
 import com.github.tommyettinger.colorful.TrigTools;
 import com.github.tommyettinger.colorful.oklab.ColorTools;
 import com.github.tommyettinger.ds.IntObjectMap;
+import com.github.yellowstonegames.core.ArrayTools;
 import isonomicon.physical.Tools3D;
 import isonomicon.physical.VoxMaterial;
 
@@ -15,7 +16,7 @@ import java.util.Arrays;
 import static com.github.tommyettinger.colorful.oklab.ColorTools.getRawGamutValue;
 import static isonomicon.visual.SpecialRenderer.cos_;
 import static isonomicon.visual.SpecialRenderer.sin_;
-import static squidpony.ArrayTools.fill;
+import static com.github.yellowstonegames.core.ArrayTools.fill;
 
 /**
  * Renders {@code byte[][][]} voxel models to {@link Pixmap}s with arbitrary yaw rotation.

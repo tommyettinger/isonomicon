@@ -1,11 +1,11 @@
 package isonomicon.physical;
 
-import squidpony.StringKit;
-import squidpony.squidmath.CrossHash;
+import com.github.tommyettinger.ds.support.Base;
+import com.github.yellowstonegames.core.Hasher;
 
 import java.util.Arrays;
 
-import static squidpony.squidmath.CrossHash.Water.*;
+import static com.github.yellowstonegames.core.Hasher.*;
 
 /**
  * Just laying some foundation for 3D array manipulation.
@@ -715,15 +715,15 @@ public class Tools3D {
         final int len = data.length;
         for (int i = 3; i < len; i+=4) {
             seed = mum(
-                    mum(CrossHash.hash(data[i-3]) ^ b1, CrossHash.hash(data[i-2]) ^ b2) + seed,
-                    mum(CrossHash.hash(data[i-1]) ^ b3, CrossHash.hash(data[i  ]) ^ b4));
+                    mum(Hasher.beleth.hash(data[i-3]) ^ b1, Hasher.beleth.hash(data[i-2]) ^ b2) + seed,
+                    mum(Hasher.beleth.hash(data[i-1]) ^ b3, Hasher.beleth.hash(data[i  ]) ^ b4));
         }
         int t;
         switch (len & 3) {
             case 0: seed = mum(b1 ^ seed, b4 + seed); break;
-            case 1: seed = mum(seed ^((t = CrossHash.hash(data[len-1])) >>> 16), b3 ^ (t & 0xFFFFL)); break;
-            case 2: seed = mum(seed ^ CrossHash.hash(data[len-2]), b0 ^ CrossHash.hash(data[len-1])); break;
-            case 3: seed = mum(seed ^ CrossHash.hash(data[len-3]), b2 ^ CrossHash.hash(data[len-2])) ^ mum(seed ^ CrossHash.hash(data[len-1]), b4); break;
+            case 1: seed = mum(seed ^((t = Hasher.beleth.hash(data[len-1])) >>> 16), b3 ^ (t & 0xFFFFL)); break;
+            case 2: seed = mum(seed ^ Hasher.beleth.hash(data[len-2]), b0 ^ Hasher.beleth.hash(data[len-1])); break;
+            case 3: seed = mum(seed ^ Hasher.beleth.hash(data[len-3]), b2 ^ Hasher.beleth.hash(data[len-2])) ^ mum(seed ^ Hasher.beleth.hash(data[len-1]), b4); break;
         }
         return (int) mum(seed ^ seed << 16, len ^ b0);
     }
@@ -734,15 +734,15 @@ public class Tools3D {
         final int len = data.length;
         for (int i = 3; i < len; i+=4) {
             seed = mum(
-                    mum(CrossHash.hash(data[i-3]) ^ b1, CrossHash.hash(data[i-2]) ^ b2) + seed,
-                    mum(CrossHash.hash(data[i-1]) ^ b3, CrossHash.hash(data[i  ]) ^ b4));
+                    mum(Hasher.beleth.hash(data[i-3]) ^ b1, Hasher.beleth.hash(data[i-2]) ^ b2) + seed,
+                    mum(Hasher.beleth.hash(data[i-1]) ^ b3, Hasher.beleth.hash(data[i  ]) ^ b4));
         }
         int t;
         switch (len & 3) {
             case 0: seed = mum(b1 ^ seed, b4 + seed); break;
-            case 1: seed = mum(seed ^((t = CrossHash.hash(data[len-1])) >>> 16), b3 ^ (t & 0xFFFFL)); break;
-            case 2: seed = mum(seed ^ CrossHash.hash(data[len-2]), b0 ^ CrossHash.hash(data[len-1])); break;
-            case 3: seed = mum(seed ^ CrossHash.hash(data[len-3]), b2 ^ CrossHash.hash(data[len-2])) ^ mum(seed ^ CrossHash.hash(data[len-1]), b4); break;
+            case 1: seed = mum(seed ^((t = Hasher.beleth.hash(data[len-1])) >>> 16), b3 ^ (t & 0xFFFFL)); break;
+            case 2: seed = mum(seed ^ Hasher.beleth.hash(data[len-2]), b0 ^ Hasher.beleth.hash(data[len-1])); break;
+            case 3: seed = mum(seed ^ Hasher.beleth.hash(data[len-3]), b2 ^ Hasher.beleth.hash(data[len-2])) ^ mum(seed ^ Hasher.beleth.hash(data[len-1]), b4); break;
         }
         return (int) mum(seed ^ seed << 16, len ^ b0);
     }
@@ -803,7 +803,7 @@ public class Tools3D {
         return seed - (seed >>> 31) + (seed << 33);
     }
 
-    public static int hash(CrossHash.Curlup h, byte[][] data) {
+    public static int hash(Hasher h, byte[][] data) {
         if (data == null) return 0;
         long result = 0xBEEF1E57DADL ^ data.length * 0x9E3779B97F4A7C15L;
         int i = 0;
@@ -831,10 +831,10 @@ public class Tools3D {
     }
     
 
-    public static int hash(CrossHash.Curlup h, byte[][][] data) {
+    public static int hash(Hasher h, byte[][][] data) {
         return (int) hash64(h, data);
     }
-    public static long hash64(CrossHash.Curlup h, byte[][][] data) {
+    public static long hash64(Hasher h, byte[][][] data) {
         if (data == null) return 0;
         long result = 0xBEEF1E57DADD1E5L ^ data.length * 0x9E3779B97F4A7C15L;
         int i = 0;
@@ -859,26 +859,6 @@ public class Tools3D {
         result ^= result >>> 31;
         result *= 0xDB4F0B9175AE2165L;
         return (result ^ result >>> 28);
-    }
-
-    /**
-     * A helper method for taking already-random input states and getting random values inside a small range.
-     * The state can be any int, though only the least-significant 16 bits will be used, and the bound can be positive
-     * or negative but should be limited to between -65536 to 65536 (precision will be lost past positive or negative
-     * 65536). The result will be between 0, inclusive, and bound, exclusive. This method is safe for GWT and does not
-     * use long math. If you give this values for state that aren't especially random, this may have noticeable patterns
-     * in its output, but if you use {@link #hash(byte[][][])} to get state, you should be fine. If you need to make
-     * multiple calls to this but have only one very-random input state, consider calling this with
-     * {@code determineSmallBounded((state = (state ^ 0x9E3779B9) * 0x9E377) ^ state >>> 16, bound)}; this will change
-     * state in a not-terribly random way (an XLCG; using XOR instead of addition makes it GWT-friendly) but then uses
-     * a common xorshift operation to conceal issues with the lower bits (without changing state again).
-     * @param state any int, but only the bottom 16 bits will be used; should already be random (e.g. from a hash)
-     * @param bound an int that is at least -65536 and no more than 65536; will be used as the exclusive outer bound
-     * @return an int between 0, inclusive, and bound, exclusive
-     */
-    public static int determineSmallBounded(final int state, final int bound)
-    {
-        return ((bound * (state & 0xFFFF)) >> 16);
     }
 
     /**
@@ -920,7 +900,7 @@ public class Tools3D {
         for (int z = 0; z < sizeZ; z++) {
             for (int y = 0; y < sizeY; y++) {
                 for (int x = 0; x < sizeX; x++) {
-                    StringKit.appendHex(sb, data[x][y][z]).append(", ");
+                    Base.BASE16.appendUnsigned(sb, data[x][y][z]).append(", ");
                 }
                 sb.append('\n');
             }

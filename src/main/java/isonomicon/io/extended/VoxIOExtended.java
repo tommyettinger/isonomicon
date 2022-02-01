@@ -3,10 +3,10 @@ package isonomicon.io.extended;
 import com.badlogic.gdx.math.Vector3;
 import com.github.tommyettinger.ds.IntObjectMap;
 import com.github.tommyettinger.ds.LongOrderedSet;
+import com.github.yellowstonegames.core.StringTools;
 import isonomicon.io.LittleEndianDataInputStream;
 import isonomicon.physical.Tools3D;
 import isonomicon.physical.VoxMaterial;
-import squidpony.StringKit;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -69,7 +69,7 @@ public class VoxIOExtended {
     public static void getTranslation(Vector3 result, String[][] pairs){
         for(String[] pair : pairs) {
             if("_t".equals(pair[0])) {
-                String[] parts = StringKit.split(pair[1], " ");
+                String[] parts = StringTools.split(pair[1], " ");
                 if (parts.length > 0) {
                     try {
                         result.x = Float.parseFloat(parts[0]);

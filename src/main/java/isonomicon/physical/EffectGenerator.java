@@ -6,8 +6,8 @@ import com.github.tommyettinger.ds.LongOrderedSet;
 import com.github.tommyettinger.ds.ObjectObjectOrderedMap;
 import com.github.tommyettinger.ds.support.EnhancedRandom;
 import com.github.tommyettinger.ds.support.FourWheelRandom;
+import com.github.yellowstonegames.grid.IntPointHash;
 import isonomicon.io.extended.VoxModel;
-import squidpony.squidmath.HastyPointHash;
 
 import static com.badlogic.gdx.math.MathUtils.ceil;
 import static com.badlogic.gdx.math.MathUtils.floor;
@@ -2167,7 +2167,7 @@ public class EffectGenerator {
                                 byte v = grid[x][y][z];
                                 if(v != 0 && (v < shock || v > shock + 1)
                                         && (1 - (f & 1) != Stuff.STUFFS_B[v & 255].material.getTrait(VoxMaterial.MaterialTrait._frame))){
-                                    int h = HastyPointHash.hash256(x, y, z, 1234567L);
+                                    int h = IntPointHash.hash256(x, y, z, 1234567);
                                     if(h < f * f * 11)
                                         grid[x][y][z] = (byte) (flicker + (h & 1));
                                 }
@@ -2182,7 +2182,7 @@ public class EffectGenerator {
                                 byte v = grid[x][y][z];
                                 if(v != 0 && (v < shock || v > shock + 1)
                                         && (1 - (f & 1) != Stuff.STUFFS_B[v & 255].material.getTrait(VoxMaterial.MaterialTrait._frame))){
-                                    int h = HastyPointHash.hash256(x, y, z, 1234567L), fr = 16 - f - f;
+                                    int h = IntPointHash.hash256(x, y, z, 12345), fr = 16 - f - f;
                                     if(h < fr * fr * 11)
                                         grid[x][y][z] = (byte) (flicker + (h & 1));
 
