@@ -104,10 +104,11 @@ public class Specialist extends ApplicationAdapter {
 //        png8 = new PNG8();
         gif = new AnimatedGif();
         apng = new AnimatedPNG();
-        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.SCATTER);
+        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.NEUE);
 //        png8.setDitherAlgorithm(Dithered.DitherAlgorithm.SCATTER);
-        gif.palette = new PaletteReducer(Coloring.YAM2, Gdx.files.local("assets/Yam2Preload.dat").readBytes());
-        gif.palette.setDitherStrength(0.25f);
+        gif.palette = new PaletteReducer();
+//        gif.palette = new PaletteReducer(Coloring.YAM2, Gdx.files.local("assets/Yam2Preload.dat").readBytes());
+        gif.setDitherStrength(0.5f);
 //        png8.palette = gif.palette;
         Gdx.files.local("out/vox").mkdirs();
         for (int n = 0; n < inputs.length; n++) {
@@ -162,7 +163,7 @@ public class Specialist extends ApplicationAdapter {
                 }
                 pm.insertRange(pm.size - 4, 4);
             }
-//                gif.palette.analyze(pm);
+            gif.palette.analyze(pm);
             gif.write(Gdx.files.local("out/b/specialized/" + name + '/' + name + ".gif"), pm, 8);
 //                gif.palette.exact(Coloring.HALTONITE240, PRELOAD);
 //                gif.write(Gdx.files.local("out/" + name + '/' + name + "-256-color.gif"), pm, 1);
@@ -207,7 +208,7 @@ public class Specialist extends ApplicationAdapter {
             this.name = name.substring(nameStart, name.indexOf('.', nameStart));
 //            renderer = new NextRenderer(voxels.length, QUALITY);
 //            renderer = new AngledRenderer(voxels.length);
-            SpecialRenderer.shrink = 0;
+            SpecialRenderer.shrink = 1;
             renderer = new SpecialRenderer(voxels.grids.get(0).length, Stuff.STUFFS_B);
             renderer.palette(Coloring.BETTS64);
             renderer.saturation(0f);
