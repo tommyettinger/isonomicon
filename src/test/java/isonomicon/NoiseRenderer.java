@@ -5,7 +5,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.github.tommyettinger.anim8.AnimatedGif;
@@ -13,7 +12,6 @@ import com.github.tommyettinger.anim8.Dithered;
 import com.github.tommyettinger.anim8.PNG8;
 import com.github.tommyettinger.anim8.PaletteReducer;
 import com.github.tommyettinger.colorful.TrigTools;
-import isonomicon.io.LittleEndianDataInputStream;
 import isonomicon.io.VoxIO;
 import isonomicon.physical.Tools3D;
 import isonomicon.physical.VoxMaterial;
@@ -22,11 +20,6 @@ import isonomicon.visual.SmudgeRenderer;
 import squidpony.squidmath.FastNoise;
 import squidpony.squidmath.FlawedPointHash;
 import squidpony.squidmath.IPointHash;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 
 public class NoiseRenderer extends ApplicationAdapter {
 //    public static final int QUALITY = 48;

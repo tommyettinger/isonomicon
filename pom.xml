@@ -67,10 +67,11 @@
         <maven.gpg.version>1.6</maven.gpg.version>
         <jdk.version>17</jdk.version>
         <junit.version>4.13.2</junit.version>
-        <anim8.version>0.3.4</anim8.version>
+        <anim8.version>0.3.5</anim8.version>
         <squidlib.version>37499e6a2b</squidlib.version>
+        <squidsquad.version>2845ba086d</squidsquad.version>
         <gdx.version>1.10.0</gdx.version>
-        <jdkgdxds.version>a700085ccb</jdkgdxds.version>
+        <jdkgdxds.version>2f1af39863</jdkgdxds.version>
 
 <!--        <anim8.version>0.2.10</anim8.version>-->
 <!--        <squidlib.version>f8173091c3</squidlib.version>-->
@@ -90,6 +91,16 @@
             <groupId>com.github.yellowstonegames.SquidLib</groupId>
             <artifactId>squidlib-util</artifactId>
             <version>${squidlib.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.yellowstonegames.SquidSquad</groupId>
+            <artifactId>SquidCore</artifactId>
+            <version>${squidsquad.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.yellowstonegames.SquidSquad</groupId>
+            <artifactId>SquidGrid</artifactId>
+            <version>${squidsquad.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.tommyettinger</groupId>

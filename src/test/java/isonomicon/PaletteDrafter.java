@@ -14,10 +14,10 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.utils.UIUtils;
 import com.badlogic.gdx.utils.*;
 import com.github.tommyettinger.colorful.oklab.ColorTools;
+import com.github.tommyettinger.ds.ObjectObjectOrderedMap;
 import isonomicon.physical.Stuff;
 import isonomicon.physical.VoxMaterial;
 import squidpony.ArrayTools;
-import squidpony.squidmath.OrderedMap;
 
 import java.io.IOException;
 
@@ -87,7 +87,7 @@ public class PaletteDrafter extends ApplicationAdapter {
 
     private static final Stuff[] STUFFS = Stuff.STUFFS;
 
-    private final OrderedMap<String, int[]> groups = new OrderedMap<>(128);
+    private final ObjectObjectOrderedMap<String, int[]> groups = new ObjectObjectOrderedMap<>(128);
     {
         groups.put("All", ArrayTools.range(1, 128));
         groups.put("Skin", new int[]{21, 19});

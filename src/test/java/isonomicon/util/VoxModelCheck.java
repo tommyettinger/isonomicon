@@ -4,12 +4,9 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import com.badlogic.gdx.utils.TimeUtils;
-import com.github.tommyettinger.anim8.PaletteReducer;
 import isonomicon.io.LittleEndianDataInputStream;
 import isonomicon.io.extended.*;
 import isonomicon.physical.Tools3D;
-import isonomicon.visual.Coloring;
 import squidpony.StringKit;
 
 import java.io.FileInputStream;
