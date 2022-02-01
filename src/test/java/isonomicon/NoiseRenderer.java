@@ -10,16 +10,14 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.github.tommyettinger.anim8.AnimatedGif;
 import com.github.tommyettinger.anim8.Dithered;
-import com.github.tommyettinger.anim8.PNG8;
-import com.github.tommyettinger.anim8.PaletteReducer;
+import com.github.yellowstonegames.grid.FlawedPointHash;
+import com.github.yellowstonegames.grid.IPointHash;
+import com.github.yellowstonegames.grid.Noise;
 import isonomicon.io.VoxIO;
 import isonomicon.physical.Tools3D;
 import isonomicon.physical.VoxMaterial;
 import isonomicon.visual.Coloring;
 import isonomicon.visual.SmudgeRenderer;
-import squidpony.squidmath.FastNoise;
-import squidpony.squidmath.FlawedPointHash;
-import squidpony.squidmath.IPointHash;
 
 import java.io.IOException;
 
@@ -28,7 +26,7 @@ public class NoiseRenderer extends ApplicationAdapter {
     public static final int SCREEN_WIDTH = 512;//640;
     public static final int SCREEN_HEIGHT = 512;//720;
     private SmudgeRenderer renderer;
-    private FastNoise noise, noise2;
+    private Noise noise;
 
     private static final int SMALL_SIZE = 64, MID_SIZE = SMALL_SIZE << 1, LARGE_SIZE = SMALL_SIZE << 2;
     private byte[][][] tempVoxels = new byte[SMALL_SIZE][SMALL_SIZE][SMALL_SIZE];
@@ -44,9 +42,9 @@ public class NoiseRenderer extends ApplicationAdapter {
     @Override
     public void create() {
         System.out.println("Setting up...");
-        noise = new FastNoise(123456789, 0x1p-3f, FastNoise.CUBIC_FRACTAL, 1);
+        noise = new Noise(123456789, 0x1p-3f, Noise.CUBIC_FRACTAL, 1);
 //        noise2 = new FastNoise(-4321, 0x1p-4f, FastNoise.PERLIN_FRACTAL, 2);
-        noise.setFractalType(FastNoise.RIDGED_MULTI);
+        noise.setFractalType(Noise.RIDGED_MULTI);
         noise.setPointHash(new CubeHash(1234, 8));
         long startTime = TimeUtils.millis();
 //        Gdx.files.local("out/vox/").mkdirs();
