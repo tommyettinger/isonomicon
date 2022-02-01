@@ -3,8 +3,11 @@ package isonomicon.visual;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.math.MathUtils;
 import com.github.tommyettinger.anim8.PaletteReducer;
+import com.github.tommyettinger.bluegrass.BlueNoise;
 import com.github.tommyettinger.colorful.oklab.ColorTools;
 import com.github.tommyettinger.ds.IntObjectMap;
+import com.github.yellowstonegames.grid.IntPointHash;
+import com.github.yellowstonegames.grid.Noise;
 import isonomicon.io.extended.GroupChunk;
 import isonomicon.io.extended.ShapeModel;
 import isonomicon.io.extended.TransformChunk;
@@ -12,14 +15,11 @@ import isonomicon.io.extended.VoxModel;
 import isonomicon.physical.Stuff;
 import isonomicon.physical.Tools3D;
 import isonomicon.physical.VoxMaterial;
-import squidpony.squidmath.BlueNoise;
-import squidpony.squidmath.FastNoise;
-import squidpony.squidmath.IntPointHash;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static squidpony.ArrayTools.fill;
+import static com.github.yellowstonegames.core.ArrayTools.fill;
 
 /**
  * Renders {@code byte[][][]} voxel models to pairs of {@link Pixmap}s, one using normal RGBA colors and one using an
@@ -40,7 +40,7 @@ public class SpecialRenderer {
     public static int shrink = 1;
     public float neutral = 1f;
 
-    public static final FastNoise noise = new FastNoise(0x1337BEEF, 0.0125f, FastNoise.SIMPLEX_FRACTAL, 2);
+    public static final Noise noise = new Noise(0x1337BEEF, 0.0125f, Noise.SIMPLEX_FRACTAL, 2);
 
     protected SpecialRenderer() {
         this(64);
@@ -71,7 +71,7 @@ public class SpecialRenderer {
     }
     
     protected float bn(int x, int y, int seed) {
-        return (BlueNoise.getSeededTriOmniTiling(x, y, seed) + 128) * 0x1p-8f;
+        return (BlueNoise.getSeededTriangular(x, y, seed) + 128) * 0x1p-8f;
     }
 
     protected float bnBlocky(int x, int y, int seed) {

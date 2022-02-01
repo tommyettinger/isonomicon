@@ -4,10 +4,10 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+import com.github.yellowstonegames.core.StringTools;
 import isonomicon.io.LittleEndianDataInputStream;
 import isonomicon.io.extended.*;
 import isonomicon.physical.Tools3D;
-import squidpony.StringKit;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -32,7 +32,7 @@ public class VoxModelCheck extends ApplicationAdapter {
                 System.out.println(tc.id + " with child " + tc.childId);
             System.out.println("GroupChunks");
             for(GroupChunk gc : model.groupChunks.values())
-                System.out.println(gc.id + " with children " + StringKit.join(",", gc.childIds));
+                System.out.println(gc.id + " with children " + StringTools.join(",", gc.childIds));
             System.out.println("ShapeChunks");
             for(ShapeChunk sc : model.shapeChunks.values()) {
                 System.out.println(sc.id + " with children");

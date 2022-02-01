@@ -18,8 +18,8 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.github.tommyettinger.colorful.oklab.ColorTools;
 import com.github.tommyettinger.ds.ObjectObjectOrderedMap;
+import com.github.yellowstonegames.core.ArrayTools;
 import isonomicon.physical.Stuff;
-import squidpony.ArrayTools;
 
 import java.io.IOException;
 
