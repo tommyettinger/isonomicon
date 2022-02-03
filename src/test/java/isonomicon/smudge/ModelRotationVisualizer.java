@@ -1,4 +1,4 @@
-package isonomicon;
+package isonomicon.smudge;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
@@ -15,10 +15,13 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import isonomicon.io.LittleEndianDataInputStream;
+import isonomicon.io.VoxIO;
 import isonomicon.io.extended.VoxIOExtended;
 import isonomicon.io.extended.VoxModel;
+import isonomicon.physical.Tools3D;
 import isonomicon.visual.Coloring;
 import isonomicon.visual.ShaderUtils;
+import isonomicon.visual.SmudgeRenderer;
 import isonomicon.visual.SpecialRenderer;
 
 import java.io.FileInputStream;
@@ -34,9 +37,9 @@ public class ModelRotationVisualizer extends ApplicationAdapter {
     protected Viewport screenView;
     protected FrameBuffer buffer;
     protected Texture screenTexture, pmTexture, palettes;
-    private SpecialRenderer renderer;
+    private SmudgeRenderer renderer;
     private ShaderProgram indexShader;
-    private VoxModel voxels;
+    private byte[][][] voxels;
     private float saturation;
     public float yaw, pitch, roll;
     
@@ -58,8 +61,7 @@ public class ModelRotationVisualizer extends ApplicationAdapter {
 //        load("vox/CrazyBox.vox");
 //        load("vox/Lomuk.vox");
 //        load("vox/Tree.vox");
-//        load("vox/Oklab.vox");
-        load("specialized/vox/FigureSplit.vox");
+        load("vox/Oklab.vox");
 //        renderer.dither = true;
         Gdx.input.setInputProcessor(inputProcessor());
     }
@@ -92,14 +94,15 @@ public class ModelRotationVisualizer extends ApplicationAdapter {
         worldView.update(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         batch.setProjectionMatrix(worldView.getCamera().combined);
 
-        renderer.drawModel(voxels, yaw, pitch, roll, (int) (TimeUtils.millis() >>> 8 & 3), 0, 0, 0);
-        pmTexture.draw(renderer.palettePixmap, 0, 0);
-        batch.setShader(indexShader);
-        palettes.bind(1);
+        renderer.drawSplats(voxels, yaw, pitch, roll, (int) (TimeUtils.millis() >>> 8 & 3), 0, 0, 0, VoxIO.lastMaterials);
+        pmTexture.draw(renderer.pixmap, 0, 0);
+//        batch.setShader(indexShader);
+//        palettes.bind(1);
         batch.begin();
-        indexShader.setUniformi("u_texPalette", 1);
-        pmTexture.bind(0);
-        batch.setColor(0f, 0.5f, 0.5f, 1f);
+//        indexShader.setUniformi("u_texPalette", 1);
+//        pmTexture.bind(0);
+//        batch.setColor(0f, 0.5f, 0.5f, 1f);
+        batch.setPackedColor(-0x1.fffffep126f); // white as a packed float, resets any color changes that the renderer made
         batch.draw(pmTexture, 0, pmTexture.getHeight(), pmTexture.getWidth(), -pmTexture.getHeight());
         batch.end();
 
@@ -113,7 +116,6 @@ public class ModelRotationVisualizer extends ApplicationAdapter {
 //        batch.draw(pmTexture,
 //                0,
 //                0);
-        //batch.setColor(-0x1.fffffep126f); // white as a packed float, resets any color changes that the renderer made
 //        batch.end();
 //        buffer.end();
 //        screenTexture = buffer.getColorBufferTexture();
@@ -177,19 +179,18 @@ public class ModelRotationVisualizer extends ApplicationAdapter {
         pmTexture = new Texture(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, Pixmap.Format.RGBA8888);
         try {
             //// loads a file by its full path, which we get via drag+drop
-            VoxModel v = VoxIOExtended.readVox(new LittleEndianDataInputStream(new FileInputStream(name)));
+            byte[][][] v = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream(name)));
             if(v == null) {
-                voxels = new VoxModel();
+                voxels = new byte[0][0][0];
                 return;
             }
-//            v = Tools3D.soak(v);
-//            voxels = new byte[v.length * 3 >> 1][v.length * 3 >> 1][v.length * 3 >> 1];
-//            Tools3D.translateCopyInto(v, voxels, v.length >> 2, v.length >> 2, v.length >> 2);
-            voxels = v;
-            renderer = new SpecialRenderer(voxels.grids.get(0).length);
-            renderer.palette(Coloring.MANOS64);
+            v = Tools3D.soak(v);
+            voxels = new byte[v.length * 3 >> 1][v.length * 3 >> 1][v.length * 3 >> 1];
+            Tools3D.translateCopyInto(v, voxels, v.length >> 2, v.length >> 2, v.length >> 2);
+            renderer = new SmudgeRenderer(voxels.length);
+            renderer.palette(VoxIO.lastPalette);
         } catch (FileNotFoundException e) {
-            voxels = new VoxModel();
+            voxels = new byte[0][0][0];
         }
     }
 }

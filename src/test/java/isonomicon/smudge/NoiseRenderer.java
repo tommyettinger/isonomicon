@@ -1,4 +1,4 @@
-package isonomicon;
+package isonomicon.smudge;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
