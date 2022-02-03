@@ -426,8 +426,6 @@ public class SmudgeRenderer {
 
     public Pixmap drawSplats(byte[][][] colors, float angleTurns, int frame, IntObjectMap<VoxMaterial> materialMap) {
         this.materialMap = materialMap;
-//        Tools3D.fill(remade, 0);
-//        seed = Tools3D.hash64(colors) + NumberUtils.floatToRawIntBits(angleTurns);
         final int size = colors.length;
         final float hs = (size) * 0.5f;
         final float c = cos_(angleTurns), s = sin_(angleTurns);
@@ -447,4 +445,40 @@ public class SmudgeRenderer {
         return blit(angleTurns, frame);
     }
 
+    public void splatOnly(byte[][][] colors, float yaw, float pitch, float roll, int frame,
+                          float translateX, float translateY, float translateZ) {
+        final int size = colors.length;
+        final float hs = size * 0.5f;
+        float ox, oy, oz; // offset x,y,z
+        final float cYaw = cos_(yaw), sYaw = sin_(yaw);
+        final float cPitch = cos_(pitch), sPitch = sin_(pitch);
+        final float cRoll = cos_(roll), sRoll = sin_(roll);
+        final float x_x = cYaw * cPitch, y_x = cYaw * sPitch * sRoll - sYaw * cRoll, z_x = cYaw * sPitch * cRoll + sYaw * sRoll;
+        final float x_y = sYaw * cPitch, y_y = sYaw * sPitch * sRoll + cYaw * cRoll, z_y = sYaw * sPitch * cRoll - cYaw * sRoll;
+        final float x_z = -sPitch, y_z = cPitch * sRoll, z_z = cPitch * cRoll;
+        for (int z = 0; z < size; z++) {
+            for (int x = 0; x < size; x++) {
+                for (int y = 0; y < size; y++) {
+                    final byte v = colors[x][y][z];
+                    if(v != 0)
+                    {
+                        ox = x - hs;
+                        oy = y - hs;
+                        oz = z - hs;
+                        splat(  ox * x_x + oy * y_x + oz * z_x + size + translateX,
+                                ox * x_y + oy * y_y + oz * z_y + size + translateY,
+                                ox * x_z + oy * y_z + oz * z_z + hs + translateZ, x, y, z, v, frame);
+                    }
+                }
+            }
+        }
+    }
+
+    public Pixmap drawSplats(byte[][][] colors, float yaw, float pitch, float roll, int frame,
+                             float translateX, float translateY, float translateZ,
+                             IntObjectMap<VoxMaterial> materialMap) {
+        this.materialMap = materialMap;
+        splatOnly(colors, yaw, pitch, roll, frame, translateX, translateY, translateZ);
+        return blit(yaw, pitch, roll, frame);
+    }
 }
