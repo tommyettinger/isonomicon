@@ -680,6 +680,21 @@ public class Tools3D {
         }
     }
 
+    public static byte[][][] hollowInPlace(byte[][][] voxels)
+    {
+        final int xs = voxels.length, ys = voxels[0].length, zs = voxels[0][0].length;
+        for (int x = 0; x < xs; x++) {
+            for (int y = 0; y < ys; y++) {
+                for (int z = 0; z < zs; z++) {
+                    if(isSurface(voxels, x, y, z) < 0) {
+                        voxels[x][y][z] = 0;
+                    }
+                }
+            }
+        }
+        return voxels;
+    }
+
     public static byte[][][] soak(byte[][][] voxels)
     {
         final int xs = voxels.length, ys = voxels[0].length, zs = voxels[0][0].length;

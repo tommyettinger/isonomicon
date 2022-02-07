@@ -184,7 +184,7 @@ public class ModelRotationVisualizer extends ApplicationAdapter {
                 voxels = new byte[0][0][0];
                 return;
             }
-            v = Tools3D.soak(v);
+            Tools3D.soakInPlace(Tools3D.hollowInPlace(v));
             voxels = new byte[v.length * 3 >> 1][v.length * 3 >> 1][v.length * 3 >> 1];
             Tools3D.translateCopyInto(v, voxels, v.length >> 2, v.length >> 2, v.length >> 2);
             renderer = new SmudgeRenderer(voxels.length);
