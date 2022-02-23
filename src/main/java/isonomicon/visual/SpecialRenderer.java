@@ -377,7 +377,6 @@ public class SpecialRenderer {
             for (int y = ySize; y >= 0; y--) {
                 if (indices[x][y] != 0) {
                     float shade = Math.min(Math.max((shading[x][y] + midShading[x][y]) * 0.625f + 0.1328125f, 0f), 1f);
-//                    float shade = Math.min(Math.max((shading[x][y]) * 0.625f + 0.125f, 0f), 1f);
                     float sat = Math.min(Math.max((saturation[x][y]) * 0.5f + 0.5f, 0f), 1f);
                     palettePixmap.drawPixel(x >>> shrink, y >>> shrink, (indices[x][y] & 255) << 24 |
                             (int)(shade * 255.999f) << 16 |

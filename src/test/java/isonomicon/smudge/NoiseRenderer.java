@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.github.tommyettinger.anim8.AnimatedGif;
 import com.github.tommyettinger.anim8.Dithered;
+import com.github.tommyettinger.anim8.PaletteReducer;
 import com.github.yellowstonegames.grid.FlawedPointHash;
 import com.github.yellowstonegames.grid.IPointHash;
 import com.github.yellowstonegames.grid.Noise;
@@ -56,7 +57,7 @@ public class NoiseRenderer extends ApplicationAdapter {
         png.setCompression(2);
 //        apng = new AnimatedPNG();
         gif.setDitherAlgorithm(Dithered.DitherAlgorithm.NEUE);
-        gif.setDitherStrength(0.75f);
+        gif.setDitherStrength(0.625f);
         Gdx.files.local("out/vox").mkdirs();
         System.out.println("Loading...");
 //        System.out.println("Produced "+SMALL_SIZE+"x"+SMALL_SIZE+"x"+SMALL_SIZE+" noise.");
@@ -74,16 +75,17 @@ public class NoiseRenderer extends ApplicationAdapter {
                 Pixmap p = new Pixmap(pixmap.getWidth(), pixmap.getHeight(), pixmap.getFormat());
                 p.drawPixmap(pixmap, 0, 0);
                 pm.add(p);
-                try {
-                    png.write(Gdx.files.local("out/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), p);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    png.write(Gdx.files.local("out/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), p);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
 //                png8.write(Gdx.files.local("out/" + name + '/' + name + "_angle" + i + ".png"), p, false, true);
             }
 //            pm.insertRange(pm.size - 4, 4);
         }
         System.out.println("Mostly done, gif stuff in progress...");
+        gif.palette = new PaletteReducer(pm);
         gif.write(Gdx.files.local("out/" + name + '/' + name + ".gif"), pm, 8);
 //                gif.palette.exact(Coloring.HALTONITE240, PRELOAD);
 //                gif.write(Gdx.files.local("out/" + name + '/' + name + "-256-color.gif"), pm, 1);
@@ -122,7 +124,7 @@ public class NoiseRenderer extends ApplicationAdapter {
 //                    sum += (tempVoxels[x][y][z] = (byte) (~(Float.floatToRawIntBits(noise.getConfiguredNoise(x, y, z, frame) - 0.875f) >> 31) & 81)); // gray-green
 //                    sum += (tempVoxels[x][y][z] = (byte) (~(Float.floatToRawIntBits(noise.getConfiguredNoise(x, y, z, frame) - 0.91f) >> 31) & 44)); // gray
 //                    sum += (tempVoxels[x][y][z] = (byte) (~(Float.floatToRawIntBits(noise.getConfiguredNoise(x, y, z, frame) - 0.91f) >> 31) & 175)); // blue
-                    sum += (tempVoxels[x][y][z] = (byte) ((~(Float.floatToRawIntBits(noise.getConfiguredNoise(x, y, z, frame) - 0.91f) >> 31) & 68))); // orange
+                    sum += (tempVoxels[x][y][z] = (byte) ((~(Float.floatToRawIntBits(noise.getConfiguredNoise(x, y, z, frame) - 0.92f) >> 31) & 68))); // orange
 //                    sum += (tempVoxels[x][y][z] = (byte) ((~(Float.floatToRawIntBits(noise.getConfiguredNoise(x, y, z, frame) - 0.91f) >> 31) & (int)(12 + 2f * noise2.getConfiguredNoise(x, y, z, TrigTools.sin_(frame * 0x1p-6f), TrigTools.cos_(frame * 0x1p-6f)))))); // jungle greenery
 //                    sum += (tempVoxels[x][y][z] = (byte) (~(Float.floatToRawIntBits(noise.getConfiguredNoise(x, y, z, frame) - 0.91f) >> 31) & (x + y + z + frame & 63))); // rainbow
                 }
@@ -136,7 +138,7 @@ public class NoiseRenderer extends ApplicationAdapter {
         this.name = "Noise";
         if(renderer == null) {
             for (int i = 1; i < 256; i++) {
-                VoxIO.lastMaterials.put(i, new VoxMaterial("Metal", "Roughness 0.6 Reflection 0.2"));
+                VoxIO.lastMaterials.put(i, new VoxMaterial("Metal", "Roughness 0.6 Reflection 0.4 Dapple -0.04"));
             }
             renderer = new SmudgeRenderer(voxels.length);
             renderer.palette(Coloring.BETSY256);

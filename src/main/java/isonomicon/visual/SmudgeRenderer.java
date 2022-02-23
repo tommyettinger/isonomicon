@@ -2,20 +2,15 @@ package isonomicon.visual;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.utils.NumberUtils;
 import com.github.tommyettinger.anim8.PaletteReducer;
-import com.github.tommyettinger.colorful.TrigTools;
 import com.github.tommyettinger.colorful.oklab.ColorTools;
 import com.github.tommyettinger.ds.IntObjectMap;
-import com.github.yellowstonegames.core.ArrayTools;
 import isonomicon.physical.Tools3D;
 import isonomicon.physical.VoxMaterial;
 
 import java.util.Arrays;
 
 import static com.github.tommyettinger.colorful.oklab.ColorTools.getRawGamutValue;
-import static isonomicon.visual.SpecialRenderer.cos_;
-import static isonomicon.visual.SpecialRenderer.sin_;
 import static com.github.yellowstonegames.core.ArrayTools.fill;
 
 /**
@@ -63,24 +58,83 @@ public class SmudgeRenderer {
         alpha = Math.min(Math.max(alpha, 0f), 1f);
         final float A2 = (A - 0.5f);
         final float B2 = (B - 0.5f);
-        final float hue = TrigTools.atan2_(B2, A2);
+        final float hue = atan2_(B2, A2);
         final int idx = (int) (L * 255.999f) << 8 | (int)(256f * hue);
         final float dist = getRawGamutValue(idx) * 0.5f;
         if(dist * dist * 0x1p-16f >= (A2 * A2 + B2 * B2))
             return ColorTools.oklab(L, A, B, alpha);
-        return NumberUtils.intBitsToFloat(
+        return Float.intBitsToFloat(
                 (int) (alpha * 127.999f) << 25 |
-                        (int) (TrigTools.sin_(hue) * dist + 128f) << 16 |
-                        (int) (TrigTools.cos_(hue) * dist + 128f) << 8 |
+                        (int) (sin_(hue) * dist + 128f) << 16 |
+                        (int) (cos_(hue) * dist + 128f) << 8 |
                         (int) (L * 255f));
     }
 
-    protected float bn(int x, int y) {
-//        final float result = (((x | ~y) & 1) + (x + ~y & 1) + (x & y & 1)) * 0.333f;
-//        System.out.println(result);
-//        return result;
-//        return (((x | ~y) & 1) + (x + ~y & 1) + (x & y & 1)) * 0.333f;
-        return (PaletteReducer.TRI_BLUE_NOISE[(x & 63) | (y & 63) << 6] + 128) * 0x1p-8f;
+//    protected float bn(int x, int y) {
+////        final float result = (((x | ~y) & 1) + (x + ~y & 1) + (x & y & 1)) * 0.333f;
+////        System.out.println(result);
+////        return result;
+////        return (((x | ~y) & 1) + (x + ~y & 1) + (x & y & 1)) * 0.333f;
+//        return (PaletteReducer.TRI_BLUE_NOISE[(x & 63) | (y & 63) << 6] + 128) * 0x1p-8f;
+//    }
+
+    /**
+     * This one's weird; unlike {@link #atan2_(float, float)}, it can return negative results.
+     * @param v any finite float
+     * @return between -0.25 and 0.25
+     */
+    private static float atn_(final float v) {
+        final float n = Math.abs(v);
+        final float c = (n - 1f) / (n + 1f);
+        final float c2 = c * c;
+        final float c3 = c * c2;
+        final float c5 = c3 * c2;
+        final float c7 = c5 * c2;
+        return Math.copySign(0.125f + 0.1590300064615682f * c - 0.051117687016646825f * c3 + 0.02328064394867594f * c5
+                - 0.006205912780487965f * c7, v);
+    }
+
+    /**
+     * Altered-range approximation of the frequently-used trigonometric method atan2, taking y and x positions as floats
+     * and returning an angle measured in turns from 0.0f to 1.0f, with one cycle over the range equivalent to 360
+     * degrees or 2PI radians. You can multiply the angle by {@code 6.2831855f} to change to radians, or by {@code 360f}
+     * to change to degrees. Takes y and x (in that unusual order) as floats. Will never return a negative number, which
+     * may help avoid costly floating-point modulus when you actually want a positive number.
+     * <br>
+     * Credit for this goes to the 1955 research study "Approximations for Digital Computers," by RAND Corporation. This
+     * is sheet 9's algorithm, which is the second-fastest and second-least precise. The algorithm on sheet 8 is faster,
+     * but only by a very small degree, and is considerably less precise. That study provides an atan()
+     * method, and the small code to make that work as atan2_() was worked out from Wikipedia.
+     * @param y y-component of the point to find the angle towards; note the parameter order is unusual by convention
+     * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention
+     * @return the angle to the given point, as a float from 0.0f to 1.0f, inclusive
+     */
+    public static float atan2_(final float y, float x) {
+        float n = y / x;
+        if(n != n) n = (y == x ? 1f : -1f); // if both y and x are infinite, n would be NaN
+        else if(n - n != n - n) x = 0f; // if n is infinite, y is infinitely larger than x.
+        if(x > 0) {
+            if(y >= 0)
+                return atn_(n);
+            else
+                return atn_(n) + 1f;
+        }
+        else if(x < 0) {
+            return atn_(n) + 0.5f;
+        }
+        else if(y > 0) return x + 0.25f;
+        else if(y < 0) return x + 0.75f;
+        else return x + y; // returns 0 for 0,0 or NaN if either y or x is NaN
+    }
+
+    public static float sin_(float turns)
+    {
+        return MathUtils.sinDeg(turns * 360f);
+    }
+
+    public static float cos_(float turns)
+    {
+        return MathUtils.cosDeg(turns * 360f);
     }
 
 //    public static float sin_(float turns)
@@ -163,7 +217,7 @@ public class SmudgeRenderer {
         final float hs = size * 0.5f;
         for (int x = 0, ax = xx; x < 4 && ax < render.length; x++, ax++) {
             for (int y = 0, ay = yy; y < 4 && ay < render[0].length; y++, ay++) {
-                if ((depth > depths[ax][ay] || (depth == depths[ax][ay] && colorL[ax][ay] < paletteL[voxel & 255])) && (alpha == 0f || bn(ax, ay) >= alpha)) {
+                if ((depth > depths[ax][ay] || (depth == depths[ax][ay] && colorL[ax][ay] < paletteL[voxel & 255])) && (alpha == 0f)) {
                     drawn = true;
                     colorL[ax][ay] = paletteL[voxel & 255];
                     colorA[ax][ay] = paletteA[voxel & 255];

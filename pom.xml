@@ -71,11 +71,6 @@
         <squidsquad.version>2845ba086d</squidsquad.version>
         <gdx.version>1.10.0</gdx.version>
         <jdkgdxds.version>2f1af39863</jdkgdxds.version>
-
-<!--        <anim8.version>0.2.10</anim8.version>-->
-<!--        <squidlib.version>f8173091c3</squidlib.version>-->
-
-<!--        <colorful.version>b223ef3c32</colorful.version>-->
         <colorful.version>0.7.0</colorful.version>
     </properties>
 

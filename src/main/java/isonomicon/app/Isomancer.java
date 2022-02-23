@@ -8,7 +8,9 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
-import com.github.tommyettinger.anim8.*;
+import com.github.tommyettinger.anim8.AnimatedGif;
+import com.github.tommyettinger.anim8.Dithered;
+import com.github.tommyettinger.anim8.PaletteReducer;
 import isonomicon.io.LittleEndianDataInputStream;
 import isonomicon.io.VoxIO;
 import isonomicon.physical.Stuff;
@@ -19,7 +21,6 @@ import isonomicon.visual.SmudgeRenderer;
 import java.io.*;
 
 public class Isomancer extends ApplicationAdapter {
-//    public static final int QUALITY = 48;
     public static final int SCREEN_WIDTH = 512;//640;
     public static final int SCREEN_HEIGHT = 512;//720;
     private SmudgeRenderer renderer;
@@ -37,9 +38,10 @@ public class Isomancer extends ApplicationAdapter {
         else 
         {
             System.out.println("INVALID ARGUMENTS. Please supply space-separated absolute paths to .vox models, or use the .bat file.");
-            inputs = new String[]{"vox/Eye_Tyrant_Floor.vox", "vox/Eye_Tyrant.vox", "vox/Damned.vox", "vox/Bear.vox", "vox/Infantry.vox", "vox/Infantry_Firing.vox", "vox/Lomuk.vox", "vox/Tree.vox", "vox/Box.vox", "vox/Direction_Cube.vox", "vox/teapot.vox"};
+//            inputs = new String[]{"vox/Eye_Tyrant_Floor.vox", "vox/Eye_Tyrant.vox", "vox/Damned.vox", "vox/Bear.vox", "vox/Infantry.vox", "vox/Infantry_Firing.vox", "vox/Lomuk.vox", "vox/Tree.vox", "vox/Box.vox", "vox/Direction_Cube.vox", "vox/teapot.vox"};
 //            inputs = new String[]{"vox/Eye_Tyrant_Floor.vox", "vox/Eye_Tyrant.vox", "vox/Bear.vox", "vox/Infantry_Firing.vox", "vox/Lomuk.vox", "vox/Tree.vox"};
 //            inputs = new String[]{"vox/Eye_Tyrant.vox", "vox/Bear.vox", "vox/Infantry_Firing.vox", "vox/Tree.vox"};
+//            inputs = new String[]{"vox/Tree.vox"};
 //            inputs = new String[]{"vox/Eye_Tyrant.vox", "vox/Infantry_Firing.vox", "vox/Lomuk.vox", "vox/Tree.vox", "vox/LAB.vox"};
 //            inputs = new String[]{"vox/Lomuk.vox", "vox/Tree.vox", "vox/Eye_Tyrant.vox", "vox/IPT.vox", "vox/LAB.vox"};
 //            inputs = new String[]{"vox/Infantry_Firing.vox"};
@@ -55,7 +57,7 @@ public class Isomancer extends ApplicationAdapter {
 //            inputs = new String[]{"vox/Eye_Tyrant.vox"};
 //            inputs = new String[]{"vox/Floor.vox"};
 //            inputs = new String[]{"vox/Bear.vox"};
-//            inputs = new String[]{"vox/Lomuk.vox"};
+            inputs = new String[]{"vox/Lomuk.vox"};
 //            inputs = new String[]{"vox/Lomuk.vox", "vox/Damned.vox"};
 //            inputs = new String[]{"vox/Damned.vox"};
 //            inputs = new String[]{"vox/teapot.vox"};
@@ -74,9 +76,10 @@ public class Isomancer extends ApplicationAdapter {
 //        png8 = new PNG8();
         gif = new AnimatedGif();
 //        apng = new AnimatedPNG();
-        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.SCATTER);
-//        png8.setDitherAlgorithm(Dithered.DitherAlgorithm.SCATTER);
-        gif.palette = new PaletteReducer(Coloring.YAM2, Gdx.files.local("assets/Yam2Preload.dat").readBytes());
+        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.NEUE);
+//        png8.setDitherAlgorithm(Dithered.DitherAlgorithm.NEUE);
+        gif.palette = new PaletteReducer();
+//        gif.palette = new PaletteReducer(Coloring.YAM2, Gdx.files.local("assets/Yam2Preload.dat").readBytes());
         gif.palette.setDitherStrength(0.625f);
 //        png8.palette = gif.palette;
         Gdx.files.local("out/vox").mkdirs();
@@ -102,13 +105,13 @@ public class Isomancer extends ApplicationAdapter {
                 }
                 pm.insertRange(pm.size - 4, 4);
             }
-//                gif.palette.analyze(pm);
+            gif.palette.analyze(pm);
             gif.write(Gdx.files.local("out/" + name + '/' + name + ".gif"), pm, 8);
 //                gif.palette.exact(Coloring.HALTONITE240, PRELOAD);
 //                gif.write(Gdx.files.local("out/" + name + '/' + name + "-256-color.gif"), pm, 1);
 //                apng.write(Gdx.files.local("out/" + name + '/' + name + ".png"), pm, 12);
             for (Pixmap pix : pm) {
-                if(!pix.isDisposed())
+                if (!pix.isDisposed())
                     pix.dispose();
             }
         }
