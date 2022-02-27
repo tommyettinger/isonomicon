@@ -31,7 +31,7 @@ import java.io.IOException;
 public class ColorGuardAssets extends ApplicationAdapter {
     public static boolean DIVERSE = true;
     public static boolean ATTACKS = true;
-    public static boolean EXPLOSION = true;
+    public static boolean EXPLOSION = false;
 
     public static final int SCREEN_WIDTH = 512;//640;
     public static final int SCREEN_HEIGHT = 512;//720;
@@ -107,12 +107,13 @@ public class ColorGuardAssets extends ApplicationAdapter {
         // many skin and hair colors
         if(DIVERSE)
         {
+            int[] canonicalLooks ={0, 9, 19, 4, 23, 22, 1, 15};
             Gdx.files.local("out/color_guard/animated_diverse/" + name + '/').mkdirs();
             for (int n = 0; n < ColorGuardData.units.size(); n++) {
                 ColorGuardData.Unit unit = ColorGuardData.units.get(n);
                 String s = unit.name;
                 System.out.println("Rendering " + s);
-                load("specialized/b/vox/color_guard/" + s);
+                load("specialized/b/vox/color_guard/" + s + ".vox");
                 Pixmap pixmap;
                 Array<Pixmap> pm = new Array<>(32 * armies.length);
                 pm.setSize(32 * armies.length);
@@ -127,6 +128,8 @@ public class ColorGuardAssets extends ApplicationAdapter {
                         Texture t = new Texture(pixmap.getWidth(), pixmap.getHeight(), Pixmap.Format.RGBA8888);
                         t.draw(renderer.palettePixmap, 0, 0);
                         for (int look = 0, lk = 0; look < 201; look+=8, lk++) {
+                            if(lk == 3 || lk == 8 || lk == 11 || lk == 18 || lk == 21 || lk == 25)
+                                continue;
                             for (int j = 0; j < armies.length; j++) {
                                 fb.begin();
                                 palette.bind(1);
@@ -141,7 +144,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                 batch.end();
                                 pixmap = Pixmap.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
                                 fb.end();
-                                if(lk == j * 3) {
+                                if(lk == canonicalLooks[j]) {
                                     pm.set(j * 32 + i * 8 + f, pixmap);
                                     pm.set(j * 32 + i * 8 + f + 4, pixmap);
                                 }
