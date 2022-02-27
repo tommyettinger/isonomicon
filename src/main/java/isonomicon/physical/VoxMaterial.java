@@ -69,7 +69,9 @@ public class VoxMaterial {
 		//15 Typically 0.5 or 0.25; multiplied with the frame rate when determining transitions
 		_rate("Rate"),
 		//16 Parsed as a float but cast to a byte, referring to an index in the Stuff table that this changes to when an effect damages it.
-		_damage("Damage")
+		_damage("Damage"),
+		//17 used in newer MV instead of a separate MaterialType
+		_type("Type")
 		;
 		
 		public String name;
@@ -96,7 +98,7 @@ public class VoxMaterial {
 			TRAIT_MAP.put(t.name, t.ordinal());
 		}
 	}
-	public final MaterialType type;
+	public MaterialType type;
 	public final IntFloatMap traits = new IntFloatMap(16);
 	
 	public VoxMaterial(){
@@ -136,10 +138,20 @@ public class VoxMaterial {
 		if(ord == 6) traits.put(8, value);
 		traits.put(ord, value);
 	}
-	public void putTrait(String trait, float value){
-		int ord = MaterialTrait.valueOf(trait).ordinal();
-		if(ord == 6) traits.put(8, value);
-		traits.put(ord, value);
+	public void putTrait(String trait, String value){
+		try {
+			int ord = MaterialTrait.valueOf(trait).ordinal();
+			if ("_type".equals(trait)) {
+				int t = MaterialType.valueOf(value).ordinal();
+				traits.put(ord, t);
+				type = ALL_TYPES[t];
+			} else {
+				float f = Float.parseFloat(value);
+				traits.put(ord, f);
+				if(ord == 6) traits.put(8, f);
+			}
+		}catch (IllegalArgumentException ignored){
+		}
 	}
 
 	@Override
