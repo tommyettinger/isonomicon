@@ -29,8 +29,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class ColorGuardAssets extends ApplicationAdapter {
-    public static boolean DIVERSE = true;
-    public static boolean ATTACKS = true;
+    public static boolean DIVERSE = false;
+    public static boolean ATTACKS = false;
+    public static boolean DEATHS = true;
     public static boolean EXPLOSION = false;
 
     public static final int SCREEN_WIDTH = 512;//640;
@@ -246,6 +247,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                             name = unit.name;
                             original = voxels.copy();
                         }
+                        EffectGenerator.r.setSeed(unit.name.hashCode() ^ which);
                         for (int i = 0; i < 4; i++) {
                             frames[0] = original.copy();
                             for (int f = 0; f < frames.length; f++) {
@@ -358,6 +360,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //                }
 //            }
             Stuff.evolve(Stuff.STUFFS_B, fireSeed, -1);
+            EffectGenerator.r.setSeed(1);
             byte[][][][] explosion = EffectGenerator.fireballAnimation(fireSeed, 12, 3, 0);
             Pixmap pixmap;
             Array<Pixmap> pm = new Array<>(4 * explosion.length);

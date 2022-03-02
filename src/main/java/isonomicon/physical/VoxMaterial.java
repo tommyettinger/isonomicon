@@ -70,7 +70,9 @@ public class VoxMaterial {
 		_rate("Rate"),
 		//16 Parsed as a float but cast to a byte, referring to an index in the Stuff table that this changes to when an effect damages it.
 		_damage("Damage"),
-		//17 used in newer MV instead of a separate MaterialType
+		//17 Used to indicate how much the voxel moves randomly outward, as well as downward (if negative) or upward (if positive)
+		_disperse("Disperse"),
+		//18 used in newer MV instead of a separate MaterialType
 		_type("Type")
 		;
 		
