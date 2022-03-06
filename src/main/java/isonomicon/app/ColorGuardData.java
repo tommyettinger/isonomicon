@@ -133,6 +133,8 @@ public class ColorGuardData {
             new Unit("Oil_Well"),
             new Unit("Laboratory"),
             new Unit("Hospital"),
-            new Unit("Terrain")
+            new Unit("Terrain"),
+            new Unit("Direction_Cube"),
+            new Unit("Test")
             );
 }

@@ -135,8 +135,10 @@ public class PaletteDrafter extends ApplicationAdapter {
 //        String name = "Damned";
 //        String name = "Figure";
 
-        String name = "Terrain";
-        String name2 = "Terrain";
+        String name = "Direction_Cube";
+        String name2 = "Direction_Cube";
+//        String name = "Terrain";
+//        String name2 = "Test";
 
         images = new Texture[32];
         for (int a = 0, i = 0; a < 4; a++) {

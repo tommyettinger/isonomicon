@@ -58,7 +58,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                 "Blue",
                 "Purple",
         };
-        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> "Terrain".equals(u.name)).toList();
+        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.name.startsWith("Te") || u.name.startsWith("Dire")).toList();
         try {
             head = VoxIOExtended.readVox(new LittleEndianDataInputStream(new FileInputStream("specialized/b/vox/color_guard/human/Head.vox")));
         }
@@ -127,7 +127,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                         for (int j = 0; j < voxels.grids.size(); j++) {
                             Stuff.evolve(Stuff.STUFFS_B, voxels.grids.get(j), f);
                         }
-                        pixmap = renderer.drawModelSimple(voxels, i * 0.25f, 0f, 0f, f, 0, 0, 0);
+                        pixmap = renderer.drawModelSimple(voxels, i * 0.25f, 0f, 0f, f, 0.00f, 0.00f, 0.00f);
                         Texture t = new Texture(pixmap.getWidth(), pixmap.getHeight(), Pixmap.Format.RGBA8888);
                         t.draw(renderer.palettePixmap, 0, 0);
                         for (int look = 0, lk = 0; look < 201; look+=8, lk++) {
@@ -207,7 +207,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                             else frames = anim;
 
                             for (int f = 0; f < frames.length; f++) {
-                                pixmap = renderer.drawModelSimple(frames[f], i * 0.25f, 0f, 0f, f, 0, 0, 0);
+                                pixmap = renderer.drawModelSimple(frames[f], i * 0.25f, 0f, 0f, f, 0.00f, 0.00f, 0.00f);
                                 Texture t = new Texture(pixmap.getWidth(), pixmap.getHeight(), Pixmap.Format.RGBA8888);
                                 t.draw(renderer.palettePixmap, 0, 0);
                                 for (int look = 0, lk = 0; look < 201; look+=8, lk++) {
@@ -282,7 +282,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                         for (int j = 0; j < voxels.grids.size(); j++) {
                             Stuff.evolve(Stuff.STUFFS_B, voxels.grids.get(j), f);
                         }
-                        pixmap = renderer.drawModelSimple(voxels, i * 0.25f, 0f, 0f, f, 0, 0, 0);
+                        pixmap = renderer.drawModelSimple(voxels, i * 0.25f, 0f, 0f, f, 0.00f, 0.00f, 0.00f);
                         Texture t = new Texture(pixmap.getWidth(), pixmap.getHeight(), Pixmap.Format.RGBA8888);
                         t.draw(renderer.palettePixmap, 0, 0);
                         int look = 0;
@@ -356,7 +356,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                             else frames = anim;
 
                             for (int f = 0; f < frames.length; f++) {
-                                pixmap = renderer.drawModelSimple(frames[f], i * 0.25f, 0f, 0f, f, 0, 0, 0);
+                                pixmap = renderer.drawModelSimple(frames[f], i * 0.25f, 0f, 0f, f, 0.00f, 0.00f, 0.00f);
                                 Texture t = new Texture(pixmap.getWidth(), pixmap.getHeight(), Pixmap.Format.RGBA8888);
                                 t.draw(renderer.palettePixmap, 0, 0);
                                 int look = 0;
@@ -413,7 +413,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
         if(EXPLOSION)
         {
             voxels = new VoxModel();
-            SpecialRenderer.shrink = 2;
+            SpecialRenderer.shrink = 1;
             renderer = new SpecialRenderer(120, Stuff.STUFFS_B);
             renderer.palette(Coloring.BETTS64);
             renderer.saturation(0f);
@@ -464,7 +464,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                     voxels.grids.add(explosion[f]);
 //                    Stuff.evolve(Stuff.STUFFS_B, fireSeed, f);
 //                    voxels.grids.add(fireSeed);
-                    pixmap = renderer.drawModelSimple(voxels, i * 0.25f, 0f, 0f, f, 0, 0, 0);
+                    pixmap = renderer.drawModelSimple(voxels, i * 0.25f, 0f, 0f, f, 0.00f, 0.00f, 0.00f);
                     Texture t = new Texture(pixmap.getWidth(), pixmap.getHeight(), Pixmap.Format.RGBA8888);
                     t.draw(renderer.palettePixmap, 0, 0);
                     fb.begin();
@@ -534,7 +534,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
             this.name = name.substring(nameStart, name.indexOf('.', nameStart));
 //            renderer = new NextRenderer(voxels.length, QUALITY);
 //            renderer = new AngledRenderer(voxels.length);
-            SpecialRenderer.shrink = 2;
+            SpecialRenderer.shrink = 1;
             renderer = new SpecialRenderer(voxels.grids.get(0).length, Stuff.STUFFS_B);
             renderer.palette(Coloring.BETTS64);
             renderer.saturation(0f);

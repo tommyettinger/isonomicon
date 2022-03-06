@@ -39,6 +39,7 @@ public class SpecialRenderer {
     public int size;
     public static int shrink = 1;
     public float neutral = 1f;
+    public static final float fidget = 0.5f;
 
     public static final Noise noise = new Noise(0x1337BEEF, 0.0125f, Noise.SIMPLEX_FRACTAL, 2);
 
@@ -243,7 +244,7 @@ public class SpecialRenderer {
         palettePixmap.fill();
         int xSize = render.length - 1, ySize = render[0].length - 1, depth;
         int v, vx, vy, vz, fx, fy, fz;
-        float hs = (size) * 0.5f, ox, oy, oz, tx, ty, tz;
+        float hs = (size) * 0.5f, hsp = hs + fidget, ox, oy, oz, tx, ty, tz;
         final float cYaw = cos_(yaw), sYaw = sin_(yaw);
         final float cPitch = cos_(pitch), sPitch = sin_(pitch);
         final float cRoll = cos_(roll), sRoll = sin_(roll);
@@ -258,8 +259,8 @@ public class SpecialRenderer {
                     vx = v & 0x3FF;
                     vy = v >>> 10 & 0x3FF;
                     vz = v >>> 20 & 0x3FF;
-                    ox = vx - hs;
-                    oy = vy - hs;
+                    ox = vx - hsp;
+                    oy = vy - hsp;
                     oz = vz - hs;
                     tx = ox * x_x + oy * y_x + oz * z_x + size + hs;
                     fx = (int)(tx);
@@ -480,8 +481,8 @@ public class SpecialRenderer {
                     final byte v = colors[x][y][z];
                     if(v != 0)
                     {
-                        ox = x - hs;
-                        oy = y - hs;
+                        ox = x - hs + fidget;
+                        oy = y - hs + fidget;
                         oz = z - hs;
                         splat(  ox * x_x + oy * y_x + oz * z_x + size + translateX,
                                 ox * x_y + oy * y_y + oz * z_y + size + translateY,
@@ -534,8 +535,8 @@ public class SpecialRenderer {
                     final byte v = g[x][y][z];
                     if(v != 0)
                     {
-                        ox = x - hs;
-                        oy = y - hs;
+                        ox = x - hs + fidget;
+                        oy = y - hs + fidget;
                         oz = z - hs;
                         splat(  ox * x_x + oy * y_x + oz * z_x + size + translateX,
                                 ox * x_y + oy * y_y + oz * z_y + size + translateY,
@@ -550,8 +551,8 @@ public class SpecialRenderer {
             for (int j = 0; j < links.size(); j++) {
                 float[] got;
                 if((got = links.get(j).get(ent.key)) != null) {
-                    ox = ent.value[0] - got[0];
-                    oy = ent.value[1] - got[1];
+                    ox = ent.value[0] - got[0] + fidget;
+                    oy = ent.value[1] - got[1] + fidget;
                     oz = ent.value[2] - got[2];
 
                     subDraw(grids, links, grids.remove(j), links.remove(j), yaw, pitch, roll, frame,
