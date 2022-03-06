@@ -159,6 +159,8 @@ public class SpecialRenderer {
             if(ns > 0) highX = (int)(4.5 + ns * (3 << shrink));
             else if(ns < 0) lowX = Math.round(lowX + ns * (3 << shrink));
         }
+        xPos += fidget;
+        yPos += fidget;
         final int
                 xx = (int)(0.5f + Math.max(0, (size + yPos - xPos) * 2 + 1)),
                 yy = (int)(0.5f + Math.max(0, (zPos * 3 + size * 3 - xPos - yPos) + 1 + rise * frame)),
@@ -244,7 +246,7 @@ public class SpecialRenderer {
         palettePixmap.fill();
         int xSize = render.length - 1, ySize = render[0].length - 1, depth;
         int v, vx, vy, vz, fx, fy, fz;
-        float hs = (size) * 0.5f, hsp = hs + fidget, ox, oy, oz, tx, ty, tz;
+        float hs = (size) * 0.5f, hsp = hs - fidget, ox, oy, oz, tx, ty, tz;
         final float cYaw = cos_(yaw), sYaw = sin_(yaw);
         final float cPitch = cos_(pitch), sPitch = sin_(pitch);
         final float cRoll = cos_(roll), sRoll = sin_(roll);
