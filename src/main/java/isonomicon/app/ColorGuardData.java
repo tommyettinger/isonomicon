@@ -132,6 +132,7 @@ public class ColorGuardData {
             new Unit("Mining_Outpost"),
             new Unit("Oil_Well"),
             new Unit("Laboratory"),
-            new Unit("Hospital")
+            new Unit("Hospital"),
+            new Unit("Terrain")
             );
 }

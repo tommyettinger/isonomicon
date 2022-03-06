@@ -14,6 +14,7 @@ import com.github.tommyettinger.anim8.AnimatedPNG;
 import com.github.tommyettinger.anim8.Dithered;
 import com.github.tommyettinger.anim8.PaletteReducer;
 import com.github.tommyettinger.ds.IntObjectMap;
+import com.github.tommyettinger.ds.ObjectList;
 import isonomicon.io.LittleEndianDataInputStream;
 import isonomicon.io.extended.VoxIOExtended;
 import isonomicon.io.extended.VoxModel;
@@ -29,8 +30,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class ColorGuardAssets extends ApplicationAdapter {
-    public static boolean DIVERSE = true;
-    public static boolean ATTACKS = true;
+    public static boolean DIVERSE = false;
+    public static boolean ATTACKS = false;
     public static boolean DEATHS = true;
     public static boolean EXPLOSION = false;
 
@@ -57,7 +58,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                 "Blue",
                 "Purple",
         };
-//        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Bomb_Drop")).toList();
+        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> "Terrain".equals(u.name)).toList();
         try {
             head = VoxIOExtended.readVox(new LittleEndianDataInputStream(new FileInputStream("specialized/b/vox/color_guard/human/Head.vox")));
         }
