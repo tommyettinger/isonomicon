@@ -312,7 +312,7 @@ public class SpecialRenderer {
                             }
                         }
                     }
-                    if (emit > 0) {
+                    if (emit != 0) {
                         float spread = emit * 0.003f;
                         final int radius = 14;
                         for (int i = -radius, si = sx + i; i <= radius; i++, si++) {
