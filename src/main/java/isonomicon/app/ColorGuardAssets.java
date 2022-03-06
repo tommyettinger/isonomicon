@@ -413,7 +413,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
         if(EXPLOSION)
         {
             voxels = new VoxModel();
-            SpecialRenderer.shrink = 1;
+//            SpecialRenderer.shrink = 1;
             renderer = new SpecialRenderer(120, Stuff.STUFFS_B);
             renderer.palette(Coloring.BETTS64);
             renderer.saturation(0f);
@@ -534,7 +534,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
             this.name = name.substring(nameStart, name.indexOf('.', nameStart));
 //            renderer = new NextRenderer(voxels.length, QUALITY);
 //            renderer = new AngledRenderer(voxels.length);
-            SpecialRenderer.shrink = 1;
+//            SpecialRenderer.shrink = 1;
             renderer = new SpecialRenderer(voxels.grids.get(0).length, Stuff.STUFFS_B);
             renderer.palette(Coloring.BETTS64);
             renderer.saturation(0f);

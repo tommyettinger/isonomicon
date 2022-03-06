@@ -37,7 +37,7 @@ public class SpecialRenderer {
     public boolean outline = true;
     public boolean variance = true;
     public int size;
-    public static int shrink = 1;
+    public static int shrink = 2;
     public float neutral = 1f;
     public static final float fidget = 0.5f;
 
