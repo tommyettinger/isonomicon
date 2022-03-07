@@ -34,9 +34,9 @@ public class SpecialRenderer {
     public byte[][] indices, outlineIndices;
     public int[] palette;
     public float[] paletteL, paletteA, paletteB;
-    public boolean outline = false;
+    public boolean outline = true;
     public boolean variance = true;
-    public boolean lighting = false;
+    public boolean lighting = true;
     public int size;
     public static int shrink = 2;
     public float neutral = 1f;

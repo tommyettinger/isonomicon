@@ -84,9 +84,11 @@ public class ColorGuardData {
             new Unit("Mining_Outpost"),
             new Unit("Oil_Well"),
             new Unit("Laboratory"),
-            new Unit("Hospital"),
-            new Unit("Terrain"),
-            new Unit("Road_Straight"),
-            new Unit("Road_Center")
+            new Unit("Hospital")
+//            new Unit("Road_Straight"),
+//            new Unit("Road_Center")
             );
+
+    public static List<String> terrains = ObjectList.with("Coast", "Desert", "Forest", "Ice", "Jungle", "Mountains",
+            "Ocean", "Plains", "River", "Rocky", "Ruins");
 }

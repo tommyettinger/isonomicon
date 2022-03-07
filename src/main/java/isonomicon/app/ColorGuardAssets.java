@@ -29,10 +29,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class ColorGuardAssets extends ApplicationAdapter {
-    public static boolean DIVERSE = false;
+    public static boolean DIVERSE = true;
     public static boolean ATTACKS = false;
     public static boolean DEATHS = true;
     public static boolean EXPLOSION = false;
+    public static boolean TERRAIN = true;
 
     public static final int SCREEN_WIDTH = 512;//640;
     public static final int SCREEN_HEIGHT = 512;//720;
@@ -57,7 +58,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                 "Blue",
                 "Purple",
         };
-        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.name.startsWith("Road")).toList();
+        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.name.equals("")).toList();
         try {
             head = VoxIOExtended.readVox(new LittleEndianDataInputStream(new FileInputStream("specialized/b/vox/color_guard/human/Head.vox")));
         }
@@ -494,6 +495,47 @@ public class ColorGuardAssets extends ApplicationAdapter {
             for (Pixmap pix : pm) {
                 if(!pix.isDisposed())
                     pix.dispose();
+            }
+        }
+        if(TERRAIN)
+        {
+            load("specialized/b/vox/color_guard/Terrain.vox");
+            EACH_INPUT:
+            for (int n = 0; n < ColorGuardData.terrains.size(); n++) {
+                name = ColorGuardData.terrains.get(n);
+                System.out.println("Rendering " + name);
+                Gdx.files.local("out/color_guard/Landscape/" + name + '/').mkdirs();
+                Pixmap pixmap;
+                VoxModel original = voxels.copy();
+                for (int i = 0; i < 4; i++) {
+                    voxels = original.copy();
+                    for (int f = 0; f < 1; f++) {
+                        pixmap = renderer.drawModelSimple(voxels, i * 0.25f, 0f, 0f, f, 0.00f, 0.00f, 0.00f);
+                        Texture t = new Texture(pixmap.getWidth(), pixmap.getHeight(), Pixmap.Format.RGBA8888);
+                        t.draw(renderer.palettePixmap, 0, 0);
+                        fb.begin();
+                        palette.bind(1);
+                        ScreenUtils.clear(Color.CLEAR);
+                        batch.begin();
+
+                        indexShader.setUniformi("u_texPalette", 1);
+                        Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
+                        batch.setColor((208 + n) / 255f, 0.625f, 0.5f, 1f);
+
+                        batch.draw(t, 0, t.getHeight(), t.getWidth(), -t.getHeight());
+                        batch.end();
+                        pixmap = Pixmap.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
+                        fb.end();
+                        try {
+                            png.write(Gdx.files.local("out/color_guard/Landscape/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), pixmap);
+                            if(n == 0)
+                                png.write(Gdx.files.local("out/color_guard/lab/Landscape/" + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        t.dispose();
+                    }
+                }
             }
         }
         fb.dispose();
