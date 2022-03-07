@@ -40,55 +40,7 @@ public class ColorGuardData {
             return type != null && (type.equals(primary) || type.equals(secondary));
         }
     }
-    public static final String[] allVoxModels = {
-            "Light_Tank.vox",
-            "War_Tank.vox",
-            "Scout_Tank.vox",
-            "Heavy_Cannon.vox",
-            "AA_Gun.vox",
-            "Flamethrower.vox",
-            "Light_Artillery.vox",
-            "Rocket_Artillery.vox",
-            "AA_Artillery.vox",
-            "Recon.vox",
-            "Supply_Truck.vox",
-            "Amphi_Transport.vox",
-            "Build_Rig.vox",
-            "Jammer.vox",
-            "Jetpack.vox",
-            "Transport_Copter.vox",
-            "Blitz_Copter.vox",
-            "Gunship_Copter.vox",
-            "Comm_Copter.vox",
-            "Patrol_Boat.vox",
-            "Battleship.vox",
-            "Submarine.vox",
-            "Cruiser.vox",
-            "Fighter_Jet.vox",
-            "Stealth_Jet.vox",
-            "Legacy_Plane.vox",
-            "Heavy_Bomber.vox",
-            "Infantry.vox",
-            "Infantry_Firing.vox",
-            "Bazooka.vox",
-            "Bazooka_Firing.vox",
-            "Bike.vox",
-            "Rifle_Sniper.vox",
-            "Rifle_Sniper_Firing.vox",
-            "Mortar_Sniper.vox",
-            "Mortar_Sniper_Firing.vox",
-            "Missile_Sniper.vox",
-            "City.vox",
-            "Mansion.vox",
-            "Fort.vox",
-            "Factory.vox",
-            "Airport.vox",
-            "Farm.vox",
-            "Mining_Outpost.vox",
-            "Oil_Well.vox",
-            "Laboratory.vox",
-            "Hospital.vox",
-    };
+
     public static List<Unit> units = ObjectList.with(
             new Unit("Infantry", "Machine_Gun", true),
             new Unit("Bazooka", "Handgun", false, "Forward_Missile", true),
@@ -134,7 +86,7 @@ public class ColorGuardData {
             new Unit("Laboratory"),
             new Unit("Hospital"),
             new Unit("Terrain"),
-            new Unit("Direction_Cube"),
-            new Unit("Test")
+            new Unit("Road_Straight"),
+            new Unit("Road_Center")
             );
 }
