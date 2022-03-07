@@ -34,8 +34,9 @@ public class SpecialRenderer {
     public byte[][] indices, outlineIndices;
     public int[] palette;
     public float[] paletteL, paletteA, paletteB;
-    public boolean outline = true;
+    public boolean outline = false;
     public boolean variance = true;
+    public boolean lighting = false;
     public int size;
     public static int shrink = 2;
     public float neutral = 1f;
@@ -284,43 +285,47 @@ public class SpecialRenderer {
                             saturation[sx][sy] = Math.min(Math.max(vary * bnBlocky(vy, vz, vx), -1f), 1f);
                         }
                     }
-                    float limit = 2;
-                    if (Math.abs(shadeX[fy][fz] - tx) <= limit || ((fy > 1 && Math.abs(shadeX[fy - 2][fz] - tx) <= limit) || (fy < shadeX.length - 2 && Math.abs(shadeX[fy + 2][fz] - tx) <= limit))) {
-                        float spread = MathUtils.lerp(0.0025f, 0.001f, rough);
-                        if (Math.abs(shadeZ[fx][fy] - tz) <= limit) {
-                            spread *= 2f;
-                            float change = m.getTrait(VoxMaterial.MaterialTrait._ior) * 0.2f;
-                            shading[sx][sy] += change;
-                        }
-                        int dist;
-                        for (int i = -3, si = sx + i; i <= 3; i++, si++) {
-                            for (int j = -3, sj = sy + j; j <= 3; j++, sj++) {
-                                if((dist = i * i + j * j) > 9 || si < 0 || sj < 0 || si > xSize || sj > ySize) continue;
-                                float change = spread * (4 - (float)Math.sqrt(dist));
-                                shading[si][sj] += change;
+                    if(lighting) {
+                        float limit = 2;
+                        if (Math.abs(shadeX[fy][fz] - tx) <= limit || ((fy > 1 && Math.abs(shadeX[fy - 2][fz] - tx) <= limit) || (fy < shadeX.length - 2 && Math.abs(shadeX[fy + 2][fz] - tx) <= limit))) {
+                            float spread = MathUtils.lerp(0.0025f, 0.001f, rough);
+                            if (Math.abs(shadeZ[fx][fy] - tz) <= limit) {
+                                spread *= 2f;
+                                float change = m.getTrait(VoxMaterial.MaterialTrait._ior) * 0.2f;
+                                shading[sx][sy] += change;
+                            }
+                            int dist;
+                            for (int i = -3, si = sx + i; i <= 3; i++, si++) {
+                                for (int j = -3, sj = sy + j; j <= 3; j++, sj++) {
+                                    if ((dist = i * i + j * j) > 9 || si < 0 || sj < 0 || si > xSize || sj > ySize)
+                                        continue;
+                                    float change = spread * (4 - (float) Math.sqrt(dist));
+                                    shading[si][sj] += change;
+                                }
+                            }
+                        } else if (Math.abs(shadeZ[fx][fy] - tz) <= limit) {
+                            float spread = MathUtils.lerp(0.005f, 0.002f, rough);
+                            float dist;
+                            for (int i = -3, si = sx + i; i <= 3; i++, si++) {
+                                for (int j = -3, sj = sy + j; j <= 3; j++, sj++) {
+                                    if ((dist = i * i + j * j) > 9 || si < 0 || sj < 0 || si > xSize || sj > ySize)
+                                        continue;
+                                    float change = spread * (4 - (float) Math.sqrt(dist));
+                                    shading[si][sj] += change;
+                                }
                             }
                         }
-                    }
-                    else if (Math.abs(shadeZ[fx][fy] - tz) <= limit) {
-                        float spread = MathUtils.lerp(0.005f, 0.002f, rough);
-                        float dist;
-                        for (int i = -3, si = sx + i; i <= 3; i++, si++) {
-                            for (int j = -3, sj = sy + j; j <= 3; j++, sj++) {
-                                if((dist = i * i + j * j) > 9 || si < 0 || sj < 0 || si > xSize || sj > ySize) continue;
-                                float change = spread * (4 - (float)Math.sqrt(dist));
-                                shading[si][sj] += change;
-                            }
-                        }
-                    }
-                    if (emit != 0) {
-                        float spread = emit * 0.003f;
-                        final int radius = 14;
-                        for (int i = -radius, si = sx + i; i <= radius; i++, si++) {
-                            for (int j = -radius, sj = sy + j; j <= radius; j++, sj++) {
-                                final int dist = i * i + j * j;
-                                if(dist > radius * radius || si < 0 || sj < 0 || si > xSize || sj > ySize) continue;
-                                float change = spread * (radius - (float) Math.sqrt(dist));
-                                midShading[si][sj] = Math.min(midShading[si][sj] + change, 0.3f);
+                        if (emit != 0) {
+                            float spread = emit * 0.003f;
+                            final int radius = 14;
+                            for (int i = -radius, si = sx + i; i <= radius; i++, si++) {
+                                for (int j = -radius, sj = sy + j; j <= radius; j++, sj++) {
+                                    final int dist = i * i + j * j;
+                                    if (dist > radius * radius || si < 0 || sj < 0 || si > xSize || sj > ySize)
+                                        continue;
+                                    float change = spread * (radius - (float) Math.sqrt(dist));
+                                    midShading[si][sj] = Math.min(midShading[si][sj] + change, 0.3f);
+                                }
                             }
                         }
                     }
