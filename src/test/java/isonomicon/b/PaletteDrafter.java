@@ -411,6 +411,7 @@ public class PaletteDrafter extends ApplicationAdapter {
         config.setForegroundFPS(60);
         config.useVsync(true);
         config.setResizable(false);
+        config.disableAudio(true);
         final PaletteDrafter app = new PaletteDrafter();
         new Lwjgl3Application(app, config);
     }

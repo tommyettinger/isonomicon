@@ -74,6 +74,7 @@ public class SpecialViewer extends ApplicationAdapter {
         config.setIdleFPS(10);
         config.useVsync(true);
         config.setResizable(false);
+        config.disableAudio(true);
 //        new Specialist(null);
         final SpecialViewer app = new SpecialViewer();
         new Lwjgl3Application(app, config);

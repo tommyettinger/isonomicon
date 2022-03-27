@@ -81,6 +81,7 @@ public class PaletteScavenger extends ApplicationAdapter {
         config.setForegroundFPS(10);
         config.useVsync(true);
         config.setResizable(false);
+        config.disableAudio(true);
         final PaletteScavenger app = new PaletteScavenger();
         new Lwjgl3Application(app, config);
     }

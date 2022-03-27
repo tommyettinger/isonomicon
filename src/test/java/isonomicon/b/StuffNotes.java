@@ -81,6 +81,7 @@ public class StuffNotes extends ApplicationAdapter {
         config.setForegroundFPS(60);
         config.useVsync(true);
         config.setResizable(false);
+        config.disableAudio(true);
         final StuffNotes app = new StuffNotes();
         new Lwjgl3Application(app, config);
     }
