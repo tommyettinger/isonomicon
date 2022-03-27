@@ -231,9 +231,9 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                             pm.set(j * 32 + i * 8 + f, pixmap);
                                         }
                                         try {
-                                            png.write(Gdx.files.local("out/color_guard/" + armies[j] + "/" + name + '/' + armies[j] + "_look" + lk + "_" + name + "_" + ps + "_angle" + i + "_" + f + ".png"), pixmap);
+                                            png.write(Gdx.files.local("out/color_guard/" + armies[j] + "/" + name + '/' + armies[j] + "_look" + lk + "_" + name + ps + "_angle" + i + "_" + f + ".png"), pixmap);
                                             if (look + j == 0)
-                                                png.write(Gdx.files.local("out/color_guard/lab/" + name + '/' + name + "_" + ps + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
+                                                png.write(Gdx.files.local("out/color_guard/lab/" + name + '/' + name + ps + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                                         } catch (IOException e) {
                                             e.printStackTrace();
                                         }
@@ -376,9 +376,9 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                     fb.end();
                                     pm.set(j * 32 + i * 8 + f, pixmap);
                                     try {
-                                        png.write(Gdx.files.local("out/color_guard/" + armies[j] + "/" + name + '/' + armies[j] + "_look0_" + name + "_" + ps + "_angle" + i + "_" + f + ".png"), pixmap);
+                                        png.write(Gdx.files.local("out/color_guard/" + armies[j] + "/" + name + '/' + armies[j] + "_look0_" + name + ps + "_angle" + i + "_" + f + ".png"), pixmap);
                                         if (look + j == 0)
-                                            png.write(Gdx.files.local("out/color_guard/lab/" + name + '/' + name + "_" + ps + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
+                                            png.write(Gdx.files.local("out/color_guard/lab/" + name + '/' + name + ps + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     }
