@@ -90,5 +90,5 @@ public class ColorGuardData {
             );
 
     public static List<String> terrains = ObjectList.with("Coast", "Desert", "Forest", "Ice", "Jungle", "Mountains",
-            "Ocean", "Plains", "River", "Rocky", "Ruins");
+            "Ocean", "Plains", "River", "Rocky", "Ruins", "Volcano");
 }
