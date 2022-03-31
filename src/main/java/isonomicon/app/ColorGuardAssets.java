@@ -109,7 +109,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
         // many skin and hair colors
         if(DIVERSE)
         {
-            int[] canonicalLooks ={0, 9, 19, 4, 23, 22, 1, 15};
+            int[] canonicalLooks ={0, 7, 15, 3, 18, 17, 1, 12};
             EACH_INPUT:
             for (int n = 0; n < ColorGuardData.units.size(); n++) {
                 ColorGuardData.Unit unit = ColorGuardData.units.get(n);
@@ -130,9 +130,9 @@ public class ColorGuardAssets extends ApplicationAdapter {
                         pixmap = renderer.drawModelSimple(voxels, i * 0.25f, 0f, 0f, f, 0.00f, 0.00f, 0.00f);
                         Texture t = new Texture(pixmap.getWidth(), pixmap.getHeight(), Pixmap.Format.RGBA8888);
                         t.draw(renderer.palettePixmap, 0, 0);
-                        for (int look = 0, lk = 0; look < 201; look+=8, lk++) {
-                            if(lk == 3 || lk == 8 || lk == 11 || lk == 18 || lk == 21 || lk == 25)
-                                continue;
+                        for (int look = 0, lk = 0; look < 153; look+=8, lk++) {
+//                            if(lk == 3 || lk == 8 || lk == 11 || lk == 18 || lk == 21 || lk == 25)
+//                                continue;
                             for (int j = 0; j < armies.length; j++) {
                                 fb.begin();
                                 palette.bind(1);
@@ -165,9 +165,9 @@ public class ColorGuardAssets extends ApplicationAdapter {
                     }
                 }
 //                gif.palette.analyze(pm);
-//                gif.write(Gdx.files.local("out/color_guard/animated_diverse/" + name + '/' + name + ".gif"), pm, 8);
-//                apng.write(Gdx.files.local("out/color_guard/animated_diverse/" + name + '/' + name + ".png"), pm, 8);
-                apng.write(Gdx.files.local("out/color_guard/animated_diverse_flat/" + name + ".png"), pm, 8);
+                gif.write(Gdx.files.local("out/color_guard/animated_diverse/" + name + '/' + name + ".gif"), pm, 8);
+                apng.write(Gdx.files.local("out/color_guard/animated_diverse/" + name + '/' + name + ".png"), pm, 8);
+//                apng.write(Gdx.files.local("out/color_guard/animated_diverse_flat/" + name + ".png"), pm, 8);
                 for (Pixmap pix : pm) {
                     if (!pix.isDisposed())
                         pix.dispose();
@@ -211,8 +211,6 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                 Texture t = new Texture(pixmap.getWidth(), pixmap.getHeight(), Pixmap.Format.RGBA8888);
                                 t.draw(renderer.palettePixmap, 0, 0);
                                 for (int look = 0, lk = 0; look < 201; look+=8, lk++) {
-                                    if (lk == 3 || lk == 8 || lk == 11 || lk == 18 || lk == 21 || lk == 25)
-                                        continue;
                                     for (int j = 0; j < armies.length; j++) {
                                         fb.begin();
                                         palette.bind(1);
@@ -249,9 +247,9 @@ public class ColorGuardAssets extends ApplicationAdapter {
                             }
                         }
 //                gif.palette.analyze(pm);
-//                        gif.write(Gdx.files.local("out/color_guard/animated_diverse/" + name + '/' + name + ps + ".gif"), pm, 8);
-//                        apng.write(Gdx.files.local("out/color_guard/animated_diverse/" + name + '/' + name + ps + ".png"), pm, 8);
-                        apng.write(Gdx.files.local("out/color_guard/animated_diverse_flat/" + name + ps + ".png"), pm, 8);
+                        gif.write(Gdx.files.local("out/color_guard/animated_diverse/" + name + '/' + name + ps + ".gif"), pm, 8);
+                        apng.write(Gdx.files.local("out/color_guard/animated_diverse/" + name + '/' + name + ps + ".png"), pm, 8);
+//                        apng.write(Gdx.files.local("out/color_guard/animated_diverse_flat/" + name + ps + ".png"), pm, 8);
                         for (Pixmap pix : pm) {
                             if (!pix.isDisposed())
                                 pix.dispose();
@@ -520,7 +518,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
 
                         indexShader.setUniformi("u_texPalette", 1);
                         Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
-                        batch.setColor((208 + n) / 255f, 0.625f, 0.5f, 1f);
+                        batch.setColor((160 + n) / 255f, 0.625f, 0.5f, 1f);
 
                         batch.draw(t, 0, t.getHeight(), t.getWidth(), -t.getHeight());
                         batch.end();
