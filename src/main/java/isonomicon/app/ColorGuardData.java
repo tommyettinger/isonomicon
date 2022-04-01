@@ -80,6 +80,7 @@ public class ColorGuardData {
             new Unit("Fort"),
             new Unit("Factory"),
             new Unit("Airport"),
+            new Unit("Dock"),
             new Unit("Farm"),
             new Unit("Mining_Outpost"),
             new Unit("Oil_Well"),

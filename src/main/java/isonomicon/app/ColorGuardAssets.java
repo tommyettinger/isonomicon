@@ -29,7 +29,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class ColorGuardAssets extends ApplicationAdapter {
-    public static boolean DIVERSE = false;
+    public static boolean DIVERSE = true;
     public static boolean ATTACKS = true;
     public static boolean DEATHS = false;
     public static boolean EXPLOSION = false;
@@ -58,7 +58,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                 "Blue",
                 "Purple",
         };
-//        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.name.equals("")).toList();
+        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.name.equals("Dock")).toList();
         try {
             head = VoxIOExtended.readVox(new LittleEndianDataInputStream(new FileInputStream("specialized/b/vox/color_guard/human/Head.vox")));
         }

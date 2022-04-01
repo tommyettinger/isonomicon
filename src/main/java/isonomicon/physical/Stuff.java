@@ -349,10 +349,10 @@ public class Stuff {
             new Stuff("radiation pulse 3", 139, 72, "Roughness 0.0 Reflection 0.0 Emission 0.4 Transparency 0.9", 136, 1), /*dark lime*/
             new Stuff("flickering light off", 140, 76, "Roughness 0.03 Reflection 0.5 Damage 153", 140, 14, 141, 1), /*dark green*/
             new Stuff("flickering light on", 141, 81, "Roughness 0.0 Reflection 0.0 Emission 0.5 Damage 153", 141, 11, 140, 1),
-            new Stuff("unused 142", 142, "Transparency 1.0"),
-            new Stuff("unused 143", 143, "Transparency 1.0"),
-            new Stuff("unused 144", 144, "Transparency 1.0"),
-            new Stuff("unused 145", 145, "Transparency 1.0"),/*light green*/
+            new Stuff("cycling light 0", 142, 81, "Roughness 0.03 Reflection 0.5 Damage 153", 143, 1),
+            new Stuff("cycling light 1", 143, 76, "Roughness 0.03 Reflection 0.5 Damage 153", 144, 1),
+            new Stuff("cycling light 2", 144, 76, "Roughness 0.03 Reflection 0.5 Damage 153", 145, 1),
+            new Stuff("cycling light 3", 145, 76, "Roughness 0.03 Reflection 0.5 Damage 153", 142, 1),/*light green*/
             new Stuff("gleaming metal", 146, 6, "Metal", "Reflection 0.9 Roughness 0.15", 89, 1, 146, 16),/*light cyan*/
             new Stuff("unused 147", 147, "Transparency 1.0"),
             new Stuff("unused 148", 148, "Transparency 1.0"), /*dark cyan*/
