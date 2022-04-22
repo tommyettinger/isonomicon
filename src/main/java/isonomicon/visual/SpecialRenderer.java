@@ -16,6 +16,7 @@ import isonomicon.physical.Stuff;
 import isonomicon.physical.Tools3D;
 import isonomicon.physical.VoxMaterial;
 
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -28,6 +29,7 @@ import static com.github.yellowstonegames.core.ArrayTools.fill;
 public class SpecialRenderer {
     public final Stuff[] stuffs;
     public Pixmap palettePixmap;
+    public ByteBuffer buffer;
     public int[][] depths, voxels, render, outlines;
     public VoxMaterial[][] materials;
     public float[][] shadeX, shadeZ, shading, midShading, outlineShading, saturation;
@@ -59,6 +61,7 @@ public class SpecialRenderer {
         final int w = size * 4 + 4, h = size * 5 + 4;
         palettePixmap = new Pixmap(w>>>shrink, h>>>shrink, Pixmap.Format.RGBA8888);
         palettePixmap.setBlending(Pixmap.Blending.None);
+        buffer = palettePixmap.getPixels();
         render =   new int[w][h];
         outlines = new int[w][h];
         depths =   new int[w][h];
@@ -387,27 +390,42 @@ public class SpecialRenderer {
         for (int x = xSize; x >= 0; x--) {
             for (int y = ySize; y >= 0; y--) {
                 if (indices[x][y] != 0) {
-                    float shade = Math.min(Math.max((shading[x][y] + midShading[x][y]) * 0.625f + 0.1328125f, 0f), 1f);
-                    float sat = Math.min(Math.max((saturation[x][y]) * 0.5f + 0.5f, 0f), 1f);
-                    palettePixmap.drawPixel(x >>> shrink, y >>> shrink, (indices[x][y] & 255) << 24 |
-                            (int)(shade * 255.999f) << 16 |
-                            (int)(sat * 255.999f) << 8 | 255);
+                    byte shade = (byte)(Math.min(Math.max((shading[x][y] + midShading[x][y]) * 0.625f + 0.1328125f, 0f), 1f) * 255.999f);
+                    byte sat = (byte)(Math.min(Math.max((saturation[x][y]) * 0.5f + 0.5f, 0f), 1f) * 255.999f);
+//                    palettePixmap.drawPixel(x >>> shrink, y >>> shrink, (indices[x][y] & 255) << 24 |
+//                            shade << 16 |
+//                            sat << 8 | 255);
+                    int idx = (y >>> shrink) * palettePixmap.getWidth() + (x >>> shrink) << 2;
+                    buffer.put(idx, indices[x][y]);
+                    buffer.put(idx+1, shade);
+                    buffer.put(idx+2, sat);
+                    buffer.put(idx+3, (byte) 255);
                 }
                 else if(midShading[x][y] > 0f) {
                     int shade = (int) (Math.min(Math.max((shading[x][y] + midShading[x][y]) * 0.625f + 0.1328125f, 0f), 1f) * 255.999f);
-                    if ((palettePixmap.getPixel(x >>> shrink, y >>> shrink) & 255) < shade) {
-                        palettePixmap.drawPixel(x >>> shrink, y >>> shrink, LIGHTEN << 24 |
-                                128 << 16 |
-                                128 << 8 | shade);
+                    int idx = (y >>> shrink) * palettePixmap.getWidth() + (x >>> shrink) << 2;
+                    if ((buffer.get(idx+3) & 255) < shade) {
+//                        palettePixmap.drawPixel(x >>> shrink, y >>> shrink, LIGHTEN << 24 |
+//                                128 << 16 |
+//                                128 << 8 | shade);
+                        buffer.put(idx, LIGHTEN);
+                        buffer.put(idx+1, (byte) 128);
+                        buffer.put(idx+2, (byte) 128);
+                        buffer.put(idx+3, (byte) shade);
                         outlineIndices[x][y] = 0;
                     }
                 }
                 else if(midShading[x][y] < 0f) {
                     int shade = (int) ((1f - Math.min(Math.max((shading[x][y] + midShading[x][y]) * 0.625f + 0.1328125f, 0f), 1f)) * 255.999f);
-                    if ((palettePixmap.getPixel(x >>> shrink, y >>> shrink) & 255) < shade) {
-                        palettePixmap.drawPixel(x >>> shrink, y >>> shrink, DARKEN << 24 |
-                                128 << 16 |
-                                128 << 8 | shade);
+                    int idx = (y >>> shrink) * palettePixmap.getWidth() + (x >>> shrink) << 2;
+                    if ((buffer.get(idx+3) & 255) < shade) {
+//                        palettePixmap.drawPixel(x >>> shrink, y >>> shrink, DARKEN << 24 |
+//                                128 << 16 |
+//                                128 << 8 | shade);
+                        buffer.put(idx, DARKEN);
+                        buffer.put(idx+1, (byte) 128);
+                        buffer.put(idx+2, (byte) 128);
+                        buffer.put(idx+3, (byte) shade);
                         outlineIndices[x][y] = 0;
                     }
                 }
