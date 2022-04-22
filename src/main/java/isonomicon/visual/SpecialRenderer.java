@@ -41,6 +41,8 @@ public class SpecialRenderer {
     public static int shrink = 2;
     public float neutral = 1f;
     public static final float fidget = 0.5f;
+    public static final byte DARKEN = (byte) 128;
+    public static final byte LIGHTEN = (byte) 135;
 
     public static final Noise noise = new Noise(0x1337BEEF, 0.0125f, Noise.SIMPLEX_FRACTAL, 2);
 
@@ -389,6 +391,18 @@ public class SpecialRenderer {
                     palettePixmap.drawPixel(x >>> shrink, y >>> shrink, (indices[x][y] & 255) << 24 |
                             (int)(shade * 255.999f) << 16 |
                             (int)(sat * 255.999f) << 8 | 255);
+                }
+                else if(midShading[x][y] > 0f){
+                    float shade = Math.min(Math.max((shading[x][y] + midShading[x][y]) * 0.625f + 0.1328125f, 0f), 1f);
+                    palettePixmap.drawPixel(x >>> shrink, y >>> shrink, LIGHTEN << 24 |
+                            128 << 16 |
+                            128 << 8 | (int)(shade * 255.999f));
+                }
+                else if(midShading[x][y] < 0f){
+                    float shade = 1f - Math.min(Math.max((shading[x][y] + midShading[x][y]) * 0.625f + 0.1328125f, 0f), 1f);
+                    palettePixmap.drawPixel(x >>> shrink, y >>> shrink, DARKEN << 24 |
+                            128 << 16 |
+                            128 << 8 | (int)(shade * 255.999f));
                 }
             }
         }

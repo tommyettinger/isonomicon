@@ -335,7 +335,7 @@ public class Stuff {
             new Stuff("gold glint", 126, "Roughness 0.2 Reflection 1.0 Emission 0.2", 126, 1, 61, 20),
             new Stuff("fiery spark", 127, "Emission 0.9 Roughness 0.4 Reflection 0.0 Missing 0.6", 127, 2, 0, 3), /*light yellow*/
 
-            new Stuff("vanishing shadow", 128, "Emission -0.5 Transparency 1.0", 0, 1),
+            new Stuff("vanishing shadow", 128, 66, "Emission -0.5 Transparency 1.0", 0, 1),
             new Stuff("matte leather swap 0", 129, 2, "Reflection 0.05 Roughness 0.6 Frame 0.0"), /*black*/
             new Stuff("matte leather swap 1", 130, 2, "Reflection 0.05 Roughness 0.6 Frame 1.0"),
             new Stuff("dull metal swap 0", 131, 4, "Metal", "Reflection 0.15 Roughness 0.8 Frame 0.0"),
