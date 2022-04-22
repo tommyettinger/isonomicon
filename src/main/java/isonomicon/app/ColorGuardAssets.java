@@ -29,7 +29,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class ColorGuardAssets extends ApplicationAdapter {
-    public static boolean DIVERSE = false;
+    public static boolean DIVERSE = true;
     public static boolean ATTACKS = true;
     public static boolean DEATHS = false;
     public static boolean EXPLOSION = true;
@@ -58,7 +58,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                 "Blue",
                 "Purple",
         };
-        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.name.equals("AA_Gun")).toList();
+//        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.name.equals("AA_Gun")).toList();
         try {
             head = VoxIOExtended.readVox(new LittleEndianDataInputStream(new FileInputStream("specialized/b/vox/color_guard/human/Head.vox")));
         }
@@ -210,7 +210,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                 pixmap = renderer.drawModelSimple(frames[f], i * 0.25f, 0f, 0f, f, 0.00f, 0.00f, 0.00f);
                                 Texture t = new Texture(pixmap.getWidth(), pixmap.getHeight(), Pixmap.Format.RGBA8888);
                                 t.draw(renderer.palettePixmap, 0, 0);
-                                for (int look = 0, lk = 0; look < 201; look+=8, lk++) {
+                                for (int look = 0, lk = 0; look < 153; look+=8, lk++) {
                                     for (int j = 0; j < armies.length; j++) {
                                         fb.begin();
                                         palette.bind(1);
