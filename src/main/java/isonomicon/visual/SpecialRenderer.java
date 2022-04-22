@@ -58,6 +58,7 @@ public class SpecialRenderer {
         this.size = size;
         final int w = size * 4 + 4, h = size * 5 + 4;
         palettePixmap = new Pixmap(w>>>shrink, h>>>shrink, Pixmap.Format.RGBA8888);
+        palettePixmap.setBlending(Pixmap.Blending.None);
         render =   new int[w][h];
         outlines = new int[w][h];
         depths =   new int[w][h];
@@ -392,17 +393,23 @@ public class SpecialRenderer {
                             (int)(shade * 255.999f) << 16 |
                             (int)(sat * 255.999f) << 8 | 255);
                 }
-                else if(midShading[x][y] > 0f){
-                    float shade = Math.min(Math.max((shading[x][y] + midShading[x][y]) * 0.625f + 0.1328125f, 0f), 1f);
-                    palettePixmap.drawPixel(x >>> shrink, y >>> shrink, LIGHTEN << 24 |
-                            128 << 16 |
-                            128 << 8 | (int)(shade * 255.999f));
+                else if(midShading[x][y] > 0f) {
+                    int shade = (int) (Math.min(Math.max((shading[x][y] + midShading[x][y]) * 0.625f + 0.1328125f, 0f), 1f) * 255.999f);
+                    if ((palettePixmap.getPixel(x >>> shrink, y >>> shrink) & 255) < shade) {
+                        palettePixmap.drawPixel(x >>> shrink, y >>> shrink, LIGHTEN << 24 |
+                                128 << 16 |
+                                128 << 8 | shade);
+                        outlineIndices[x][y] = 0;
+                    }
                 }
-                else if(midShading[x][y] < 0f){
-                    float shade = 1f - Math.min(Math.max((shading[x][y] + midShading[x][y]) * 0.625f + 0.1328125f, 0f), 1f);
-                    palettePixmap.drawPixel(x >>> shrink, y >>> shrink, DARKEN << 24 |
-                            128 << 16 |
-                            128 << 8 | (int)(shade * 255.999f));
+                else if(midShading[x][y] < 0f) {
+                    int shade = (int) ((1f - Math.min(Math.max((shading[x][y] + midShading[x][y]) * 0.625f + 0.1328125f, 0f), 1f)) * 255.999f);
+                    if ((palettePixmap.getPixel(x >>> shrink, y >>> shrink) & 255) < shade) {
+                        palettePixmap.drawPixel(x >>> shrink, y >>> shrink, DARKEN << 24 |
+                                128 << 16 |
+                                128 << 8 | shade);
+                        outlineIndices[x][y] = 0;
+                    }
                 }
             }
         }
