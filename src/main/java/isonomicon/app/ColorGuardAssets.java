@@ -136,7 +136,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                             for (int j = 0; j < armies.length; j++) {
                                 fb.begin();
                                 palette.bind(1);
-                                ScreenUtils.clear(Color.CLEAR);
+                                ScreenUtils.clear(1f, 1f, 1f, 0f);
                                 batch.begin();
 
                                 indexShader.setUniformi("u_texPalette", 1);
@@ -214,7 +214,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                     for (int j = 0; j < armies.length; j++) {
                                         fb.begin();
                                         palette.bind(1);
-                                        ScreenUtils.clear(Color.CLEAR);
+                                        ScreenUtils.clear(1f, 1f, 1f, 0f);
                                         batch.begin();
 
                                         indexShader.setUniformi("u_texPalette", 1);
@@ -287,7 +287,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                         for (int j = 0; j < armies.length; j++) {
                             fb.begin();
                             palette.bind(1);
-                            ScreenUtils.clear(Color.CLEAR);
+                            ScreenUtils.clear(1f, 1f, 1f, 0f);
                             batch.begin();
 
                             indexShader.setUniformi("u_texPalette", 1);
@@ -361,7 +361,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                 for (int j = 0; j < armies.length; j++) {
                                     fb.begin();
                                     palette.bind(1);
-                                    ScreenUtils.clear(Color.CLEAR);
+                                    ScreenUtils.clear(1f, 1f, 1f, 0f);
                                     batch.begin();
 
                                     indexShader.setUniformi("u_texPalette", 1);
@@ -467,7 +467,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                     t.draw(renderer.palettePixmap, 0, 0);
                     fb.begin();
                     palette.bind(1);
-                    ScreenUtils.clear(Color.CLEAR);
+                    ScreenUtils.clear(1f, 1f, 1f, 0f);
                     batch.begin();
 
                     indexShader.setUniformi("u_texPalette", 1);
@@ -513,7 +513,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                         t.draw(renderer.palettePixmap, 0, 0);
                         fb.begin();
                         palette.bind(1);
-                        ScreenUtils.clear(Color.CLEAR);
+                        ScreenUtils.clear(1f, 1f, 1f, 0f);
                         batch.begin();
 
                         indexShader.setUniformi("u_texPalette", 1);
