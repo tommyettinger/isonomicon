@@ -266,7 +266,7 @@ public class Stuff {
             new Stuff("knotted wood", 58, "Roughness 0.5 Reflection 0.1 Dapple -0.1 Damage 122"), /*dark brown*/
             new Stuff("old wood", 59, "Roughness 0.6 Reflection 0.0 Dapple -0.25 Vary -0.35 Damage 122"),
             new Stuff("fresh wood", 60, "Roughness 0.4 Reflection 0.0 Dapple -0.15 Vary -0.1 Damage 122"), /*medium brown*/
-            new Stuff("gold", 61, "Roughness 0.5 Reflection 0.85", 126, 1, 61, 12), /*dark yellow*/
+            new Stuff("gold", 61, "Roughness 0.5 Reflection 0.85 Rate 0.5", 126, 1, 61, 12), /*dark yellow*/
             new Stuff("ripe fruit or flower", 62, "Roughness 0.2 Reflection 0.55 Dapple -0.2"),
             new Stuff("bone beak claw", 63, "Roughness 0.4 Reflection 0.4"), /*light yellow*/
 
@@ -332,7 +332,7 @@ public class Stuff {
             new Stuff("stone pieces", 123, "Roughness 0.8 Reflection 0.05 Missing 0.45 Rise -0.25 Disperse -0.2", 0, 2, 123, 7),
             new Stuff("cloth pieces", 124, "Roughness 0.25 Reflection 0.06 Missing 0.4 Rise -0.05 Disperse -0.6", 0, 2, 124, 5), /*medium brown*/
             new Stuff("yellow glass", 125, "Transparency 0.5 Roughness 0.0 Reflection 0.65 Damage 153"), /*dark yellow*/
-            new Stuff("gold glint", 126, "Roughness 0.2 Reflection 1.0 Emission 0.2", 126, 1, 61, 20),
+            new Stuff("gold glint", 126, "Roughness 0.2 Reflection 1.0 Emission 0.2 Rate 0.5", 126, 1, 61, 20),
             new Stuff("fiery spark", 127, "Emission 0.9 Roughness 0.4 Reflection 0.0 Missing 0.6", 127, 2, 0, 3), /*light yellow*/
 
             new Stuff("vanishing shadow", 128, 66, "Emission -0.5 Transparency 1.0", 0, 1),

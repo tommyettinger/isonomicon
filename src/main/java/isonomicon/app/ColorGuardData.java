@@ -93,7 +93,8 @@ public class ColorGuardData {
             new Unit("Oil"),
             new Unit("Metal"),
             new Unit("Food"),
-            new Unit("Signal"));
+            new Unit("Signal"),
+            new Unit("Money"));
 
     public static List<String> terrains = ObjectList.with("Coast", "Desert", "Forest", "Ice", "Jungle", "Mountains",
             "Ocean", "Plains", "River", "Rocky", "Ruins", "Volcano");
