@@ -59,7 +59,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                 "Purple",
         };
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.name.equals("AA_Gun")).toList();
-        ColorGuardData.units = ColorGuardData.units.subList(52, ColorGuardData.units.size());
+//        ColorGuardData.units = ColorGuardData.units.subList(52, ColorGuardData.units.size());
         try {
             head = VoxIOExtended.readVox(new LittleEndianDataInputStream(new FileInputStream("specialized/b/vox/color_guard/human/Head.vox")));
         }
