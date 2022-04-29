@@ -77,6 +77,7 @@ public class ColorGuardData {
             new Unit("Heavy_Bomber", "Bomb_Drop"),
             new Unit("Volunteer"),
             new Unit("Medic"),
+            new Unit("Spy"),
             new Unit("City"),
             new Unit("Mansion"),
             new Unit("Fort"),
