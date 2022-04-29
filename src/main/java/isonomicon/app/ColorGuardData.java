@@ -78,6 +78,7 @@ public class ColorGuardData {
             new Unit("Volunteer"),
             new Unit("Medic"),
             new Unit("Spy"),
+            new Unit("Engineer"),
             new Unit("City"),
             new Unit("Mansion"),
             new Unit("Fort"),
