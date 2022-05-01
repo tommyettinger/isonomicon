@@ -12,6 +12,7 @@ import isonomicon.io.extended.VoxModel;
 
 import static com.badlogic.gdx.math.MathUtils.ceil;
 import static com.badlogic.gdx.math.MathUtils.floor;
+import static isonomicon.io.VoxIO.lastMaterials;
 
 public class EffectGenerator {
 
@@ -258,29 +259,28 @@ public class EffectGenerator {
         }
     }
 
-    public static byte[][][][] burst(byte[][][] initial, int xInitial, int yInitial, int zInitial, int frames, boolean big) {
-        byte[][][][] result = new byte[frames][initial.length][initial[0].length][initial[0][0].length];
+    public static byte[][][][] burst(byte[][][][] grids, int xInitial, int yInitial, int zInitial, int startFrame, int frames, boolean big) {
         for (int n = 0, runs = r.nextInt(1, 4); n < runs; n++) {
             float angle = r.nextFloat(), yAngle = TrigTools.sin_(angle), xAngle = TrigTools.cos_(angle),
                     zAngle = TrigTools.acos_(r.nextFloat());
             int x = xInitial + r.nextInt(-1, 5);
             int y = yInitial + r.nextInt(-3, 4);
             int z = zInitial + r.nextInt(5);
-            for (int f = 0; f < frames; f++) {
-                if (f == 0) {
-                    result[f][x][y][z] = sparks;
+            for (int f = startFrame, p = 0; p < frames && f < grids.length; f++, p++) {
+                if (p == 0) {
+                    grids[f][x][y][z] = sparks;
                 } else {
-                    for (int i = f; i <= f + (big ? f + 3 + n : f); i++) {
+                    for (int i = p; i <= p + (big ? p + 3 + n : p); i++) {
                         if(r.next(6) < 50)
-                            result[f]
-                                    [MathUtils.clamp(MathUtils.round(x + i * xAngle), 0, initial.length)]
-                                    [MathUtils.clamp(MathUtils.round(y + i * yAngle), 0, initial[0].length)]
-                                    [MathUtils.clamp(MathUtils.round(z + i * zAngle), 0, initial[0][0].length)] = sparks;
+                            grids[f]
+                                    [MathUtils.clamp(MathUtils.round(x + i * xAngle), 0, grids[0].length)]
+                                    [MathUtils.clamp(MathUtils.round(y + i * yAngle), 0, grids[0][0].length)]
+                                    [MathUtils.clamp(MathUtils.round(z + i * zAngle), 0, grids[0][0][0].length)] = sparks;
                     }
                 }
             }
         }
-        return result;
+        return grids;
     }
 
     public static VoxModel[] machineGunAnimation(VoxModel[] frames, int which){
@@ -2451,64 +2451,20 @@ public class EffectGenerator {
 
     // RECEIVE
 
-//    public static VoxModel[] handgunReceiveAnimation(VoxModel[] frames, int strength){
-//        int count = frames.length;
-//        VoxModel[] next = new VoxModel[count];
-//        for (int i = 0; i < count; i++) {
-//            next[i] = frames[i].copy();
-//        }
-//        final int gridLimit = next[0].grids.size();
-//        boolean foundAny = false;
-//        for (int g = 0; g < gridLimit; g++) {
-//            LongOrderedSet ls = next[0].markers.get(g).get(launch + which * 8);
-//            if (ls == null)
-//                continue;
-//            foundAny = true;
-//            LongList launchers = ls.order();
-//            Choice majorLimit = ((x, y, z) -> r.nextInt(10) > 2);
-//            Choice minorLimit = ((x, y, z) -> r.nextInt(10) > 1);
-//            for (int f = 0; f < count - 2; f++) {
-//                byte[][][] grid = next[f+1].grids.get(g);
-//                int currentlyFiring = f % ((launchers.size() >>> 2) + 1);
-//                if ((currentlyFiring & 1) == 0) {
-//                    for (int ln = 0; ln < launchers.size(); ln++) {
-//                        long launcher = launchers.get(ln);
-//                        if (currentlyFiring != 0) {
-//                            currentlyFiring = (currentlyFiring + 1) % ((launchers.size() >>> 2) + 1);
-//                            continue;
-//                        }
-//                        int lx = ((int) (launcher) & 0xFFFFF), ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) (launcher >>> 40) & 0xFFFFF;
-//                        ShapeGenerator.line(grid, lx, ly, lz, lx + 7, ly, lz, sparks, minorLimit);
-//
-//                        ShapeGenerator.line(grid, lx, ly, lz, lx + 5, ly, lz + 2, sparks, minorLimit);
-//                        ShapeGenerator.line(grid, lx, ly, lz, lx + 5, ly, lz - 2, sparks, minorLimit);
-//                        ShapeGenerator.line(grid, lx, ly, lz, lx + 5, ly + 2, lz, sparks, minorLimit);
-//                        ShapeGenerator.line(grid, lx, ly, lz, lx + 5, ly - 2, lz, sparks, minorLimit);
-//
-//                        ShapeGenerator.line(grid, lx, ly, lz, lx + 3, ly + 2, lz + 2, sparks, minorLimit);
-//                        ShapeGenerator.line(grid, lx, ly, lz, lx + 3, ly - 2, lz + 2, sparks, minorLimit);
-//                        ShapeGenerator.line(grid, lx, ly, lz, lx + 3, ly + 2, lz - 2, sparks, minorLimit);
-//                        ShapeGenerator.line(grid, lx, ly, lz, lx + 3, ly - 2, lz - 2, sparks, minorLimit);
-//                    }
-//                } else {
-//                    for (int ln = 0; ln < launchers.size(); ln++) {
-//                        long launcher = launchers.get(ln);
-//                        if (currentlyFiring < 2 && launchers.size() > 8) {
-//                            currentlyFiring = (currentlyFiring + 1) % ((launchers.size() >>> 2) + 1);
-//                            continue;
-//                        }
-//                        int lx = ((int) (launcher) & 0xFFFFF), ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) (launcher >>> 40) & 0xFFFFF;
-//                        ShapeGenerator.line(grid, lx + 2, ly, lz, lx + 9, ly, lz, yellowFire, majorLimit);
-//
-//                        currentlyFiring = (currentlyFiring + 1) % ((launchers.size() >>> 2) + 1);
-//                    }
-//                }
-//            }
-//        }
-//        if(!foundAny) return null;
-//
-//        return next;
-//    }
+    public static VoxModel[] handgunReceiveAnimation(int size, int frames, int strength){
+        VoxModel[] next = new VoxModel[frames];
+        byte[][][][] grids = new byte[frames][size][size][size];
+        for (int i = 0; i < frames; i++) {
+            next[i] = new VoxModel();
+            next[i].grids.add(grids[i]);
+            next[i].materials.putAll(lastMaterials);
+        }
+
+        for(int s = 0; s < strength + strength; s++) {
+            burst(grids, 35, 32, 7, s >> 1, 3, s + r.next(2) > strength);
+        }
+        return next;
+    }
 
     /*
             public static MagicaVoxelData[][] HandgunReceiveAnimationLarge(MagicaVoxelData[][] parsedFrames, int strength)
@@ -2544,14 +2500,14 @@ public class EffectGenerator {
             for(int f = 0; f < voxelFrames.Length - 2; f++)
             {
                 int currentlyMissing = f, currentlyHitting = f + 4;
-                if(currentlyMissing % 8 < f)
+                if((currentlyMissing & 7) < f)
                 {
-                    currentlyMissing %= 8;
+                    currentlyMissing &= 7;
                     secondMiss ^= 1;
                 }
-                if(currentlyHitting % 8 < f)
+                if((currentlyHitting & 7) < f)
                 {
-                    currentlyHitting %= 8;
+                    currentlyHitting &= 7;
                     secondHit ^= 1;
                 }
                 if(currentlyMissing < strength)
