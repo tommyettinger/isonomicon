@@ -6,6 +6,7 @@ import com.github.tommyettinger.ds.LongOrderedSet;
 import com.github.tommyettinger.ds.ObjectObjectOrderedMap;
 import com.github.tommyettinger.ds.support.EnhancedRandom;
 import com.github.tommyettinger.ds.support.FourWheelRandom;
+import com.github.yellowstonegames.core.TrigTools;
 import com.github.yellowstonegames.grid.IntPointHash;
 import isonomicon.io.extended.VoxModel;
 
@@ -255,6 +256,31 @@ public class EffectGenerator {
             default:
                 return 67;
         }
+    }
+
+    public static byte[][][][] burst(byte[][][] initial, int xInitial, int yInitial, int zInitial, int frames, boolean big) {
+        byte[][][][] result = new byte[frames][initial.length][initial[0].length][initial[0][0].length];
+        for (int n = 0, runs = r.nextInt(1, 4); n < runs; n++) {
+            float angle = r.nextFloat(), yAngle = TrigTools.sin_(angle), xAngle = TrigTools.cos_(angle),
+                    zAngle = TrigTools.acos_(r.nextFloat());
+            int x = xInitial + r.nextInt(-1, 5);
+            int y = yInitial + r.nextInt(-3, 4);
+            int z = zInitial + r.nextInt(5);
+            for (int f = 0; f < frames; f++) {
+                if (f == 0) {
+                    result[f][x][y][z] = sparks;
+                } else {
+                    for (int i = f; i <= f + (big ? f + 3 + n : f); i++) {
+                        if(r.next(6) < 50)
+                            result[f]
+                                    [MathUtils.clamp(MathUtils.round(x + i * xAngle), 0, initial.length)]
+                                    [MathUtils.clamp(MathUtils.round(y + i * yAngle), 0, initial[0].length)]
+                                    [MathUtils.clamp(MathUtils.round(z + i * zAngle), 0, initial[0][0].length)] = sparks;
+                    }
+                }
+            }
+        }
+        return result;
     }
 
     public static VoxModel[] machineGunAnimation(VoxModel[] frames, int which){
@@ -2420,5 +2446,137 @@ public class EffectGenerator {
             }
 
             return voxelFrames;
+     */
+
+
+    // RECEIVE
+
+//    public static VoxModel[] handgunReceiveAnimation(VoxModel[] frames, int strength){
+//        int count = frames.length;
+//        VoxModel[] next = new VoxModel[count];
+//        for (int i = 0; i < count; i++) {
+//            next[i] = frames[i].copy();
+//        }
+//        final int gridLimit = next[0].grids.size();
+//        boolean foundAny = false;
+//        for (int g = 0; g < gridLimit; g++) {
+//            LongOrderedSet ls = next[0].markers.get(g).get(launch + which * 8);
+//            if (ls == null)
+//                continue;
+//            foundAny = true;
+//            LongList launchers = ls.order();
+//            Choice majorLimit = ((x, y, z) -> r.nextInt(10) > 2);
+//            Choice minorLimit = ((x, y, z) -> r.nextInt(10) > 1);
+//            for (int f = 0; f < count - 2; f++) {
+//                byte[][][] grid = next[f+1].grids.get(g);
+//                int currentlyFiring = f % ((launchers.size() >>> 2) + 1);
+//                if ((currentlyFiring & 1) == 0) {
+//                    for (int ln = 0; ln < launchers.size(); ln++) {
+//                        long launcher = launchers.get(ln);
+//                        if (currentlyFiring != 0) {
+//                            currentlyFiring = (currentlyFiring + 1) % ((launchers.size() >>> 2) + 1);
+//                            continue;
+//                        }
+//                        int lx = ((int) (launcher) & 0xFFFFF), ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) (launcher >>> 40) & 0xFFFFF;
+//                        ShapeGenerator.line(grid, lx, ly, lz, lx + 7, ly, lz, sparks, minorLimit);
+//
+//                        ShapeGenerator.line(grid, lx, ly, lz, lx + 5, ly, lz + 2, sparks, minorLimit);
+//                        ShapeGenerator.line(grid, lx, ly, lz, lx + 5, ly, lz - 2, sparks, minorLimit);
+//                        ShapeGenerator.line(grid, lx, ly, lz, lx + 5, ly + 2, lz, sparks, minorLimit);
+//                        ShapeGenerator.line(grid, lx, ly, lz, lx + 5, ly - 2, lz, sparks, minorLimit);
+//
+//                        ShapeGenerator.line(grid, lx, ly, lz, lx + 3, ly + 2, lz + 2, sparks, minorLimit);
+//                        ShapeGenerator.line(grid, lx, ly, lz, lx + 3, ly - 2, lz + 2, sparks, minorLimit);
+//                        ShapeGenerator.line(grid, lx, ly, lz, lx + 3, ly + 2, lz - 2, sparks, minorLimit);
+//                        ShapeGenerator.line(grid, lx, ly, lz, lx + 3, ly - 2, lz - 2, sparks, minorLimit);
+//                    }
+//                } else {
+//                    for (int ln = 0; ln < launchers.size(); ln++) {
+//                        long launcher = launchers.get(ln);
+//                        if (currentlyFiring < 2 && launchers.size() > 8) {
+//                            currentlyFiring = (currentlyFiring + 1) % ((launchers.size() >>> 2) + 1);
+//                            continue;
+//                        }
+//                        int lx = ((int) (launcher) & 0xFFFFF), ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) (launcher >>> 40) & 0xFFFFF;
+//                        ShapeGenerator.line(grid, lx + 2, ly, lz, lx + 9, ly, lz, yellowFire, majorLimit);
+//
+//                        currentlyFiring = (currentlyFiring + 1) % ((launchers.size() >>> 2) + 1);
+//                    }
+//                }
+//            }
+//        }
+//        if(!foundAny) return null;
+//
+//        return next;
+//    }
+
+    /*
+            public static MagicaVoxelData[][] HandgunReceiveAnimationLarge(MagicaVoxelData[][] parsedFrames, int strength)
+        {
+            List<MagicaVoxelData>[] voxelFrames = new List<MagicaVoxelData>[parsedFrames.Length];
+            MagicaVoxelData[][] finalFrames = new MagicaVoxelData[parsedFrames.Length][];
+
+            List<MagicaVoxelData>[] extra = new List<MagicaVoxelData>[voxelFrames.Length];
+            MagicaVoxelData[][][] plumes = new MagicaVoxelData[strength * 2][][];
+            MagicaVoxelData[][][] bursts = new MagicaVoxelData[strength * 2][][];
+            for(int s = 0; s < 2 * strength; s++)
+            {
+                plumes[s] = SmokePlumeLarge(new MagicaVoxelData
+                {
+                    x = (byte)((s % 2 == 0) ? 90 - r.Next(20) : r.Next(20) + 30),
+                    y = (byte)((s % 2 == 0) ? (r.Next(30) + 20) : (100 - r.Next(30))),
+                    z = 0,
+                    color = smoke
+                }, 8, 7);
+                bursts[s] = BurstLarge(new MagicaVoxelData
+                {
+                    x = (byte)(35 + r.Next(3)),
+                    y = (byte)(32 - r.Next(4)),
+                    z = (byte)(7 + r.Next(3)),
+                    color = yellow_fire
+                }, 3, s >= strength);
+            }
+            for(int f = 0; f < voxelFrames.Length; f++)
+            {
+                extra[f] = new List<MagicaVoxelData>(20);
+            }
+            int secondMiss = 0, secondHit = 0;
+            for(int f = 0; f < voxelFrames.Length - 2; f++)
+            {
+                int currentlyMissing = f, currentlyHitting = f + 4;
+                if(currentlyMissing % 8 < f)
+                {
+                    currentlyMissing %= 8;
+                    secondMiss ^= 1;
+                }
+                if(currentlyHitting % 8 < f)
+                {
+                    currentlyHitting %= 8;
+                    secondHit ^= 1;
+                }
+                if(currentlyMissing < strength)
+                {
+                    for(int p = 0; p < 7 && f + p < parsedFrames.Length; p++)
+                    {
+                        extra[f + p].AddRange(plumes[currentlyMissing + strength * secondMiss][p]);
+                    }
+                }
+                if(currentlyHitting < strength)
+                {
+                    for(int b = 0; b < 3 && f + b < parsedFrames.Length; b++)
+                    {
+                        extra[f + b].AddRange(bursts[currentlyHitting + strength * secondHit][b]);
+                    }
+                }
+            }
+            for(int f = 0; f < voxelFrames.Length; f++)
+            {
+                List<MagicaVoxelData> working = new List<MagicaVoxelData>(20);
+                working.AddRange(extra[f]);
+                finalFrames[f] = working.ToArray();
+            }
+            return finalFrames;
+        }
+
      */
 }
