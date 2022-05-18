@@ -4,8 +4,6 @@ import com.badlogic.gdx.*;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3WindowAdapter;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -25,9 +23,6 @@ import isonomicon.visual.SpecialRenderer;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-
-import static com.badlogic.gdx.graphics.GL20.GL_TEXTURE0;
-import static com.badlogic.gdx.graphics.GL20.GL_TEXTURE1;
 
 public class RotationVisualizer extends ApplicationAdapter {
     public static final int SCREEN_WIDTH = 400;//640;

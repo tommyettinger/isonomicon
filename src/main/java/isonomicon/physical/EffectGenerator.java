@@ -4,9 +4,9 @@ import com.badlogic.gdx.math.MathUtils;
 import com.github.tommyettinger.ds.LongList;
 import com.github.tommyettinger.ds.LongOrderedSet;
 import com.github.tommyettinger.ds.ObjectObjectOrderedMap;
-import com.github.tommyettinger.ds.support.EnhancedRandom;
-import com.github.tommyettinger.ds.support.FourWheelRandom;
-import com.github.yellowstonegames.core.TrigTools;
+import com.github.tommyettinger.random.EnhancedRandom;
+import com.github.tommyettinger.random.FourWheelRandom;
+import com.github.tommyettinger.digital.TrigTools;
 import com.github.yellowstonegames.grid.IntPointHash;
 import isonomicon.io.extended.VoxModel;
 
@@ -261,8 +261,8 @@ public class EffectGenerator {
 
     public static byte[][][][] burst(byte[][][][] grids, int xInitial, int yInitial, int zInitial, int startFrame, int frames, boolean big) {
         for (int n = 0, runs = r.nextInt(1, 4); n < runs; n++) {
-            float angle = r.nextFloat(), yAngle = TrigTools.sin_(angle), xAngle = TrigTools.cos_(angle),
-                    zAngle = TrigTools.acos_(r.nextFloat());
+            float angle = r.nextFloat(), yAngle = TrigTools.sinTurns(angle), xAngle = TrigTools.cosTurns(angle),
+                    zAngle = TrigTools.acosTurns(r.nextFloat());
             int x = xInitial + r.nextInt(-1, 5);
             int y = yInitial + r.nextInt(-3, 4);
             int z = zInitial + r.nextInt(5);

@@ -20,7 +20,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static com.github.yellowstonegames.core.ArrayTools.fill;
+import static com.github.tommyettinger.digital.ArrayTools.fill;
 
 /**
  * Renders {@code byte[][][]} voxel models to pairs of {@link Pixmap}s, one using normal RGBA colors and one using an

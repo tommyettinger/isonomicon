@@ -11,7 +11,7 @@ import isonomicon.physical.VoxMaterial;
 import java.util.Arrays;
 
 import static com.github.tommyettinger.colorful.oklab.ColorTools.getRawGamutValue;
-import static com.github.yellowstonegames.core.ArrayTools.fill;
+import static com.github.tommyettinger.digital.ArrayTools.fill;
 
 /**
  * Renders {@code byte[][][]} voxel models to {@link Pixmap}s with arbitrary yaw rotation.
