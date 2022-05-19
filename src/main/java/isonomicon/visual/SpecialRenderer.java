@@ -324,15 +324,15 @@ public class SpecialRenderer {
                             }
                         }
                         if (emit != 0) {
-                            float spread = emit * 0.003f;
-                            final int radius = 14;
+                            float spread = emit * 0.08f;
+                            final int radius = 9;
                             for (int i = -radius, si = sx + i; i <= radius; i++, si++) {
                                 for (int j = -radius, sj = sy + j; j <= radius; j++, sj++) {
                                     final int dist = i * i + j * j;
                                     if (dist > radius * radius || si < 0 || sj < 0 || si > xSize || sj > ySize)
                                         continue;
                                     float change = spread * (radius - (float) Math.sqrt(dist));
-                                    midShading[si][sj] = Math.min(midShading[si][sj] + change, 0.3f);
+                                    midShading[si][sj] = Math.min(midShading[si][sj] + change * change, 0.25f);
                                     lightIndices[si][sj] = (byte)Math.max(lightIndices[si][sj], indices[sx][sy]);
                                 }
                             }
