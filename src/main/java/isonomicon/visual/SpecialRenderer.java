@@ -332,7 +332,7 @@ public class SpecialRenderer {
                                     if (dist > radius * radius || si < 0 || sj < 0 || si > xSize || sj > ySize)
                                         continue;
                                     float change = spread * (radius - (float) Math.sqrt(dist));
-                                    midShading[si][sj] = Math.min(midShading[si][sj] + change * change, 0.25f);
+                                    midShading[si][sj] = Math.min(midShading[si][sj] + change * Math.abs(change), 0.25f);
                                     lightIndices[si][sj] = (byte)Math.max(lightIndices[si][sj], indices[sx][sy]);
                                 }
                             }
