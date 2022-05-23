@@ -11,6 +11,8 @@ public class ColorGuardData {
         public String secondary;
         public boolean primaryPose;
         public boolean secondaryPose;
+        public int primaryStrength;
+        public int secondaryStrength;
         public Unit(String name){
             this.name = name;
         }
@@ -36,6 +38,16 @@ public class ColorGuardData {
             this.secondaryPose = secondaryPose;
         }
 
+        public Unit(String name, String primary, boolean primaryPose, int primaryStrength, String secondary, boolean secondaryPose, int secondaryStrength){
+            this.name = name;
+            this.primary = primary;
+            this.primaryPose = primaryPose;
+            this.primaryStrength = primaryStrength;
+            this.secondary = secondary;
+            this.secondaryPose = secondaryPose;
+            this.secondaryStrength = secondaryStrength;
+        }
+
         public boolean hasWeapon(String type){
             return type != null && (type.equals(primary) || type.equals(secondary));
         }
@@ -43,14 +55,14 @@ public class ColorGuardData {
 
     public static List<Unit> units = ObjectList.with(
             new Unit("Infantry", "Machine_Gun", true),
-            new Unit("Bazooka", "Handgun", false, "Forward_Missile", true),
+            new Unit("Bazooka", "Handgun", false, 1, "Forward_Missile", true, 0),
             new Unit("Bike", "Machine_Gun"),
-            new Unit("Rifle_Sniper", "Handgun", false, "Handgun", true),
+            new Unit("Rifle_Sniper", "Handgun", false, 1, "Handgun", true, 2),
             new Unit("Mortar_Sniper", "Arc_Cannon", true),
             new Unit("Missile_Sniper", "Arc_Missile"),
             new Unit("Light_Tank", "Forward_Cannon", "Machine_Gun"),
             new Unit("War_Tank", "Forward_Cannon", "Machine_Gun"),
-            new Unit("Scout_Tank", "Forward_Cannon", "Handgun"),
+            new Unit("Scout_Tank", "Forward_Cannon", false, 0, "Handgun", false, 2),
             new Unit("Heavy_Cannon", "Forward_Cannon"),
             new Unit("Recon", "Machine_Gun"),
             new Unit("AA_Gun", "Machine_Gun"),

@@ -1,6 +1,7 @@
 package isonomicon.physical;
 
 import com.badlogic.gdx.math.MathUtils;
+import com.github.tommyettinger.ds.IntObjectMap;
 import com.github.tommyettinger.ds.LongList;
 import com.github.tommyettinger.ds.LongOrderedSet;
 import com.github.tommyettinger.ds.ObjectObjectOrderedMap;
@@ -21,6 +22,11 @@ public class EffectGenerator {
         VoxModel[] runEffect(VoxModel[] frames, int which);
     }
 
+    @FunctionalInterface
+    public interface ReceiveEffect {
+        VoxModel[] runEffect(int size, int frames, int strength);
+    }
+
     public static final ObjectObjectOrderedMap<String, Effect> KNOWN_EFFECTS = new ObjectObjectOrderedMap<>(
             new String[]{"Handgun", "Machine_Gun", "Forward_Cannon", "Arc_Cannon",
                     "Forward_Missile", "Arc_Missile", "Torpedo", "Flame_Wave", "Bomb_Drop", "Hack"},
@@ -29,6 +35,12 @@ public class EffectGenerator {
                     EffectGenerator::forwardMissileAnimation, EffectGenerator::arcMissileAnimation,
                     EffectGenerator::torpedoAnimation, EffectGenerator::flameWaveAnimation,
                     EffectGenerator::bombDropAnimation, EffectGenerator::hackAnimation
+            }
+    );
+
+    public static final ObjectObjectOrderedMap<String, ReceiveEffect> KNOWN_RECEIVE_EFFECTS = new ObjectObjectOrderedMap<>(
+            new String[]{"Handgun"},
+            new ReceiveEffect[]{EffectGenerator::handgunReceiveAnimation
             }
     );
 
@@ -263,7 +275,7 @@ public class EffectGenerator {
         for (int n = 0, runs = r.nextInt(1, 4); n < runs; n++) {
             float angle = r.nextFloat(), yAngle = TrigTools.sinTurns(angle), xAngle = TrigTools.cosTurns(angle),
                     zAngle = TrigTools.acosTurns(r.nextFloat());
-            int x = xInitial + r.nextInt(-1, 5);
+            int x = xInitial + r.nextInt(-10, 5);
             int y = yInitial + r.nextInt(-3, 4);
             int z = zInitial + r.nextInt(5);
             for (int f = startFrame, p = 0; p < frames && f < grids.length; f++, p++) {
@@ -2457,6 +2469,7 @@ public class EffectGenerator {
         for (int i = 0; i < frames; i++) {
             next[i] = new VoxModel();
             next[i].grids.add(grids[i]);
+            next[i].links.add(new IntObjectMap<>(1));
             next[i].materials.putAll(lastMaterials);
         }
 
