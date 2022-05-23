@@ -14,6 +14,7 @@ import com.github.tommyettinger.anim8.AnimatedPNG;
 import com.github.tommyettinger.anim8.Dithered;
 import com.github.tommyettinger.anim8.PaletteReducer;
 import com.github.tommyettinger.ds.IntObjectMap;
+import com.github.tommyettinger.ds.ObjectIntMap;
 import isonomicon.io.LittleEndianDataInputStream;
 import isonomicon.io.extended.VoxIOExtended;
 import isonomicon.io.extended.VoxModel;
@@ -47,6 +48,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
     private AnimatedPNG apng;
     private SpriteBatch batch;
     private Texture palette;
+
     public ColorGuardAssets() {
         armies = new String[]{
                 "Dark",
@@ -58,6 +60,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                 "Blue",
                 "Purple",
         };
+        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Handgun")).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.name.equals("Engineer")).toList();
 //        ColorGuardData.units = ColorGuardData.units.subList(52, ColorGuardData.units.size());
         try {
@@ -107,6 +110,10 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //        gif.palette = new PaletteReducer(Coloring.BETSY256, Gdx.files.local("assets/BetsyPreload.dat").readBytes());
         gif.palette.setDitherStrength(0.5f);
         FrameBuffer fb = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), false);
+        ObjectIntMap<String> doneReceive = new ObjectIntMap<>(16);
+        doneReceive.setDefaultValue(-1);
+        for(String s : EffectGenerator.KNOWN_RECEIVE_EFFECTS.keySet())
+            doneReceive.put(s, 0);
         // many skin and hair colors
         if(DIVERSE)
         {
@@ -324,6 +331,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                     pm.clear();
                     pm.setSize(32 * armies.length);
                     String attack = unit.primary, ps = "_Primary";
+                    int strength = unit.primaryStrength;
                     boolean pose = unit.primaryPose;
                     for (int which = 0; which < 2; which++) {
                         if(attack == null) continue EACH_INPUT;
@@ -375,7 +383,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                     fb.end();
                                     pm.set(j * 32 + i * 8 + f, pixmap);
                                     try {
-                                        png.write(Gdx.files.local("out/color_guard/" + armies[j] + "/" + name + '/' + armies[j] + "_look0_" + name + ps + "_angle" + i + "_" + f + ".png"), pixmap);
+                                        png.write(Gdx.files.local("out/color_guard/" + armies[j] + "/" + name + '/' + armies[j] + "_look" + look + "_" + name + ps + "_angle" + i + "_" + f + ".png"), pixmap);
                                         if (look + j == 0)
                                             png.write(Gdx.files.local("out/color_guard/lab/" + name + '/' + name + ps + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                                     } catch (IOException e) {
@@ -387,11 +395,6 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                 for (int j = 1; j < frames[f].grids.size(); j++) {
                                     Tools3D.deepCopyInto(g, frames[f].grids.get(j));
                                 }
-                                Gdx.files.local("out/temp/" + name + '/').mkdirs();
-
-//                            VoxIOExtended.writeVOX("out/temp/" + name + '/' + name + "_Machine_Gun_angle" + i + "_" + f + ".vox", g, Coloring.BETTS64, Stuff.MATERIALS_B);
-
-//                png8.write(Gdx.files.local("out/" + name + '/' + name + "_angle" + i + ".png"), p, false, true);
                             }
                         }
 //                gif.palette.analyze(pm);
@@ -401,7 +404,58 @@ public class ColorGuardAssets extends ApplicationAdapter {
                             if (!pix.isDisposed())
                                 pix.dispose();
                         }
+                        EffectGenerator.r.setSeed(unit.name.hashCode() ^ which);
+                        if(strength > 0){
+                            int rec = doneReceive.get(attack);
+                            if(rec >= 0 && (rec & 1 << strength) == 0) {
+                                doneReceive.put(attack, rec | 1 << strength);
+                                EffectGenerator.ReceiveEffect recEff = EffectGenerator.KNOWN_RECEIVE_EFFECTS.get(attack);
+                                if (recEff != null) {
+                                    for (int i = 0; i < 4; i++) {
+                                        frames = recEff.runEffect(60, 8, strength);
+                                        for (int f = 0; f < frames.length; f++) {
+                                            pixmap = renderer.drawModelSimple(frames[f], i * 0.25f, 0f, 0f, f, 0.00f, 0.00f, 0.00f);
+                                            Texture t = new Texture(pixmap.getWidth(), pixmap.getHeight(), Pixmap.Format.RGBA8888);
+                                            t.draw(renderer.palettePixmap, 0, 0);
+                                            int look = 0;
+                                            for (int j = 0; j < armies.length; j++) {
+                                                fb.begin();
+                                                palette.bind(1);
+                                                ScreenUtils.clear(1f, 1f, 1f, 0f);
+                                                batch.begin();
+
+                                                indexShader.setUniformi("u_texPalette", 1);
+                                                Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
+                                                batch.setColor((look + j) / 255f, 0.5f, 0.5f, 1f);
+
+                                                batch.draw(t, 0, t.getHeight(), t.getWidth(), -t.getHeight());
+                                                batch.end();
+                                                pixmap = Pixmap.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
+                                                fb.end();
+                                                pm.set(j * 32 + i * 8 + f, pixmap);
+                                                try {
+                                                    png.write(Gdx.files.local("out/color_guard/" + armies[j] + "/" + attack + "Receive/" + armies[j] + "_look" + look + "_" + attack + "Receive_" + strength + "_angle" + i + "_" + f + ".png"), pixmap);
+                                                    if (look + j == 0)
+                                                        png.write(Gdx.files.local("out/color_guard/lab/" + attack + "Receive/" + attack + "Receive_" + strength + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
+                                                } catch (IOException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                            t.dispose();
+                                        }
+                                    }
+                                    gif.write(Gdx.files.local("out/color_guard/animated/" + attack + "Receive/" + attack + "Receive_" + strength + ".gif"), pm, 8);
+                                    apng.write(Gdx.files.local("out/color_guard/animated/" + attack + "Receive/" + attack + "Receive_" + strength + ".png"), pm, 8);
+                                    for (Pixmap pix : pm) {
+                                        if (!pix.isDisposed())
+                                            pix.dispose();
+                                    }
+
+                                }
+                            }
+                        }
                         attack = unit.secondary;
+                        strength = unit.secondaryStrength;
                         pose = unit.secondaryPose;
                         ps = "_Secondary";
 
