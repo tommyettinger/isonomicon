@@ -434,9 +434,9 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                                 fb.end();
                                                 pm.set(j * 32 + i * 8 + f, pixmap);
                                                 try {
-                                                    png.write(Gdx.files.local("out/color_guard/" + armies[j] + "/" + attack + "Receive/" + armies[j] + "_look" + look + "_" + attack + "Receive_" + strength + "_angle" + i + "_" + f + ".png"), pixmap);
+                                                    png.write(Gdx.files.local("out/color_guard/" + armies[j] + "/" + attack + "_Receive/" + armies[j] + "_look" + look + "_" + attack + "_Receive_" + strength + "_angle" + i + "_" + f + ".png"), pixmap);
                                                     if (look + j == 0)
-                                                        png.write(Gdx.files.local("out/color_guard/lab/" + attack + "Receive/" + attack + "Receive_" + strength + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
+                                                        png.write(Gdx.files.local("out/color_guard/lab/" + attack + "_Receive/" + attack + "_Receive_" + strength + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                                                 } catch (IOException e) {
                                                     e.printStackTrace();
                                                 }
@@ -444,8 +444,8 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                             t.dispose();
                                         }
                                     }
-                                    gif.write(Gdx.files.local("out/color_guard/animated/" + attack + "Receive/" + attack + "Receive_" + strength + ".gif"), pm, 8);
-                                    apng.write(Gdx.files.local("out/color_guard/animated/" + attack + "Receive/" + attack + "Receive_" + strength + ".png"), pm, 8);
+                                    gif.write(Gdx.files.local("out/color_guard/animated/" + attack + "_Receive/" + attack + "_Receive_" + strength + ".gif"), pm, 8);
+                                    apng.write(Gdx.files.local("out/color_guard/animated/" + attack + "_Receive/" + attack + "_Receive_" + strength + ".png"), pm, 8);
                                     for (Pixmap pix : pm) {
                                         if (!pix.isDisposed())
                                             pix.dispose();
