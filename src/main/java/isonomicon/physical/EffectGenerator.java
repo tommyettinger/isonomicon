@@ -275,7 +275,7 @@ public class EffectGenerator {
         for (int n = 0, runs = r.nextInt(1, 4); n < runs; n++) {
             float angle = r.nextFloat(), yAngle = TrigTools.sinTurns(angle), xAngle = TrigTools.cosTurns(angle),
                     zAngle = TrigTools.acosTurns(r.nextFloat());
-            int x = xInitial + r.nextInt(-10, 5);
+            int x = xInitial + r.nextInt(-4, 5);
             int y = yInitial + r.nextInt(-3, 4);
             int z = zInitial + r.nextInt(5);
             for (int f = startFrame, p = 0; p < frames && f < grids.length; f++, p++) {
@@ -2548,4 +2548,62 @@ public class EffectGenerator {
         }
 
      */
+
+
+    public static VoxModel[] machineGunReceiveAnimation(int size, int frames, int strength){
+        VoxModel[] next = new VoxModel[frames];
+        byte[][][][] grids = new byte[frames][size][size][size];
+        for (int i = 0; i < frames; i++) {
+            next[i] = new VoxModel();
+            next[i].grids.add(grids[i]);
+            next[i].links.add(new IntObjectMap<>(1));
+            next[i].materials.putAll(lastMaterials);
+        }
+
+        for (int f = 1; f < frames - 1; f++) {
+            for (int s = 0; s < strength + strength; s++) {
+                burst(grids, 50, 12 + 7 * s + 2 * f, 0, f, 2, false);
+            }
+        }
+        return next;
+    }
+/*
+        public static MagicaVoxelData[][] MachineGunReceiveAnimationLarge(MagicaVoxelData[][] parsedFrames, int strength)
+        {
+            List<MagicaVoxelData>[] voxelFrames = new List<MagicaVoxelData>[parsedFrames.Length];
+            MagicaVoxelData[][] finalFrames = new MagicaVoxelData[parsedFrames.Length][];
+
+            List<MagicaVoxelData>[] extra = new List<MagicaVoxelData>[voxelFrames.Length];
+            MagicaVoxelData[][][] sparks = new MagicaVoxelData[strength][][];
+            for(int s = 0; s < strength; s++)
+            {
+                sparks[s] = SparksLarge(new MagicaVoxelData
+                {
+                    x = (byte)(66 + r.Next(10)),
+                    y = (byte)(27 + s * 12),
+                    z = 0,
+                    color = yellow_fire
+                }, 2 * (3 + strength));
+            }
+            for(int f = 0; f < voxelFrames.Length; f++)
+            {
+                extra[f] = new List<MagicaVoxelData>(160);
+            }
+            for(int f = 0; f < voxelFrames.Length - 1; f++)
+            {
+                for(int sp = 0; sp < sparks.Length; sp++)
+                    extra[f + 1].AddRange(sparks[sp][f]);
+
+            }
+            for(int f = 0; f < voxelFrames.Length; f++)
+            {
+                List<MagicaVoxelData> working = new List<MagicaVoxelData>(20);
+                working.AddRange(extra[f]);
+                finalFrames[f] = working.ToArray();
+            }
+            return finalFrames;
+        }
+
+ */
+
 }
