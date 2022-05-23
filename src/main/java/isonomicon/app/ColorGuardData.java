@@ -25,6 +25,12 @@ public class ColorGuardData {
             this.primary = primary;
             this.primaryPose = primaryPose;
         }
+        public Unit(String name, String primary, boolean primaryPose, int primaryStrength){
+            this.name = name;
+            this.primary = primary;
+            this.primaryPose = primaryPose;
+            this.primaryStrength = primaryStrength;
+        }
         public Unit(String name, String primary, String secondary){
             this.name = name;
             this.primary = primary;
@@ -54,18 +60,18 @@ public class ColorGuardData {
     }
 
     public static List<Unit> units = ObjectList.with(
-            new Unit("Infantry", "Machine_Gun", true),
+            new Unit("Infantry", "Machine_Gun", true, 1),
             new Unit("Bazooka", "Handgun", false, 1, "Forward_Missile", true, 0),
-            new Unit("Bike", "Machine_Gun"),
+            new Unit("Bike", "Machine_Gun", false, 2),
             new Unit("Rifle_Sniper", "Handgun", false, 1, "Handgun", true, 2),
             new Unit("Mortar_Sniper", "Arc_Cannon", true),
             new Unit("Missile_Sniper", "Arc_Missile"),
-            new Unit("Light_Tank", "Forward_Cannon", "Machine_Gun"),
-            new Unit("War_Tank", "Forward_Cannon", "Machine_Gun"),
+            new Unit("Light_Tank", "Forward_Cannon", false, 0, "Machine_Gun", false, 1),
+            new Unit("War_Tank", "Forward_Cannon", false, 0, "Machine_Gun", false, 1),
             new Unit("Scout_Tank", "Forward_Cannon", false, 0, "Handgun", false, 2),
             new Unit("Heavy_Cannon", "Forward_Cannon"),
-            new Unit("Recon", "Machine_Gun"),
-            new Unit("AA_Gun", "Machine_Gun"),
+            new Unit("Recon", "Machine_Gun", false, 1),
+            new Unit("AA_Gun", "Machine_Gun", false, 2),
             new Unit("Flamethrower", "Flame_Wave"),
             new Unit("Light_Artillery", "Arc_Cannon"),
             new Unit("Rocket_Artillery", "Arc_Missile"),
@@ -75,15 +81,15 @@ public class ColorGuardData {
             new Unit("Build_Rig"),
             new Unit("Jammer", "Hack"),
             new Unit("Comm_Copter", "Hack"),
-            new Unit("Jetpack", "Machine_Gun"),
+            new Unit("Jetpack", "Machine_Gun", false, 2),
             new Unit("Transport_Copter"),
-            new Unit("Blitz_Copter", "Machine_Gun"),
-            new Unit("Gunship_Copter", "Machine_Gun", "Forward_Missile"),
-            new Unit("Patrol_Boat", "Machine_Gun"),
+            new Unit("Blitz_Copter", "Machine_Gun", false, 2),
+            new Unit("Gunship_Copter", "Machine_Gun", false, 2, "Forward_Missile", false, 0),
+            new Unit("Patrol_Boat", "Machine_Gun", false, 2),
             new Unit("Battleship", "Arc_Cannon"),
             new Unit("Cruiser", "Arc_Missile", "Torpedo"),
             new Unit("Submarine", "Arc_Missile", "Torpedo"),
-            new Unit("Legacy_Plane", "Machine_Gun"),
+            new Unit("Legacy_Plane", "Machine_Gun", false, 2),
             new Unit("Fighter_Jet", "Forward_Missile"),
             new Unit("Stealth_Jet", "Forward_Missile"),
             new Unit("Heavy_Bomber", "Bomb_Drop"),

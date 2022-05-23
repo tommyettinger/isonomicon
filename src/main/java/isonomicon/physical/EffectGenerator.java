@@ -39,8 +39,8 @@ public class EffectGenerator {
     );
 
     public static final ObjectObjectOrderedMap<String, ReceiveEffect> KNOWN_RECEIVE_EFFECTS = new ObjectObjectOrderedMap<>(
-            new String[]{"Handgun"},
-            new ReceiveEffect[]{EffectGenerator::handgunReceiveAnimation
+            new String[]{"Handgun", "Machine_Gun"},
+            new ReceiveEffect[]{EffectGenerator::handgunReceiveAnimation, EffectGenerator::machineGunReceiveAnimation
             }
     );
 
