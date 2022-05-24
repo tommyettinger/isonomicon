@@ -39,8 +39,9 @@ public class EffectGenerator {
     );
 
     public static final ObjectObjectOrderedMap<String, ReceiveEffect> KNOWN_RECEIVE_EFFECTS = new ObjectObjectOrderedMap<>(
-            new String[]{"Handgun", "Machine_Gun"},
-            new ReceiveEffect[]{EffectGenerator::handgunReceiveAnimation, EffectGenerator::machineGunReceiveAnimation
+            new String[]{"Handgun", "Machine_Gun", "Forward_Cannon"},
+            new ReceiveEffect[]{EffectGenerator::handgunReceiveAnimation, EffectGenerator::machineGunReceiveAnimation,
+                    EffectGenerator::forwardCannonReceiveAnimation,
             }
     );
 
@@ -2606,5 +2607,26 @@ public class EffectGenerator {
         }
 
  */
+
+    public static VoxModel[] forwardCannonReceiveAnimation(int size, int frames, int strength){
+        VoxModel[] next = new VoxModel[frames];
+        byte[][][][] grids = new byte[frames][size][size][size];
+        for (int i = 0; i < frames; i++) {
+            next[i] = new VoxModel();
+            next[i].grids.add(grids[i]);
+            next[i].links.add(new IntObjectMap<>(1));
+            next[i].materials.putAll(lastMaterials);
+        }
+        byte[][][] fireStart = new byte[size][size][size];
+        for (int s = 0; s < strength; s++) {
+            ShapeGenerator.ball(fireStart, 49 - s, 26 + r.nextInt(8), 6 + s + s, 8, yellowFire, ((x, y, z) -> r.next(2) != 0));
+            byte[][][][] explosion = fireballAnimation(fireStart, 6 - s, 0, 3);
+            for (int i = 0, f = 0; f < frames - 1 && i < explosion.length; f++, i++) {
+                byte[][][] grid = next[f + 1].grids.get(0);
+                Tools3D.translateCopyInto(explosion[i], grid, 0, 0, 0);
+            }
+        }
+        return next;
+    }
 
 }
