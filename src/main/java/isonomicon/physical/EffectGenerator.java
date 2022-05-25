@@ -39,9 +39,9 @@ public class EffectGenerator {
     );
 
     public static final ObjectObjectOrderedMap<String, ReceiveEffect> KNOWN_RECEIVE_EFFECTS = new ObjectObjectOrderedMap<>(
-            new String[]{"Handgun", "Machine_Gun", "Forward_Cannon"},
+            new String[]{"Handgun", "Machine_Gun", "Forward_Cannon", "Arc_Cannon"},
             new ReceiveEffect[]{EffectGenerator::handgunReceiveAnimation, EffectGenerator::machineGunReceiveAnimation,
-                    EffectGenerator::forwardCannonReceiveAnimation,
+                    EffectGenerator::forwardCannonReceiveAnimation, EffectGenerator::arcCannonReceiveAnimation
             }
     );
 
@@ -2622,6 +2622,35 @@ public class EffectGenerator {
             ShapeGenerator.ball(fireStart, 49 - s, 26 + r.nextInt(8), 6 + s + s, 8, yellowFire, ((x, y, z) -> r.next(2) != 0));
             byte[][][][] explosion = fireballAnimation(fireStart, 6 - s, 0, 3);
             for (int i = 0, f = 0; f < frames - 1 && i < explosion.length; f++, i++) {
+                byte[][][] grid = next[f + 1].grids.get(0);
+                Tools3D.translateCopyInto(explosion[i], grid, 0, 0, 0);
+            }
+        }
+        return next;
+    }
+
+    /**
+     *
+     * @param size
+     * @param frames
+     * @param strength the rough number of cannons firing, 1 to 4
+     * @return
+     */
+    public static VoxModel[] arcCannonReceiveAnimation(int size, int frames, int strength){
+        VoxModel[] next = new VoxModel[frames];
+        byte[][][][] grids = new byte[frames][size][size][size];
+        for (int i = 0; i < frames; i++) {
+            next[i] = new VoxModel();
+            next[i].grids.add(grids[i]);
+            next[i].links.add(new IntObjectMap<>(1));
+            next[i].materials.putAll(lastMaterials);
+        }
+        byte[][][] fireStart = new byte[size][size][size];
+        for (int s = 0; s < strength; s++) {
+            int xPos = 41 - s * 3 + r.nextInt(10), yPos = 22 + r.nextInt(8);
+            ShapeGenerator.box(fireStart, xPos, yPos, 0, xPos + 8, yPos + 8, 14, yellowFire, ((x, y, z) -> r.next(3) != 0));
+            byte[][][][] explosion = fireballAnimation(fireStart, 6 - s, 0, 1);
+            for (int i = 0, f = s; f < frames - 1 && i < explosion.length; f++, i++) {
                 byte[][][] grid = next[f + 1].grids.get(0);
                 Tools3D.translateCopyInto(explosion[i], grid, 0, 0, 0);
             }
