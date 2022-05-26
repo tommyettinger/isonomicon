@@ -11,13 +11,14 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
+import isonomicon.app.ColorGuardData;
 import isonomicon.visual.ShaderUtils;
 
 public class SpecialViewer extends ApplicationAdapter {
     public ShaderProgram indexShader;
 
     public Texture palettes;
-    public Texture[] images, targetImages;
+    public Texture[] images, targetImages, receiveImages;
 
     public SpriteBatch batch;
 
@@ -41,12 +42,31 @@ public class SpecialViewer extends ApplicationAdapter {
 //        String name = "Figure";
 
         String name = "Light_Tank";
+        ColorGuardData.Unit unit = ColorGuardData.byName.get(name);
         String target = "Infantry";
 
-        images = new Texture[32];
+        images = new Texture[64];
+        receiveImages = new Texture[64];
         for (int a = 0, i = 0; a < 4; a++) {
             for (int f = 0; f < 8; f++) {
-                images[i++] = new Texture(Gdx.files.local("out/color_guard/lab/"+name+"/"+name+"_Primary_angle"+a+"_"+f+".png"));
+                images[i] = new Texture(Gdx.files.local("out/color_guard/lab/"+name+"/"+name+"_Primary_angle"+a+"_"+f+".png"));
+                receiveImages[i++] = new Texture(Gdx.files.local("out/color_guard/lab/"+unit.primary+"_Receive"+"/"+unit.primary+"_Receive_"+unit.primaryStrength+"_angle"+a+"_"+f+".png"));
+            }
+        }
+        if(unit.secondary == null){
+            for (int a = 0, i = 32; a < 4; a++) {
+                for (int f = 0; f < 8; f++) {
+                    images[i] = new Texture(Gdx.files.local("out/color_guard/lab/"+name+"/"+name+"_Primary_angle"+a+"_"+f+".png"));
+                    receiveImages[i++] = new Texture(Gdx.files.local("out/color_guard/lab/"+unit.primary+"_Receive"+"/"+unit.primary+"_Receive_"+unit.primaryStrength+"_angle"+a+"_"+f+".png"));
+                }
+            }
+        }
+        else {
+            for (int a = 0, i = 32; a < 4; a++) {
+                for (int f = 0; f < 8; f++) {
+                    images[i] = new Texture(Gdx.files.local("out/color_guard/lab/"+name+"/"+name+"_Secondary_angle"+a+"_"+f+".png"));
+                    receiveImages[i++] = new Texture(Gdx.files.local("out/color_guard/lab/"+unit.secondary+"_Receive"+"/"+unit.secondary+"_Receive_"+unit.secondaryStrength+"_angle"+a+"_"+f+".png"));
+                }
             }
         }
         targetImages = new Texture[16];
@@ -81,6 +101,9 @@ public class SpecialViewer extends ApplicationAdapter {
         batch.draw(targetImages[(time & 3) | (time >>> 1 & 12)], -60 + 90, -30 + 90);
         batch.setColor(4f/256f, 0.5f, 0.5f, 1f);
         batch.draw(targetImages[(time & 3) | (time >>> 1 & 12)], 60 + 90, -30 + 90);
+
+        batch.setColor(0f, 0.5f, 0.5f, 1f);
+        batch.draw(receiveImages[(time & 7) | (time + 16 & 24)], 60 + 90, 30 + 90);
 
         batch.end();
     }
