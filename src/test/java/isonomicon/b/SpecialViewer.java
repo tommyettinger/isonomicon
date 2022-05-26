@@ -53,7 +53,7 @@ public class SpecialViewer extends ApplicationAdapter {
                 receiveImages[i++] = new Texture(Gdx.files.local("out/color_guard/lab/"+unit.primary+"_Receive"+"/"+unit.primary+"_Receive_"+unit.primaryStrength+"_angle"+a+"_"+f+".png"));
             }
         }
-        if(unit.secondary == null){
+        if(unit.secondaryStrength == 0){
             for (int a = 0, i = 32; a < 4; a++) {
                 for (int f = 0; f < 8; f++) {
                     images[i] = new Texture(Gdx.files.local("out/color_guard/lab/"+name+"/"+name+"_Primary_angle"+a+"_"+f+".png"));
@@ -91,19 +91,21 @@ public class SpecialViewer extends ApplicationAdapter {
         indexShader.setUniformi("u_texPalette", 1);
         Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
         batch.setColor(0f, 0.5f, 0.5f, 1f);
-        final int time = (int) (TimeUtils.timeSinceMillis(startTime) >>> 7);
-        batch.draw(images[(time & 7) | (time & 24)], 90, 90);
+        int time = (int) (TimeUtils.timeSinceMillis(startTime) >>> 7);
+        batch.draw(images[(time & 7) | (time & 24)], 64.0f, 64.0f);
+        time += 16;
         batch.setColor(1f/256f, 0.5f, 0.5f, 1f);
-        batch.draw(targetImages[(time & 3) | (time >>> 1 & 12)], 60 + 90, 30 + 90);
+        batch.draw(targetImages[(time & 3) | (time >>> 1 & 12)], 60 + 64.0f, 30 + 64.0f);
         batch.setColor(2f/256f, 0.5f, 0.5f, 1f);
-        batch.draw(targetImages[(time & 3) | (time >>> 1 & 12)], -60 + 90, 30 + 90);
+        batch.draw(targetImages[(time & 3) | (time >>> 1 & 12)], -60 + 64.0f, 30 + 64.0f);
         batch.setColor(3f/256f, 0.5f, 0.5f, 1f);
-        batch.draw(targetImages[(time & 3) | (time >>> 1 & 12)], -60 + 90, -30 + 90);
+        batch.draw(targetImages[(time & 3) | (time >>> 1 & 12)], -60 + 64.0f, -30 + 64.0f);
         batch.setColor(4f/256f, 0.5f, 0.5f, 1f);
-        batch.draw(targetImages[(time & 3) | (time >>> 1 & 12)], 60 + 90, -30 + 90);
+        batch.draw(targetImages[(time & 3) | (time >>> 1 & 12)], 60 + 64.0f, -30 + 64.0f);
 
+        int angle = time >>> 3 & 3;
         batch.setColor(0f, 0.5f, 0.5f, 1f);
-        batch.draw(receiveImages[(time & 7) | (time + 16 & 24)], 60 + 90, 30 + 90);
+        batch.draw(receiveImages[(time & 7) | (time & 24)], 60 * (1|-((angle ^ angle >>> 1) & 1)) + 64.0f, 30 * (1 - (angle & 2)) + 64.0f);
 
         batch.end();
     }
