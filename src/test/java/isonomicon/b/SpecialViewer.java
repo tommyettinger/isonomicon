@@ -17,7 +17,7 @@ public class SpecialViewer extends ApplicationAdapter {
     public ShaderProgram indexShader;
 
     public Texture palettes;
-    public Texture[] images;
+    public Texture[] images, targetImages;
 
     public SpriteBatch batch;
 
@@ -28,19 +28,31 @@ public class SpecialViewer extends ApplicationAdapter {
 //        palettes = new Texture("palettes/palettes-b.png");
 //        palettes = new Texture("palettes/b/TanClothDarkSkin.png");
 //        palettes = new Texture("palettes/b/CherrySkinDarkCloth.png");
-        palettes = new Texture("palettes/b/BlueFurCyanCrystal.png");
+//        palettes = new Texture("palettes/b/BlueFurCyanCrystal.png");
+
+        palettes = new Texture("palettes/b/ColorGuardMasterPalette.png");
+
 //        palettes = new Texture("palettes/edited/NaturalWoodAndLeaves.png");
 //        String name = "Eye_Tyrant";
-        String name = "Lomuk";
+//        String name = "Lomuk";
 //        String name = "Damned";
 //        String name = "Tree";
 //        String name = "Phantom_Wand";
 //        String name = "Figure";
 
+        String name = "Light_Tank";
+        String target = "Infantry";
+
         images = new Texture[32];
-        for (int a = 0, i = 0; a < 8; a++) {
+        for (int a = 0, i = 0; a < 4; a++) {
+            for (int f = 0; f < 8; f++) {
+                images[i++] = new Texture(Gdx.files.local("out/color_guard/lab/"+name+"/"+name+"_Primary_angle"+a+"_"+f+".png"));
+            }
+        }
+        targetImages = new Texture[16];
+        for (int a = 0, i = 0; a < 4; a++) {
             for (int f = 0; f < 4; f++) {
-                images[i++] = new Texture(Gdx.files.local("out/b/special_lab/"+name+"/"+name+"_angle"+a+"_"+f+".png"));
+                targetImages[i++] = new Texture(Gdx.files.local("out/color_guard/lab/"+target+"/"+target+"_angle"+a+"_"+f+".png"));
             }
         }
         indexShader = new ShaderProgram(ShaderUtils.stuffSelectVertex, ShaderUtils.stuffSelectFragment);
@@ -60,7 +72,16 @@ public class SpecialViewer extends ApplicationAdapter {
         Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
         batch.setColor(0f, 0.5f, 0.5f, 1f);
         final int time = (int) (TimeUtils.timeSinceMillis(startTime) >>> 7);
-        batch.draw(images[(time & 3) | (time >>> 1 & 28)], 0, 0);
+        batch.draw(images[(time & 7) | (time & 24)], 90, 90);
+        batch.setColor(1f/256f, 0.5f, 0.5f, 1f);
+        batch.draw(targetImages[(time & 3) | (time >>> 1 & 12)], 60 + 90, 30 + 90);
+        batch.setColor(2f/256f, 0.5f, 0.5f, 1f);
+        batch.draw(targetImages[(time & 3) | (time >>> 1 & 12)], -60 + 90, 30 + 90);
+        batch.setColor(3f/256f, 0.5f, 0.5f, 1f);
+        batch.draw(targetImages[(time & 3) | (time >>> 1 & 12)], -60 + 90, -30 + 90);
+        batch.setColor(4f/256f, 0.5f, 0.5f, 1f);
+        batch.draw(targetImages[(time & 3) | (time >>> 1 & 12)], 60 + 90, -30 + 90);
+
         batch.end();
     }
 
