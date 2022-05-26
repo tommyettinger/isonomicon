@@ -1,5 +1,6 @@
 package isonomicon.app;
 
+import com.github.tommyettinger.ds.HolderOrderedSet;
 import com.github.tommyettinger.ds.ObjectList;
 
 import java.util.List;
@@ -56,6 +57,10 @@ public class ColorGuardData {
 
         public boolean hasWeapon(String type){
             return type != null && (type.equals(primary) || type.equals(secondary));
+        }
+
+        public String getName() {
+            return name;
         }
     }
 
@@ -119,6 +124,8 @@ public class ColorGuardData {
             new Unit("Money"),
             new Unit("Fire"),
             new Unit("Poison"));
+
+    public static HolderOrderedSet<Unit, String> byName = new HolderOrderedSet<>(Unit::getName, units);
 
     public static List<String> terrains = ObjectList.with("Coast", "Desert", "Forest", "Ice", "Jungle", "Mountains",
             "Ocean", "Plains", "River", "Rocky", "Ruins", "Volcano");
