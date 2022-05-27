@@ -280,8 +280,8 @@ public class EffectGenerator {
         for (int n = 0, runs = r.nextInt(1, 4); n < runs; n++) {
             float angle = r.nextFloat(), yAngle = TrigTools.sinTurns(angle), xAngle = TrigTools.cosTurns(angle),
                     zAngle = TrigTools.acosTurns(r.nextFloat());
-            int x = xInitial + r.nextInt(-4, 5);
-            int y = yInitial + r.nextInt(-3, 4);
+            int x = xInitial + r.nextInt(-8, 9);
+            int y = yInitial + r.nextInt(-6, 7);
             int z = zInitial + r.nextInt(5);
             for (int f = startFrame, p = 0; p < frames && f < grids.length; f++, p++) {
                 if (p == 0) {
@@ -2514,7 +2514,7 @@ public class EffectGenerator {
         }
 
         for(int s = 0; s < strength + strength; s++) {
-            burst(grids, 35, 32, 7, s >> 1, 3, s + r.next(2) > strength);
+            burst(grids, 70, 60, 4, s >> 1, 3, s + r.next(2) > strength);
         }
         return next;
     }
