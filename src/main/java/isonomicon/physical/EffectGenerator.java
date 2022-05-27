@@ -59,7 +59,8 @@ public class EffectGenerator {
     public static final int flicker = 140;
     public static final int launch = 201;
     public static final int trail = 202;
-    public static final int glow = 72;
+    public static final int glow = 81;
+    public static final int red = 103;
 
 
     public static byte[][][][] fireballAnimation(byte[][][] initial, int frames, int trimLevel, int blowback){
@@ -2479,13 +2480,18 @@ public class EffectGenerator {
             foundAny = true;
             LongList launchers = ls.order();
             for (int f = 0; f < count - 2; f++) {
-                byte[][][] grid = next[f+1].grids.get(g);
+                byte[][][] grid = next[f + 1].grids.get(g);
+                final int lim = grid.length - 1;
+                for (int ln = 0; ln < launchers.size(); ln++) {
+                    long launcher = launchers.get(ln);
+                    int lx = ((int) (launcher) & 0xFFFFF), ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) (launcher >>> 40) & 0xFFFFF;
+                    ShapeGenerator.line(grid, lx, ly, lz, lim, ly, lz, glow);
+                }
+                ShapeGenerator.line(grid, 0, 0, 0, lim, 0, 0, glow);
+                ShapeGenerator.line(grid, 0, lim, 0, lim, lim, 0, glow);
+                ShapeGenerator.line(grid, 0, 0, lim, lim, 0, lim, glow);
+                ShapeGenerator.line(grid, 0, lim, lim, lim, lim, lim, glow);
 
-                    for (int ln = 0; ln < launchers.size(); ln++) {
-                        long launcher = launchers.get(ln);
-                        int lx = ((int) (launcher) & 0xFFFFF), ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) (launcher >>> 40) & 0xFFFFF;
-                        ShapeGenerator.line(grid, lx, ly, lz, 59, ly, lz, glow);
-                    }
             }
         }
         if(!foundAny) return null;
@@ -2693,16 +2699,28 @@ public class EffectGenerator {
     public static VoxModel[] debugReceiveAnimation(int size, int frames, int strength){
         VoxModel[] next = new VoxModel[frames];
         byte[][][][] grids = new byte[frames][size][size][size];
+        int E = size - 1, L = (size >> 1) - 3, H = (size >> 1) + 2;
         for (int i = 0; i < frames; i++) {
             next[i] = new VoxModel();
             next[i].grids.add(grids[i]);
             next[i].links.add(new IntObjectMap<>(1));
             next[i].materials.putAll(lastMaterials);
 
-            ShapeGenerator.line(grids[i], 0, 0, 0, 0, 0, 59, glow);
-            ShapeGenerator.line(grids[i], 0, 59, 0, 0, 59, 59, glow);
-            ShapeGenerator.line(grids[i], 59, 0, 0, 59, 0, 59, glow);
-            ShapeGenerator.line(grids[i], 59, 59, 0, 59, 59, 59, glow);
+            ShapeGenerator.line(grids[i], 0, 0, 0, 0, 0, E, glow);
+            ShapeGenerator.line(grids[i], 0, E, 0, 0, E, E, glow);
+            ShapeGenerator.line(grids[i], E, 0, 0, E, 0, E, glow);
+            ShapeGenerator.line(grids[i], E, E, 0, E, E, E, glow);
+
+            ShapeGenerator.line(grids[i], 0, L, 0, 0, L, E, red);
+            ShapeGenerator.line(grids[i], 0, H, 0, 0, H, E, red);
+            ShapeGenerator.line(grids[i], E, L, 0, E, L, E, red);
+            ShapeGenerator.line(grids[i], E, H, 0, E, H, E, red);
+
+            ShapeGenerator.line(grids[i], 0, 0, L, 0, E, L, red);
+            ShapeGenerator.line(grids[i], 0, 0, H, 0, E, H, red);
+            ShapeGenerator.line(grids[i], E, 0, L, E, E, L, red);
+            ShapeGenerator.line(grids[i], E, 0, H, E, E, H, red);
+
         }
 
         return next;
