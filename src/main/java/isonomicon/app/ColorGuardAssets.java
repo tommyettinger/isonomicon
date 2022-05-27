@@ -414,7 +414,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                 EffectGenerator.ReceiveEffect recEff = EffectGenerator.KNOWN_RECEIVE_EFFECTS.get(attack);
                                 if (recEff != null) {
                                     for (int i = 0; i < 4; i++) {
-                                        frames = recEff.runEffect(60, 8, strength);
+                                        frames = recEff.runEffect(60 << 1, 8, strength);
                                         for (int f = 0; f < frames.length; f++) {
                                             pixmap = renderer.drawModelSimple(frames[f], i * 0.25f, 0f, 0f, f, 0.00f, 0.00f, 0.00f);
                                             Texture t = new Texture(pixmap.getWidth(), pixmap.getHeight(), Pixmap.Format.RGBA8888);

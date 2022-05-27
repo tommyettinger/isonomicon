@@ -2720,7 +2720,6 @@ public class EffectGenerator {
             ShapeGenerator.line(grids[i], 0, 0, H, 0, E, H, red);
             ShapeGenerator.line(grids[i], E, 0, L, E, E, L, red);
             ShapeGenerator.line(grids[i], E, 0, H, E, E, H, red);
-
         }
 
         return next;
