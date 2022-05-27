@@ -105,7 +105,7 @@ public class SpecialViewer extends ApplicationAdapter {
 
         int angle = time >>> 3 & 3;
         batch.setColor(0f, 0.5f, 0.5f, 1f);
-        batch.draw(receiveImages[(time & 7) | (time & 24)], 60 * (1|-((angle ^ angle >>> 1) & 1)) + 64.0f, 30 * (1 - (angle & 2)) + 64.0f);
+        batch.draw(receiveImages[(time & 7) | (time & 24)], 60 * (1|-((angle ^ angle >>> 1) & 1)) + 64.0f, 30 * (1 - (angle & 2)) + 64.0f - 16f);
 
         batch.end();
     }
