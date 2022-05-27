@@ -2619,7 +2619,7 @@ public class EffectGenerator {
         }
         byte[][][] fireStart = new byte[size][size][size];
         for (int s = 0; s < strength; s++) {
-            ShapeGenerator.ball(fireStart, 49 - s, 26 + r.nextInt(8), 6 + s + s, 8, yellowFire, ((x, y, z) -> r.next(2) != 0));
+            ShapeGenerator.ball(fireStart, 52 - s, 26 + r.next(3), 4, 8 + s + s, yellowFire, ((x, y, z) -> r.next(2) != 0));
             byte[][][][] explosion = fireballAnimation(fireStart, 6 - s, 0, 3);
             for (int i = 0, f = 0; f < frames - 1 && i < explosion.length; f++, i++) {
                 byte[][][] grid = next[f + 1].grids.get(0);
@@ -2647,7 +2647,7 @@ public class EffectGenerator {
         }
         byte[][][] fireStart = new byte[size][size][size];
         for (int s = 0; s < strength; s++) {
-            int xPos = 41 - s * 3 + r.nextInt(10), yPos = 22 + r.nextInt(8);
+            int xPos = 41 - s * 3 + r.nextInt(10), yPos = 22 + r.next(3);
             ShapeGenerator.box(fireStart, xPos, yPos, 0, xPos + 8, yPos + 8, 14, yellowFire, ((x, y, z) -> r.next(3) != 0));
             byte[][][][] explosion = fireballAnimation(fireStart, 6 - s, 0, 1);
             for (int i = 0, f = s; f < frames - 1 && i < explosion.length; f++, i++) {
