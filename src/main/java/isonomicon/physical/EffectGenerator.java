@@ -29,19 +29,20 @@ public class EffectGenerator {
 
     public static final ObjectObjectOrderedMap<String, Effect> KNOWN_EFFECTS = new ObjectObjectOrderedMap<>(
             new String[]{"Handgun", "Machine_Gun", "Forward_Cannon", "Arc_Cannon",
-                    "Forward_Missile", "Arc_Missile", "Torpedo", "Flame_Wave", "Bomb_Drop", "Hack"},
+                    "Forward_Missile", "Arc_Missile", "Torpedo", "Flame_Wave", "Bomb_Drop", "Hack", "Debug"},
             new Effect[]{EffectGenerator::handgunAnimation, EffectGenerator::machineGunAnimation,
                     EffectGenerator::forwardCannonAnimation, EffectGenerator::arcCannonAnimation,
                     EffectGenerator::forwardMissileAnimation, EffectGenerator::arcMissileAnimation,
                     EffectGenerator::torpedoAnimation, EffectGenerator::flameWaveAnimation,
-                    EffectGenerator::bombDropAnimation, EffectGenerator::hackAnimation
+                    EffectGenerator::bombDropAnimation, EffectGenerator::hackAnimation, EffectGenerator::debugAnimation
             }
     );
 
     public static final ObjectObjectOrderedMap<String, ReceiveEffect> KNOWN_RECEIVE_EFFECTS = new ObjectObjectOrderedMap<>(
-            new String[]{"Handgun", "Machine_Gun", "Forward_Cannon", "Arc_Cannon"},
+            new String[]{"Handgun", "Machine_Gun", "Forward_Cannon", "Arc_Cannon", "Debug"},
             new ReceiveEffect[]{EffectGenerator::handgunReceiveAnimation, EffectGenerator::machineGunReceiveAnimation,
-                    EffectGenerator::forwardCannonReceiveAnimation, EffectGenerator::arcCannonReceiveAnimation
+                    EffectGenerator::forwardCannonReceiveAnimation, EffectGenerator::arcCannonReceiveAnimation,
+                    EffectGenerator::debugReceiveAnimation
             }
     );
 
@@ -58,6 +59,8 @@ public class EffectGenerator {
     public static final int flicker = 140;
     public static final int launch = 201;
     public static final int trail = 202;
+    public static final int glow = 72;
+
 
     public static byte[][][][] fireballAnimation(byte[][][] initial, int frames, int trimLevel, int blowback){
         final int xSize = initial.length, ySize = initial[0].length, zSize = initial[0][0].length;
@@ -2460,6 +2463,36 @@ public class EffectGenerator {
 
             return voxelFrames;
      */
+    public static VoxModel[] debugAnimation(VoxModel[] frames, int which){
+        int count = frames.length;
+        VoxModel[] next = new VoxModel[count];
+        for (int i = 0; i < count; i++) {
+            next[i] = frames[i].copy();
+        }
+        final int gridLimit = next[0].grids.size();
+        boolean foundAny = false;
+
+        for (int g = 0; g < gridLimit; g++) {
+            LongOrderedSet ls = next[0].markers.get(g).get(launch + which * 8);
+            if (ls == null)
+                continue;
+            foundAny = true;
+            LongList launchers = ls.order();
+            for (int f = 0; f < count - 2; f++) {
+                byte[][][] grid = next[f+1].grids.get(g);
+
+                    for (int ln = 0; ln < launchers.size(); ln++) {
+                        long launcher = launchers.get(ln);
+                        int lx = ((int) (launcher) & 0xFFFFF), ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) (launcher >>> 40) & 0xFFFFF;
+                        ShapeGenerator.line(grid, lx, ly, lz, 59, ly, lz, glow);
+                    }
+            }
+        }
+        if(!foundAny) return null;
+
+        return next;
+    }
+
 
 
     // RECEIVE
@@ -2657,5 +2690,23 @@ public class EffectGenerator {
         }
         return next;
     }
+    public static VoxModel[] debugReceiveAnimation(int size, int frames, int strength){
+        VoxModel[] next = new VoxModel[frames];
+        byte[][][][] grids = new byte[frames][size][size][size];
+        for (int i = 0; i < frames; i++) {
+            next[i] = new VoxModel();
+            next[i].grids.add(grids[i]);
+            next[i].links.add(new IntObjectMap<>(1));
+            next[i].materials.putAll(lastMaterials);
+
+            ShapeGenerator.line(grids[i], 0, 0, 0, 0, 0, 59, glow);
+            ShapeGenerator.line(grids[i], 0, 59, 0, 0, 59, 59, glow);
+            ShapeGenerator.line(grids[i], 59, 0, 0, 59, 0, 59, glow);
+            ShapeGenerator.line(grids[i], 59, 59, 0, 59, 59, 59, glow);
+        }
+
+        return next;
+    }
+
 
 }
