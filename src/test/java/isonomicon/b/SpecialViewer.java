@@ -92,8 +92,8 @@ public class SpecialViewer extends ApplicationAdapter {
         Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
         batch.setColor(0f, 0.5f, 0.5f, 1f);
         int time = (int) (TimeUtils.timeSinceMillis(startTime) >>> 7);
-        batch.draw(images[(time & 7) | (time & 24)], 64.0f, 64.0f);
-        time += 16;
+        batch.draw(images[(time & 7) | (time & 56)], 64.0f, 64.0f);
+        time ^= 16;
         batch.setColor(1f/256f, 0.5f, 0.5f, 1f);
         batch.draw(targetImages[(time & 3) | (time >>> 1 & 12)], 60 + 64.0f, 30 + 64.0f);
         batch.setColor(2f/256f, 0.5f, 0.5f, 1f);
@@ -105,7 +105,7 @@ public class SpecialViewer extends ApplicationAdapter {
 
         int angle = time >>> 3 & 3;
         batch.setColor(0f, 0.5f, 0.5f, 1f);
-        batch.draw(receiveImages[(time & 7) | (time & 24)], 60 * (1|-((angle ^ angle >>> 1) & 1)) + 64.0f, 30 * (1 - (angle & 2)) + 64.0f);
+        batch.draw(receiveImages[(time & 7) | (time & 56)], 60 * (1|-((angle ^ angle >>> 1) & 1)) + 64.0f, 30 * (1 - (angle & 2)) + 64.0f);
 
         batch.end();
     }
