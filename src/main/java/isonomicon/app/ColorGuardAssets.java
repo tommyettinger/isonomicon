@@ -34,7 +34,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
     public static boolean ATTACKS = true;
     public static boolean DEATHS = false;
     public static boolean EXPLOSION = true;
-    public static boolean TERRAIN = true;
+    public static boolean TERRAIN = false;
 
     public static final int SCREEN_WIDTH = 512;//640;
     public static final int SCREEN_HEIGHT = 512;//720;
@@ -62,8 +62,9 @@ public class ColorGuardAssets extends ApplicationAdapter {
         };
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.primaryStrength > 0).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Debug")).toList();
-//        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Forward_Cannon")).toList();
-        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Machine_Gun")).toList();
+//        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Arc_Cannon")).toList();
+        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Forward_Cannon")).toList();
+//        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Machine_Gun")).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Handgun")).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.name.equals("Engineer")).toList();
 //        ColorGuardData.units = ColorGuardData.units.subList(52, ColorGuardData.units.size());
