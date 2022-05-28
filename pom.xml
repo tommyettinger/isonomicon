@@ -68,7 +68,7 @@
         <jdk.version>17</jdk.version>
         <junit.version>4.13.2</junit.version>
         <anim8.version>0.3.6</anim8.version>
-        <squidsquad.version>b7ba51e11e</squidsquad.version>
+        <squidsquad.version>61b58fb9c0</squidsquad.version>
         <gdx.version>1.11.0</gdx.version>
         <digital.version>0.0.2</digital.version>
         <juniper.version>0.0.2</juniper.version>

@@ -2514,7 +2514,7 @@ public class EffectGenerator {
         }
 
         for(int s = 0; s < strength + strength; s++) {
-            burst(grids, 70, 60, 4, s >> 1, 3, s + r.next(2) > strength);
+            burst(grids, 70, 60, 4 + r.next(2), s >> 1, 3, s + r.next(2) > strength);
         }
         return next;
     }
@@ -2603,7 +2603,7 @@ public class EffectGenerator {
 
         for (int f = 1; f < frames - 1; f++) {
             for (int s = 0; s < strength; s++) {
-                burst(grids, 47, 10 + 16 * s + 2 * f, 0, f, 2, false);
+                burst(grids, 82, 17 + 28 * s + 5 * f, 0, f, 2, false);
             }
         }
         return next;

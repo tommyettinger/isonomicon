@@ -41,7 +41,7 @@ public class SpecialViewer extends ApplicationAdapter {
 //        String name = "Phantom_Wand";
 //        String name = "Figure";
 
-        String name = "Rifle_Sniper";
+        String name = "Bike";
         ColorGuardData.Unit unit = ColorGuardData.byName.get(name);
         String target = "Infantry";
 
