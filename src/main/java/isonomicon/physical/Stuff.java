@@ -53,7 +53,7 @@ public class Stuff {
         this.material.traits.putIfAbsent(VoxMaterial.MaterialTrait._damage.ordinal(), id);
         this.appearsAs = appearsAs;
         if(transitions != null && transitions.length >= 2){
-            double[] weights = new double[transitions.length >>> 1];
+            float[] weights = new float[transitions.length >>> 1];
             transitionIDs = new byte[weights.length];
             for (int i = 0, t = 0; i < weights.length; i++) {
                 transitionIDs[i] = (byte)transitions[t++];
