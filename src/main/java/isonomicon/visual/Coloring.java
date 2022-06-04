@@ -33,6 +33,13 @@ public class Coloring {
     }
 
 
+    public static int lerp(final int rgba1, final int rgba2, float amount){
+        return  (int) MathUtils.lerp(rgba1 >>> 24, rgba2 >>> 24, amount) << 24 |
+                (int) MathUtils.lerp(rgba1 >>> 16 & 255, rgba2 >>> 16 & 255, amount) << 16 |
+                (int) MathUtils.lerp(rgba1 >>> 8 & 255, rgba2 >>> 8 & 255, amount) << 8 |
+                (int) MathUtils.lerp(rgba1 & 255, rgba2 & 255, amount);
+    }
+
 
     /**
      * DawnBringer's 256-color Aurora palette, modified slightly to fit one transparent color by removing one gray.

@@ -7,6 +7,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.PixmapIO;
 import isonomicon.physical.Stuff;
+import isonomicon.visual.Coloring;
 
 import java.io.IOException;
 
@@ -44,7 +45,7 @@ public class PaletteScavenger extends ApplicationAdapter {
             }
             scar = oldPalette.getPixel(217, appearance); // 51
             skin = oldPalette.getPixel(216, appearance); // 52
-            nose = oldPalette.getPixel(221, appearance); // 53
+            nose = Coloring.lerp(oldPalette.getPixel(221, appearance), skin, 0.6f); // 53
             freckle = oldPalette.getPixel(218, appearance); // 54
             ears = oldPalette.getPixel(220, appearance); // 55
             for (int faction = 0; faction < 8; faction++) {

@@ -65,8 +65,40 @@ public class PaletteDrafter extends ApplicationAdapter {
                     "                 (lab * lab * lab)," +
                     "                 0.0, 1.0)), v_color.a * color.a);\n" +
                     "}\n";
+    public static final String fragment2 =
+            "#ifdef GL_ES\n" +
+                    "#define LOWP lowp\n" +
+                    "precision highp float;\n" +
+                    "#else\n" +
+                    "#define LOWP\n" +
+                    "#endif\n" +
+                    "varying LOWP vec4 v_color;\n" +
+                    "varying vec2 v_texCoords;\n" +
+                    "uniform sampler2D u_texture;\n" +
+                    "uniform sampler2D u_texPalette;\n" +
+                    "const vec3 forward = vec3(1.0 / 3.0);\n" +
+                    "void main()\n" +
+                    "{\n" +
+                    "  vec4 color = texture2D(u_texture, v_texCoords);\n" +
+                    "  vec4 index = vec4(color.rgb, v_color.r);\n" +
+                    "  index.rgb *= (254.0 / 255.5);\n" +
+                    "  vec3 tgt = texture2D(u_texPalette, index.xw).rgb;\n" +
+                    "  vec3 lab = mat3(+0.2104542553, +1.9779984951, +0.0259040371, +0.7936177850, -2.4285922050, +0.7827717662, -0.0040720468, +0.4505937099, -0.8086757660) *" +
+                    "             pow(mat3(0.4121656120, 0.2118591070, 0.0883097947, 0.5362752080, 0.6807189584, 0.2818474174, 0.0514575653, 0.1074065790, 0.6302613616) \n" +
+                    "             * (tgt.rgb * tgt.rgb), forward);\n" +
+
+                    "  lab.x = smoothstep(0.0, 1.0, (lab.x + index.y + v_color.g - 1.25) * 0.8 + 0.5);\n" +
+                    "  lab.y = clamp(lab.y * (3.8 * color.b) * (v_color.b), -1.0, 1.0);\n" +
+                    "  lab.z = clamp(lab.z * (3.8 * color.b) * (v_color.b) + (sqrt(lab.x) - 0.8) * 0.25, -1.0, 1.0);\n" +
+                    "  lab = mat3(1.0, 1.0, 1.0, +0.3963377774, -0.1055613458, -0.0894841775, +0.2158037573, -0.0638541728, -1.2914855480) * lab;\n" +
+                    "  gl_FragColor = vec4(sqrt(clamp(" +
+                    "                 mat3(+4.0767245293, -1.2681437731, -0.0041119885, -3.3072168827, +2.6093323231, -0.7034763098, +0.2307590544, -0.3411344290, +1.7068625689) *\n" +
+                    "                 (lab * lab * lab)," +
+                    "                 0.0, 1.0)), v_color.a * color.a);\n" +
+                    "}\n";
 
     public ShaderProgram indexShader;
+    public ShaderProgram indexShader2;
     public ShaderProgram regularShader;
 
     public Texture palettes;
@@ -121,8 +153,8 @@ public class PaletteDrafter extends ApplicationAdapter {
     public void create() {
         font = new BitmapFont(Gdx.files.internal("font.fnt"));
 //        workingPalette = new Pixmap(Gdx.files.internal("palettes/repeated-blocks-b.png"));
-        workingPalette = new Pixmap(Gdx.files.internal("palettes/b/ColorGuardTerrainRocky.png"));
-//        workingPalette = new Pixmap(Gdx.files.internal("palettes/b/ColorGuardBaseYellow.png"));
+//        workingPalette = new Pixmap(Gdx.files.internal("palettes/b/ColorGuardTerrainRocky.png"));
+        workingPalette = new Pixmap(Gdx.files.internal("palettes/b/ColorGuardBaseRed.png"));
 //        workingPalette = new Pixmap(Gdx.files.internal("palettes/b/ColorGuardBaseDark.png"));
         workingOklab = new float[128];
         palettes = new Texture(workingPalette);
@@ -138,8 +170,10 @@ public class PaletteDrafter extends ApplicationAdapter {
 
 //        String name = "Road_Center";
 //        String name2 = "Road_Straight";
-        String name = "Terrain";
-        String name2 = "Terrain";
+        String name = "Light_Tank";
+        String name2 = "Bazooka";
+//        String name = "Terrain";
+//        String name2 = "Terrain";
 
         images = new Texture[32];
         for (int a = 0, i = 0; a < 4; a++) {
@@ -165,6 +199,8 @@ public class PaletteDrafter extends ApplicationAdapter {
         batch = new SpriteBatch();
         indexShader = new ShaderProgram(vertex, fragment);
         if (!indexShader.isCompiled()) throw new GdxRuntimeException("Error compiling shader: " + indexShader.getLog());
+        indexShader2 = new ShaderProgram(vertex, fragment2);
+        if (!indexShader2.isCompiled()) throw new GdxRuntimeException("Error compiling shader: " + indexShader2.getLog());
         regularShader = SpriteBatch.createDefaultShader();
         startTime = TimeUtils.millis();
         scrollTime = Long.MAX_VALUE >>> 4;
@@ -377,12 +413,12 @@ public class PaletteDrafter extends ApplicationAdapter {
             }
         }
         ScreenUtils.clear(0.5f, 0.5f, 0.5f, 1f);
-        batch.setShader(indexShader);
+        batch.setShader(Gdx.input.isKeyPressed(Input.Keys.SPACE) ? indexShader2 : indexShader);
         Gdx.gl.glActiveTexture(GL20.GL_TEXTURE1);
         palettes.bind();
         batch.begin();
 
-        indexShader.setUniformi("u_texPalette", 1);
+        batch.getShader().setUniformi("u_texPalette", 1);
         Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
         batch.setColor(0f, 0.5f, 0.5f, 1f);
         batch.draw(images[(int) (TimeUtils.timeSinceMillis(startTime) >>> 8) & 31], 0, 0);
