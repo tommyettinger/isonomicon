@@ -33,21 +33,19 @@ public class PaletteScavenger extends ApplicationAdapter {
                 new Pixmap(Gdx.files.internal("palettes/b/ColorGuardBaseBlue.png")),
                 new Pixmap(Gdx.files.internal("palettes/b/ColorGuardBasePurple.png")),
         };
-        workingPalette = new Pixmap(256, 256, Pixmap.Format.RGBA8888);
+        workingPalette = new Pixmap(Gdx.files.internal("palettes/b/ColorGuardMasterPalette.png"));
         int hairA, hairB, scar, skin, nose, freckle, ears;
-        for (int appearance = 0; appearance < 201; appearance+=8) {
-            if(appearance == 24 || appearance == 64 || appearance == 88 || appearance == 144 || appearance == 168 || appearance == 200){
-                hairB = hairA = oldPalette.getPixel(216, appearance);
-            }
-            else {
-                hairA = oldPalette.getPixel(225, appearance); // 49
-                hairB = oldPalette.getPixel(223, appearance); // 50
-            }
-            scar = oldPalette.getPixel(217, appearance); // 51
-            skin = oldPalette.getPixel(216, appearance); // 52
-            nose = Coloring.lerp(oldPalette.getPixel(221, appearance), skin, 0.6f); // 53
-            freckle = oldPalette.getPixel(218, appearance); // 54
-            ears = oldPalette.getPixel(220, appearance); // 55
+        for (int appearance = 0, lk = 0; appearance < 153; lk++) {
+            if(lk == 3 || lk == 8 || lk == 11 || lk == 18 || lk == 21 || lk == 25)
+                continue;
+            int la = lk << 3;
+            hairA = oldPalette.getPixel(225, la); // 49
+            hairB = oldPalette.getPixel(223, la); // 50
+            scar = oldPalette.getPixel(217, la); // 51
+            skin = oldPalette.getPixel(216, la); // 52
+            nose = Coloring.lerp(oldPalette.getPixel(221, la), skin, 0.6f); // 53
+            freckle = oldPalette.getPixel(218, la); // 54
+            ears = oldPalette.getPixel(220, la); // 55
             for (int faction = 0; faction < 8; faction++) {
                 workingPalette.drawPixmap(palettes[faction], 0, appearance + faction);
                 workingPalette.drawPixel(49-1, appearance + faction, hairA);
@@ -58,6 +56,7 @@ public class PaletteScavenger extends ApplicationAdapter {
                 workingPalette.drawPixel(54-1, appearance + faction, freckle);
                 workingPalette.drawPixel(55-1, appearance + faction, ears);
             }
+            appearance += 8;
         }
         png = new PixmapIO.PNG(1024);
         png.setFlipY(false);
