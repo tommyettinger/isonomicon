@@ -170,8 +170,8 @@ public class PaletteDrafter extends ApplicationAdapter {
 
 //        String name = "Road_Center";
 //        String name2 = "Road_Straight";
-        String name = "Light_Tank";
-        String name2 = "Bazooka";
+        String name = "Hospital";
+        String name2 = "Cruiser";
 //        String name = "Terrain";
 //        String name2 = "Terrain";
 
