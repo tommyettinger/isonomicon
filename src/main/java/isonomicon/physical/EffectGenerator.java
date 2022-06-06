@@ -1242,9 +1242,9 @@ public class EffectGenerator {
                     for (int ln = 0; ln < launchers.size(); ln++) {
                         long launcher = launchers.get(ln);
                         int lx = ((int) (launcher) & 0xFFFFF), ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) (launcher >>> 40) & 0xFFFFF;
-                        ShapeGenerator.box(grid, lx + 44, ly, lz, lx + 47, ly + 3, lz + 3, missileHead);
-                        ShapeGenerator.box(grid, lx + 16, ly, lz, lx + 43, ly + 3, lz + 3, missileBody);
-                        ShapeGenerator.box(grid, lx + 4, ly, lz, lx + 15, ly + 3, lz + 3, yellowFire);
+                        ShapeGenerator.box(grid, lx + 48, ly, lz, lx + 51, ly + 3, lz + 3, missileHead);
+                        ShapeGenerator.box(grid, lx + 20, ly, lz, lx + 47, ly + 3, lz + 3, missileBody);
+                        ShapeGenerator.box(grid, lx + 8, ly, lz, lx + 19, ly + 3, lz + 3, yellowFire);
                     }
                     for (int tr = 0; tr < trails.size(); tr++) {
                         long trail = trails.get(tr);
@@ -1265,9 +1265,9 @@ public class EffectGenerator {
                     for (int ln = 0; ln < launchers.size(); ln++) {
                         long launcher = launchers.get(ln);
                         int lx = ((int) (launcher) & 0xFFFFF), ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) (launcher >>> 40) & 0xFFFFF;
-                        ShapeGenerator.box(grid, lx + 44 + 16, ly, lz, lx + 47 + 16, ly + 3, lz + 3, missileHead);
-                        ShapeGenerator.box(grid, lx + 16 + 16, ly, lz, lx + 43 + 16, ly + 3, lz + 3, missileBody);
-                        ShapeGenerator.box(grid, lx + 4 + 16, ly, lz, lx + 15 + 16, ly + 3, lz + 3, yellowFire);
+                        ShapeGenerator.box(grid, lx + 48 + 20, ly, lz, lx + 51 + 20, ly + 3, lz + 3, missileHead);
+                        ShapeGenerator.box(grid, lx + 20 + 20, ly, lz, lx + 47 + 20, ly + 3, lz + 3, missileBody);
+                        ShapeGenerator.box(grid, lx + 8 + 20, ly, lz, lx + 19 + 20, ly + 3, lz + 3, yellowFire);
                     }
                     for (int tr = 0; tr < trails.size(); tr++) {
                         long trail = trails.get(tr);
@@ -1287,9 +1287,9 @@ public class EffectGenerator {
                     for (int ln = 0; ln < launchers.size(); ln++) {
                         long launcher = launchers.get(ln);
                         int lx = ((int) (launcher) & 0xFFFFF), ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) (launcher >>> 40) & 0xFFFFF;
-                        ShapeGenerator.box(grid, lx + 44 + 16*2, ly, lz, lx + 47 + 16*2, ly + 3, lz + 3, missileHead);
-                        ShapeGenerator.box(grid, lx + 16 + 16*2, ly, lz, lx + 43 + 16*2, ly + 3, lz + 3, missileBody);
-                        ShapeGenerator.box(grid, lx + 4 + 16*2, ly, lz, lx + 15 + 16*2, ly + 3, lz + 3, yellowFire);
+                        ShapeGenerator.box(grid, lx + 48 + 20*2, ly, lz, lx + 51 + 20*2, ly + 3, lz + 3, missileHead);
+                        ShapeGenerator.box(grid, lx + 20 + 20*2, ly, lz, lx + 47 + 20*2, ly + 3, lz + 3, missileBody);
+                        ShapeGenerator.box(grid, lx + 8 + 20*2, ly, lz, lx + 19 + 20*2, ly + 3, lz + 3, yellowFire);
                     }
                     for (int tr = 0; tr < trails.size(); tr++) {
                         long trail = trails.get(tr);
@@ -2515,7 +2515,7 @@ public class EffectGenerator {
         }
 
         for(int s = 0; s < strength + strength; s++) {
-            burst(grids, 70, 60, 4 + r.next(2), s >> 1, 3, s + r.next(2) > strength);
+            burst(grids, 65 + r.nextInt(10), 50 + r.nextInt(20), 4 + r.next(2), (s & 1) << 2, 3, s + r.next(2) > strength);
         }
         return next;
     }
@@ -2709,10 +2709,10 @@ public class EffectGenerator {
         }
         byte[][][] fireStart = new byte[size][size][size];
         for (int s = 0; s < 3; s++) {
-            ShapeGenerator.box(fireStart, 90 - r.nextInt(7) - s * 3, 90, 30, 95 + s, 102, 42, yellowFire, ((x, y, z) -> r.next(2) != 0));
-            byte[][][][] explosion = fireballAnimation(fireStart, 4 - s, 1, -2);
-            for (int i = 0, f = 0; f < frames - 1 && i < explosion.length; f++, i++) {
-                byte[][][] grid = next[f + distance].grids.get(0);
+            ShapeGenerator.box(fireStart, 90 - r.nextInt(7) - s * 3, 75, 30, 95 + s, 104, 42, yellowFire, ((x, y, z) -> r.next(2) != 0));
+            byte[][][][] explosion = fireballAnimation(fireStart, 3 - s, 1, -2);
+            for (int i = 0, f = 0; f < frames - 1 - distance && i < explosion.length; f++, i++) {
+                byte[][][] grid = next[f + 1 + distance].grids.get(0);
                 Tools3D.translateCopyInto(explosion[i], grid, 0, 0, 0);
             }
         }
