@@ -33,8 +33,8 @@ public class ColorGuardAssets extends ApplicationAdapter {
     public static boolean DIVERSE = false;
     public static boolean ATTACKS = true;
     public static boolean DEATHS = false;
-    public static boolean EXPLOSION = true;
-    public static boolean TERRAIN = false;
+    public static boolean EXPLOSION = false;
+    public static boolean TERRAIN = true;
 
     public static final int SCREEN_WIDTH = 512;//640;
     public static final int SCREEN_HEIGHT = 512;//720;
@@ -62,7 +62,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
         };
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.primaryStrength > 0).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Debug")).toList();
-        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Arc_Cannon")).toList();
+//        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Arc_Cannon")).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Forward_Cannon")).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Machine_Gun")).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Handgun")).toList();
@@ -557,8 +557,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
         }
         if(TERRAIN)
         {
-            load("specialized/b/vox/color_guard/Terrain.vox");
-            EACH_INPUT:
+            load("specialized/b/vox/color_guard/Terrain_Small.vox");
             for (int n = 0; n < ColorGuardData.terrains.size(); n++) {
                 name = ColorGuardData.terrains.get(n);
                 System.out.println("Rendering " + name);
@@ -586,7 +585,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                         fb.end();
                         try {
                             png.write(Gdx.files.local("out/color_guard/Landscape/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), pixmap);
-                            if(n == 0)
+                            if (n == 0)
                                 png.write(Gdx.files.local("out/color_guard/lab/Landscape/" + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                         } catch (IOException e) {
                             e.printStackTrace();
