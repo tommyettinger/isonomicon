@@ -34,16 +34,17 @@ public class EffectGenerator {
                     EffectGenerator::forwardCannonAnimation, EffectGenerator::arcCannonAnimation,
                     EffectGenerator::forwardMissileAnimation, EffectGenerator::arcMissileAnimation,
                     EffectGenerator::torpedoAnimation, EffectGenerator::flameWaveAnimation,
-                    EffectGenerator::bombDropAnimation, EffectGenerator::hackAnimation, EffectGenerator::debugAnimation
+                    EffectGenerator::bombDropAnimation, EffectGenerator::hackAnimation,
+//                    EffectGenerator::debugAnimation
             }
     );
 
     public static final ObjectObjectOrderedMap<String, ReceiveEffect> KNOWN_RECEIVE_EFFECTS = new ObjectObjectOrderedMap<>(
-            new String[]{"Handgun", "Machine_Gun", "Forward_Cannon", "Arc_Cannon", "Forward_Missile", "Debug"},
+            new String[]{"Handgun", "Machine_Gun", "Forward_Cannon", "Arc_Cannon", "Forward_Missile", "Arc_Missile", "Debug"},
             new ReceiveEffect[]{EffectGenerator::handgunReceiveAnimation, EffectGenerator::machineGunReceiveAnimation,
                     EffectGenerator::forwardCannonReceiveAnimation, EffectGenerator::arcCannonReceiveAnimation,
-                    EffectGenerator::forwardMissileReceiveAnimation,
-                    EffectGenerator::debugReceiveAnimation
+                    EffectGenerator::forwardMissileReceiveAnimation, EffectGenerator::arcMissileReceiveAnimation,
+//                    EffectGenerator::debugReceiveAnimation
             }
     );
 
@@ -2691,12 +2692,20 @@ public class EffectGenerator {
             next[i].materials.putAll(lastMaterials);
         }
         byte[][][] fireStart = new byte[size][size][size];
-        for (int s = 0; s < 3; s++) {
-            ShapeGenerator.box(fireStart, 90 - r.nextInt(7) - s * 3, 75, 30, 95 + s, 104, 42, yellowFire, ((x, y, z) -> r.next(2) != 0));
-            byte[][][][] explosion = fireballAnimation(fireStart, 3 - s, 1, 0);
-            for (int i = 0, f = 0; f < frames - 3 && i < explosion.length; f++, i++) {
-                byte[][][] grid = next[f + 3].grids.get(0);
-                Tools3D.translateCopyInto(explosion[i], grid, 0, 0, 0);
+        for (int launcher = 0; launcher < count; launcher++) {
+            int lx = 110 - (int)((launcher * 0x91E10DA5L + 0xE10DA591L & 0xFFFFFFFFL) * 30 >>> 32);
+            int ly = (int)((launcher * 0xC13FA9A9L + 0xA9A9C13FL & 0xFFFFFFFFL) * 80 >>> 32) + 40;
+            for (int f = 0; f < 3; f++) {
+                byte[][][] grid = next[f].grids.get(0);
+                addMissile(grid, lx, ly, 80, -1, 0, -1, 16 * f + 6);
+            }
+            for (int s = 0; s < 3; s++) {
+                ShapeGenerator.box(fireStart, lx - 52 - 3 + s * 3, ly - 5, 30, lx - 44 + s, ly + 5, 42, yellowFire, ((x, y, z) -> r.next(2) != 0));
+                byte[][][][] explosion = fireballAnimation(fireStart, 3 - s, 1, 0);
+                for (int i = 0, f = 0; f < frames - 3 && i < explosion.length; f++, i++) {
+                    byte[][][] grid = next[f + 3].grids.get(0);
+                    Tools3D.translateCopyInto(explosion[i], grid, 0, 0, 0);
+                }
             }
         }
         return next;
