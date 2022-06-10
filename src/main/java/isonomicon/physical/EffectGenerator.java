@@ -1457,6 +1457,28 @@ public class EffectGenerator {
             return voxelFrames;
         }
      */
+
+    public static void addMissile(byte[][][] grid, int lx, int ly, int lz, int dx, int dy, int dz, int distance){
+        Choice choose3of4 = ((x, y, z) -> r.next(2) != 0);
+        ShapeGenerator.box(grid, lx + (4 + distance) * dx, ly + 1, lz + 4 + distance * dz, lx + (10 + distance) * dx, ly + 6, lz + (10 + distance) * dz, missileHead);
+        for (int y = 1; y <= 6; y++) {
+            for (int d = 0; d < 6; d++) {
+                ShapeGenerator.line(grid, lx + (-22+distance)*dx+d, ly+y, lz+ (-16+distance) * dz -d, lx + (distance + 4) * dx + d, ly + y, lz + (distance + 10) * dz - d, missileBody);
+            }
+        }
+        for (int y = 2; y <= 5; y++) {
+            for (int d = 1; d < 5; d++) {
+                ShapeGenerator.line(grid, lx + (-34+distance)*dx+d, ly+y, lz + (-28+distance)*dz-d, lx+(-22+distance)*dx+d, ly+y, lz+ (-16+distance) * dz-d, yellowFire);
+            }
+        }
+        for (int y = 1; y <= 6; y++) {
+            for (int d = 0; d < 6; d++) {
+                ShapeGenerator.line(grid, lx + (-32+distance)*dx+d, ly+y, lz+(-26+distance)*dz-d, lx+(-22+distance)*dx+d, ly+y, lz+(-16+distance) * dz-d, hotFire, choose3of4);
+            }
+        }
+
+    }
+
     public static VoxModel[] arcMissileAnimation(VoxModel[] frames, int which){
         int count = frames.length;
         VoxModel[] next = new VoxModel[count];
@@ -1525,44 +1547,14 @@ public class EffectGenerator {
                     for (int ln = 0; ln < launchers.size(); ln++) {
                         long launcher = launchers.get(ln);
                         int lx = ((int) (launcher) & 0xFFFFF) - 2, ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) ((launcher >>> 40) & 0xFFFFF) + 2;
-                        ShapeGenerator.box(grid, lx + 4 + 16*2, ly + 1, lz + 4 + 16*2, lx + 10 + 16*2, ly + 6, lz + 10 + 16*2, missileHead);
-                        for (int y = 1; y <= 6; y++) {
-                            for (int d = 0; d < 6; d++) {
-                                ShapeGenerator.line(grid, lx-22+16*2+d, ly+y, lz-16+16*2-d, lx + 16*2 + 4 + d, ly + y, lz + 16*2 + 10 - d, missileBody);
-                            }
-                        }
-                        for (int y = 2; y <= 5; y++) {
-                            for (int d = 1; d < 5; d++) {
-                                ShapeGenerator.line(grid, lx-34+16*2+d, ly+y, lz-28+16*2-d, lx-22+16*2+d, ly+y, lz-16+16*2-d, yellowFire);
-                            }
-                        }
-                        for (int y = 1; y <= 6; y++) {
-                            for (int d = 0; d < 6; d++) {
-                                ShapeGenerator.line(grid, lx-32+16*2+d, ly+y, lz-26+16*2-d, lx-22+16*2+d, ly+y, lz-16+16*2-d, hotFire, choose3of4);
-                            }
-                        }
+                        addMissile(grid, lx, ly, lz, 1, 0, 1, 16 * 2);
                     }
                 }
                 else if(f == 4) {
                     for (int ln = 0; ln < launchers.size(); ln++) {
                         long launcher = launchers.get(ln);
                         int lx = ((int) (launcher) & 0xFFFFF) - 2, ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) ((launcher >>> 40) & 0xFFFFF) + 2;
-                        ShapeGenerator.box(grid, lx + 4 + 16*3, ly + 1, lz + 4 + 16*3, lx + 10 + 16*3, ly + 6, lz + 10 + 16*3, missileHead);
-                        for (int y = 1; y <= 6; y++) {
-                            for (int d = 0; d < 6; d++) {
-                                ShapeGenerator.line(grid, lx-22+16*3+d, ly+y, lz-16+16*3-d, lx + 16*3 + 4 + d, ly + y, lz + 16*3 + 10 - d, missileBody);
-                            }
-                        }
-                        for (int y = 2; y <= 5; y++) {
-                            for (int d = 1; d < 5; d++) {
-                                ShapeGenerator.line(grid, lx-34+16*3+d, ly+y, lz-28+16*3-d, lx-22+16*3+d, ly+y, lz-16+16*3-d, yellowFire);
-                            }
-                        }
-                        for (int y = 1; y <= 6; y++) {
-                            for (int d = 0; d < 6; d++) {
-                                ShapeGenerator.line(grid, lx-32+16*3+d, ly+y, lz-26+16*3-d, lx-22+16*3+d, ly+y, lz-16+16*3-d, hotFire, choose3of4);
-                            }
-                        }
+                        addMissile(grid, lx, ly, lz, 1, 0, 1, 16 * 3);
                         ShapeGenerator.ball(grid, lx - 1 + r.next(2), ly - 1 + r.next(2), lz + 2, 1.45, smoke, choose3of4);
                         ShapeGenerator.ball(grid, lx - 3 + r.next(3), ly - 3 + r.next(3), lz + 1, 1.45, smoke, choose3of4);
                     }
@@ -1571,22 +1563,7 @@ public class EffectGenerator {
                     for (int ln = 0; ln < launchers.size(); ln++) {
                         long launcher = launchers.get(ln);
                         int lx = ((int) (launcher) & 0xFFFFF) - 2, ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) ((launcher >>> 40) & 0xFFFFF) + 2;
-                        ShapeGenerator.box(grid, lx + 4 + 16*4, ly + 1, lz + 4 + 16*4, lx + 10 + 16*4, ly + 6, lz + 10 + 16*4, missileHead);
-                        for (int y = 1; y <= 6; y++) {
-                            for (int d = 0; d < 6; d++) {
-                                ShapeGenerator.line(grid, lx-22+16*4+d, ly+y, lz-16+16*4-d, lx + 16*4+4 + d, ly + y, lz+16*4+10-d, missileBody);
-                            }
-                        }
-                        for (int y = 2; y <= 5; y++) {
-                            for (int d = 1; d < 5; d++) {
-                                ShapeGenerator.line(grid, lx-34+16*4+d, ly+y, lz-28+16*4-d, lx-22+16*4+d, ly+y, lz-16+16*4-d, yellowFire);
-                            }
-                        }
-                        for (int y = 1; y <= 6; y++) {
-                            for (int d = 0; d < 6; d++) {
-                                ShapeGenerator.line(grid, lx-32+16*4+d, ly+y, lz-26+16*4-d, lx-22+16*4+d, ly+y, lz-16+16*4-d, hotFire, choose3of4);
-                            }
-                        }
+                        addMissile(grid, lx, ly, lz, 1, 0, 1, 16 * 4);
                         ShapeGenerator.ball(grid, lx - 1 + r.next(2), ly - 1 + r.next(2), lz + 4, 1.45, smoke, choose1of2);
                         ShapeGenerator.ball(grid, lx - 3 + r.next(3), ly - 3 + r.next(3), lz + 3, 1.45, smoke, choose1of2);
                         ShapeGenerator.ball(grid, lx - 4 + r.nextInt(10), ly - 4 + r.nextInt(10), lz + 2, 1.45, smoke, choose1of2);
@@ -1597,22 +1574,7 @@ public class EffectGenerator {
                     for (int ln = 0; ln < launchers.size(); ln++) {
                         long launcher = launchers.get(ln);
                         int lx = ((int) (launcher) & 0xFFFFF) - 2, ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) ((launcher >>> 40) & 0xFFFFF) + 2;
-                        ShapeGenerator.box(grid, lx + 4 + 16*5, ly + 1, lz + 4 + 16*5, lx + 10 + 16*5, ly + 6, lz + 10 + 16*5, missileHead);
-                        for (int y = 1; y <= 6; y++) {
-                            for (int d = 0; d < 6; d++) {
-                                ShapeGenerator.line(grid, lx-22+16*5+d, ly+y, lz-16+16*5-d, lx + 16*5+4 + d, ly + y, lz+16*5+10-d, missileBody);
-                            }
-                        }
-                        for (int y = 2; y <= 5; y++) {
-                            for (int d = 1; d < 5; d++) {
-                                ShapeGenerator.line(grid, lx-34+16*5+d, ly+y, lz-28+16*5-d, lx-22+16*5+d, ly+y, lz-16+16*5-d, yellowFire);
-                            }
-                        }
-                        for (int y = 1; y <= 6; y++) {
-                            for (int d = 0; d < 6; d++) {
-                                ShapeGenerator.line(grid, lx-32+16*5+d, ly+y, lz-26+16*5-d, lx-22+16*5+d, ly+y, lz-16+16*5-d, hotFire, choose3of4);
-                            }
-                        }
+                        addMissile(grid, lx, ly, lz, 1, 0, 1, 16 * 5);
                         ShapeGenerator.ball(grid, lx - 2 + r.nextInt(6), ly - 2 + r.nextInt(6), lz + 6, 1.45, smoke, choose1of4);
                         ShapeGenerator.ball(grid, lx - 3 + r.next(3), ly - 3 + r.next(3), lz + 5, 1.45, smoke, choose1of4);
                         ShapeGenerator.ball(grid, lx - 5 + r.nextInt(12), ly - 5 + r.nextInt(12), lz + 3, 1.45, smoke, choose1of4);
@@ -2719,6 +2681,27 @@ public class EffectGenerator {
         return next;
     }
 
+    public static VoxModel[] arcMissileReceiveAnimation(int size, int frames, int count) {
+        VoxModel[] next = new VoxModel[frames];
+        byte[][][][] grids = new byte[frames][size][size][size];
+        for (int i = 0; i < frames; i++) {
+            next[i] = new VoxModel();
+            next[i].grids.add(grids[i]);
+            next[i].links.add(new IntObjectMap<>(1));
+            next[i].materials.putAll(lastMaterials);
+        }
+        byte[][][] fireStart = new byte[size][size][size];
+        for (int s = 0; s < 3; s++) {
+            ShapeGenerator.box(fireStart, 90 - r.nextInt(7) - s * 3, 75, 30, 95 + s, 104, 42, yellowFire, ((x, y, z) -> r.next(2) != 0));
+            byte[][][][] explosion = fireballAnimation(fireStart, 3 - s, 1, 0);
+            for (int i = 0, f = 0; f < frames - 3 && i < explosion.length; f++, i++) {
+                byte[][][] grid = next[f + 3].grids.get(0);
+                Tools3D.translateCopyInto(explosion[i], grid, 0, 0, 0);
+            }
+        }
+        return next;
+    }
+
 
     public static VoxModel[] debugReceiveAnimation(int size, int frames, int strength){
         VoxModel[] next = new VoxModel[frames];
@@ -2749,5 +2732,76 @@ public class EffectGenerator {
         return next;
     }
 
+/*
 
+        public static MagicaVoxelData[][] ArcMissileReceiveAnimationLarge(MagicaVoxelData[][] parsedFrames, int strength)
+        {
+
+            List<MagicaVoxelData>[] voxelFrames = new List<MagicaVoxelData>[parsedFrames.Length];
+            MagicaVoxelData[][] finalFrames = new MagicaVoxelData[parsedFrames.Length][];
+
+            List<MagicaVoxelData>[] extra = new List<MagicaVoxelData>[voxelFrames.Length], missile = new List<MagicaVoxelData>[voxelFrames.Length];
+            MagicaVoxelData[][] explosion = new MagicaVoxelData[16][];
+
+            MagicaVoxelData launcher = new MagicaVoxelData { x = 112, y = 58, z = 60 };
+            bool isExploding = false;
+            int firstBurst = 0;
+            for(int f = 0; f < voxelFrames.Length; f++)
+            {
+                extra[f] = new List<MagicaVoxelData>(160);
+                missile[f] = new List<MagicaVoxelData>(160);
+
+                if(f > 0 && !isExploding)
+                {
+                    for(int i = 0; i < missile[f - 1].Count; i++)
+                    {
+                        if(missile[f - 1][i].x - 4 < 64)
+                        {
+                            isExploding = true;
+                            explosion = FireballLarge(randomFill(50 - strength, 55 - strength, Math.Max(2, missile[f - 1][i].z - 4), 12 + strength * 2, 10 + strength * 2, 14 + strength * 3,
+                                new int[] { smoke, orange_fire, yellow_fire }).Concat(missile[f - 1]).ToArray(), 0, 14 - f, 1);
+                            missile[f].Clear();
+                            firstBurst = f;
+                            break;
+                        }
+                    }
+                }
+                if(f == 0 && !isExploding)
+                {
+                    missile[f].AddRange(generateDownwardMissileLarge(launcher, 0));
+                }
+                if(f == 1 && !isExploding)
+                        {
+                        missile[f].AddRange(generateDownwardMissileLarge(new MagicaVoxelData { x = (byte)(launcher.x - 8), y = launcher.y, z = (byte)(launcher.z - 8), color = bold_paint }, 8));
+
+
+
+
+                        }
+                        else if(f >= 2 && !isExploding)
+                        {
+                        missile[f].AddRange(generateDownwardMissileFieryTrailLarge(new MagicaVoxelData { x = (byte)(launcher.x - 8 * f), y = launcher.y, z = (byte)(launcher.z - 8 * f), color = bold_paint }, 12));
+                        }
+                        if(f >= 4)
+                        {
+                        extra[f].AddRange(generateDownwardConeLarge(new MagicaVoxelData { x = (byte)(launcher.x - 8 * (f - 3)), y = (byte)(launcher.y), z = (byte)(launcher.z - 8 * (f - 3)), color = smoke },
+                        8, smoke).Where(v => r.Next(95) > (f + 1) * (f + 1) && r.Next(95) > (f + 1) * f));
+                        }
+                        if(f < 14 && isExploding)
+        {
+        extra[f].AddRange(explosion[f - firstBurst]);
+        }
+        }
+        for(int f = 0; f < voxelFrames.Length; f++)
+        {
+        List<MagicaVoxelData> working = new List<MagicaVoxelData>(20);
+        working.AddRange(missile[f]);
+        working.AddRange(extra[f]);
+        finalFrames[f] = working.ToArray();
+        }
+        return finalFrames; ;
+        }
+
+
+ */
 }
