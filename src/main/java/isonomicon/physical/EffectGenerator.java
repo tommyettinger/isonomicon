@@ -6,8 +6,8 @@ import com.github.tommyettinger.ds.LongList;
 import com.github.tommyettinger.ds.LongOrderedSet;
 import com.github.tommyettinger.ds.ObjectObjectOrderedMap;
 import com.github.tommyettinger.random.EnhancedRandom;
-import com.github.tommyettinger.random.FourWheelRandom;
 import com.github.tommyettinger.digital.TrigTools;
+import com.github.tommyettinger.random.WhiskerRandom;
 import com.github.yellowstonegames.grid.IntPointHash;
 import isonomicon.io.extended.VoxModel;
 
@@ -48,7 +48,7 @@ public class EffectGenerator {
             }
     );
 
-    public static final EnhancedRandom r = new FourWheelRandom(123456789L);
+    public static final EnhancedRandom r = new WhiskerRandom(123456789L);
 
     public static final int missileBody = 5;
     public static final int missileHead = 27;

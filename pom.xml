@@ -70,9 +70,9 @@
         <anim8.version>0.3.7</anim8.version>
         <squidsquad.version>bf30a0f998</squidsquad.version>
         <gdx.version>1.11.0</gdx.version>
-        <digital.version>0.0.2</digital.version>
-        <juniper.version>0.0.2</juniper.version>
-        <jdkgdxds.version>1.0.2</jdkgdxds.version>
+        <digital.version>0.0.4</digital.version>
+        <juniper.version>0.1.0</juniper.version>
+        <jdkgdxds.version>1.0.3</jdkgdxds.version>
         <colorful.version>0.8.2</colorful.version>
     </properties>
 
@@ -92,6 +92,11 @@
             <groupId>com.github.yellowstonegames.SquidSquad</groupId>
             <artifactId>SquidGrid</artifactId>
             <version>${squidsquad.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.tommyettinger</groupId>
+            <artifactId>juniper</artifactId>
+            <version>${juniper.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.tommyettinger</groupId>
@@ -251,7 +256,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
+                <version>3.3.0</version>
                 <executions>
                     <!-- Run shade goal on package phase -->
                     <execution>
