@@ -61,17 +61,15 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.version>3.8.1</maven.compiler.version>
-        <maven.javadoc.version>3.2.0</maven.javadoc.version>
+        <maven.javadoc.version>3.4.0</maven.javadoc.version>
         <maven.resources.version>3.2.0</maven.resources.version>
         <maven.source.version>3.2.1</maven.source.version>
         <maven.gpg.version>1.6</maven.gpg.version>
         <jdk.version>17</jdk.version>
         <junit.version>4.13.2</junit.version>
         <anim8.version>0.3.7</anim8.version>
-        <squidsquad.version>bf30a0f998</squidsquad.version>
+        <squidsquad.version>964f5fadbb</squidsquad.version>
         <gdx.version>1.11.0</gdx.version>
-        <digital.version>0.0.4</digital.version>
-        <juniper.version>0.1.0</juniper.version>
         <jdkgdxds.version>1.0.3</jdkgdxds.version>
         <colorful.version>0.8.2</colorful.version>
     </properties>
@@ -92,11 +90,6 @@
             <groupId>com.github.yellowstonegames.SquidSquad</groupId>
             <artifactId>SquidGrid</artifactId>
             <version>${squidsquad.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.tommyettinger</groupId>
-            <artifactId>juniper</artifactId>
-            <version>${juniper.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.tommyettinger</groupId>
@@ -136,6 +129,19 @@
             <artifactId>gdx-platform</artifactId>
             <version>${gdx.version}</version>
             <classifier>natives-desktop</classifier>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <version>3.2.1</version>
+            <type>maven-plugin</type>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>3.4.0</version>
+            <type>maven-plugin</type>
         </dependency>
     </dependencies>
 

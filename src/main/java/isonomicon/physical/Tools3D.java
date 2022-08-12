@@ -2,6 +2,7 @@ package isonomicon.physical;
 
 import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.digital.Hasher;
+import com.github.tommyettinger.ds.IntIntMap;
 
 import java.util.Arrays;
 
@@ -639,6 +640,32 @@ public class Tools3D {
                     if(z < 0) continue;
                     if (into[x][y][z] == 0 && voxels[xx][yy][zz] != 0)
                         into[x][y][z] = voxels[xx][yy][zz];
+                }
+            }
+        }
+    }
+
+    public static void translateCopyInto(byte[][][] voxels, byte[][][] into, int xMove, int yMove, int zMove, IntIntMap remap) {
+        int xs, ys, zs;
+        xs = into.length;
+        ys = into[0].length;
+        zs = into[0][0].length;
+        final int xLimit = voxels.length;
+        final int yLimit = voxels[0].length;
+        final int zLimit = voxels[0][0].length;
+        for (int x = xMove, xx = 0; x < xs && xx < xLimit && xx < xs; x++, xx++) {
+            if(x < 0) continue;
+            for (int y = yMove, yy = 0; y < ys && yy < yLimit && yy < ys; y++, yy++) {
+                if(y < 0) continue;
+                for (int z = zMove, zz = 0; z < zs && zz < zLimit && zz < zs; z++, zz++) {
+                    if(z < 0) continue;
+                    if (into[x][y][z] == 0) {
+                        int voxel = voxels[xx][yy][zz];
+                        if(remap.containsKey(voxel))
+                            voxel = remap.get(voxel);
+                        if(voxel != 0)
+                            into[x][y][z] = voxels[xx][yy][zz];
+                    }
                 }
             }
         }
