@@ -55,6 +55,7 @@ public class EffectGenerator {
     public static final int shadow = 66;
     public static final int smoke = 67;
     public static final int shock = 97;
+    public static final int ember = 113;
     public static final int hotFire = 114;
     public static final int yellowFire = 115;
     public static final int sparks = 127;
@@ -2711,7 +2712,7 @@ public class EffectGenerator {
         return next;
     }
 
-    static final IntIntMap fireToWater = IntIntMap.with(hotFire, 85, yellowFire, 86, sparks, 87, smoke, 0);
+    static final IntIntMap fireToWater = IntIntMap.with(hotFire, 88, new int[]{ember, 87, yellowFire, 88, sparks, 88, smoke, 0});
     public static VoxModel[] torpedoReceiveAnimation(int size, int frames, int distance){
         VoxModel[] next = new VoxModel[frames];
         byte[][][][] grids = new byte[frames][size][size][size];
@@ -2723,7 +2724,7 @@ public class EffectGenerator {
         }
         byte[][][] fireStart = new byte[size][size][size];
         for (int s = 0; s < 3; s++) {
-            ShapeGenerator.box(fireStart, 90 - r.nextInt(7) - s * 3, 75, 0, 95 + s, 104, 8, yellowFire, ((x, y, z) -> r.next(2) != 0));
+            ShapeGenerator.ball(fireStart, 115 - r.nextInt(7) - s * 3, 87, -1, 20, yellowFire, ((x, y, z) -> r.next(3) != 0));
             byte[][][][] explosion = fireballAnimation(fireStart, 3 - s, 1, -2);
             for (int i = 0, f = 0; f < frames - 1 - distance && i < explosion.length; f++, i++) {
                 byte[][][] grid = next[f + 1 + distance].grids.get(0);

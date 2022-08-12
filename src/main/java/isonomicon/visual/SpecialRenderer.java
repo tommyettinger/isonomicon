@@ -3,7 +3,7 @@ package isonomicon.visual;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.math.MathUtils;
 import com.github.tommyettinger.anim8.PaletteReducer;
-import com.github.tommyettinger.bluegrass.BlueNoise;
+import com.github.yellowstonegames.grid.BlueNoise;
 import com.github.tommyettinger.colorful.oklab.ColorTools;
 import com.github.tommyettinger.ds.IntObjectMap;
 import com.github.yellowstonegames.grid.IntPointHash;

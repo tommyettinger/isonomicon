@@ -664,7 +664,7 @@ public class Tools3D {
                         if(remap.containsKey(voxel))
                             voxel = remap.get(voxel);
                         if(voxel != 0)
-                            into[x][y][z] = voxels[xx][yy][zz];
+                            into[x][y][z] = (byte) voxel;
                     }
                 }
             }
