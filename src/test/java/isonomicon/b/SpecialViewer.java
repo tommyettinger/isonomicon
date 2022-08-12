@@ -43,7 +43,7 @@ public class SpecialViewer extends ApplicationAdapter {
 
         String name = "Submarine";//Fighter_Jet
         ColorGuardData.Unit unit = ColorGuardData.byName.get(name);
-        String target = "Cruiser";
+        String target = "Submarine";
 
         images = new Texture[64];
         receiveImages = new Texture[64];

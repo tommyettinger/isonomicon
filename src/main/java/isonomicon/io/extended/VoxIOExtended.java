@@ -10,6 +10,8 @@ import isonomicon.physical.VoxMaterial;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.PrimitiveIterator;
 
 import static isonomicon.io.VoxIO.lastMaterials;
@@ -251,7 +253,7 @@ public class VoxIOExtended {
         // check out https://github.com/ephtracy/voxel-model/blob/master/MagicaVoxel-file-format-vox.txt for the file format used below
         try {
             int xSize = voxelData.length, ySize = voxelData[0].length, zSize = voxelData[0][0].length;
-
+            Files.createDirectories(Path.of(filename).getParent());
             FileOutputStream fos = new FileOutputStream(filename);
             DataOutputStream bin = new DataOutputStream(fos);
             ByteArrayOutputStream voxelsRaw = new ByteArrayOutputStream(0);

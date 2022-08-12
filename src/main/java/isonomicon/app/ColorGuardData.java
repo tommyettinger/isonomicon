@@ -124,7 +124,9 @@ public class ColorGuardData {
             new Unit("Signal"),
             new Unit("Money"),
             new Unit("Fire"),
-            new Unit("Poison"));
+            new Unit("Poison")
+//            new Unit("Shadow_Blob", "Arc_Missile", false, 1),
+            );
 
     public static HolderOrderedSet<Unit, String> byName = new HolderOrderedSet<>(Unit::getName, units);
 

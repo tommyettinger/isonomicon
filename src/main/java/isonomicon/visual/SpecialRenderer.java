@@ -478,6 +478,7 @@ public class SpecialRenderer {
         fill(outlines, (byte) 0);
         fill(indices, (byte) 0);
         fill(outlineIndices, (byte) 0);
+        fill(lightIndices, (byte) 0);
         fill(voxels, -1);
         fill(shadeX, -1f);
         fill(shadeZ, -1f);
