@@ -77,7 +77,7 @@ public class ColorGuardData {
             new Unit("Heavy_Cannon", "Forward_Cannon", false, 2),
             new Unit("Recon", "Machine_Gun", false, 1),
             new Unit("AA_Gun", "Machine_Gun", false, 2),
-            new Unit("Flamethrower", "Flame_Wave"),
+            new Unit("Flamethrower", "Flame_Wave", false, 1),
             new Unit("Light_Artillery", "Arc_Cannon", false, 1),
             new Unit("Rocket_Artillery", "Arc_Missile", false, 8),
             new Unit("AA_Artillery", "Arc_Missile", false, 1),
