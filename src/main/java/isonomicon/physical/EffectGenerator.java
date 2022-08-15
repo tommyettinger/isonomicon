@@ -38,12 +38,13 @@ public class EffectGenerator {
 
     public static final ObjectObjectOrderedMap<String, ReceiveEffect> KNOWN_RECEIVE_EFFECTS = new ObjectObjectOrderedMap<>(
             new String[]{"Handgun", "Machine_Gun", "Forward_Cannon", "Arc_Cannon", "Forward_Missile", "Arc_Missile",
-                    "Torpedo", "Flame_Wave",
+                    "Torpedo", "Flame_Wave", "Bomb_Drop",
                     "Debug"},
             new ReceiveEffect[]{EffectGenerator::handgunReceiveAnimation, EffectGenerator::machineGunReceiveAnimation,
                     EffectGenerator::forwardCannonReceiveAnimation, EffectGenerator::arcCannonReceiveAnimation,
                     EffectGenerator::forwardMissileReceiveAnimation, EffectGenerator::arcMissileReceiveAnimation,
-                    EffectGenerator::torpedoReceiveAnimation, EffectGenerator::flameWaveReceiveAnimation
+                    EffectGenerator::torpedoReceiveAnimation, EffectGenerator::flameWaveReceiveAnimation,
+                    EffectGenerator::bombDropReceiveAnimation
 //                    EffectGenerator::debugReceiveAnimation
             }
     );
@@ -1613,6 +1614,35 @@ public class EffectGenerator {
             byte[][][][] explosion = fireballAnimation(fireStart, 5 - s, 0, -4);
             for (int i = 0, f = s; f < frames - 2 && i < explosion.length; f++, i++) {
                 byte[][][] grid = next[f + 2].grids.get(0);
+                Tools3D.translateCopyInto(explosion[i], grid, 0, 0, 0);
+            }
+        }
+        return next;
+    }
+
+    /**
+     *
+     * @param size
+     * @param frames
+     * @param strength the scale of the explosion, 1 or higher
+     * @return
+     */
+    public static VoxModel[] bombDropReceiveAnimation(int size, int frames, int strength){
+        VoxModel[] next = new VoxModel[frames];
+        byte[][][][] grids = new byte[frames][size][size][size];
+        for (int i = 0; i < frames; i++) {
+            next[i] = new VoxModel();
+            next[i].grids.add(grids[i]);
+            next[i].links.add(new IntObjectMap<>(1));
+            next[i].materials.putAll(lastMaterials);
+        }
+        byte[][][] fireStart = new byte[size][size][size];
+        for (int s = 0; s < strength; s++) {
+            int xPos = 100 - s * 6 - r.next(2), yPos = 40 + r.next(3);
+            ShapeGenerator.box(fireStart, xPos, yPos, 0, xPos + 16, yPos + 32, 32, yellowFire, ((x, y, z) -> r.next(2) != 0));
+            byte[][][][] explosion = fireballAnimation(fireStart, 4 - s, 0, -3);
+            for (int i = 0, f = s; f < frames - 3 && i < explosion.length; f++, i++) {
+                byte[][][] grid = next[f + 3].grids.get(0);
                 Tools3D.translateCopyInto(explosion[i], grid, 0, 0, 0);
             }
         }

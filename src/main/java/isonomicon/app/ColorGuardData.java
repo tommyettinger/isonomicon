@@ -97,7 +97,7 @@ public class ColorGuardData {
             new Unit("Legacy_Plane", "Machine_Gun", false, 2),
             new Unit("Fighter_Jet", "Forward_Missile", false, 1),
             new Unit("Stealth_Jet", "Forward_Missile", false, 2),
-            new Unit("Heavy_Bomber", "Bomb_Drop"),
+            new Unit("Heavy_Bomber", "Bomb_Drop", false, 3),
             new Unit("Volunteer"),
             new Unit("Medic"),
             new Unit("Spy"),
