@@ -370,10 +370,10 @@ public class Stuff {
             new Stuff("unused 160", 160, "Transparency 1.0"),
             new Stuff("unused 161", 161, "Transparency 1.0"),
             new Stuff("unused 162", 162, "Transparency 1.0"), /*light violet*/
-            new Stuff("unused 163", 163, "Transparency 1.0"), /*light purple*/
-            new Stuff("unused 164", 164, "Transparency 1.0"),
-            new Stuff("unused 165", 165, "Transparency 1.0"),
-            new Stuff("unused 166", 166, "Transparency 1.0"), /*dark purple*/
+            new Stuff("terminal space 0", 163, 72, "Roughness 0.0 Reflection 0.0 Emission 0.3 Dapple 0.05", 164, 1), /*light purple*/
+            new Stuff("terminal space 1", 164, 72, "Roughness 0.0 Reflection 0.0 Emission 0.1 Dapple 0.05", 165, 1),
+            new Stuff("terminal space 2", 165, 76, "Roughness 0.0 Reflection 0.0", 166, 1),
+            new Stuff("terminal space 3", 166, 76, "Roughness 0.0 Reflection 0.0", 163, 1), /*dark purple*/
             new Stuff("unused 167", 167, "Transparency 1.0"), /*burgundy*/
             new Stuff("unused 168", 168, "Transparency 1.0"), /*medium magenta*/
             new Stuff("unused 169", 169, "Transparency 1.0"),

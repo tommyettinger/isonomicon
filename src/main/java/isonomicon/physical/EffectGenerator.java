@@ -65,6 +65,7 @@ public class EffectGenerator {
     public static final int trail = 202;
     public static final int glow = 81;
     public static final int red = 103;
+    public static final int terminal = 163;
 
 
     public static byte[][][][] fireballAnimation(byte[][][] initial, int frames, int trimLevel, int blowback){
@@ -1240,6 +1241,66 @@ public class EffectGenerator {
     }
 
     public static VoxModel[] hackAnimation(VoxModel[] frames, int which){
+        int count = frames.length;
+        VoxModel[] next = new VoxModel[count];
+        for (int i = 0; i < count; i++) {
+            next[i] = frames[i].copy();
+        }
+        final int gridLimit = next[0].grids.size();
+        boolean foundAny = false;
+
+        Choice choose1of256 = ((x, y, z) -> r.next(8) == 0);
+        Choice choose1of512 = ((x, y, z) -> r.next(9) == 0);
+        for (int g = 0; g < gridLimit; g++) {
+            LongOrderedSet ls = next[0].markers.get(g).get(launch + which * 8);
+            if (ls == null)
+                continue;
+            foundAny = true;
+            LongList launchers = ls.order();
+            for (int f = 0; f < count - 2; f++) {
+                byte[][][] grid = next[f+1].grids.get(g);
+                int gs = grid.length;
+
+                if(f == 0 || f == 7) {
+                    for (int ln = 0; ln < launchers.size(); ln++) {
+                        long launcher = launchers.get(ln);
+                        int lx = ((int) (launcher) & 0xFFFFF), ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) (launcher >>> 40) & 0xFFFFF;
+                        ShapeGenerator.ball(grid, lx, ly, lz, 21 - f, shock, choose1of512);
+                    }
+                }
+                if(f == 1) {
+                    for (int ln = 0; ln < launchers.size(); ln++) {
+                        long launcher = launchers.get(ln);
+                        int lx = ((int) (launcher) & 0xFFFFF), ly = ((int) (launcher >>> 20) & 0xFFFFF), lz = (int) (launcher >>> 40) & 0xFFFFF;
+                        ShapeGenerator.ball(grid, lx, ly, lz, 17, shock, choose1of512);
+                        ShapeGenerator.ball(grid, lx, ly, lz, 24, shock, choose1of512);
+                    }
+                }
+                if(f >= 2 && f <= 6) {
+                    for (int x = 0; x < gs; x++) {
+                        for (int y = 0; y < gs; y++) {
+                            for (int z = 0; z < gs; z++) {
+                                byte v = grid[x][y][z];
+                                if(v != 0 && (v < shock || v > shock + 1)
+                                        && (1 - (f & 1) != Stuff.STUFFS_B[v & 255].material.getTrait(VoxMaterial.MaterialTrait._frame))){
+                                    int h = IntPointHash.hash256(x>>>1, y>>>1, 12345678);
+                                    if(h < 180)
+                                        grid[x][y][z] = 76;
+                                    else
+                                        grid[x][y][z] = (byte) (terminal + (h + (z>>>2) + f & 3));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if(!foundAny) return null;
+
+        return next;
+    }
+
+    public static VoxModel[] hackAnimationOld(VoxModel[] frames, int which){
         int count = frames.length;
         VoxModel[] next = new VoxModel[count];
         for (int i = 0; i < count; i++) {

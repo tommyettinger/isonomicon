@@ -66,7 +66,8 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Forward_Missile")).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Torpedo")).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Flame_Wave")).toList();
-        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Bomb_Drop")).toList();
+//        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Bomb_Drop")).toList();
+        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Hack")).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Arc_Missile")).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Arc_Cannon")).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Forward_Cannon")).toList();
