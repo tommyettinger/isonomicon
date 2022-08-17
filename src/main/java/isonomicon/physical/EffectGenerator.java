@@ -1725,8 +1725,8 @@ public class EffectGenerator {
         }
 
         for(int s = 0; s < strength; s++) {
-            int rx = r.nextInt(90, 150), ry = r.nextInt(90, 150), rz = r.nextInt(15, 60);
-            for (int f = 6 - s * 3, i = 0; i < 3 && f >= 0; f++, i++) {
+            int rx = r.nextInt(40, 80), ry = r.nextInt(40, 80), rz = r.nextInt(15, 60);
+            for (int f = 6 - s * 3, i = 0; i < 3 && f >= 0; f--, i++) {
                 if(i == 2) {
                     ShapeGenerator.ball(grids[f], rx, ry, rz, 20, shock, choose1of256);
                 }
