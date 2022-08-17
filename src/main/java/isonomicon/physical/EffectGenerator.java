@@ -38,13 +38,13 @@ public class EffectGenerator {
 
     public static final ObjectObjectOrderedMap<String, ReceiveEffect> KNOWN_RECEIVE_EFFECTS = new ObjectObjectOrderedMap<>(
             new String[]{"Handgun", "Machine_Gun", "Forward_Cannon", "Arc_Cannon", "Forward_Missile", "Arc_Missile",
-                    "Torpedo", "Flame_Wave", "Bomb_Drop",
+                    "Torpedo", "Flame_Wave", "Bomb_Drop", "Hack",
                     "Debug"},
             new ReceiveEffect[]{EffectGenerator::handgunReceiveAnimation, EffectGenerator::machineGunReceiveAnimation,
                     EffectGenerator::forwardCannonReceiveAnimation, EffectGenerator::arcCannonReceiveAnimation,
                     EffectGenerator::forwardMissileReceiveAnimation, EffectGenerator::arcMissileReceiveAnimation,
                     EffectGenerator::torpedoReceiveAnimation, EffectGenerator::flameWaveReceiveAnimation,
-                    EffectGenerator::bombDropReceiveAnimation
+                    EffectGenerator::bombDropReceiveAnimation, EffectGenerator::hackReceiveAnimation,
 //                    EffectGenerator::debugReceiveAnimation
             }
     );
@@ -1710,6 +1710,35 @@ public class EffectGenerator {
         return next;
     }
 
+    public static VoxModel[] hackReceiveAnimation(int size, int frames, int strength) {
+
+        Choice choose1of256 = ((x, y, z) -> r.next(8) == 0);
+        Choice choose1of512 = ((x, y, z) -> r.next(9) == 0);
+
+        VoxModel[] next = new VoxModel[frames];
+        byte[][][][] grids = new byte[frames][size][size][size];
+        for (int i = 0; i < frames; i++) {
+            next[i] = new VoxModel();
+            next[i].grids.add(grids[i]);
+            next[i].links.add(new IntObjectMap<>(1));
+            next[i].materials.putAll(lastMaterials);
+        }
+
+        for(int s = 0; s < strength; s++) {
+            int rx = r.nextInt(90, 150), ry = r.nextInt(90, 150), rz = r.nextInt(15, 60);
+            for (int f = 6 - s * 3, i = 0; i < 3 && f >= 0; f++, i++) {
+                if(i == 2) {
+                    ShapeGenerator.ball(grids[f], rx, ry, rz, 20, shock, choose1of256);
+                }
+                else if(i == 1) {
+                    ShapeGenerator.ball(grids[f], rx, ry, rz, 16, shock, choose1of512);
+                    ShapeGenerator.ball(grids[f], rx, ry, rz, 25, shock, choose1of512);
+
+                }
+            }
+        }
+        return next;
+    }
 
     public static VoxModel[] debugReceiveAnimation(int size, int frames, int strength){
         VoxModel[] next = new VoxModel[frames];
