@@ -4,11 +4,17 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.PixmapIO;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.badlogic.gdx.utils.*;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.github.tommyettinger.anim8.AnimatedGif;
 import com.github.tommyettinger.anim8.AnimatedPNG;
 import com.github.tommyettinger.anim8.Dithered;
@@ -16,7 +22,6 @@ import com.github.tommyettinger.anim8.PaletteReducer;
 import com.github.tommyettinger.ds.IntObjectMap;
 import com.github.tommyettinger.ds.ObjectIntMap;
 import isonomicon.io.LittleEndianDataInputStream;
-import isonomicon.io.VoxIO;
 import isonomicon.io.extended.VoxIOExtended;
 import isonomicon.io.extended.VoxModel;
 import isonomicon.physical.EffectGenerator;
@@ -31,11 +36,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class ColorGuardAssets extends ApplicationAdapter {
-    public static boolean DIVERSE = false;
+    public static boolean DIVERSE = true;
     public static boolean ATTACKS = true;
     public static boolean DEATHS = false;
-    public static boolean EXPLOSION = false;
-    public static boolean TERRAIN = false;
+    public static boolean EXPLOSION = true;
+    public static boolean TERRAIN = true;
 
     public static final int SCREEN_WIDTH = 512;//640;
     public static final int SCREEN_HEIGHT = 512;//720;
@@ -67,7 +72,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Torpedo")).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Flame_Wave")).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Bomb_Drop")).toList();
-        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Hack")).toList();
+//        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Hack")).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Arc_Missile")).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Arc_Cannon")).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Forward_Cannon")).toList();
@@ -116,7 +121,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.SCATTER);
         //// Neue with the preloaded YAM3 palette, dither strength 0.5f, looks a little better, and takes similar time.
         gif.setDitherAlgorithm(Dithered.DitherAlgorithm.NEUE);
-        gif.palette = new PaletteReducer(Coloring.YAM3, Gdx.files.local("assets/Yam3Preload.dat").readBytes());
+        gif.palette = new PaletteReducer(Coloring.CORN4, Gdx.files.local("assets/Corn4OklabPreload.dat").readBytes());
 //        gif.palette = new PaletteReducer(Coloring.TATER255, Gdx.files.local("assets/TaterPreload.dat").readBytes());
 //        gif.palette = new PaletteReducer(Coloring.TETRA256, Gdx.files.local("assets/TetraPreload.dat").readBytes());
 //        gif.palette = new PaletteReducer(Coloring.BETSY256, Gdx.files.local("assets/BetsyPreload.dat").readBytes());
@@ -186,7 +191,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                 }
 //                gif.palette.analyze(pm);
                 gif.write(Gdx.files.local("out/color_guard/animated_diverse/" + name + '/' + name + ".gif"), pm, 8);
-                apng.write(Gdx.files.local("out/color_guard/animated_diverse/" + name + '/' + name + ".png"), pm, 8);
+//                apng.write(Gdx.files.local("out/color_guard/animated_diverse/" + name + '/' + name + ".png"), pm, 8);
 //                apng.write(Gdx.files.local("out/color_guard/animated_diverse_flat/" + name + ".png"), pm, 8);
                 for (Pixmap pix : pm) {
                     if (!pix.isDisposed())
@@ -268,7 +273,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                         }
 //                gif.palette.analyze(pm);
                         gif.write(Gdx.files.local("out/color_guard/animated_diverse/" + name + '/' + name + ps + ".gif"), pm, 8);
-                        apng.write(Gdx.files.local("out/color_guard/animated_diverse/" + name + '/' + name + ps + ".png"), pm, 8);
+//                        apng.write(Gdx.files.local("out/color_guard/animated_diverse/" + name + '/' + name + ps + ".png"), pm, 8);
 //                        apng.write(Gdx.files.local("out/color_guard/animated_diverse_flat/" + name + ps + ".png"), pm, 8);
                         for (Pixmap pix : pm) {
                             if (!pix.isDisposed())
