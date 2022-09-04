@@ -197,7 +197,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                 }
 //                gif.palette.analyze(pm);
                 gif.write(Gdx.files.local("out/color_guard/animated_diverse/" + name + '/' + name + ".gif"), pm, 8);
-//                apng.write(Gdx.files.local("out/color_guard/animated_diverse/" + name + '/' + name + ".png"), pm, 8);
+                apng.write(Gdx.files.local("out/color_guard/animated_diverse/" + name + '/' + name + ".png"), pm, 8);
 //                apng.write(Gdx.files.local("out/color_guard/animated_diverse_flat/" + name + ".png"), pm, 8);
                 for (Pixmap pix : pm) {
                     if (!pix.isDisposed())
@@ -207,6 +207,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                     pm.clear();
                     pm.setSize(32 * armies.length);
                     String attack = unit.primary, ps = "_Primary";
+                    int strength = unit.primaryStrength;
                     boolean pose = unit.primaryPose;
                     for (int which = 0; which < 2; which++) {
                         if (attack == null) continue EACH_INPUT;
@@ -279,16 +280,66 @@ public class ColorGuardAssets extends ApplicationAdapter {
                         }
 //                gif.palette.analyze(pm);
                         gif.write(Gdx.files.local("out/color_guard/animated_diverse/" + name + '/' + name + ps + ".gif"), pm, 8);
-//                        apng.write(Gdx.files.local("out/color_guard/animated_diverse/" + name + '/' + name + ps + ".png"), pm, 8);
+                        apng.write(Gdx.files.local("out/color_guard/animated_diverse/" + name + '/' + name + ps + ".png"), pm, 8);
 //                        apng.write(Gdx.files.local("out/color_guard/animated_diverse_flat/" + name + ps + ".png"), pm, 8);
                         for (Pixmap pix : pm) {
                             if (!pix.isDisposed())
                                 pix.dispose();
                         }
+                        EffectGenerator.r.setSeed(unit.name.hashCode() ^ which);
+                        if(strength > 0) {
+                            int rec = doneReceive.get(attack);
+                            if(rec >= 0 && (rec & 1 << strength) == 0) {
+                                doneReceive.put(attack, rec | 1 << strength);
+                                EffectGenerator.ReceiveEffect recEff = EffectGenerator.KNOWN_RECEIVE_EFFECTS.get(attack);
+                                if (recEff != null) {
+                                    for (int i = 0; i < 4; i++) {
+                                        frames = recEff.runEffect(60 << 1, 8, strength);
+                                        for (int f = 0; f < frames.length; f++) {
+                                            pixmap = renderer.drawModelSimple(frames[f], i * 0.25f, 0f, 0f, f, 0.00f, 0.00f, 0.00f);
+                                            Texture t = new Texture(pixmap.getWidth(), pixmap.getHeight(), Pixmap.Format.RGBA8888);
+                                            t.draw(renderer.palettePixmap, 0, 0);
+                                            int look = 0;
+                                            for (int j = 0; j < armies.length; j++) {
+                                                fb.begin();
+                                                palette.bind(1);
+                                                ScreenUtils.clear(1f, 1f, 1f, 0f);
+                                                batch.begin();
+
+                                                indexShader.setUniformi("u_texPalette", 1);
+                                                Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
+                                                batch.setColor((look + j) / 255f, 0.5f, 0.5f, 1f);
+
+                                                batch.draw(t, 0, t.getHeight(), t.getWidth(), -t.getHeight());
+                                                batch.end();
+                                                pixmap = Pixmap.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
+                                                fb.end();
+                                                pm.set(j * 32 + i * 8 + f, pixmap);
+                                                try {
+                                                    png.write(Gdx.files.local("out/color_guard/" + armies[j] + "/" + attack + "_Receive/" + armies[j] + "_look" + look + "_" + attack + "_Receive_" + strength + "_angle" + i + "_" + f + ".png"), pixmap);
+                                                    if (look + j == 0)
+                                                        png.write(Gdx.files.local("out/color_guard/lab/" + attack + "_Receive/" + attack + "_Receive_" + strength + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
+                                                } catch (IOException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                            t.dispose();
+                                        }
+                                    }
+                                    gif.write(Gdx.files.local("out/color_guard/animated_diverse/" + attack + "_Receive/" + attack + "_Receive_" + strength + ".gif"), pm, 8);
+                                    apng.write(Gdx.files.local("out/color_guard/animated_diverse/" + attack + "_Receive/" + attack + "_Receive_" + strength + ".png"), pm, 8);
+                                    for (Pixmap pix : pm) {
+                                        if (!pix.isDisposed())
+                                            pix.dispose();
+                                    }
+
+                                }
+                            }
+                        }
                         attack = unit.secondary;
+                        strength = unit.secondaryStrength;
                         pose = unit.secondaryPose;
                         ps = "_Secondary";
-
                     }
                 }
             }
@@ -363,13 +414,11 @@ public class ColorGuardAssets extends ApplicationAdapter {
                         }
                         if (pose) {
                             load("specialized/b/vox/color_guard/" + unit.name + "_Firing.vox");
-                            name = unit.name;
-                            original = voxels.copy();
                         } else {
                             load("specialized/b/vox/color_guard/" + unit.name + ".vox");
-                            name = unit.name;
-                            original = voxels.copy();
                         }
+                        name = unit.name;
+                        original = voxels.copy();
                         EffectGenerator.r.setSeed(unit.name.hashCode() ^ which);
                         for (int i = 0; i < 4; i++) {
                             frames[0] = original.copy();
