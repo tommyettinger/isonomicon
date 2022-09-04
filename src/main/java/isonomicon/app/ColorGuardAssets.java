@@ -80,6 +80,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Forward_Missile") || u.hasWeapon("Handgun")).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.name.equals("Submarine")).toList();
 //        ColorGuardData.units = ColorGuardData.units.subList(52, ColorGuardData.units.size());
+//        ColorGuardData.units = ColorGuardData.units.subList(0, 4);
         try {
             head = VoxIOExtended.readVox(new LittleEndianDataInputStream(new FileInputStream("specialized/b/vox/color_guard/human/Head.vox")));
         }
@@ -120,12 +121,17 @@ public class ColorGuardAssets extends ApplicationAdapter {
         //// Using Scatter with the below YAM3 preloaded palette, dither strength 0.75f, takes 25.596 seconds.
 //        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.SCATTER);
         //// Neue with the preloaded YAM3 palette, dither strength 0.5f, looks a little better, and takes similar time.
-        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.NEUE);
-        gif.palette = new PaletteReducer(Coloring.CORN4, Gdx.files.local("assets/Corn4OklabPreload.dat").readBytes());
+
+        //// The latest BLUE_NOISE dither is a huge improvement, and looks much better in animations.
+        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.BLUE_NOISE);
+//        gif.palette = new PaletteReducer(Coloring.AURORA);
+//        gif.palette = new PaletteReducer(Coloring.CORN4, Gdx.files.local("assets/Corn4OklabPreload.dat").readBytes());
+        gif.palette = new PaletteReducer(Coloring.YAM3, Gdx.files.local("assets/Yam3Preload.dat").readBytes());
 //        gif.palette = new PaletteReducer(Coloring.TATER255, Gdx.files.local("assets/TaterPreload.dat").readBytes());
 //        gif.palette = new PaletteReducer(Coloring.TETRA256, Gdx.files.local("assets/TetraPreload.dat").readBytes());
 //        gif.palette = new PaletteReducer(Coloring.BETSY256, Gdx.files.local("assets/BetsyPreload.dat").readBytes());
-        gif.palette.setDitherStrength(0.5f);
+        //// BLUE_NOISE doesn't need this, but NEUE does.
+//        gif.palette.setDitherStrength(0.5f);
         FrameBuffer fb = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), false);
         ObjectIntMap<String> doneReceive = new ObjectIntMap<>(16);
         doneReceive.setDefaultValue(-1);

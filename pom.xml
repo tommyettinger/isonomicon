@@ -67,10 +67,10 @@
         <maven.gpg.version>1.6</maven.gpg.version>
         <jdk.version>17</jdk.version>
         <junit.version>4.13.2</junit.version>
-        <anim8.version>0.3.7</anim8.version>
+        <anim8.version>b36109f3e0</anim8.version>
         <squidsquad.version>964f5fadbb</squidsquad.version>
         <gdx.version>1.11.0</gdx.version>
-        <jdkgdxds.version>1.0.3</jdkgdxds.version>
+        <jdkgdxds.version>1.0.4</jdkgdxds.version>
         <colorful.version>0.8.2</colorful.version>
     </properties>
 
