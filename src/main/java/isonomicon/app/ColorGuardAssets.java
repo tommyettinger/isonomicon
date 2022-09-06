@@ -80,7 +80,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Forward_Missile") || u.hasWeapon("Handgun")).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.name.equals("Submarine")).toList();
 //        ColorGuardData.units = ColorGuardData.units.subList(52, ColorGuardData.units.size());
-//        ColorGuardData.units = ColorGuardData.units.subList(0, 4);
+        ColorGuardData.units = ColorGuardData.units.subList(0, 4);
         try {
             head = VoxIOExtended.readVox(new LittleEndianDataInputStream(new FileInputStream("specialized/b/vox/color_guard/human/Head.vox")));
         }
@@ -125,8 +125,11 @@ public class ColorGuardAssets extends ApplicationAdapter {
         //// The latest BLUE_NOISE dither is a huge improvement, and looks much better in animations.
         gif.setDitherAlgorithm(Dithered.DitherAlgorithm.BLUE_NOISE);
 //        gif.palette = new PaletteReducer(Coloring.AURORA);
+//        gif.palette = new PaletteReducer(Coloring.MUNSELLISH255, Gdx.files.local("assets/MunsellishRGBPreload.dat").readBytes());
+        gif.palette = new PaletteReducer(Coloring.MUNSELLISH255, Gdx.files.local("assets/MunsellishOklabPreload.dat").readBytes());
+//        gif.palette = new PaletteReducer(Coloring.CORN4, Gdx.files.local("assets/Corn4RGBPreload.dat").readBytes());
 //        gif.palette = new PaletteReducer(Coloring.CORN4, Gdx.files.local("assets/Corn4OklabPreload.dat").readBytes());
-        gif.palette = new PaletteReducer(Coloring.YAM3, Gdx.files.local("assets/Yam3Preload.dat").readBytes());
+//        gif.palette = new PaletteReducer(Coloring.YAM3, Gdx.files.local("assets/Yam3Preload.dat").readBytes());
 //        gif.palette = new PaletteReducer(Coloring.TATER255, Gdx.files.local("assets/TaterPreload.dat").readBytes());
 //        gif.palette = new PaletteReducer(Coloring.TETRA256, Gdx.files.local("assets/TetraPreload.dat").readBytes());
 //        gif.palette = new PaletteReducer(Coloring.BETSY256, Gdx.files.local("assets/BetsyPreload.dat").readBytes());
