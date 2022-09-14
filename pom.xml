@@ -67,11 +67,13 @@
         <maven.gpg.version>1.6</maven.gpg.version>
         <jdk.version>17</jdk.version>
         <junit.version>4.13.2</junit.version>
-        <anim8.version>e6ac254fef</anim8.version>
-        <squidsquad.version>19d91735b6</squidsquad.version><!-- was 964f5fadbb -->
+        <anim8.version>fe4db55a5a</anim8.version>
+        <squidsquad.version>ef99812ae3</squidsquad.version><!-- was 19d91735b6 -->
         <gdx.version>1.11.0</gdx.version>
+        <digital.version>0.1.2</digital.version>
+        <juniper.version>0.1.4</juniper.version>
         <jdkgdxds.version>1.0.4</jdkgdxds.version>
-        <colorful.version>0.8.2</colorful.version>
+        <colorful.version>a061044461</colorful.version>
     </properties>
 
 
@@ -93,6 +95,16 @@
         </dependency>
         <dependency>
             <groupId>com.github.tommyettinger</groupId>
+            <artifactId>digital</artifactId>
+            <version>${digital.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.tommyettinger</groupId>
+            <artifactId>juniper</artifactId>
+            <version>${juniper.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.tommyettinger</groupId>
             <artifactId>jdkgdxds</artifactId>
             <version>${jdkgdxds.version}</version>
         </dependency>
@@ -102,17 +114,17 @@
             <version>${anim8.version}</version>
         </dependency>
         <!-- JitPack -->
-        <!--        <dependency>-->
-        <!--            <groupId>com.github.tommyettinger.colorful-gdx</groupId>-->
-        <!--            <artifactId>colorful</artifactId>-->
-        <!--            <version>${colorful.version}</version>-->
-        <!--        </dependency>-->
-        <!-- Maven Central -->
         <dependency>
-            <groupId>com.github.tommyettinger</groupId>
+            <groupId>com.github.tommyettinger.colorful-gdx</groupId>
             <artifactId>colorful</artifactId>
             <version>${colorful.version}</version>
         </dependency>
+        <!-- Maven Central -->
+<!--        <dependency>-->
+<!--            <groupId>com.github.tommyettinger</groupId>-->
+<!--            <artifactId>colorful</artifactId>-->
+<!--            <version>${colorful.version}</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
