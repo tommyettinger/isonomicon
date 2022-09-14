@@ -125,9 +125,11 @@ public class ColorGuardAssets extends ApplicationAdapter {
         //// The latest BLUE_NOISE dither is a huge improvement, and looks much better in animations.
         gif.setDitherAlgorithm(Dithered.DitherAlgorithm.BLUE_NOISE);
 //        gif.palette = new PaletteReducer(Coloring.AURORA);
-        gif.palette = new PaletteReducer(); // uses YAMPED
+//        gif.palette = new PaletteReducer(PaletteReducer.YAMPED); // uses YAMPED, simplest RGB metric
+//        gif.palette = new PaletteReducer(); // uses YAMPED, OklabCareful metric
 //        gif.palette = new PaletteReducer(Coloring.MUNSELLISH255, Gdx.files.local("assets/MunsellishRGBPreload.dat").readBytes());
 //        gif.palette = new PaletteReducer(Coloring.MUNSELLISH255, Gdx.files.local("assets/MunsellishOklabPreload.dat").readBytes());
+        gif.palette = new PaletteReducer(Coloring.AURORA, Gdx.files.local("assets/AuroraOklabPreload.dat").readBytes());
 //        gif.palette = new PaletteReducer(Coloring.CORN4, Gdx.files.local("assets/Corn4RGBPreload.dat").readBytes());
 //        gif.palette = new PaletteReducer(Coloring.CORN4, Gdx.files.local("assets/Corn4OklabPreload.dat").readBytes());
 //        gif.palette = new PaletteReducer(Coloring.YAM3, Gdx.files.local("assets/Yam3Preload.dat").readBytes());
