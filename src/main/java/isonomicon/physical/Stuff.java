@@ -448,7 +448,7 @@ public class Stuff {
             new Stuff("unused 237", 237, "Transparency 1.0"),
             new Stuff("unused 238", 238, "Transparency 1.0"),
             new Stuff("unused 239", 239, "Transparency 1.0"),
-            new Stuff("unused 240", 240, "Transparency 1.0"),
+            new Stuff("floor reserved", 240, 0, "Roughness 0.25 Reflection 0.2"),
             new Stuff("unused 241", 241, "Transparency 1.0"),
             new Stuff("unused 242", 242, "Transparency 1.0"),
             new Stuff("unused 243", 243, "Transparency 1.0"),

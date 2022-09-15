@@ -41,6 +41,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
     public static boolean DEATHS = false;
     public static boolean EXPLOSION = true;
     public static boolean TERRAIN = true;
+    public static boolean SHADOWS = true;
 
     public static final int SCREEN_WIDTH = 512;//640;
     public static final int SCREEN_HEIGHT = 512;//720;
@@ -80,7 +81,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Forward_Missile") || u.hasWeapon("Handgun")).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.name.equals("Submarine")).toList();
 //        ColorGuardData.units = ColorGuardData.units.subList(52, ColorGuardData.units.size());
-//        ColorGuardData.units = ColorGuardData.units.subList(0, 4);
+        ColorGuardData.units = ColorGuardData.units.subList(0, 2);
         try {
             head = VoxIOExtended.readVox(new LittleEndianDataInputStream(new FileInputStream("specialized/b/vox/color_guard/human/Head.vox")));
         }
@@ -125,11 +126,12 @@ public class ColorGuardAssets extends ApplicationAdapter {
         //// The latest BLUE_NOISE dither is a huge improvement, and looks much better in animations.
         gif.setDitherAlgorithm(Dithered.DitherAlgorithm.BLUE_NOISE);
 //        gif.palette = new PaletteReducer(Coloring.AURORA);
+        gif.palette = new PaletteReducer(); // uses AURORA, OklabCareful metric
 //        gif.palette = new PaletteReducer(PaletteReducer.YAMPED); // uses YAMPED, simplest RGB metric
-//        gif.palette = new PaletteReducer(); // uses YAMPED, OklabCareful metric
+//        gif.palette = new PaletteReducer(PaletteReducer.YAMPED, Gdx.files.local("assets/YampedOklabPreload.dat").readBytes()); // uses YAMPED, OklabCareful metric
 //        gif.palette = new PaletteReducer(Coloring.MUNSELLISH255, Gdx.files.local("assets/MunsellishRGBPreload.dat").readBytes());
 //        gif.palette = new PaletteReducer(Coloring.MUNSELLISH255, Gdx.files.local("assets/MunsellishOklabPreload.dat").readBytes());
-        gif.palette = new PaletteReducer(Coloring.AURORA, Gdx.files.local("assets/AuroraOklabPreload.dat").readBytes());
+//        gif.palette = new PaletteReducer(Coloring.AURORA, Gdx.files.local("assets/AuroraOklabPreload.dat").readBytes());
 //        gif.palette = new PaletteReducer(Coloring.CORN4, Gdx.files.local("assets/Corn4RGBPreload.dat").readBytes());
 //        gif.palette = new PaletteReducer(Coloring.CORN4, Gdx.files.local("assets/Corn4OklabPreload.dat").readBytes());
 //        gif.palette = new PaletteReducer(Coloring.YAM3, Gdx.files.local("assets/Yam3Preload.dat").readBytes());
