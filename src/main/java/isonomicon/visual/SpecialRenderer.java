@@ -183,12 +183,17 @@ public class SpecialRenderer {
             for (int y = lowY, ay = yy; y < highY && ay < render[0].length; y++, ay++) {
                 if ((depth > depths[ax][ay] || (depth == depths[ax][ay] && (indices[ax][ay] & 255) < (voxel & 255)))) {
                     drawn = true;
-                    indices[ax][ay] = voxel;
                     depths[ax][ay] = depth;
                     materials[ax][ay] = m;
-                    outlines[ax][ay] = 1;
-                    outlineShading[ax][ay] = paletteL[voxel & 255] * (0.625f + emit * 2.5f);
-                    outlineIndices[ax][ay] = voxel;
+                    if(voxel != 0) {
+                        indices[ax][ay] = voxel;
+                        outlines[ax][ay] = 1;
+                        outlineShading[ax][ay] = paletteL[voxel & 255] * (0.625f + emit * 2.5f);
+                        outlineIndices[ax][ay] = voxel;
+                    }
+                    else {
+                        indices[ax][ay] = -16;
+                    }
 //                                Coloring.darken(palette[voxel & 255], 0.375f - emit);
 //                                Coloring.adjust(palette[voxel & 255], 0.625f + emit, neutral);
 //                    else
@@ -344,68 +349,27 @@ public class SpecialRenderer {
                 }
             }
         }
-//        final int distance = 1;
-//        for (int x = 0; x <= xSize; x++) {
-//            for (int y = 0; y <= ySize; y++) {
-//                if (colorA[x][y] >= 0f) {
-//                    float maxL = 0f, minL = 1f, avgL = 0f,
-//                            maxA = 0f, minA = 1f, avgA = 0f,
-//                            maxB = 0f, minB = 1f, avgB = 0f,
-//                            div = 0f, current;
-//                    for (int xx = -distance; xx <= distance; xx++) {
-//                        if (x + xx < 0 || x + xx > xSize) continue;
-//                        for (int yy = -distance; yy <= distance; yy++) {
-//                            if ((xx & yy) != 0 || y + yy < 0 || y + yy > ySize || colorA[x + xx][y + yy] <= 0f)
-//                                continue;
-//                            current = colorL[x + xx][y + yy];
-//                            maxL = Math.max(maxL, current);
-//                            minL = Math.min(minL, current);
-//                            avgL += current;
-//                            current = colorA[x + xx][y + yy];
-//                            maxA = Math.max(maxA, current);
-//                            minA = Math.min(minA, current);
-//                            avgA += current;
-//                            current = colorB[x + xx][y + yy];
-//                            maxB = Math.max(maxB, current);
-//                            minB = Math.min(minB, current);
-//                            avgB += current;
-//                            div++;
-//                        }
-//                    }
-//                    avgL /= div;
-//                    avgA /= div;
-//                    avgB /= div;
-//                    render[x][y] = ColorTools.toRGBA8888(ColorTools.limitToGamut(
-//                            Math.min(Math.max(((avgL - minL) < (maxL - avgL) ? minL : maxL) - 0.15625f, 0f), 1f),
-//                            (avgA - 0.5f) * neutral + 0.5f,
-//                            (avgB - 0.5f) * neutral + 0.5f, 1f));
-//                }
-//            }
-//        }
-
-//        for (int x = 0; x <= xSize; x++) {
-//            for (int y = 0; y <= ySize; y++) {
-//                if (colorA[x][y] >= 0f) {
-//                    pixmap.drawPixel(x >>> 1, y >>> 1, render[x][y] = ColorTools.toRGBA8888(ColorTools.limitToGamut(
-//                            Math.min(Math.max(colorL[x][y] - 0.125f, 0f), 1f),
-//                            (colorA[x][y] - 0.5f) * neutral + 0.5f,
-//                            (colorB[x][y] - 0.5f) * neutral + 0.5f, 1f)));
-//                }
-//            }
-//        }
+        byte index;
         for (int x = xSize; x >= 0; x--) {
             for (int y = ySize; y >= 0; y--) {
-                if (indices[x][y] != 0) {
-                    byte shade = (byte)(Math.min(Math.max((shading[x][y] + midShading[x][y]) * 0.625f + 0.1328125f, 0f), 1f) * 255.999f);
-                    byte sat = (byte)(Math.min(Math.max((saturation[x][y]) * 0.5f + 0.5f, 0f), 1f) * 255.999f);
+                if ((index = indices[x][y]) != 0) {
+                    byte shade = (byte) (Math.min(Math.max((shading[x][y] + midShading[x][y]) * 0.625f + 0.1328125f, 0f), 1f) * 255.999f);
+                    byte sat = (byte) (Math.min(Math.max((saturation[x][y]) * 0.5f + 0.5f, 0f), 1f) * 255.999f);
 //                    palettePixmap.drawPixel(x >>> shrink, y >>> shrink, (indices[x][y] & 255) << 24 |
 //                            shade << 16 |
 //                            sat << 8 | 255);
                     int idx = (y >>> shrink) * palettePixmap.getWidth() + (x >>> shrink) << 2;
-                    buffer.put(idx, indices[x][y]);
-                    buffer.put(idx+1, shade);
-                    buffer.put(idx+2, sat);
-                    buffer.put(idx+3, (byte) 255);
+                    if (index == -16) {
+                        buffer.put(idx, (byte) 67); // shadow stuff
+                        buffer.put(idx + 1, shade);
+                        buffer.put(idx + 2, (byte) 0);
+                        buffer.put(idx + 3, (byte) Math.min(Math.max(500 - (shade & 255) * 8, 0), 255));
+                    } else {
+                        buffer.put(idx, index);
+                        buffer.put(idx + 1, shade);
+                        buffer.put(idx + 2, sat);
+                        buffer.put(idx + 3, (byte) 255);
+                    }
                 }
                 else if(midShading[x][y] > 0f) {
                     int shade = (int) (Math.min(Math.max((shading[x][y] + midShading[x][y]) * 0.625f + 0.1328125f, 0f), 1f) * 255.999f);
@@ -528,8 +492,8 @@ public class SpecialRenderer {
         final float x_x = cYaw * cPitch, y_x = cYaw * sPitch * sRoll - sYaw * cRoll, z_x = cYaw * sPitch * cRoll + sYaw * sRoll;
         final float x_y = sYaw * cPitch, y_y = sYaw * sPitch * sRoll + cYaw * cRoll, z_y = sYaw * sPitch * cRoll - cYaw * sRoll;
         final float x_z = -sPitch, y_z = cPitch * sRoll, z_z = cPitch * cRoll;
-        for (int x = 0; x < size; x++) {
-            for (int y = 0; y < size; y++) {
+        for (int x = 1; x < size - 1; x++) {
+            for (int y = 1; y < size - 1; y++) {
                 ox = x - hs + fidget;
                 oy = y - hs + fidget;
                 oz = -hs;
