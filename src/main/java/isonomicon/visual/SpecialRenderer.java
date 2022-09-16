@@ -211,7 +211,7 @@ public class SpecialRenderer {
         }
         if(xPos < -hs || yPos < -hs || zPos < -hs || xPos + hs > shadeZ.length || yPos + hs > shadeZ[0].length || zPos + hs > shadeX[0].length)
             System.out.println(xPos + ", " + yPos + ", " + zPos + " is out of bounds");
-        else if(drawn) {
+        else if(drawn && emit == 0f) {
             shadeZ[(int) (hs + xPos)][(int) (hs + yPos)] = Math.max(shadeZ[(int) (hs + xPos)][(int) (hs + yPos)], (hs + zPos));
             shadeX[(int) (hs + yPos)][(int) (hs + zPos)] = Math.max(shadeX[(int) (hs + yPos)][(int) (hs + zPos)], (hs + xPos));
         }
@@ -368,7 +368,7 @@ public class SpecialRenderer {
 //                            shade << 16 |
 //                            sat << 8 | 255);
                     int idx = (y >>> shrink) * palettePixmap.getWidth() + (x >>> shrink) << 2;
-                    if (index == -16) {
+                    if (shadows && index == -16) {
                         buffer.put(idx, (byte) 67); // shadow stuff
                         buffer.put(idx + 1, (byte) ((shade & 255) >>> 1));
                         buffer.put(idx + 2, (byte) 0);
@@ -502,26 +502,27 @@ public class SpecialRenderer {
         final float x_x = cYaw * cPitch, y_x = cYaw * sPitch * sRoll - sYaw * cRoll, z_x = cYaw * sPitch * cRoll + sYaw * sRoll;
         final float x_y = sYaw * cPitch, y_y = sYaw * sPitch * sRoll + cYaw * cRoll, z_y = sYaw * sPitch * cRoll - cYaw * sRoll;
         final float x_z = -sPitch, y_z = cPitch * sRoll, z_z = cPitch * cRoll;
-        for (int x = 0; x < size; x++) {
-            for (int y = 0; y < size; y++) {
-                ox = x - hs + fidget;
-                oy = y - hs + fidget;
-                oz = -hs;
-                        splat(  ox * x_x + oy * y_x + oz * z_x + size + translateX,
-                                ox * x_y + oy * y_y + oz * z_y + size + translateY,
-                                0, x, y, 0, (byte) -16, frame);
+        if (shadows) {
+            for (int x = 0; x < size; x++) {
+                for (int y = 0; y < size; y++) {
+                    ox = x - hs + fidget;
+                    oy = y - hs + fidget;
+                    oz = -hs;
+                    splat(ox * x_x + oy * y_x + oz * z_x + size + translateX,
+                            ox * x_y + oy * y_y + oz * z_y + size + translateY,
+                            0, x, y, 0, (byte) -16, frame);
+                }
             }
         }
         for (int z = 0; z < size; z++) {
             for (int x = 0; x < size; x++) {
                 for (int y = 0; y < size; y++) {
                     final byte v = colors[x][y][z];
-                    if(v != 0)
-                    {
+                    if (v != 0) {
                         ox = x - hs + fidget;
                         oy = y - hs + fidget;
                         oz = z - hs;
-                        splat(  ox * x_x + oy * y_x + oz * z_x + size + translateX,
+                        splat(ox * x_x + oy * y_x + oz * z_x + size + translateX,
                                 ox * x_y + oy * y_y + oz * z_y + size + translateY,
                                 ox * x_z + oy * y_z + oz * z_z + hs + translateZ, x, y, z, v, frame);
                     }
