@@ -78,7 +78,7 @@ public class SpecialRenderer {
         materials = new VoxMaterial[w][h];
         voxels = fill(-1, w, h);
         shadeX = fill(-1f, size * 4, size * 4);
-        shadeZ = fill(-1f, size * 4, size * 4);
+        shadeZ = fill(0f, size * 4, size * 4);
         this.stuffs = stuffs;
     }
     
@@ -228,7 +228,7 @@ public class SpecialRenderer {
         fill(lightIndices, (byte) 0);
         fill(voxels, -1);
         fill(shadeX, -1f);
-        fill(shadeZ, -1f);
+        fill(shadeZ, 0f);
         fill(shading, 0f);
         fill(midShading, 0f);
         fill(saturation, 0f);
@@ -345,15 +345,24 @@ public class SpecialRenderer {
                                 }
                             }
                         }
+                        if(shadows){
+                            if(indices[sx][sy] == -16 && shadeZ[fx][fy] <= hs + 0.5f)
+//                            if(indices[sx][sy] == -16 && (vx <= step * 4 || vy <= step * 4 || vx >= xSize - step * 4 || vy >= ySize - step * 4))
+                                shading[sx][sy] = 1024f;
+                        }
                     }
                 }
             }
         }
         byte index;
+        float sh;
         for (int x = xSize; x >= 0; x--) {
             for (int y = ySize; y >= 0; y--) {
                 if ((index = indices[x][y]) != 0) {
-                    byte shade = (byte) (Math.min(Math.max((shading[x][y] + midShading[x][y]) * 0.625f + 0.1328125f, 0f), 1f) * 255.999f);
+                    sh = shading[x][y];
+                    if(sh >= 1000f)
+                        continue;
+                    byte shade = (byte) (Math.min(Math.max((sh + midShading[x][y]) * 0.625f + 0.1328125f, 0f), 1f) * 255.999f);
                     byte sat = (byte) (Math.min(Math.max((saturation[x][y]) * 0.5f + 0.5f, 0f), 1f) * 255.999f);
 //                    palettePixmap.drawPixel(x >>> shrink, y >>> shrink, (indices[x][y] & 255) << 24 |
 //                            shade << 16 |
@@ -361,9 +370,11 @@ public class SpecialRenderer {
                     int idx = (y >>> shrink) * palettePixmap.getWidth() + (x >>> shrink) << 2;
                     if (index == -16) {
                         buffer.put(idx, (byte) 67); // shadow stuff
-                        buffer.put(idx + 1, shade);
+//                        buffer.put(idx + 1, (byte) 64);
+                        buffer.put(idx + 1, (byte) ((shade & 255) >>> 1));
                         buffer.put(idx + 2, (byte) 0);
-                        buffer.put(idx + 3, (byte) Math.min(Math.max(500 - (shade & 255) * 8, 0), 255));
+//                        buffer.put(idx + 3, (byte) (255 - shade));
+                        buffer.put(idx + 3, (byte) Math.min(Math.max(480 - (shade & 255) * 8, 0), 255));
                     } else {
                         buffer.put(idx, index);
                         buffer.put(idx + 1, shade);
@@ -448,7 +459,7 @@ public class SpecialRenderer {
         fill(lightIndices, (byte) 0);
         fill(voxels, -1);
         fill(shadeX, -1f);
-        fill(shadeZ, -1f);
+        fill(shadeZ, 0f);
         for (int i = 0; i < materials.length; i++) {
             Arrays.fill(materials[i], null);
         }
@@ -492,8 +503,9 @@ public class SpecialRenderer {
         final float x_x = cYaw * cPitch, y_x = cYaw * sPitch * sRoll - sYaw * cRoll, z_x = cYaw * sPitch * cRoll + sYaw * sRoll;
         final float x_y = sYaw * cPitch, y_y = sYaw * sPitch * sRoll + cYaw * cRoll, z_y = sYaw * sPitch * cRoll - cYaw * sRoll;
         final float x_z = -sPitch, y_z = cPitch * sRoll, z_z = cPitch * cRoll;
-        for (int x = 1; x < size - 1; x++) {
-            for (int y = 1; y < size - 1; y++) {
+        final int step = 1 << shrink;
+        for (int x = step; x < size - step; x++) {
+            for (int y = step; y < size - step; y++) {
                 ox = x - hs + fidget;
                 oy = y - hs + fidget;
                 oz = -hs;
