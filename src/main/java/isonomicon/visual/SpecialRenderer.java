@@ -2,6 +2,7 @@ package isonomicon.visual;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.utils.Array;
 import com.github.tommyettinger.anim8.PaletteReducer;
 import com.github.yellowstonegames.grid.BlueNoise;
 import com.github.tommyettinger.colorful.oklab.ColorTools;
@@ -463,6 +464,24 @@ public class SpecialRenderer {
             Arrays.fill(materials[i], null);
         }
         return palettePixmap;
+    }
+
+    public static void monoAlpha(Pixmap pm) {
+        final ByteBuffer buffer = pm.getPixels();
+        final int limit = buffer.limit();
+        int alpha, rgba;
+        for (int i = 3; i < limit; i += 4) {
+            if((alpha = buffer.get(i)) < -1) {
+                rgba = buffer.getInt(i - 3);
+                buffer.putInt(i - 3, Coloring.lerp(0xC0C0C0FF, rgba | 255, (alpha & 255) / 255f));
+            }
+        }
+    }
+
+    public static void monoAlpha(Array<Pixmap> pms) {
+        for(Pixmap pm : pms) {
+            monoAlpha(pm);
+        }
     }
 
     // To move one x+ in voxels is x + 2, y - 1 in pixels.
