@@ -78,7 +78,7 @@ public class SpecialRenderer {
         materials = new VoxMaterial[w][h];
         voxels = fill(-1, w, h);
         shadeX = fill(-1f, size * 4, size * 4);
-        shadeZ = fill(0f, size * 4, size * 4);
+        shadeZ = fill(-1f, size * 4, size * 4);
         this.stuffs = stuffs;
     }
     
@@ -228,7 +228,7 @@ public class SpecialRenderer {
         fill(lightIndices, (byte) 0);
         fill(voxels, -1);
         fill(shadeX, -1f);
-        fill(shadeZ, 0f);
+        fill(shadeZ, -1f);
         fill(shading, 0f);
         fill(midShading, 0f);
         fill(saturation, 0f);
@@ -240,7 +240,7 @@ public class SpecialRenderer {
     }
 
     /**
-     * Compiles all of the individual voxels drawn with {@link #splat(float, float, float, int, int, int, byte, int)} into a
+     * Compiles all the individual voxels drawn with {@link #splat(float, float, float, int, int, int, byte, int)} into a
      * single Pixmap and returns it.
      * @param turns yaw in turns; like turning your head or making a turn in a car
      * @return {@link #palettePixmap}, edited to contain the render of all the voxels put in this with {@link #splat(float, float, float, int, int, int, byte, int)}
@@ -250,7 +250,7 @@ public class SpecialRenderer {
     }
 
     /**
-     * Compiles all of the individual voxels drawn with {@link #splat(float, float, float, int, int, int, byte, int)} into a
+     * Compiles all the individual voxels drawn with {@link #splat(float, float, float, int, int, int, byte, int)} into a
      * single Pixmap and returns it.
      * @param yaw in turns; like turning your head or making a turn in a car
      * @param pitch in turns; like looking up or down or making a nosedive in a plane
@@ -370,7 +370,6 @@ public class SpecialRenderer {
                     int idx = (y >>> shrink) * palettePixmap.getWidth() + (x >>> shrink) << 2;
                     if (index == -16) {
                         buffer.put(idx, (byte) 67); // shadow stuff
-//                        buffer.put(idx + 1, (byte) 64);
                         buffer.put(idx + 1, (byte) ((shade & 255) >>> 1));
                         buffer.put(idx + 2, (byte) 0);
 //                        buffer.put(idx + 3, (byte) (255 - shade));
@@ -459,7 +458,7 @@ public class SpecialRenderer {
         fill(lightIndices, (byte) 0);
         fill(voxels, -1);
         fill(shadeX, -1f);
-        fill(shadeZ, 0f);
+        fill(shadeZ, -1f);
         for (int i = 0; i < materials.length; i++) {
             Arrays.fill(materials[i], null);
         }
@@ -503,9 +502,8 @@ public class SpecialRenderer {
         final float x_x = cYaw * cPitch, y_x = cYaw * sPitch * sRoll - sYaw * cRoll, z_x = cYaw * sPitch * cRoll + sYaw * sRoll;
         final float x_y = sYaw * cPitch, y_y = sYaw * sPitch * sRoll + cYaw * cRoll, z_y = sYaw * sPitch * cRoll - cYaw * sRoll;
         final float x_z = -sPitch, y_z = cPitch * sRoll, z_z = cPitch * cRoll;
-        final int step = 1 << shrink;
-        for (int x = step; x < size - step; x++) {
-            for (int y = step; y < size - step; y++) {
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
                 ox = x - hs + fidget;
                 oy = y - hs + fidget;
                 oz = -hs;
