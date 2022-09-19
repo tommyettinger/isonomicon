@@ -187,7 +187,7 @@ public class ModelRotationVisualizer extends ApplicationAdapter {
 //            Tools3D.translateCopyInto(v, voxels, v.length >> 2, v.length >> 2, v.length >> 2);
             voxels = v;
             renderer = new SpecialRenderer(voxels.grids.get(0).length);
-            renderer.palette(Coloring.MANOS64);
+            renderer.palette(Coloring.BETTS64);
         } catch (FileNotFoundException e) {
             voxels = new VoxModel();
         }

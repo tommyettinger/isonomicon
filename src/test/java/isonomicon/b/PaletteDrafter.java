@@ -154,7 +154,7 @@ public class PaletteDrafter extends ApplicationAdapter {
         font = new BitmapFont(Gdx.files.internal("font.fnt"));
 //        workingPalette = new Pixmap(Gdx.files.internal("palettes/repeated-blocks-b.png"));
 //        workingPalette = new Pixmap(Gdx.files.internal("palettes/b/ColorGuardTerrainRocky.png"));
-        workingPalette = new Pixmap(Gdx.files.internal("palettes/b/ColorGuardBaseRed.png"));
+        workingPalette = new Pixmap(Gdx.files.internal("palettes/b/ColorGuardBaseYellow.png"));
 //        workingPalette = new Pixmap(Gdx.files.internal("palettes/b/ColorGuardBaseDark.png"));
         workingOklab = new float[128];
         palettes = new Texture(workingPalette);
@@ -171,7 +171,7 @@ public class PaletteDrafter extends ApplicationAdapter {
 //        String name = "Road_Center";
 //        String name2 = "Road_Straight";
         String name = "Hospital";
-        String name2 = "Cruiser";
+        String name2 = "Bazooka";
 //        String name = "Terrain";
 //        String name2 = "Terrain";
 

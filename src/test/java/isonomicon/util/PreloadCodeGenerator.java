@@ -25,8 +25,7 @@ public class PreloadCodeGenerator extends ApplicationAdapter {
     }
 
     public void create() { 
-        generatePreloadCode(new PaletteReducer(Coloring.MANOS64).paletteMapping, "ManosPreload.txt");
-        generatePreloadCode(new PaletteReducer(Coloring.MANOSSUS256).paletteMapping, "ManossusPreload.txt");
+        generatePreloadCode(new PaletteReducer(Coloring.BETSY256).paletteMapping, "BetsyPreload.txt");
         Gdx.app.exit();
     }
     /**
