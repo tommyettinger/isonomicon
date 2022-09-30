@@ -57,7 +57,8 @@ public class Isomancer extends ApplicationAdapter {
 //            inputs = new String[]{"vox/Eye_Tyrant.vox"};
 //            inputs = new String[]{"vox/Floor.vox"};
 //            inputs = new String[]{"vox/Bear.vox"};
-            inputs = new String[]{"vox/Lomuk.vox"};
+//            inputs = new String[]{"vox/Lomuk.vox"};
+            inputs = new String[]{"vox/FigureSplit.vox"};
 //            inputs = new String[]{"vox/Lomuk.vox", "vox/Damned.vox"};
 //            inputs = new String[]{"vox/Damned.vox"};
 //            inputs = new String[]{"vox/teapot.vox"};
@@ -76,11 +77,11 @@ public class Isomancer extends ApplicationAdapter {
 //        png8 = new PNG8();
         gif = new AnimatedGif();
 //        apng = new AnimatedPNG();
-        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.NEUE);
+        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.ROBERTS);
 //        png8.setDitherAlgorithm(Dithered.DitherAlgorithm.NEUE);
         gif.palette = new PaletteReducer();
 //        gif.palette = new PaletteReducer(Coloring.YAM2, Gdx.files.local("assets/Yam2Preload.dat").readBytes());
-        gif.palette.setDitherStrength(0.625f);
+        gif.palette.setDitherStrength(0.5f);
 //        png8.palette = gif.palette;
         Gdx.files.local("out/vox").mkdirs();
         for (String s : inputs) {
@@ -144,8 +145,8 @@ public class Isomancer extends ApplicationAdapter {
                 voxels = new byte[][][]{{{1}}};
                 return;
             }
-            voxels = Tools3D.scaleAndSoak(voxels);
-//            voxels = Tools3D.soak(voxels);
+//            voxels = Tools3D.scaleAndSoak(voxels);
+            voxels = Tools3D.soak(voxels);
 
             int nameStart = Math.max(name.lastIndexOf('/'), name.lastIndexOf('\\')) + 1;
             this.name = name.substring(nameStart, name.indexOf('.', nameStart));
