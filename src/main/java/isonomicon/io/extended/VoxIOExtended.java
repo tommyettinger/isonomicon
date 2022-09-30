@@ -26,6 +26,11 @@ import static isonomicon.io.VoxIO.lastPalette;
  * Created by Tommy Ettinger on 6/28/2021.
  */
 public class VoxIOExtended {
+    /**
+     * If this is a general-purpose .vox loader, this should be true. For CG-specialized models, false.
+     */
+    public static boolean GENERAL = false;
+
     protected static String readString(LittleEndianDataInputStream stream) throws IOException {
         int len = stream.readInt();
         byte[] buf = new byte[len];
@@ -140,40 +145,45 @@ public class VoxIOExtended {
                             int z = stream.read();
                             byte color = stream.readByte();
                             //If you are using this as a general .vox parser, use the following line only:
-//                            voxelData[x][y][z] = color;
-                            //If you are using this as Isonomicon's special parser, also use the following if/else:
-                            if ((color & 0xC0) != 0xC0) {
+                            if(GENERAL)
                                 voxelData[x][y][z] = color;
-                            } else // The last 64 indices are used for link markers, and don't show.
-                            {
-                                float[] ln;
-                                if ((ln = linkage.get(color)) == null) {
-                                    ln = new float[]{x, y, z, 1f};
-                                } else {
-                                    ln[0] += x;
-                                    ln[1] += y;
-                                    ln[2] += z;
-                                    ln[3]++;
-                                }
-                                linkage.put(color, ln);
+                            else {
+                                //If you are using this as Isonomicon's special parser, also use the following if/else:
+                                if ((color & 0xC0) != 0xC0) {
+                                    voxelData[x][y][z] = color;
+                                } else // The last 64 indices are used for link markers, and don't show.
+                                {
+                                    float[] ln;
+                                    if ((ln = linkage.get(color)) == null) {
+                                        ln = new float[]{x, y, z, 1f};
+                                    } else {
+                                        ln[0] += x;
+                                        ln[1] += y;
+                                        ln[2] += z;
+                                        ln[3]++;
+                                    }
+                                    linkage.put(color, ln);
 
-                                LongOrderedSet ls;
-                                if((ls = markers.get(color & 255)) == null){
-                                    ls = new LongOrderedSet(16);
+                                    LongOrderedSet ls;
+                                    if ((ls = markers.get(color & 255)) == null) {
+                                        ls = new LongOrderedSet(16);
+                                    }
+                                    ls.add(((x & 0xFFFFFL) | (y & 0xFFFFFL) << 20 | (z & 0xFFFFFL) << 40) << 1);
+                                    markers.put(color & 255, ls);
                                 }
-                                ls.add(((x & 0xFFFFFL) | (y & 0xFFFFFL) << 20 | (z & 0xFFFFFL) << 40) << 1);
-                                markers.put(color & 255, ls);
                             }
                         }
                         model.grids.add(Tools3D.scaleAndSoak(voxelData));
-                        for(IntObjectMap.Entry<float[]> e : linkage){
-                            float div = 2f / e.value[3];
-                            e.value[0] *= div;
-                            e.value[1] *= div;
-                            e.value[2] *= div;
+                        if(!GENERAL) {
+                            for (IntObjectMap.Entry<float[]> e : linkage) {
+                                float div = 2f / e.value[3];
+                                e.value[0] *= div;
+                                e.value[1] *= div;
+                                e.value[2] *= div;
+                            }
+                            model.links.add(linkage);
+                            model.markers.add(markers);
                         }
-                        model.links.add(linkage);
-                        model.markers.add(markers);
                     } else if (chunkName.equals("RGBA")) {
                         for (int i = 1; i < 256; i++) {
                             lastPalette[i] = Integer.reverseBytes(stream.readInt());

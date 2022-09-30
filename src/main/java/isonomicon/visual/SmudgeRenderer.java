@@ -5,6 +5,8 @@ import com.badlogic.gdx.math.MathUtils;
 import com.github.tommyettinger.anim8.PaletteReducer;
 import com.github.tommyettinger.colorful.oklab.ColorTools;
 import com.github.tommyettinger.ds.IntObjectMap;
+import isonomicon.io.VoxIO;
+import isonomicon.io.extended.*;
 import isonomicon.physical.Tools3D;
 import isonomicon.physical.VoxMaterial;
 
@@ -30,6 +32,8 @@ public class SmudgeRenderer {
     public float neutral = 1f;
     public IntObjectMap<VoxMaterial> materialMap;
 //    public long seed;
+
+    public static final float fidget = 0.5f;
 
     protected SmudgeRenderer() {
 
@@ -499,6 +503,14 @@ public class SmudgeRenderer {
         return blit(angleTurns, frame);
     }
 
+    public Pixmap drawSplats(byte[][][] colors, float yaw, float pitch, float roll, int frame,
+                             float translateX, float translateY, float translateZ,
+                             IntObjectMap<VoxMaterial> materialMap) {
+        this.materialMap = materialMap;
+        splatOnly(colors, yaw, pitch, roll, frame, translateX, translateY, translateZ);
+        return blit(yaw, pitch, roll, frame);
+    }
+
     public void splatOnly(byte[][][] colors, float yaw, float pitch, float roll, int frame,
                           float translateX, float translateY, float translateZ) {
         final int size = colors.length;
@@ -514,12 +526,11 @@ public class SmudgeRenderer {
             for (int x = 0; x < size; x++) {
                 for (int y = 0; y < size; y++) {
                     final byte v = colors[x][y][z];
-                    if(v != 0)
-                    {
-                        ox = x - hs;
-                        oy = y - hs;
+                    if (v != 0) {
+                        ox = x - hs + fidget;
+                        oy = y - hs + fidget;
                         oz = z - hs;
-                        splat(  ox * x_x + oy * y_x + oz * z_x + size + translateX,
+                        splat(ox * x_x + oy * y_x + oz * z_x + size + translateX,
                                 ox * x_y + oy * y_y + oz * z_y + size + translateY,
                                 ox * x_z + oy * y_z + oz * z_z + hs + translateZ, x, y, z, v, frame);
                     }
@@ -529,10 +540,26 @@ public class SmudgeRenderer {
     }
 
     public Pixmap drawSplats(byte[][][] colors, float yaw, float pitch, float roll, int frame,
-                             float translateX, float translateY, float translateZ,
-                             IntObjectMap<VoxMaterial> materialMap) {
-        this.materialMap = materialMap;
+                             float translateX, float translateY, float translateZ) {
         splatOnly(colors, yaw, pitch, roll, frame, translateX, translateY, translateZ);
         return blit(yaw, pitch, roll, frame);
     }
+
+    public Pixmap drawModel(VoxModel model, float yaw, float pitch, float roll, int frame,
+                            float translateX, float translateY, float translateZ){
+        materialMap = VoxIO.lastMaterials;
+        for(GroupChunk gc : model.groupChunks.values()) {
+            for(int ch : gc.childIds) {
+                TransformChunk tc = model.transformChunks.get(ch);
+                if (tc != null) {
+                    for (ShapeModel sm : model.shapeChunks.get(tc.childId).models) {
+                        byte[][][] g = model.grids.get(sm.id);
+                        splatOnly(g, yaw, pitch, roll, frame, translateX + tc.translation.x, translateY + tc.translation.y, translateZ + tc.translation.z);
+                    }
+                }
+            }
+        }
+        return blit(yaw, pitch, roll, frame);
+    }
+
 }
