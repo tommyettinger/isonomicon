@@ -168,7 +168,6 @@ public class Isomodeler extends ApplicationAdapter {
             renderer = new SmudgeRenderer(size);
             renderer.palette(VoxIO.lastPalette);
             renderer.saturation(0f);
-            
         } catch (FileNotFoundException e) {
             voxels = new VoxModel();
         }
