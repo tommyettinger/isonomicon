@@ -16,18 +16,14 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import isonomicon.io.LittleEndianDataInputStream;
 import isonomicon.io.VoxIO;
-import isonomicon.io.extended.VoxIOExtended;
-import isonomicon.io.extended.VoxModel;
-import isonomicon.physical.Tools3D;
-import isonomicon.visual.Coloring;
+import isonomicon.io.extended.*;
 import isonomicon.visual.ShaderUtils;
 import isonomicon.visual.SmudgeRenderer;
-import isonomicon.visual.SpecialRenderer;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
-public class ModelRotationVisualizer extends ApplicationAdapter {
+public class ModelRotationVisualizerNew extends ApplicationAdapter {
     public static final int SCREEN_WIDTH = 400;//640;
     public static final int SCREEN_HEIGHT = 400;//720;
     public static final int VIRTUAL_WIDTH = SCREEN_WIDTH;
@@ -36,16 +32,16 @@ public class ModelRotationVisualizer extends ApplicationAdapter {
     protected Viewport worldView;
     protected Viewport screenView;
     protected FrameBuffer buffer;
-    protected Texture pmTexture;
-    protected Texture palettes;
+    protected Texture screenTexture, pmTexture, palettes;
     private SmudgeRenderer renderer;
     private ShaderProgram indexShader;
-    private byte[][][] voxels;
+    private VoxModel voxels;
     private float saturation;
     public float yaw, pitch, roll;
     
     @Override
     public void create() {
+        VoxIOExtended.GENERAL = true;
         palettes = new Texture("palettes/palettes.png");
         batch = new SpriteBatch();
         indexShader = new ShaderProgram(ShaderUtils.stuffSelectVertex, ShaderUtils.stuffSelectFragment);
@@ -63,6 +59,7 @@ public class ModelRotationVisualizer extends ApplicationAdapter {
 //        load("vox/Lomuk.vox");
         load("vox/Tree.vox");
 //        load("vox/Oklab.vox");
+//        load("vox/FigureSplit.vox");
 //        renderer.dither = true;
         Gdx.input.setInputProcessor(inputProcessor());
     }
@@ -95,7 +92,7 @@ public class ModelRotationVisualizer extends ApplicationAdapter {
         worldView.update(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         batch.setProjectionMatrix(worldView.getCamera().combined);
 
-        renderer.drawSplats(voxels, yaw, pitch, roll, (int) (TimeUtils.millis() >>> 8 & 3), 0, 0, 0, VoxIO.lastMaterials);
+        renderer.drawSplats(voxels.grids.get(0), yaw, pitch, roll, (int) (TimeUtils.millis() >>> 8 & 3), 0, 0, 0, VoxIO.lastMaterials);
         pmTexture.draw(renderer.pixmap, 0, 0);
 //        batch.setShader(indexShader);
 //        palettes.bind(1);
@@ -138,7 +135,7 @@ public class ModelRotationVisualizer extends ApplicationAdapter {
         config.useVsync(false);
         config.setResizable(true);
         config.disableAudio(true);
-        final ModelRotationVisualizer app = new ModelRotationVisualizer();
+        final ModelRotationVisualizerNew app = new ModelRotationVisualizerNew();
         config.setWindowListener(new Lwjgl3WindowAdapter() {
             @Override
             public void filesDropped(String[] files) {
@@ -179,20 +176,32 @@ public class ModelRotationVisualizer extends ApplicationAdapter {
         if(pmTexture != null) pmTexture.dispose();
         pmTexture = new Texture(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, Pixmap.Format.RGBA8888);
         try {
-            //// loads a file by its full path, which we get via drag+drop
-            byte[][][] v = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream(name)));
-            if(v == null) {
-                voxels = new byte[0][0][0];
+            //// loads a file by its full path, which we get via a command-line arg
+            voxels = VoxIOExtended.readVox(new LittleEndianDataInputStream(new FileInputStream(name)));
+            if(voxels == null) {
+                voxels = new VoxModel();
                 return;
             }
-            System.out.println("Raw voxel 3D array side length: " + v.length);
-            Tools3D.soakInPlace(Tools3D.hollowInPlace(v));
-            voxels = new byte[v.length * 3 >> 1][v.length * 3 >> 1][v.length * 3 >> 1];
-            Tools3D.translateCopyInto(v, voxels, v.length >> 2, v.length >> 2, v.length >> 2);
-            renderer = new SmudgeRenderer(voxels.length);
+            int size = 1;
+            for(GroupChunk gc : voxels.groupChunks.values()) {
+                for (int ch : gc.childIds) {
+                    TransformChunk tc = voxels.transformChunks.get(ch);
+                    if (tc != null) {
+                        for (ShapeModel sm : voxels.shapeChunks.get(tc.childId).models) {
+                            byte[][][] g = voxels.grids.get(sm.id);
+                            size = Math.max(size, Math.round(tc.translation.x) + g.length);
+                            size = Math.max(size, Math.round(tc.translation.y) + g[0].length);
+                            size = Math.max(size, Math.round(tc.translation.z + g[0][0].length * 0.5f));
+                        }
+                    }
+                }
+            }
+            System.out.println(size);
+            renderer = new SmudgeRenderer(size);
             renderer.palette(VoxIO.lastPalette);
+            renderer.saturation(0f);
         } catch (FileNotFoundException e) {
-            voxels = new byte[0][0][0];
+            voxels = new VoxModel();
         }
     }
 }

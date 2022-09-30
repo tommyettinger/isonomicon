@@ -173,8 +173,12 @@ public class VoxIOExtended {
                                 }
                             }
                         }
-                        model.grids.add(Tools3D.scaleAndSoak(voxelData));
-                        if(!GENERAL) {
+                        if(GENERAL) {
+                            Tools3D.soakInPlace(voxelData);
+                            model.grids.add(voxelData);
+                        }
+                        else {
+                            model.grids.add(Tools3D.scaleAndSoak(voxelData));
                             for (IntObjectMap.Entry<float[]> e : linkage) {
                                 float div = 2f / e.value[3];
                                 e.value[0] *= div;
