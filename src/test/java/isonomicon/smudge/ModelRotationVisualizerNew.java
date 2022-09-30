@@ -57,9 +57,9 @@ public class ModelRotationVisualizerNew extends ApplicationAdapter {
 //        load("vox/Infantry_Firing.vox");
 //        load("vox/CrazyBox.vox");
 //        load("vox/Lomuk.vox");
-        load("vox/Tree.vox");
+//        load("vox/Tree.vox");
 //        load("vox/Oklab.vox");
-//        load("vox/FigureSplit.vox");
+        load("vox/FigureSplit.vox");
 //        renderer.dither = true;
         Gdx.input.setInputProcessor(inputProcessor());
     }
@@ -196,7 +196,6 @@ public class ModelRotationVisualizerNew extends ApplicationAdapter {
                     }
                 }
             }
-            System.out.println(size);
             renderer = new SmudgeRenderer(size);
             renderer.palette(VoxIO.lastPalette);
             renderer.saturation(0f);

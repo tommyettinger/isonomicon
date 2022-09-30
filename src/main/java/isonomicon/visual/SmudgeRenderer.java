@@ -557,7 +557,7 @@ public class SmudgeRenderer {
                         byte[][][] g = model.grids.get(sm.id);
                         splatOnly(g, yaw, pitch, roll, frame,
 //                                translateX, translateY, translateZ
-                                translateX + tc.translation.x, translateY + tc.translation.y, translateZ + tc.translation.z
+                                translateX + tc.translation.x, translateY + tc.translation.y, translateZ + tc.translation.z - g[0][0].length * 0.5f
                         );
                     }
                 }

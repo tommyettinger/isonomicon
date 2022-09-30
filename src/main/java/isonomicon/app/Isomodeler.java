@@ -160,7 +160,7 @@ public class Isomodeler extends ApplicationAdapter {
                             byte[][][] g = voxels.grids.get(sm.id);
                             size = Math.max(size, Math.round(tc.translation.x) + g.length);
                             size = Math.max(size, Math.round(tc.translation.y) + g[0].length);
-                            size = Math.max(size, Math.round(tc.translation.z) + g[0][0].length);
+                            size = Math.max(size, Math.round(tc.translation.z + g[0][0].length * 0.5f));
                         }
                     }
                 }
