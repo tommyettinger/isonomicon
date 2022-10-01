@@ -165,4 +165,6 @@ public class VoxMaterial {
 		sb.setCharAt(sb.length() - 1, '}');
 		return sb.toString();
 	}
+
+	public static final VoxMaterial DEFAULT_MATERIAL = new VoxMaterial();
 }

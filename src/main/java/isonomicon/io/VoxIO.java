@@ -54,6 +54,10 @@ public class VoxIO {
     public static int[] lastPalette = Arrays.copyOf(defaultPalette, 256);
     public static final IntObjectMap<VoxMaterial> lastMaterials = new IntObjectMap<>(256);
 
+    static {
+        lastMaterials.setDefaultValue(VoxMaterial.DEFAULT_MATERIAL);
+    }
+
     public static byte[][][] readVox(InputStream stream) {
         return readVox(new LittleEndianDataInputStream(stream));
     }

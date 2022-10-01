@@ -30,6 +30,12 @@ public class VoxIOExtended {
      * If this is a general-purpose .vox loader, this should be true. For CG-specialized models, false.
      */
     public static boolean GENERAL = false;
+    public static int minX = Integer.MAX_VALUE;
+    public static int maxX;
+    public static int minY = Integer.MAX_VALUE;
+    public static int maxY;
+    public static int minZ = Integer.MAX_VALUE;
+    public static int maxZ;
 
     protected static String readString(LittleEndianDataInputStream stream) throws IOException {
         int len = stream.readInt();
@@ -106,6 +112,16 @@ public class VoxIOExtended {
         lastMaterials.clear();
         VoxModel model = new VoxModel();
         byte[][][] voxelData = null;
+        IntObjectMap<ShapeModel> shapes = new IntObjectMap<>(8);
+        TransformChunk latest = null;
+
+        minX = Integer.MAX_VALUE;
+        minY = Integer.MAX_VALUE;
+        minZ = Integer.MAX_VALUE;
+        maxX = 0;
+        maxY = 0;
+        maxZ = 0;
+
         try {
             byte[] chunkId = new byte[4];
             if (4 != stream.read(chunkId))
@@ -136,6 +152,20 @@ public class VoxIOExtended {
                     } else if (chunkName.equals("XYZI") && voxelData != null) {
                         // XYZI contains n voxels
                         int numVoxels = stream.readInt();
+
+                        ShapeModel shp = shapes.get(model.grids.size());
+                        if(shp == null) {
+                            shp = new ShapeModel(model.grids.size(), new String[0][0]);
+                            shapes.put(model.grids.size(), shp);
+                        }
+                        shp.minX = Integer.MAX_VALUE;
+                        shp.minY = Integer.MAX_VALUE;
+                        shp.minZ = Integer.MAX_VALUE;
+                        shp.maxX = 0;
+                        shp.maxY = 0;
+                        shp.maxZ = 0;
+
+
                         IntObjectMap<float[]> linkage = new IntObjectMap<>(8);
                         IntObjectMap<LongOrderedSet> markers = new IntObjectMap<>(8);
                         // each voxel has x, y, z and color index values
@@ -144,6 +174,14 @@ public class VoxIOExtended {
                             int y = stream.read() + offY;
                             int z = stream.read();
                             byte color = stream.readByte();
+
+                            shp.minX = Math.min(shp.minX, x);
+                            shp.minY = Math.min(shp.minY, y);
+                            shp.minZ = Math.min(shp.minZ, z);
+                            shp.maxX = Math.max(shp.maxX, x);
+                            shp.maxY = Math.max(shp.maxY, y);
+                            shp.maxZ = Math.max(shp.maxZ, z);
+
                             //If you are using this as a general .vox parser, use the following line only:
                             if(GENERAL)
                                 voxelData[x][y][z] = color;
@@ -221,7 +259,9 @@ public class VoxIOExtended {
                         for (int i = 0; i < frameCount; i++) {
                             frames[i] = readStringPairs(stream);
                         }
-                        model.transformChunks.put(chunkID, new TransformChunk(chunkID, attributes, childID, reservedID, layerID, frames));
+                        latest = new TransformChunk(chunkID, attributes, childID, reservedID, layerID, frames);
+                        latest.translation.z -= sizeZ * 0.5f;
+                        model.transformChunks.put(chunkID, latest);
                     } else if (chunkName.equals("nGRP")) {
                         int chunkID = stream.readInt();
                         String[][] attributes = readStringPairs(stream);
@@ -239,7 +279,21 @@ public class VoxIOExtended {
                         int modelCount = stream.readInt();
                         ShapeModel[] models = new ShapeModel[modelCount];
                         for (int i = 0; i < modelCount; i++) {
-                            models[i] = new ShapeModel(stream.readInt(), readStringPairs(stream));
+                            int shapeID = stream.readInt();
+                            String[][] ps = readStringPairs(stream);
+                            if(shapes.containsKey(shapeID))
+                                models[i] = shapes.get(shapeID);
+                            else
+                                models[i] = new ShapeModel(shapeID, ps);
+                            models[i].offsetX = Math.round(latest.translation.x);
+                            models[i].offsetY = Math.round(latest.translation.y);
+                            models[i].offsetZ = Math.round(latest.translation.z);
+                            minX = Math.min(minX, models[i].minX + models[i].offsetX);
+                            minY = Math.min(minY, models[i].minY + models[i].offsetY);
+                            minZ = Math.min(minZ, models[i].minZ + models[i].offsetZ);
+                            maxX = Math.max(maxX, models[i].maxX + models[i].offsetX);
+                            maxY = Math.max(maxY, models[i].maxY + models[i].offsetY);
+                            maxZ = Math.max(maxZ, models[i].maxZ + models[i].offsetZ);
                         }
                         model.shapeChunks.put(chunkID, new ShapeChunk(chunkID, attributes, models));
                     } else stream.skipBytes(chunkSize);   // read any excess bytes
@@ -252,6 +306,37 @@ public class VoxIOExtended {
         }
         model.materials.putAll(lastMaterials);
         return model;
+    }
+
+    public static byte[][][] mergeModel(VoxModel model) {
+        int size = 1;
+            for(GroupChunk gc : model.groupChunks.values()) {
+                for (int ch : gc.childIds) {
+                    TransformChunk tc = model.transformChunks.get(ch);
+                    if (tc != null) {
+                        for (ShapeModel sm : model.shapeChunks.get(tc.childId).models) {
+                            byte[][][] g = model.grids.get(sm.id);
+                            size = Math.max(size, Math.round(tc.translation.x + g.length));
+                            size = Math.max(size, Math.round(tc.translation.y + g[0].length));
+                            size = Math.max(size, Math.round(tc.translation.z + g[0][0].length * 0.5f));
+                        }
+                    }
+                }
+            }
+
+        byte[][][] voxels = new byte[size][size][size];
+        for(GroupChunk gc : model.groupChunks.values()) {
+            for (int ch : gc.childIds) {
+                TransformChunk tc = model.transformChunks.get(ch);
+                if (tc != null) {
+                    for (ShapeModel sm : model.shapeChunks.get(tc.childId).models) {
+                        byte[][][] g = model.grids.get(sm.id);
+                        Tools3D.translateCopyInto(g, voxels, Math.round(tc.translation.x), Math.round(tc.translation.y), Math.round(tc.translation.z));
+                    }
+                }
+            }
+        }
+        return voxels;
     }
 
     private static void writeInt(DataOutputStream bin, int value) throws IOException

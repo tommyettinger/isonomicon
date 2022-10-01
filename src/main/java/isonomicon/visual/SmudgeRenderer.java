@@ -33,7 +33,7 @@ public class SmudgeRenderer {
     public IntObjectMap<VoxMaterial> materialMap;
 //    public long seed;
 
-    public static final float fidget = 0f;
+    public static final float fidget = 0.5f;
 
     protected SmudgeRenderer() {
 
@@ -539,13 +539,6 @@ public class SmudgeRenderer {
         }
     }
 
-    public Pixmap drawSplats(byte[][][] colors, float yaw, float pitch, float roll, int frame,
-                             float translateX, float translateY, float translateZ) {
-        materialMap = VoxIO.lastMaterials;
-        splatOnly(colors, yaw, pitch, roll, frame, translateX, translateY, translateZ);
-        return blit(yaw, pitch, roll, frame);
-    }
-
     public Pixmap drawModel(VoxModel model, float yaw, float pitch, float roll, int frame,
                             float translateX, float translateY, float translateZ){
         materialMap = VoxIO.lastMaterials;
@@ -566,4 +559,10 @@ public class SmudgeRenderer {
         return blit(yaw, pitch, roll, frame);
     }
 
+    public Pixmap drawSplats(byte[][][] colors, float yaw, float pitch, float roll, int frame,
+                             float translateX, float translateY, float translateZ) {
+        materialMap = VoxIO.lastMaterials;
+        splatOnly(colors, yaw, pitch, roll, frame, translateX, translateY, translateZ);
+        return blit(yaw, pitch, roll, frame);
+    }
 }

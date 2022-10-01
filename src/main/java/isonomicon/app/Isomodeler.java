@@ -27,7 +27,8 @@ public class Isomodeler extends ApplicationAdapter {
     public static final int SCREEN_WIDTH = 512;//640;
     public static final int SCREEN_HEIGHT = 512;//720;
     private SmudgeRenderer renderer;
-    private VoxModel voxels;
+    private VoxModel model;
+    private byte[][][] voxels;
     private String name;
     private String[] inputs;
     private PixmapIO.PNG png;
@@ -62,6 +63,7 @@ public class Isomodeler extends ApplicationAdapter {
 //            inputs = new String[]{"vox/Floor.vox"};
 //            inputs = new String[]{"vox/Bear.vox"};
 //            inputs = new String[]{"vox/Lomuk.vox"};
+//            inputs = new String[]{"vox/error.vox"};
             inputs = new String[]{"vox/FigureSplit.vox"};
 //            inputs = new String[]{"vox/Lomuk.vox", "vox/Damned.vox"};
 //            inputs = new String[]{"vox/Damned.vox"};
@@ -97,7 +99,7 @@ public class Isomodeler extends ApplicationAdapter {
             Array<Pixmap> pm = new Array<>(8);
             for (int i = 0; i < 8; i++) {
                 for (int f = 0; f < 4; f++) {
-                    pixmap = renderer.drawModel(voxels, i * 0.125f, 0, 0, f, 0, 0, 0);
+                    pixmap = renderer.drawSplats(voxels, i * 0.125f, 0, 0, f, 0, 0, 0);
                     Pixmap p = new Pixmap(pixmap.getWidth(), pixmap.getHeight(), pixmap.getFormat());
                     p.drawPixmap(pixmap, 0, 0);
                     pm.add(p);
@@ -144,32 +146,19 @@ public class Isomodeler extends ApplicationAdapter {
     public void load(String name) {
         try {
             //// loads a file by its full path, which we get via a command-line arg
-            voxels = VoxIOExtended.readVox(new LittleEndianDataInputStream(new FileInputStream(name)));
-            if(voxels == null) {
-                voxels = new VoxModel();
+            model = VoxIOExtended.readVox(new LittleEndianDataInputStream(new FileInputStream(name)));
+            if(model == null) {
+                model = new VoxModel();
                 return;
             }
             int nameStart = Math.max(name.lastIndexOf('/'), name.lastIndexOf('\\')) + 1;
             this.name = name.substring(nameStart, name.indexOf('.', nameStart));
-            int size = 1;
-            for(GroupChunk gc : voxels.groupChunks.values()) {
-                for (int ch : gc.childIds) {
-                    TransformChunk tc = voxels.transformChunks.get(ch);
-                    if (tc != null) {
-                        for (ShapeModel sm : voxels.shapeChunks.get(tc.childId).models) {
-                            byte[][][] g = voxels.grids.get(sm.id);
-                            size = Math.max(size, Math.round(tc.translation.x) + g.length);
-                            size = Math.max(size, Math.round(tc.translation.y) + g[0].length);
-                            size = Math.max(size, Math.round(tc.translation.z + g[0][0].length * 0.5f));
-                        }
-                    }
-                }
-            }
-            renderer = new SmudgeRenderer(size);
+            voxels = VoxIOExtended.mergeModel(model);
+            renderer = new SmudgeRenderer(voxels.length);
             renderer.palette(VoxIO.lastPalette);
             renderer.saturation(0f);
         } catch (FileNotFoundException e) {
-            voxels = new VoxModel();
+            model = new VoxModel();
         }
     }
 }
