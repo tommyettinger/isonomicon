@@ -63,8 +63,8 @@ public class Isomodeler extends ApplicationAdapter {
 //            inputs = new String[]{"vox/Floor.vox"};
 //            inputs = new String[]{"vox/Bear.vox"};
 //            inputs = new String[]{"vox/Lomuk.vox"};
-//            inputs = new String[]{"vox/error.vox"};
-            inputs = new String[]{"vox/FigureSplit.vox"};
+            inputs = new String[]{"vox/Predator.vox"};
+//            inputs = new String[]{"vox/FigureSplit.vox"};
 //            inputs = new String[]{"vox/Lomuk.vox", "vox/Damned.vox"};
 //            inputs = new String[]{"vox/Damned.vox"};
 //            inputs = new String[]{"vox/teapot.vox"};

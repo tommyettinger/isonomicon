@@ -2,7 +2,6 @@ package isonomicon.visual;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.math.MathUtils;
-import com.github.tommyettinger.anim8.PaletteReducer;
 import com.github.tommyettinger.colorful.oklab.ColorTools;
 import com.github.tommyettinger.ds.IntObjectMap;
 import isonomicon.io.VoxIO;
@@ -12,38 +11,38 @@ import isonomicon.physical.VoxMaterial;
 
 import java.util.Arrays;
 
+import static com.github.tommyettinger.colorful.oklab.ColorTools.fromRGBA8888;
 import static com.github.tommyettinger.colorful.oklab.ColorTools.getRawGamutValue;
 import static com.github.tommyettinger.digital.ArrayTools.fill;
 
 /**
- * Renders {@code byte[][][]} voxel models to {@link Pixmap}s with arbitrary yaw rotation.
+ * Renders {@code byte[][][]} voxel models to {@link Pixmap}s with arbitrary rotation.
  */
-public class SmudgeRenderer {
+public class Renderer {
     public Pixmap pixmap;
-    public int[][] depths, voxels, render, outlines;
+    public int[][] depths;
+    public int[][] voxels;
+    public int[][] outlines;
     public VoxMaterial[][] materials;
     public float[][] shadeX, shadeZ, colorL, colorA, colorB, midShading;
-    public PaletteReducer reducer = new PaletteReducer();
     public int[] palette;
     public float[] paletteL, paletteA, paletteB;
-    public boolean dither = false, outline = true;
+    public int outline = 2;
     public int size;
     public int shrink = 2;
     public float neutral = 1f;
     public IntObjectMap<VoxMaterial> materialMap;
-//    public long seed;
 
-    public static final float fidget = 0.5f;
-
-    protected SmudgeRenderer() {
+    protected Renderer() {
 
     }
-    public SmudgeRenderer(final int size) {
+    public Renderer(final int size) {
         this.size = size;
+    }
+
+    public void init(){
         final int w = size * 4 + 4, h = size * 5 + 4;
-//        pixmap = new Pixmap(w, h, Pixmap.Format.RGBA8888);
         pixmap = new Pixmap(w>>>shrink, h>>>shrink, Pixmap.Format.RGBA8888);
-        render =   new int[w][h];
         outlines = new int[w][h];
         depths =   new int[w][h];
         materials = new VoxMaterial[w][h];
@@ -54,7 +53,6 @@ public class SmudgeRenderer {
         colorA = fill(-1f, w, h);
         colorB = fill(-1f, w, h);
         midShading = fill(0f, w, h);
-//        remade = new byte[size << 1][size << 1][size << 1];
     }
     public static float limitToGamut(float L, float A, float B, float alpha) {
         L = Math.min(Math.max(L, 0f), 1f);
@@ -74,14 +72,6 @@ public class SmudgeRenderer {
                         (int) (cos_(hue) * dist + 128f) << 8 |
                         (int) (L * 255f));
     }
-
-//    protected float bn(int x, int y) {
-////        final float result = (((x | ~y) & 1) + (x + ~y & 1) + (x & y & 1)) * 0.333f;
-////        System.out.println(result);
-////        return result;
-////        return (((x | ~y) & 1) + (x + ~y & 1) + (x & y & 1)) * 0.333f;
-//        return (PaletteReducer.TRI_BLUE_NOISE[(x & 63) | (y & 63) << 6] + 128) * 0x1p-8f;
-//    }
 
     /**
      * This one's weird; unlike {@link #atan2_(float, float)}, it can return negative results.
@@ -165,10 +155,10 @@ public class SmudgeRenderer {
      * Negative modifiers will decrease saturation, while positive ones increase it. If positive, any
      * changes are incredibly sensitive, and 0.05 will seem very different from 0.0. If negative, changes
      * are not as sensitive, but most of the noticeable effect will happen close to -0.1.
-     * @param saturationModifier a float between -0.5f and 0.2f; negative decreases saturation, positive increases
+     * @param saturationModifier a float between -1f and 0.5f; negative decreases saturation, positive increases
      * @return this, for chaining
      */
-    public SmudgeRenderer saturation(float saturationModifier) {
+    public Renderer saturation(float saturationModifier) {
         neutral = (1f + MathUtils.clamp(saturationModifier, -1f, 0.5f));
         return this;
     }
@@ -177,14 +167,10 @@ public class SmudgeRenderer {
         return palette;
     }
 
-    public SmudgeRenderer palette(PaletteReducer color) {
-        return palette(color.paletteArray, color.colorCount);
-    }
-
-    public SmudgeRenderer palette(int[] color) {
+    public Renderer palette(int[] color) {
         return palette(color, 256);
     }
-    public SmudgeRenderer palette(int[] color, int count) {
+    public Renderer palette(int[] color, int count) {
         this.palette = color;
         count = Math.min(256, count);
         if(paletteL == null) paletteL = new float[256];
@@ -220,9 +206,9 @@ public class SmudgeRenderer {
         final float emit = m.getTrait(VoxMaterial.MaterialTrait._emit) * 0.75f;
         final float alpha = m.getTrait(VoxMaterial.MaterialTrait._alpha);
         final float hs = size * 0.5f;
-        for (int x = 0, ax = xx; x < 4 && ax < render.length; x++, ax++) {
-            for (int y = 0, ay = yy; y < 4 && ay < render[0].length; y++, ay++) {
-                if ((depth > depths[ax][ay] || (depth == depths[ax][ay] && colorL[ax][ay] < paletteL[voxel & 255])) && (alpha == 0f)) {
+        for (int x = 0, ax = xx; x < 4 && ax < depths.length; x++, ax++) {
+            for (int y = 0, ay = yy; y < 4 && ay < depths[0].length; y++, ay++) {
+                if ((alpha == 0f) && (depth > depths[ax][ay] || (depth == depths[ax][ay] && colorL[ax][ay] < paletteL[voxel & 255]))) {
                     drawn = true;
                     colorL[ax][ay] = paletteL[voxel & 255];
                     colorA[ax][ay] = paletteA[voxel & 255];
@@ -254,11 +240,10 @@ public class SmudgeRenderer {
         }
     }
     
-    public SmudgeRenderer clear() {
+    public Renderer clear() {
         pixmap.setColor(0);
         pixmap.fill();
         fill(depths, 0);
-        fill(render, 0);
         fill(outlines, (byte) 0);
         fill(voxels, -1);
         fill(shadeX, -1f);
@@ -273,13 +258,13 @@ public class SmudgeRenderer {
     }
 
     /**
-     * Compiles all of the individual voxels drawn with {@link #splat(float, float, float, int, int, int, byte, int)} into a
+     * Compiles all the individual voxels drawn with {@link #splat(float, float, float, int, int, int, byte, int)} into a
      * single Pixmap and returns it.
      * @param turns yaw in turns; like turning your head or making a turn in a car
      * @return {@link #pixmap}, edited to contain the render of all the voxels put in this with {@link #splat(float, float, float, int, int, int, byte, int)}
      */
-    public Pixmap blit(float turns, int frame) {
-        return blit(turns, 0f, 0f, frame);
+    public Pixmap blit(float turns) {
+        return blit(turns, 0f, 0f, 0);
     }
 
     /**
@@ -294,7 +279,7 @@ public class SmudgeRenderer {
         final int threshold = 13;
         pixmap.setColor(0);
         pixmap.fill();
-        int xSize = render.length - 1, ySize = render[0].length - 1, depth;
+        int xSize = depths.length - 1, ySize = depths[0].length - 1, depth;
         int v, vx, vy, vz, fx, fy, fz;
         float hs = (size) * 0.5f, ox, oy, oz, tx, ty, tz;
         final float cYaw = cos_(yaw), sYaw = sin_(yaw);
@@ -324,7 +309,6 @@ public class SmudgeRenderer {
                     float rough = m.getTrait(VoxMaterial.MaterialTrait._rough);
                     float emit = m.getTrait(VoxMaterial.MaterialTrait._emit);
                     float limit = 2;
-                    // + (PaletteReducer.TRI_BLUE_NOISE[(sx & 63) + (sy << 6) + (fx + fy + fz >>> 2) & 4095] + 0.5) * 0x1p-7;
                     if (Math.abs(shadeX[fy][fz] - tx) <= limit || ((fy > 1 && Math.abs(shadeX[fy - 2][fz] - tx) <= limit) ||
                             (fy < shadeX.length - 2 && Math.abs(shadeX[fy + 2][fz] - tx) <= limit))) {
                         float spread = MathUtils.lerp(0.0025f, 0.001f, rough);
@@ -366,124 +350,59 @@ public class SmudgeRenderer {
                 }
             }
         }
-        final int distance = 1;
-        for (int x = 0; x <= xSize; x++) {
-            for (int y = 0; y <= ySize; y++) {
-                if (colorA[x][y] >= 0f) {
-                    pixmap.drawPixel(x >>> shrink, y >>> shrink, ColorTools.toRGBA8888(ColorTools.oklab(
-                            Math.min(Math.max(colorL[x][y] - 0.1f + midShading[x][y], 0f), 1f),
-                            (colorA[x][y] - 0.5f) * neutral + 0.5f,
-                            (colorB[x][y] - 0.5f) * neutral + 0.5f, 1f)));
-                }
-//                if (colorA[x][y] >= 0f) {
-//                    float maxL = 0f, minL = 1f, avgL = 0f,
-//                            maxA = 0f, minA = 1f, avgA = 0f,
-//                            maxB = 0f, minB = 1f, avgB = 0f,
-//                            div = 0f, current;
-//                    for (int xx = -distance; xx <= distance; xx++) {
-//                        if (x + xx < 0 || x + xx > xSize) continue;
-//                        for (int yy = -distance; yy <= distance; yy++) {
-//                            if ((xx & yy) != 0 || y + yy < 0 || y + yy > ySize || colorA[x + xx][y + yy] < 0f)
-//                                continue;
-//                            current = colorL[x + xx][y + yy];
-//                            maxL = Math.max(maxL, current);
-//                            minL = Math.min(minL, current);
-//                            avgL += current;
-//                            current = colorA[x + xx][y + yy];
-//                            maxA = Math.max(maxA, current);
-//                            minA = Math.min(minA, current);
-//                            avgA += current;
-//                            current = colorB[x + xx][y + yy];
-//                            maxB = Math.max(maxB, current);
-//                            minB = Math.min(minB, current);
-//                            avgB += current;
-//                            div++;
-//                        }
-//                    }
-////                    avg = avg / div + (x + y & 1) * 0.05f - 0.025f;
-////                    pixmap.drawPixel(x, y, render[x][y] = ColorTools.toRGBA8888(ColorTools.limitToGamut(
-////                            Math.min(Math.max(((avg - minL) < (maxL - avg) ? minL : maxL) - 0.15625f, 0f), 1f),
-////                            (colorA[x][y] - 0.5f) * neutral + 0.5f,
-////                            (colorB[x][y] - 0.5f) * neutral + 0.5f, 1f)));
-////                    avgL = avgL / div + (x + y & 2) * 0.004f - 0.004f;
-//                    avgL /= div;
-//                    avgA /= div;
-//                    avgB /= div;
-//                    render[x][y] = ColorTools.toRGBA8888(limitToGamut(
-//                            Math.min(Math.max(((avgL - minL) < (maxL - avgL) ? minL : maxL) - 0.15625f, 0f), 1f),
-//                            (avgA - 0.5f) * neutral + 0.5f,
-//                            (avgB - 0.5f) * neutral + 0.5f, 1f));
-////                    avg /= div;
-////                    colorL[x][y] = Math.min(Math.max(((avg - minL) < (maxL - avg) ? minL : maxL) - 0.15625f, 0f), 1f);
-////                    if (neutral != 1f) {
-////                        colorA[x][y] = (colorA[x][y] - 0.5f) * neutral + 0.5f;
-////                        colorB[x][y] = (colorB[x][y] - 0.5f) * neutral + 0.5f;
-////                    }
-//                }
-            }
-        }
-//        for (int x = 0; x <= xSize; x++) {
-//            for (int y = 0; y <= ySize; y++) {
-//                if (colorA[x][y] >= 0f) {
-//                    pixmap.drawPixel(x >>> 1, y >>> 1, render[x][y] = ColorTools.toRGBA8888(ColorTools.limitToGamut(
-//                            Math.min(Math.max(colorL[x][y] - 0.125f, 0f), 1f),
-//                            (colorA[x][y] - 0.5f) * neutral + 0.5f,
-//                            (colorB[x][y] - 0.5f) * neutral + 0.5f, 1f)));
-//                }
-//            }
-//        }
         for (int x = xSize; x >= 0; x--) {
             for (int y = ySize; y >= 0; y--) {
                 if (colorA[x][y] >= 0f) {
-                    pixmap.drawPixel(x >>> shrink, y >>> shrink, render[x][y]);
+                    pixmap.drawPixel(x >>> shrink, y >>> shrink, ColorTools.toRGBA8888(ColorTools.oklab(
+                            Math.min(Math.max(colorL[x][y] - 0.1f + midShading[x][y], 0f), 1f),
+                                                        (colorA[x][y] - 0.5f) * neutral + 0.5f,
+                            (colorB[x][y] - 0.5f) * neutral + 0.5f, 1f)));
                 }
             }
         }
-        if (outline) {
-            int o;
+        if (outline != 0) {
+            int inner, outer = 0x000000FF;
+            if(outline <= 1) outer = 0;
             for (int x = step; x <= xSize - step; x+= step) {
 //                final int hx = x;
                 final int hx = x >>> shrink;
                 for (int y = step; y <= ySize - step; y+= step) {
 //                    final int hy = y;
                     int hy = y >>> shrink;
-                    if ((o = outlines[x][y]) != 0) {
+                    inner = outlines[x][y];
+                    if (inner != 0) {
+                        if(outline == 2) outer = inner;
                         depth = depths[x][y];
                         if (outlines[x - step][y] == 0) {
-                            pixmap.drawPixel(hx - 1, hy    , o);
+                            pixmap.drawPixel(hx - 1, hy    , outer);
                         }
                         else if (depths[x - step][y] < depth - threshold) {
-                            pixmap.drawPixel(hx - 1, hy    , o);
+                            pixmap.drawPixel(hx - 1, hy    , inner);
                         }
                         if (outlines[x + step][y] == 0) {
-                            pixmap.drawPixel(hx + 1, hy    , o);
+                            pixmap.drawPixel(hx + 1, hy    , outer);
                         }
                         else if (depths[x + step][y] < depth - threshold) {
-                            pixmap.drawPixel(hx + 1, hy    , o);
+                            pixmap.drawPixel(hx + 1, hy    , inner);
                         }
                         if (outlines[x][y - step] == 0) {
-                            pixmap.drawPixel(hx    , hy - 1, o);
+                            pixmap.drawPixel(hx    , hy - 1, outer);
                         }
                         else if (depths[x][y - step] < depth - threshold) {
-                            pixmap.drawPixel(hx    , hy - 1, o);
+                            pixmap.drawPixel(hx    , hy - 1, inner);
                         }
                         if (outlines[x][y + step] == 0) {
-                            pixmap.drawPixel(hx    , hy + 1, o);
+                            pixmap.drawPixel(hx    , hy + 1, outer);
                         }
                         else if (depths[x][y + step] < depth - threshold) {
-                            pixmap.drawPixel(hx    , hy + 1, o);
+                            pixmap.drawPixel(hx    , hy + 1, inner);
                         }
                     }
                 }
             }
         }
-        if(dither) {
-            reducer.setDitherStrength(1f);
-            reducer.reduceRoberts(pixmap);
-        }
 
         fill(depths, 0);
-        fill(render, 0);
         fill(outlines, (byte) 0);
         fill(voxels, -1);
         fill(shadeX, -1f);
@@ -510,9 +429,9 @@ public class SmudgeRenderer {
         final int size = colors.length;
         final float hs = (size) * 0.5f;
         final float c = cos_(angleTurns), s = sin_(angleTurns);
-        for (int z = 0; z < size; z++) {
-            for (int x = 0; x < size; x++) {
-                for (int y = 0; y < size; y++) {
+        for (int z = VoxIOExtended.minZ; z <= VoxIOExtended.maxZ; z++) {
+            for (int x = VoxIOExtended.minX; x <= VoxIOExtended.maxX; x++) {
+                for (int y = VoxIOExtended.minY; y <= VoxIOExtended.maxY; y++) {
                     final byte v = colors[x][y][z];
                     if(v != 0)
                     {
@@ -523,15 +442,7 @@ public class SmudgeRenderer {
                 }
             }
         }
-        return blit(angleTurns, frame);
-    }
-
-    public Pixmap drawSplats(byte[][][] colors, float yaw, float pitch, float roll, int frame,
-                             float translateX, float translateY, float translateZ,
-                             IntObjectMap<VoxMaterial> materialMap) {
-        this.materialMap = materialMap;
-        splatOnly(colors, yaw, pitch, roll, frame, translateX, translateY, translateZ);
-        return blit(yaw, pitch, roll, frame);
+        return blit(angleTurns);
     }
 
     public void splatOnly(byte[][][] colors, float yaw, float pitch, float roll, int frame,
@@ -571,9 +482,16 @@ public class SmudgeRenderer {
                 if (tc != null) {
                     for (ShapeModel sm : model.shapeChunks.get(tc.childId).models) {
                         byte[][][] g = model.grids.get(sm.id);
+                        VoxIOExtended.minX = sm.minX;
+                        VoxIOExtended.maxX = sm.maxX;
+                        VoxIOExtended.minY = sm.minY;
+                        VoxIOExtended.maxY = sm.maxY;
+                        VoxIOExtended.minZ = sm.minZ;
+                        VoxIOExtended.maxZ = sm.maxZ;
                         splatOnly(g, yaw, pitch, roll, frame,
-//                                translateX, translateY, translateZ
-                                translateX + tc.translation.x, translateY + tc.translation.y, translateZ + tc.translation.z - g[0][0].length * 0.5f
+                                translateX + tc.translation.x,// - g.length * 0.5f,
+                                translateY + tc.translation.y,// - g[0].length * 0.5f,
+                                translateZ + tc.translation.z - g[0][0].length * 0.5f
                         );
                     }
                 }
@@ -583,8 +501,9 @@ public class SmudgeRenderer {
     }
 
     public Pixmap drawSplats(byte[][][] colors, float yaw, float pitch, float roll, int frame,
-                             float translateX, float translateY, float translateZ) {
-        materialMap = VoxIO.lastMaterials;
+                             float translateX, float translateY, float translateZ,
+                             IntObjectMap<VoxMaterial> materialMap) {
+        this.materialMap = materialMap;
         splatOnly(colors, yaw, pitch, roll, frame, translateX, translateY, translateZ);
         return blit(yaw, pitch, roll, frame);
     }

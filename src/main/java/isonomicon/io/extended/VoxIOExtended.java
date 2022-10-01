@@ -165,7 +165,6 @@ public class VoxIOExtended {
                         shp.maxY = 0;
                         shp.maxZ = 0;
 
-
                         IntObjectMap<float[]> linkage = new IntObjectMap<>(8);
                         IntObjectMap<LongOrderedSet> markers = new IntObjectMap<>(8);
                         // each voxel has x, y, z and color index values
@@ -212,7 +211,6 @@ public class VoxIOExtended {
                             }
                         }
                         if(GENERAL) {
-                            Tools3D.soakInPlace(voxelData);
                             model.grids.add(voxelData);
                         }
                         else {
@@ -304,34 +302,49 @@ public class VoxIOExtended {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        for(byte[][][] grid: model.grids){
+            Tools3D.soakInPlace(grid, lastMaterials);
+        }
         model.materials.putAll(lastMaterials);
         return model;
     }
 
     public static byte[][][] mergeModel(VoxModel model) {
-        int size = 1;
-            for(GroupChunk gc : model.groupChunks.values()) {
-                for (int ch : gc.childIds) {
-                    TransformChunk tc = model.transformChunks.get(ch);
-                    if (tc != null) {
-                        for (ShapeModel sm : model.shapeChunks.get(tc.childId).models) {
-                            byte[][][] g = model.grids.get(sm.id);
-                            size = Math.max(size, Math.round(tc.translation.x + g.length));
-                            size = Math.max(size, Math.round(tc.translation.y + g[0].length));
-                            size = Math.max(size, Math.round(tc.translation.z + g[0][0].length * 0.5f));
-                        }
-                    }
-                }
-            }
+        int xChange = 0, yChange = 0;
+        if(minX < 0) {
+            xChange = -minX;
+            maxX += xChange;
+            minX = 0;
+        }
+        if(minY < 0) {
+            yChange = -minY;
+            maxY += yChange;
+            minY = 0;
+        }
 
-        byte[][][] voxels = new byte[size][size][size];
-        for(GroupChunk gc : model.groupChunks.values()) {
+        int size = 1;
+        for (GroupChunk gc : model.groupChunks.values()) {
             for (int ch : gc.childIds) {
                 TransformChunk tc = model.transformChunks.get(ch);
                 if (tc != null) {
                     for (ShapeModel sm : model.shapeChunks.get(tc.childId).models) {
                         byte[][][] g = model.grids.get(sm.id);
-                        Tools3D.translateCopyInto(g, voxels, Math.round(tc.translation.x), Math.round(tc.translation.y), Math.round(tc.translation.z));
+                        size = Math.max(size, Math.round(tc.translation.x + g.length));
+                        size = Math.max(size, Math.round(tc.translation.y + g[0].length));
+                        size = Math.max(size, Math.round(tc.translation.z + g[0][0].length * 0.5f));
+                    }
+                }
+            }
+        }
+
+        byte[][][] voxels = new byte[size][size][size];
+        for (GroupChunk gc : model.groupChunks.values()) {
+            for (int ch : gc.childIds) {
+                TransformChunk tc = model.transformChunks.get(ch);
+                if (tc != null) {
+                    for (ShapeModel sm : model.shapeChunks.get(tc.childId).models) {
+                        byte[][][] g = model.grids.get(sm.id);
+                        Tools3D.translateCopyInto(g, voxels, Math.round(tc.translation.x + xChange), Math.round(tc.translation.y + yChange), Math.round(tc.translation.z));
                     }
                 }
             }

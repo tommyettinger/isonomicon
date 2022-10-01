@@ -3,6 +3,7 @@ package isonomicon.physical;
 import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.digital.Hasher;
 import com.github.tommyettinger.ds.IntIntMap;
+import com.github.tommyettinger.ds.IntObjectMap;
 
 import java.util.Arrays;
 
@@ -677,9 +678,9 @@ public class Tools3D {
                 x >= voxels.length || y >= voxels[x].length || z >= voxels[x][y].length ||
                 voxels[x][y][z] == 0)
             return 0;
-        if(x <= 0 || (v = voxels[x-1][y][z] & 255) == 0 || STUFFS[v % STUFFS.length].material.getTrait(VoxMaterial.MaterialTrait._alpha) >= 1f) return 1;
-        if(y <= 0 || (v = voxels[x][y-1][z] & 255) == 0 || STUFFS[v % STUFFS.length].material.getTrait(VoxMaterial.MaterialTrait._alpha) >= 1f) return 2;
-        if(z <= 0 || (v = voxels[x][y][z-1] & 255) == 0 || STUFFS[v % STUFFS.length].material.getTrait(VoxMaterial.MaterialTrait._alpha) >= 1f) return 3;
+        if(x == 0 || (v = voxels[x-1][y][z] & 255) == 0 || STUFFS[v % STUFFS.length].material.getTrait(VoxMaterial.MaterialTrait._alpha) >= 1f) return 1;
+        if(y == 0 || (v = voxels[x][y-1][z] & 255) == 0 || STUFFS[v % STUFFS.length].material.getTrait(VoxMaterial.MaterialTrait._alpha) >= 1f) return 2;
+        if(z == 0 || (v = voxels[x][y][z-1] & 255) == 0 || STUFFS[v % STUFFS.length].material.getTrait(VoxMaterial.MaterialTrait._alpha) >= 1f) return 3;
         if(x >= voxels.length - 1       || (v = voxels[x+1][y][z] & 255) == 0 || STUFFS[v % STUFFS.length].material.getTrait(VoxMaterial.MaterialTrait._alpha) >= 1f) return 4;
         if(y >= voxels[x].length - 1    || (v = voxels[x][y+1][z] & 255) == 0 || STUFFS[v % STUFFS.length].material.getTrait(VoxMaterial.MaterialTrait._alpha) >= 1f) return 5;
         if(z >= voxels[x][y].length - 1 || (v = voxels[x][y][z+1] & 255) == 0 || STUFFS[v % STUFFS.length].material.getTrait(VoxMaterial.MaterialTrait._alpha) >= 1f) return 6;
@@ -701,6 +702,42 @@ public class Tools3D {
                         if(isSurface(voxels, x+1, y, z) == -1) voxels[x+1][y][z] = b;
                         if(isSurface(voxels, x, y+1, z) == -1) voxels[x][y+1][z] = b;
                         if(isSurface(voxels, x, y, z+1) == -1) voxels[x][y][z+1] = b;
+                    }
+                }
+            }
+        }
+    }
+
+    private static int isSurface(byte[][][] voxels, int x, int y, int z, IntObjectMap<VoxMaterial> materialMap) {
+        int v;
+        if(x < 0 || y < 0 || z < 0 ||
+                x >= voxels.length || y >= voxels[x].length || z >= voxels[x][y].length ||
+                voxels[x][y][z] == 0)
+            return 0;
+        if(x == 0 || (v = voxels[x-1][y][z] & 255) == 0 || materialMap.get(v).getTrait(VoxMaterial.MaterialTrait._alpha) >= 1f) return 1;
+        if(y == 0 || (v = voxels[x][y-1][z] & 255) == 0 || materialMap.get(v).getTrait(VoxMaterial.MaterialTrait._alpha) >= 1f) return 2;
+        if(z == 0 || (v = voxels[x][y][z-1] & 255) == 0 || materialMap.get(v).getTrait(VoxMaterial.MaterialTrait._alpha) >= 1f) return 3;
+        if(x >= voxels.length - 1       || (v = voxels[x+1][y][z] & 255) == 0 || materialMap.get(v).getTrait(VoxMaterial.MaterialTrait._alpha) >= 1f) return 4;
+        if(y >= voxels[x].length - 1    || (v = voxels[x][y+1][z] & 255) == 0 || materialMap.get(v).getTrait(VoxMaterial.MaterialTrait._alpha) >= 1f) return 5;
+        if(z >= voxels[x][y].length - 1 || (v = voxels[x][y][z+1] & 255) == 0 || materialMap.get(v).getTrait(VoxMaterial.MaterialTrait._alpha) >= 1f) return 6;
+        return -1;
+    }
+
+    public static void soakInPlace(byte[][][] voxels, IntObjectMap<VoxMaterial> materialMap)
+    {
+        final int xs = voxels.length, ys = voxels[0].length, zs = voxels[0][0].length;
+        byte b;
+        for (int x = 0; x < xs; x++) {
+            for (int y = 0; y < ys; y++) {
+                for (int z = 0; z < zs; z++) {
+                    if(isSurface(voxels, x, y, z, materialMap) > 0){
+                        b = voxels[x][y][z];
+                        if(isSurface(voxels, x, y, z-1, materialMap) == -1) voxels[x][y][z-1] = b;
+                        if(isSurface(voxels, x-1, y, z, materialMap) == -1) voxels[x-1][y][z] = b;
+                        if(isSurface(voxels, x, y-1, z, materialMap) == -1) voxels[x][y-1][z] = b;
+                        if(isSurface(voxels, x+1, y, z, materialMap) == -1) voxels[x+1][y][z] = b;
+                        if(isSurface(voxels, x, y+1, z, materialMap) == -1) voxels[x][y+1][z] = b;
+                        if(isSurface(voxels, x, y, z+1, materialMap) == -1) voxels[x][y][z+1] = b;
                     }
                 }
             }
