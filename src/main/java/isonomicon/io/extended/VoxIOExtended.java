@@ -302,8 +302,10 @@ public class VoxIOExtended {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        for(byte[][][] grid: model.grids){
-            Tools3D.soakInPlace(grid, lastMaterials);
+        if(GENERAL) {
+            for (byte[][][] grid : model.grids) {
+                Tools3D.soakInPlace(grid, lastMaterials);
+            }
         }
         model.materials.putAll(lastMaterials);
         return model;
