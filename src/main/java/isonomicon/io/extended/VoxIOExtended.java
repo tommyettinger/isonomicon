@@ -174,13 +174,6 @@ public class VoxIOExtended {
                             int z = stream.read();
                             byte color = stream.readByte();
 
-                            shp.minX = Math.min(shp.minX, x);
-                            shp.minY = Math.min(shp.minY, y);
-                            shp.minZ = Math.min(shp.minZ, z);
-                            shp.maxX = Math.max(shp.maxX, x);
-                            shp.maxY = Math.max(shp.maxY, y);
-                            shp.maxZ = Math.max(shp.maxZ, z);
-
                             //If you are using this as a general .vox parser, use the following line only:
                             if(GENERAL)
                                 voxelData[x][y][z] = color;
@@ -212,7 +205,14 @@ public class VoxIOExtended {
                         }
 //                        Tools3D.soakInPlace(voxelData);
 //                        model.grids.add(voxelData);
-                        model.grids.add(Tools3D.scaleAndSoak(voxelData));
+                        model.grids.add(voxelData = Tools3D.scaleAndSoak(voxelData));
+                        shp.minX = Math.min(shp.minX, 0);
+                        shp.minY = Math.min(shp.minY, 0);
+                        shp.minZ = Math.min(shp.minZ, 0);
+                        shp.maxX = Math.max(shp.maxX, voxelData.length);
+                        shp.maxY = Math.max(shp.maxY, voxelData[0].length);
+                        shp.maxZ = Math.max(shp.maxZ, voxelData[0][0].length);
+
                         if (!GENERAL) {
                             for (IntObjectMap.Entry<float[]> e : linkage) {
                                 float div = 2f / e.value[3];

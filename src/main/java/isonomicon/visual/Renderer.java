@@ -11,7 +11,6 @@ import isonomicon.physical.VoxMaterial;
 
 import java.util.Arrays;
 
-import static com.github.tommyettinger.colorful.oklab.ColorTools.fromRGBA8888;
 import static com.github.tommyettinger.colorful.oklab.ColorTools.getRawGamutValue;
 import static com.github.tommyettinger.digital.ArrayTools.fill;
 

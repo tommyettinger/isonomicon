@@ -33,7 +33,7 @@ public class SmudgeRenderer {
     public IntObjectMap<VoxMaterial> materialMap;
 //    public long seed;
 
-    public static final float fidget = 0.5f;
+    public static final float fidget = 0f;
 
     protected SmudgeRenderer() {
 
@@ -209,7 +209,9 @@ public class SmudgeRenderer {
         if(xPos <= -1f || yPos <= -1f || zPos <= -1f
                 || xPos >= size * 2 || yPos >= size * 2 || zPos >= size * 2)
             return;
-        final int 
+        xPos += fidget;
+        yPos += fidget;
+        final int
                 xx = (int)(0.5f + Math.max(0, (size + yPos - xPos) * 2 + 1)),
                 yy = (int)(0.5f + Math.max(0, (zPos * 3 + size * 3 - xPos - yPos) + 1)),
                 depth = (int)(0.5f + (xPos + yPos) * 2 + zPos * 3);
@@ -296,7 +298,7 @@ public class SmudgeRenderer {
         pixmap.fill();
         int xSize = render.length - 1, ySize = render[0].length - 1, depth;
         int v, vx, vy, vz, fx, fy, fz;
-        float hs = (size) * 0.5f, ox, oy, oz, tx, ty, tz;
+        float hs = (size) * 0.5f, hsp = hs - fidget, ox, oy, oz, tx, ty, tz;
         final float cYaw = cos_(yaw), sYaw = sin_(yaw);
         final float cPitch = cos_(pitch), sPitch = sin_(pitch);
         final float cRoll = cos_(roll), sRoll = sin_(roll);
@@ -311,8 +313,8 @@ public class SmudgeRenderer {
                     vx = v & 0x3FF;
                     vy = v >>> 10 & 0x3FF;
                     vz = v >>> 20 & 0x3FF;
-                    ox = vx - hs;
-                    oy = vy - hs;
+                    ox = vx - hsp;
+                    oy = vy - hsp;
                     oz = vz - hs;
                     tx = ox * x_x + oy * y_x + oz * z_x + size + hs;
                     fx = (int)(tx);
@@ -550,8 +552,8 @@ public class SmudgeRenderer {
                 for (int y = 0; y < size; y++) {
                     final byte v = colors[x][y][z];
                     if (v != 0) {
-                        ox = x - hs + translateX;
-                        oy = y - hs + translateY;
+                        ox = x - hs + translateX + fidget;
+                        oy = y - hs + translateY + fidget;
                         oz = z - hs + translateZ;
                         splat(  ox * x_x + oy * y_x + oz * z_x + size,
                                 ox * x_y + oy * y_y + oz * z_y + size,

@@ -27,7 +27,7 @@ import java.io.IOException;
 public class Isomodeler extends ApplicationAdapter {
     public static final int SCREEN_WIDTH = 512;//640;
     public static final int SCREEN_HEIGHT = 512;//720;
-    private Renderer renderer;
+    private SmudgeRenderer renderer;
     private VoxModel model;
     private byte[][][] voxels;
     private String name;
@@ -155,10 +155,10 @@ public class Isomodeler extends ApplicationAdapter {
             int nameStart = Math.max(name.lastIndexOf('/'), name.lastIndexOf('\\')) + 1;
             this.name = name.substring(nameStart, name.indexOf('.', nameStart));
             voxels = VoxIOExtended.mergeModel(model);
-            renderer = new Renderer(voxels.length);
+            renderer = new SmudgeRenderer(voxels.length);
             renderer.palette(VoxIO.lastPalette);
             renderer.saturation(0f);
-            renderer.init();
+//            renderer.init();
         } catch (FileNotFoundException e) {
             model = new VoxModel();
         }

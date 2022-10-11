@@ -233,7 +233,6 @@ target/
 
 
 # jEdit garbage
-*~
 *#*#
 *#*.*#
 /bin/
@@ -243,3 +242,5 @@ target/
 
 *.zip
 /package/*.jar
+
+/vox/Predator.vox
