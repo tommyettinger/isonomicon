@@ -16,6 +16,7 @@ import isonomicon.io.VoxIO;
 import isonomicon.io.extended.*;
 import isonomicon.physical.Stuff;
 import isonomicon.physical.Tools3D;
+import isonomicon.visual.Renderer;
 import isonomicon.visual.SmudgeRenderer;
 
 import java.io.File;
@@ -26,7 +27,7 @@ import java.io.IOException;
 public class Isomodeler extends ApplicationAdapter {
     public static final int SCREEN_WIDTH = 512;//640;
     public static final int SCREEN_HEIGHT = 512;//720;
-    private SmudgeRenderer renderer;
+    private Renderer renderer;
     private VoxModel model;
     private byte[][][] voxels;
     private String name;
@@ -43,7 +44,7 @@ public class Isomodeler extends ApplicationAdapter {
         else 
         {
             System.out.println("INVALID ARGUMENTS. Please supply space-separated absolute paths to .vox models, or use the .bat file.");
-//            inputs = new String[]{"vox/Eye_Tyrant_Floor.vox", "vox/Eye_Tyrant.vox", "vox/Damned.vox", "vox/Bear.vox", "vox/Infantry.vox", "vox/Infantry_Firing.vox", "vox/Lomuk.vox", "vox/Tree.vox", "vox/Box.vox", "vox/Direction_Cube.vox", "vox/teapot.vox"};
+            inputs = new String[]{"vox/Eye_Tyrant_Floor.vox", "vox/Eye_Tyrant.vox", "vox/Damned.vox", "vox/Bear.vox", "vox/Infantry.vox", "vox/Infantry_Firing.vox", "vox/Lomuk.vox", "vox/Tree.vox", "vox/Box.vox", "vox/Direction_Cube.vox", "vox/teapot.vox"};
 //            inputs = new String[]{"vox/Eye_Tyrant_Floor.vox", "vox/Eye_Tyrant.vox", "vox/Bear.vox", "vox/Infantry_Firing.vox", "vox/Lomuk.vox", "vox/Tree.vox"};
 //            inputs = new String[]{"vox/Eye_Tyrant.vox", "vox/Bear.vox", "vox/Infantry_Firing.vox", "vox/Tree.vox"};
 //            inputs = new String[]{"vox/Tree.vox"};
@@ -63,7 +64,7 @@ public class Isomodeler extends ApplicationAdapter {
 //            inputs = new String[]{"vox/Floor.vox"};
 //            inputs = new String[]{"vox/Bear.vox"};
 //            inputs = new String[]{"vox/Lomuk.vox"};
-            inputs = new String[]{"vox/Predator.vox"};
+//            inputs = new String[]{"vox/Predator.vox"};
 //            inputs = new String[]{"vox/FigureSplit.vox"};
 //            inputs = new String[]{"vox/Lomuk.vox", "vox/Damned.vox"};
 //            inputs = new String[]{"vox/Damned.vox"};
@@ -99,7 +100,7 @@ public class Isomodeler extends ApplicationAdapter {
             Array<Pixmap> pm = new Array<>(8);
             for (int i = 0; i < 8; i++) {
                 for (int f = 0; f < 4; f++) {
-                    pixmap = renderer.drawSplats(voxels, i * 0.125f, 0, 0, f, 0, 0, 0);
+                    pixmap = renderer.drawSplats(voxels, i * 0.125f, 0, 0, f, 0, 0, 0, VoxIO.lastMaterials);
                     Pixmap p = new Pixmap(pixmap.getWidth(), pixmap.getHeight(), pixmap.getFormat());
                     p.drawPixmap(pixmap, 0, 0);
                     pm.add(p);
@@ -154,9 +155,10 @@ public class Isomodeler extends ApplicationAdapter {
             int nameStart = Math.max(name.lastIndexOf('/'), name.lastIndexOf('\\')) + 1;
             this.name = name.substring(nameStart, name.indexOf('.', nameStart));
             voxels = VoxIOExtended.mergeModel(model);
-            renderer = new SmudgeRenderer(voxels.length);
+            renderer = new Renderer(voxels.length);
             renderer.palette(VoxIO.lastPalette);
             renderer.saturation(0f);
+            renderer.init();
         } catch (FileNotFoundException e) {
             model = new VoxModel();
         }

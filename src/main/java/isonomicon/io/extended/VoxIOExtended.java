@@ -210,11 +210,8 @@ public class VoxIOExtended {
                                 }
                             }
                         }
-                        if(GENERAL) {
-                            model.grids.add(voxelData);
-                        }
-                        else {
-                            model.grids.add(Tools3D.scaleAndSoak(voxelData));
+                        model.grids.add(Tools3D.scaleAndSoak(voxelData));
+                        if (!GENERAL) {
                             for (IntObjectMap.Entry<float[]> e : linkage) {
                                 float div = 2f / e.value[3];
                                 e.value[0] *= div;
@@ -302,11 +299,11 @@ public class VoxIOExtended {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if(GENERAL) {
-            for (byte[][][] grid : model.grids) {
-                Tools3D.soakInPlace(grid, lastMaterials);
-            }
-        }
+//        if(GENERAL) {
+//            for (byte[][][] grid : model.grids) {
+//                Tools3D.soakInPlace(grid, lastMaterials);
+//            }
+//        }
         model.materials.putAll(lastMaterials);
         return model;
     }

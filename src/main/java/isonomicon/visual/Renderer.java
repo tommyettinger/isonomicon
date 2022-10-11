@@ -456,9 +456,9 @@ public class Renderer {
         final float x_x = cYaw * cPitch, y_x = cYaw * sPitch * sRoll - sYaw * cRoll, z_x = cYaw * sPitch * cRoll + sYaw * sRoll;
         final float x_y = sYaw * cPitch, y_y = sYaw * sPitch * sRoll + cYaw * cRoll, z_y = sYaw * sPitch * cRoll - cYaw * sRoll;
         final float x_z = -sPitch, y_z = cPitch * sRoll, z_z = cPitch * cRoll;
-        for (int z = VoxIOExtended.minZ; z <= VoxIOExtended.maxZ; z++) {
-            for (int x = VoxIOExtended.minX; x <= VoxIOExtended.maxX; x++) {
-                for (int y = VoxIOExtended.minY; y <= VoxIOExtended.maxY; y++) {
+        for (int z = 0; z < size; z++) {
+            for (int x = 0; x < size; x++) {
+                for (int y = 0; y < size; y++) {
                     final byte v = colors[x][y][z];
                     if (v != 0) {
                         ox = x - hs + translateX;
