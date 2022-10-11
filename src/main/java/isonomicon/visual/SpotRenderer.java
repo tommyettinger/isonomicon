@@ -15,9 +15,9 @@ import static com.github.tommyettinger.colorful.oklab.ColorTools.getRawGamutValu
 import static com.github.tommyettinger.digital.ArrayTools.fill;
 
 /**
- * Renders {@code byte[][][]} voxel models to {@link Pixmap}s with arbitrary rotation.
+ * Renders {@code byte[][][]} voxel models to {@link Pixmap}s with arbitrary rotation; this version is from SpotVox.
  */
-public class Renderer {
+public class SpotRenderer {
     public Pixmap pixmap;
     public int[][] depths;
     public int[][] voxels;
@@ -32,10 +32,10 @@ public class Renderer {
     public float neutral = 1f;
     public IntObjectMap<VoxMaterial> materialMap;
 
-    protected Renderer() {
+    protected SpotRenderer() {
 
     }
-    public Renderer(final int size) {
+    public SpotRenderer(final int size) {
         this.size = size;
     }
 
@@ -157,7 +157,7 @@ public class Renderer {
      * @param saturationModifier a float between -1f and 0.5f; negative decreases saturation, positive increases
      * @return this, for chaining
      */
-    public Renderer saturation(float saturationModifier) {
+    public SpotRenderer saturation(float saturationModifier) {
         neutral = (1f + MathUtils.clamp(saturationModifier, -1f, 0.5f));
         return this;
     }
@@ -166,10 +166,10 @@ public class Renderer {
         return palette;
     }
 
-    public Renderer palette(int[] color) {
+    public SpotRenderer palette(int[] color) {
         return palette(color, 256);
     }
-    public Renderer palette(int[] color, int count) {
+    public SpotRenderer palette(int[] color, int count) {
         this.palette = color;
         count = Math.min(256, count);
         if(paletteL == null) paletteL = new float[256];
@@ -239,7 +239,7 @@ public class Renderer {
         }
     }
     
-    public Renderer clear() {
+    public SpotRenderer clear() {
         pixmap.setColor(0);
         pixmap.fill();
         fill(depths, 0);

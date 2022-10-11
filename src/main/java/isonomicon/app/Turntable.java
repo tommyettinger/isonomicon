@@ -9,11 +9,13 @@ import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.github.tommyettinger.anim8.AnimatedGif;
+import com.github.tommyettinger.anim8.AnimatedPNG;
 import com.github.tommyettinger.anim8.Dithered;
 import com.github.tommyettinger.anim8.PaletteReducer;
 import isonomicon.io.LittleEndianDataInputStream;
 import isonomicon.io.VoxIO;
-import isonomicon.io.extended.*;
+import isonomicon.io.extended.VoxIOExtended;
+import isonomicon.io.extended.VoxModel;
 import isonomicon.physical.Stuff;
 import isonomicon.physical.Tools3D;
 import isonomicon.visual.SmudgeRenderer;
@@ -23,7 +25,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class Isomodeler extends ApplicationAdapter {
+public class Turntable extends ApplicationAdapter {
     public static final int SCREEN_WIDTH = 512;//640;
     public static final int SCREEN_HEIGHT = 512;//720;
     private SmudgeRenderer renderer;
@@ -31,11 +33,10 @@ public class Isomodeler extends ApplicationAdapter {
     private byte[][][] voxels;
     private String name;
     private String[] inputs;
-    private PixmapIO.PNG png;
     private AnimatedGif gif;
 //    private PNG8 png8;
-//    private AnimatedPNG apng;
-    public Isomodeler(String[] args){
+    private AnimatedPNG apng;
+    public Turntable(String[] args){
         Tools3D.STUFFS = Stuff.STUFFS;
         VoxIOExtended.GENERAL = true;
         if(args != null && args.length > 0)
@@ -43,9 +44,9 @@ public class Isomodeler extends ApplicationAdapter {
         else 
         {
             System.out.println("INVALID ARGUMENTS. Please supply space-separated absolute paths to .vox models, or use the .bat file.");
-            inputs = new String[]{"vox/Eye_Tyrant_Floor.vox", "vox/Eye_Tyrant.vox", "vox/Damned.vox", "vox/Bear.vox", "vox/Infantry.vox", "vox/Infantry_Firing.vox", "vox/Lomuk.vox", "vox/Tree.vox", "vox/Box.vox", "vox/Direction_Cube.vox", "vox/teapot.vox"};
+//            inputs = new String[]{"vox/Eye_Tyrant_Floor.vox", "vox/Eye_Tyrant.vox", "vox/Damned.vox", "vox/Bear.vox", "vox/Infantry.vox", "vox/Infantry_Firing.vox", "vox/Lomuk.vox", "vox/Tree.vox", "vox/Box.vox", "vox/Direction_Cube.vox", "vox/teapot.vox"};
 //            inputs = new String[]{"vox/Eye_Tyrant_Floor.vox", "vox/Eye_Tyrant.vox", "vox/Bear.vox", "vox/Infantry_Firing.vox", "vox/Lomuk.vox", "vox/Tree.vox"};
-//            inputs = new String[]{"vox/Eye_Tyrant.vox", "vox/Bear.vox", "vox/Infantry_Firing.vox", "vox/Tree.vox"};
+            inputs = new String[]{"vox/Eye_Tyrant_Floor.vox", "vox/Bear.vox", "vox/Infantry_Firing.vox", "vox/Tree.vox"};
 //            inputs = new String[]{"vox/Tree.vox"};
 //            inputs = new String[]{"vox/Eye_Tyrant.vox", "vox/Infantry_Firing.vox", "vox/Lomuk.vox", "vox/Tree.vox", "vox/LAB.vox"};
 //            inputs = new String[]{"vox/Lomuk.vox", "vox/Tree.vox", "vox/Eye_Tyrant.vox", "vox/IPT.vox", "vox/LAB.vox"};
@@ -78,17 +79,11 @@ public class Isomodeler extends ApplicationAdapter {
         if (inputs == null) Gdx.app.exit();
         long startTime = TimeUtils.millis();
 //        Gdx.files.local("out/vox/").mkdirs();
-        png = new PixmapIO.PNG();
-        png.setCompression(2); // we are likely to compress these with something better, like oxipng.
-//        png8 = new PNG8();
         gif = new AnimatedGif();
-//        apng = new AnimatedPNG();
-        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.ROBERTS);
-//        png8.setDitherAlgorithm(Dithered.DitherAlgorithm.NEUE);
+        apng = new AnimatedPNG();
+        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.BLUE_NOISE);
         gif.palette = new PaletteReducer(); // Uses DB Aurora
-//        gif.palette = new PaletteReducer(Coloring.YAM2, Gdx.files.local("assets/Yam2Preload.dat").readBytes());
-        gif.palette.setDitherStrength(0.5f);
-//        png8.palette = gif.palette;
+//        gif.palette.setDitherStrength(0.5f);
         Gdx.files.local("out/vox").mkdirs();
         for (String s : inputs) {
             System.out.println("Rendering " + s);
@@ -97,24 +92,15 @@ public class Isomodeler extends ApplicationAdapter {
 //            load("out/"+s);
             Pixmap pixmap;
             Array<Pixmap> pm = new Array<>(8);
-            for (int i = 0; i < 8; i++) {
-                for (int f = 0; f < 4; f++) {
-                    pixmap = renderer.drawSplats(voxels, i * 0.125f, 0, 0, f, 0, 0, 0, VoxIO.lastMaterials);
-                    Pixmap p = new Pixmap(pixmap.getWidth(), pixmap.getHeight(), pixmap.getFormat());
-                    p.drawPixmap(pixmap, 0, 0);
-                    pm.add(p);
-                    try {
-                        png.write(Gdx.files.local("out/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), p);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-//                png8.write(Gdx.files.local("out/" + name + '/' + name + "_angle" + i + ".png"), p, false, true);
-                }
-                pm.insertRange(pm.size - 4, 4);
+            for (int i = 0; i < 128; i++) {
+                pixmap = renderer.drawSplats(voxels, i * 0x1p-7f + 0.125f, 0, 0, i & 3, 0, 0, 0, VoxIO.lastMaterials);
+                Pixmap p = new Pixmap(pixmap.getWidth(), pixmap.getHeight(), pixmap.getFormat());
+                p.drawPixmap(pixmap, 0, 0);
+                pm.add(p);
             }
             gif.palette.analyze(pm);
-            gif.write(Gdx.files.local("out/" + name + '/' + name + ".gif"), pm, 8);
-//                apng.write(Gdx.files.local("out/" + name + '/' + name + ".png"), pm, 12);
+            gif.write(Gdx.files.local("out/Turntable/" + name + ".gif"), pm, 24);
+            apng.write(Gdx.files.local("out/Turntable/" + name + ".png"), pm, 24);
             for (Pixmap pix : pm) {
                 if (!pix.isDisposed())
                     pix.dispose();
@@ -137,7 +123,7 @@ public class Isomodeler extends ApplicationAdapter {
         config.useVsync(true);
         config.setResizable(false);
         config.disableAudio(true);
-        final Isomodeler app = new Isomodeler(arg);
+        final Turntable app = new Turntable(arg);
         new Lwjgl3Application(app, config);
     }
 
