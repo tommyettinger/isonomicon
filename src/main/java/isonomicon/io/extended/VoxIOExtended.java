@@ -209,9 +209,9 @@ public class VoxIOExtended {
                         shp.minX = Math.min(shp.minX, 0);
                         shp.minY = Math.min(shp.minY, 0);
                         shp.minZ = Math.min(shp.minZ, 0);
-                        shp.maxX = Math.max(shp.maxX, voxelData.length);
-                        shp.maxY = Math.max(shp.maxY, voxelData[0].length);
-                        shp.maxZ = Math.max(shp.maxZ, voxelData[0][0].length);
+                        shp.maxX = Math.max(shp.maxX, voxelData.length - 1);
+                        shp.maxY = Math.max(shp.maxY, voxelData[0].length - 1);
+                        shp.maxZ = Math.max(shp.maxZ, voxelData[0][0].length - 1);
 
                         if (!GENERAL) {
                             for (IntObjectMap.Entry<float[]> e : linkage) {

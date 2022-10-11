@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.math.MathUtils;
 import com.github.tommyettinger.anim8.PaletteReducer;
 import com.github.tommyettinger.colorful.oklab.ColorTools;
+import com.github.tommyettinger.digital.TrigTools;
 import com.github.tommyettinger.ds.IntObjectMap;
 import isonomicon.io.VoxIO;
 import isonomicon.io.extended.*;
@@ -84,22 +85,6 @@ public class SmudgeRenderer {
 //    }
 
     /**
-     * This one's weird; unlike {@link #atan2_(float, float)}, it can return negative results.
-     * @param v any finite float
-     * @return between -0.25 and 0.25
-     */
-    private static float atn_(final float v) {
-        final float n = Math.abs(v);
-        final float c = (n - 1f) / (n + 1f);
-        final float c2 = c * c;
-        final float c3 = c * c2;
-        final float c5 = c3 * c2;
-        final float c7 = c5 * c2;
-        return Math.copySign(0.125f + 0.1590300064615682f * c - 0.051117687016646825f * c3 + 0.02328064394867594f * c5
-                - 0.006205912780487965f * c7, v);
-    }
-
-    /**
      * Altered-range approximation of the frequently-used trigonometric method atan2, taking y and x positions as floats
      * and returning an angle measured in turns from 0.0f to 1.0f, with one cycle over the range equivalent to 360
      * degrees or 2PI radians. You can multiply the angle by {@code 6.2831855f} to change to radians, or by {@code 360f}
@@ -115,31 +100,17 @@ public class SmudgeRenderer {
      * @return the angle to the given point, as a float from 0.0f to 1.0f, inclusive
      */
     public static float atan2_(final float y, float x) {
-        float n = y / x;
-        if(n != n) n = (y == x ? 1f : -1f); // if both y and x are infinite, n would be NaN
-        else if(n - n != n - n) x = 0f; // if n is infinite, y is infinitely larger than x.
-        if(x > 0) {
-            if(y >= 0)
-                return atn_(n);
-            else
-                return atn_(n) + 1f;
-        }
-        else if(x < 0) {
-            return atn_(n) + 0.5f;
-        }
-        else if(y > 0) return x + 0.25f;
-        else if(y < 0) return x + 0.75f;
-        else return x + y; // returns 0 for 0,0 or NaN if either y or x is NaN
+        return TrigTools.atan2Turns(y, x);
     }
 
     public static float sin_(float turns)
     {
-        return MathUtils.sinDeg(turns * 360f);
+        return TrigTools.sinSmoothTurns(turns);
     }
 
     public static float cos_(float turns)
     {
-        return MathUtils.cosDeg(turns * 360f);
+        return TrigTools.cosSmoothTurns(turns);
     }
 
 //    public static float sin_(float turns)
@@ -368,9 +339,8 @@ public class SmudgeRenderer {
                 }
             }
         }
-        final int distance = 1;
-        for (int x = 0; x <= xSize; x++) {
-            for (int y = 0; y <= ySize; y++) {
+        for (int x = xSize; x >= 0; x--) {
+            for (int y = ySize; y >= 0; y--) {
                 if (colorA[x][y] >= 0f) {
                     pixmap.drawPixel(x >>> shrink, y >>> shrink, ColorTools.toRGBA8888(ColorTools.oklab(
                             Math.min(Math.max(colorL[x][y] - 0.1f + midShading[x][y], 0f), 1f),
@@ -434,13 +404,13 @@ public class SmudgeRenderer {
 //                }
 //            }
 //        }
-        for (int x = xSize; x >= 0; x--) {
-            for (int y = ySize; y >= 0; y--) {
-                if (colorA[x][y] >= 0f) {
-                    pixmap.drawPixel(x >>> shrink, y >>> shrink, render[x][y]);
-                }
-            }
-        }
+//        for (int x = xSize; x >= 0; x--) {
+//            for (int y = ySize; y >= 0; y--) {
+//                if (colorA[x][y] >= 0f) {
+//                    pixmap.drawPixel(x >>> shrink, y >>> shrink, render[x][y]);
+//                }
+//            }
+//        }
         if (outline) {
             int o;
             for (int x = step; x <= xSize - step; x+= step) {
