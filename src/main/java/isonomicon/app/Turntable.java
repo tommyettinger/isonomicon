@@ -83,7 +83,7 @@ public class Turntable extends ApplicationAdapter {
         apng = new AnimatedPNG();
         gif.setDitherAlgorithm(Dithered.DitherAlgorithm.BLUE_NOISE);
         gif.palette = new PaletteReducer(); // Uses DB Aurora
-//        gif.palette.setDitherStrength(0.5f);
+        gif.palette.setDitherStrength(0.5f);
         Gdx.files.local("out/vox").mkdirs();
         for (String s : inputs) {
             System.out.println("Rendering " + s);
@@ -91,14 +91,14 @@ public class Turntable extends ApplicationAdapter {
 //            VoxIO.writeVOX("out/" + s, voxels, renderer.palette, VoxIO.lastMaterials);
 //            load("out/"+s);
             Pixmap pixmap;
-            Array<Pixmap> pm = new Array<>(8);
+            Array<Pixmap> pm = new Array<>(128);
             for (int i = 0; i < 128; i++) {
                 pixmap = renderer.drawSplats(voxels, i * 0x1p-7f + 0.125f, 0, 0, i & 3, 0, 0, 0, VoxIO.lastMaterials);
                 Pixmap p = new Pixmap(pixmap.getWidth(), pixmap.getHeight(), pixmap.getFormat());
                 p.drawPixmap(pixmap, 0, 0);
                 pm.add(p);
             }
-            gif.palette.analyze(pm);
+            gif.palette.analyze(pm, 75.0, 256);
             gif.write(Gdx.files.local("out/Turntable/" + name + ".gif"), pm, 24);
             apng.write(Gdx.files.local("out/Turntable/" + name + ".png"), pm, 24);
             for (Pixmap pix : pm) {

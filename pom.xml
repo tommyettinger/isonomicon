@@ -67,12 +67,12 @@
         <maven.gpg.version>1.6</maven.gpg.version>
         <jdk.version>17</jdk.version>
         <junit.version>4.13.2</junit.version>
-        <anim8.version>0.3.10</anim8.version>
-        <squidsquad.version>a90aa4c081</squidsquad.version><!-- was 19d91735b6 -->
+        <anim8.version>0.3.11</anim8.version>
+        <squidsquad.version>3c46d4c4fd</squidsquad.version><!-- was 19d91735b6 -->
         <gdx.version>1.11.0</gdx.version>
         <digital.version>0.1.4</digital.version>
         <juniper.version>0.1.6</juniper.version>
-        <jdkgdxds.version>1.0.4</jdkgdxds.version>
+        <jdkgdxds.version>1.0.5</jdkgdxds.version>
         <colorful.version>0.8.3</colorful.version>
     </properties>
 
