@@ -9,8 +9,10 @@ import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.github.tommyettinger.anim8.AnimatedGif;
+import com.github.tommyettinger.anim8.AnimatedPNG;
 import com.github.tommyettinger.anim8.Dithered;
 import com.github.tommyettinger.anim8.PaletteReducer;
+import com.github.tommyettinger.digital.Base;
 import com.github.yellowstonegames.grid.FlawedPointHash;
 import com.github.yellowstonegames.grid.IPointHash;
 import com.github.yellowstonegames.grid.Noise;
@@ -29,35 +31,40 @@ public class NoiseRenderer extends ApplicationAdapter {
     private SmudgeRenderer renderer;
     private Noise noise;
 
-    private static final int SMALL_SIZE = 64, MID_SIZE = SMALL_SIZE << 1, LARGE_SIZE = SMALL_SIZE << 2;
+    private static final int SMALL_SIZE = 32, MID_SIZE = SMALL_SIZE << 1, LARGE_SIZE = SMALL_SIZE << 2;
     private byte[][][] tempVoxels = new byte[SMALL_SIZE][SMALL_SIZE][SMALL_SIZE];
     private byte[][][] midVoxels = new byte[MID_SIZE][MID_SIZE][MID_SIZE];
     private byte[][][] voxels = new byte[LARGE_SIZE][LARGE_SIZE][LARGE_SIZE];
     private String name;
     private AnimatedGif gif;
-    PixmapIO.PNG png;
+//    PixmapIO.PNG png;
 //    private PNG8 png8;
-//    private AnimatedPNG apng;
+    private AnimatedPNG apng;
     public NoiseRenderer(String[] args){
     }
     @Override
     public void create() {
         System.out.println("Setting up...");
-        noise = new Noise(123456789, 0x1p-3f, Noise.CUBIC_FRACTAL, 1);
+        noise = new Noise((int)System.nanoTime(), 0x1p-3f, Noise.CUBIC_FRACTAL, 2);
+//        noise = new Noise((int)System.nanoTime(), 0x1p-3f, Noise.CUBIC_FRACTAL, 2);
+//        noise = new Noise(Base.BASE36.readInt("VOXEL2"), 0x1p-2f, Noise.CUBIC_FRACTAL, 2);
 //        noise2 = new FastNoise(-4321, 0x1p-4f, FastNoise.PERLIN_FRACTAL, 2);
-        noise.setFractalType(Noise.RIDGED_MULTI);
-        noise.setPointHash(new CubeHash(1234, 8));
+//        noise.setFractalType(Noise.RIDGED_MULTI);
+        noise.setFractalType(Noise.FBM);
+        noise.setPointHash(new CubeHash(~noise.getSeed(), 7));
+        this.name = Base.BASE36.unsigned(noise.getSeed());
+
         long startTime = TimeUtils.millis();
 //        Gdx.files.local("out/vox/").mkdirs();
 //        png = new PixmapIO.PNG();
 //        png8 = new PNG8();
         gif = new AnimatedGif();
-        png = new PixmapIO.PNG();
-        png.setFlipY(true);
-        png.setCompression(2);
-//        apng = new AnimatedPNG();
-        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.NEUE);
-        gif.setDitherStrength(0.625f);
+//        png = new PixmapIO.PNG();
+//        png.setFlipY(true);
+//        png.setCompression(2);
+        apng = new AnimatedPNG();
+        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.WOVEN);
+        gif.setDitherStrength(0.5f);
         Gdx.files.local("out/vox").mkdirs();
         System.out.println("Loading...");
 //        System.out.println("Produced "+SMALL_SIZE+"x"+SMALL_SIZE+"x"+SMALL_SIZE+" noise.");
@@ -84,12 +91,12 @@ public class NoiseRenderer extends ApplicationAdapter {
             }
 //            pm.insertRange(pm.size - 4, 4);
         }
-        System.out.println("Mostly done, gif stuff in progress...");
+        System.out.println("Mostly done, animation stuff in progress...");
         gif.palette = new PaletteReducer(pm);
         gif.write(Gdx.files.local("out/" + name + '/' + name + ".gif"), pm, 8);
 //                gif.palette.exact(Coloring.HALTONITE240, PRELOAD);
 //                gif.write(Gdx.files.local("out/" + name + '/' + name + "-256-color.gif"), pm, 1);
-//                apng.write(Gdx.files.local("out/" + name + '/' + name + ".png"), pm, 12);
+                apng.write(Gdx.files.local("out/" + name + '/' + name + ".png"), pm, 8);
         for (Pixmap pix : pm) {
             if (!pix.isDisposed())
                 pix.dispose();
@@ -123,8 +130,9 @@ public class NoiseRenderer extends ApplicationAdapter {
 //                    sum += (tempVoxels[x][y][z] = (byte) ((Float.floatToRawIntBits(noise.getConfiguredNoise(x, y, z, frame)) >> 31) & 81)); // gray-green
 //                    sum += (tempVoxels[x][y][z] = (byte) (~(Float.floatToRawIntBits(noise.getConfiguredNoise(x, y, z, frame) - 0.875f) >> 31) & 81)); // gray-green
 //                    sum += (tempVoxels[x][y][z] = (byte) (~(Float.floatToRawIntBits(noise.getConfiguredNoise(x, y, z, frame) - 0.91f) >> 31) & 44)); // gray
-//                    sum += (tempVoxels[x][y][z] = (byte) (~(Float.floatToRawIntBits(noise.getConfiguredNoise(x, y, z, frame) - 0.91f) >> 31) & 175)); // blue
-                    sum += (tempVoxels[x][y][z] = (byte) ((~(Float.floatToRawIntBits(noise.getConfiguredNoise(x, y, z, frame) - 0.92f) >> 31) & 68))); // orange
+//                    sum += (tempVoxels[x][y][z] = (byte) (~(Float.floatToRawIntBits(noise.getConfiguredNoise(x, y, z, frame) - 0.8f) >> 31) & 175)); // blue
+//                    sum += (tempVoxels[x][y][z] = (byte) ((~(Float.floatToRawIntBits(noise.getConfiguredNoise(x, y, z, frame) - 0.92f) >> 31) & 68))); // orange
+                    sum += (tempVoxels[x][y][z] = (byte) ((~(Float.floatToRawIntBits(noise.getConfiguredNoise(x, y, z, frame) - 0.25f) >> 31) & 68))); // orange fbm
 //                    sum += (tempVoxels[x][y][z] = (byte) ((~(Float.floatToRawIntBits(noise.getConfiguredNoise(x, y, z, frame) - 0.91f) >> 31) & (int)(12 + 2f * noise2.getConfiguredNoise(x, y, z, TrigTools.sin_(frame * 0x1p-6f), TrigTools.cos_(frame * 0x1p-6f)))))); // jungle greenery
 //                    sum += (tempVoxels[x][y][z] = (byte) (~(Float.floatToRawIntBits(noise.getConfiguredNoise(x, y, z, frame) - 0.91f) >> 31) & (x + y + z + frame & 63))); // rainbow
                 }
@@ -135,7 +143,6 @@ public class NoiseRenderer extends ApplicationAdapter {
 //        Tools3D.simpleScale(midVoxels, voxels);
         Tools3D.soakInPlace(midVoxels);
         voxels = midVoxels;
-        this.name = "Noise";
         if(renderer == null) {
             for (int i = 1; i < 256; i++) {
                 VoxIO.lastMaterials.put(i, new VoxMaterial("Metal", "Roughness 0.6 Reflection 0.4 Dapple -0.04"));
