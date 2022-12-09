@@ -34,7 +34,6 @@ public class Turntable extends ApplicationAdapter {
     private String name;
     private String[] inputs;
     private AnimatedGif gif;
-//    private PNG8 png8;
     private AnimatedPNG apng;
     public Turntable(String[] args){
         Tools3D.STUFFS = Stuff.STUFFS;

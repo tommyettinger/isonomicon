@@ -89,13 +89,13 @@ public class Specialist extends ApplicationAdapter {
         Gdx.files.local("out/vox").mkdirs();
         for (int n = 0; n < inputs.length; n++) {
             String s = inputs[n++];
-            palette = new Texture(Gdx.files.local("assets/"+inputs[n]));
+            palette = new Texture(Gdx.files.local("assets/" + inputs[n]));
             System.out.println("Rendering " + s);
-            load("specialized/"+s);
+            load("specialized/" + s);
 //            VoxIO.writeVOX("out/" + s, voxels, renderer.palette, VoxIO.lastMaterials);
 //            load("out/"+s);
             Pixmap pixmap;
-            Array<Pixmap> pm = new Array<>(32);
+            Array<Pixmap> pm = new Array<>(128);
             ArrayList<byte[][][]> original = new ArrayList<>(voxels.grids.size());
             for (int i = 0; i < voxels.grids.size(); i++) {
                 original.add(Tools3D.deepCopy(voxels.grids.get(i)));
@@ -106,10 +106,10 @@ public class Specialist extends ApplicationAdapter {
                     voxels.grids.add(Tools3D.deepCopy(original.get(j)));
                 }
                 for (int f = 0; f < 4; f++) {
-                    pixmap = renderer.drawModelSimple(voxels, i * 0.125f, 0f, 0f, f, 0, 0, 0);
                     for (int j = 0; j < voxels.grids.size(); j++) {
                         Stuff.evolve(Stuff.STUFFS_B, voxels.grids.get(j), f);
                     }
+                    pixmap = renderer.drawModelSimple(voxels, i * 0.125f, 0f, 0f, f, 0, 0, 0);
                     Texture t = new Texture(pixmap.getWidth(), pixmap.getHeight(), Pixmap.Format.RGBA8888);
                     t.draw(renderer.palettePixmap, 0, 0);
                     FrameBuffer fb = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), false);
@@ -135,18 +135,54 @@ public class Specialist extends ApplicationAdapter {
                     }
                     fb.dispose();
                     t.dispose();
-//                png8.write(Gdx.files.local("out/" + name + '/' + name + "_angle" + i + ".png"), p, false, true);
                 }
                 pm.insertRange(pm.size - 4, 4);
             }
-            gif.palette.analyze(pm);
+            gif.palette.analyze(pm, 75.0, 256);
             gif.write(Gdx.files.local("out/b/specialized/" + name + '/' + name + ".gif"), pm, 8);
-//                gif.palette.exact(Coloring.HALTONITE240, PRELOAD);
-//                gif.write(Gdx.files.local("out/" + name + '/' + name + "-256-color.gif"), pm, 1);
             apng.write(Gdx.files.local("out/b/specialized/" + name + '/' + name + ".png"), pm, 8);
             for (Pixmap pix : pm) {
-                if(!pix.isDisposed())
+                if (!pix.isDisposed())
                     pix.dispose();
+            }
+            pm.clear();
+            if(true) {
+                voxels.grids.clear();
+                for (int j = 0; j < original.size(); j++) {
+                    voxels.grids.add(Tools3D.deepCopy(original.get(j)));
+                }
+                for (int i = 0; i < 128; i++) {
+                    for (int j = 0; j < voxels.grids.size(); j++) {
+                        Stuff.evolve(Stuff.STUFFS_B, voxels.grids.get(j), i);
+                    }
+                    pixmap = renderer.drawModelSimple(voxels, i * 0x1p-7f + 0.125f, 0f, 0f, i, 0, 0, 0);
+                    Texture t = new Texture(pixmap.getWidth(), pixmap.getHeight(), Pixmap.Format.RGBA8888);
+                    t.draw(renderer.palettePixmap, 0, 0);
+                    FrameBuffer fb = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), false);
+                    fb.begin();
+                    palette.bind(1);
+                    ScreenUtils.clear(Color.CLEAR);
+                    batch.begin();
+
+                    indexShader.setUniformi("u_texPalette", 1);
+                    Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
+                    batch.setColor(0f, 0.5f, 0.5f, 1f);
+
+                    batch.draw(t, 0, t.getHeight(), t.getWidth(), -t.getHeight());
+                    batch.end();
+                    pixmap = Pixmap.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
+                    fb.end();
+                    pm.add(pixmap);
+                    fb.dispose();
+                    t.dispose();
+                }
+                gif.palette.analyze(pm, 75.0, 256);
+                gif.write(Gdx.files.local("out/b/specialized/" + name + '/' + name + "_Turntable.gif"), pm, 24);
+                apng.write(Gdx.files.local("out/b/specialized/" + name + '/' + name + "_Turntable.png"), pm, 24);
+                for (Pixmap pix : pm) {
+                    if (!pix.isDisposed())
+                        pix.dispose();
+                }
             }
         }
         System.out.println("Finished in " + TimeUtils.timeSinceMillis(startTime) * 0.001 + " seconds.");
