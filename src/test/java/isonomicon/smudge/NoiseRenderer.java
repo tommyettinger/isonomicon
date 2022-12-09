@@ -5,7 +5,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.github.tommyettinger.anim8.AnimatedGif;
@@ -21,8 +20,6 @@ import isonomicon.physical.Tools3D;
 import isonomicon.physical.VoxMaterial;
 import isonomicon.visual.Coloring;
 import isonomicon.visual.SmudgeRenderer;
-
-import java.io.IOException;
 
 public class NoiseRenderer extends ApplicationAdapter {
 //    public static final int QUALITY = 48;
