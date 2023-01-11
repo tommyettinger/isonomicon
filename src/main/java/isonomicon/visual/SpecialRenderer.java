@@ -7,6 +7,7 @@ import com.github.tommyettinger.anim8.PaletteReducer;
 import com.github.tommyettinger.colorful.oklab.ColorTools;
 import com.github.tommyettinger.ds.IntObjectMap;
 import com.github.yellowstonegames.grid.BlueNoise;
+import com.github.yellowstonegames.grid.CyclicNoise;
 import com.github.yellowstonegames.grid.IntPointHash;
 import com.github.yellowstonegames.grid.Noise;
 import isonomicon.app.ColorGuardAssets;
@@ -50,6 +51,7 @@ public class SpecialRenderer {
     public static final byte LIGHTEN = (byte) 135;
 
     public static final Noise noise = new Noise(0x1337BEEF, 0.0125f, Noise.SIMPLEX_FRACTAL, 2);
+    public static final CyclicNoise swirlNoise = new CyclicNoise(0x1337BEEFBA77L, 5, 0.0125f);
 
     protected SpecialRenderer() {
         this(64);
@@ -159,17 +161,22 @@ public class SpecialRenderer {
             return;
         final float rise = m.getTrait(VoxMaterial.MaterialTrait._rise) * (1.25f + IntPointHash.hash256(vx, vy, vz, 12345) * 0x1.Cp-8f);
         final float flow = m.getTrait(VoxMaterial.MaterialTrait._flow);
+        final float swirl = m.getTrait(VoxMaterial.MaterialTrait._swirl) + 1f;
+        if(swirl != 1f) {
+            float ns = swirlNoise.getNoise(vx, vy, vz, frame);
+            if(ns > swirl) return;
+        }
         final float emit = m.getTrait(VoxMaterial.MaterialTrait._emit) * 0.75f;
         int lowX = 0, highX = 4, lowY = 0, highY = 4;
 //        if(emit != 0f) {
 //            lowX = lowY = 1;
 //            highX = highY = 3;
 //        } else
-            if(flow != 0f){
-            float ns = noise.getConfiguredNoise(xPos, yPos, zPos, frame * flow);
-            if(ns > 0) highX = (int)(4.5 + ns * (3 << shrink));
-            else if(ns < 0) lowX = Math.round(lowX + ns * (3 << shrink));
-        }
+            if(flow != 0f) {
+                float ns = noise.getConfiguredNoise(xPos, yPos, zPos, frame * flow);
+                if (ns > 0) highX = (int) (4.5 + ns * (3 << shrink));
+                else if (ns < 0) lowX = Math.round(lowX + ns * (3 << shrink));
+            }
         xPos += fidget;
         yPos += fidget;
         final int

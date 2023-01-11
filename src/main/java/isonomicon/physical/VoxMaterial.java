@@ -72,7 +72,9 @@ public class VoxMaterial {
 		_damage("Damage"),
 		//17 Used to indicate how much the voxel moves randomly outward, as well as downward (if negative) or upward (if positive)
 		_disperse("Disperse"),
-		//18 used in newer MV instead of a separate MaterialType
+		//18 A threshold noise value between -1.0 and 1.0; if some CyclicNoise is greater than this threshold, the voxel isn't drawn.
+		_swirl("Swirl"),
+		//19 used in newer MV instead of a separate MaterialType
 		_type("Type")
 		;
 		
@@ -128,7 +130,8 @@ public class VoxMaterial {
 		traits.put(14, 0.5f);
 		String[] split = traitMap.split("[ ,;]+");
 		for (int i = 1; i < (split.length & -2); i+=2) {
-			traits.put(TRAIT_MAP.getOrDefault(split[i-1], -1), Float.parseFloat(split[i]));
+			putTrait(split[i-1], Float.parseFloat(split[i]));
+//			traits.put(TRAIT_MAP.getOrDefault(split[i-1], -1), Float.parseFloat(split[i]));
 		}
 	}
 
@@ -138,7 +141,21 @@ public class VoxMaterial {
 	public void putTrait(MaterialTrait trait, float value){
 		int ord = trait.ordinal();
 		if(ord == 6) traits.put(8, value);
-		traits.put(ord, value);
+		if(ord == 18)
+			traits.put(ord, value - 1f);
+		else
+			traits.put(ord, value);
+	}
+	public void putTrait(String trait, float value) {
+		try {
+			int ord = TRAIT_MAP.getOrDefault(trait, -1);
+			if (ord == 6) traits.put(8, value);
+			if (ord == 18)
+				traits.put(ord, value - 1f);
+			else
+				traits.put(ord, value);
+		} catch (IllegalArgumentException ignored) {
+		}
 	}
 	public void putTrait(String trait, String value){
 		try {
@@ -149,8 +166,12 @@ public class VoxMaterial {
 				type = ALL_TYPES[t];
 			} else {
 				float f = Float.parseFloat(value);
-				traits.put(ord, f);
-				if(ord == 6) traits.put(8, f);
+				if(ord == 18)
+					traits.put(ord, f - 1f);
+				else
+					traits.put(ord, f);
+				if(ord == 6)
+					traits.put(8, f);
 			}
 		}catch (IllegalArgumentException ignored){
 		}
