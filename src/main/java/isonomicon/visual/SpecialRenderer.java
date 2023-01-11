@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import static com.github.tommyettinger.digital.ArrayTools.fill;
+import static com.github.tommyettinger.digital.TrigTools.cosTurns;
+import static com.github.tommyettinger.digital.TrigTools.sinTurns;
 
 /**
  * Renders {@code byte[][][]} voxel models to pairs of {@link Pixmap}s, one using normal RGBA colors and one using an
@@ -51,7 +53,7 @@ public class SpecialRenderer {
     public static final byte LIGHTEN = (byte) 135;
 
     public static final Noise noise = new Noise(0x1337BEEF, 0.0125f, Noise.SIMPLEX_FRACTAL, 2);
-    public static final CyclicNoise swirlNoise = new CyclicNoise(0x1337BEEFBA77L, 5, 0.0125f);
+    public static final CyclicNoise swirlNoise = new CyclicNoise(0x1337BEEFBA77L, 6, 0.03125f);
 
     protected SpecialRenderer() {
         this(64);
@@ -90,16 +92,6 @@ public class SpecialRenderer {
 
     protected float bnBlocky(int x, int y, int seed) {
         return (BlueNoise.TILE_NOISE[seed & 63][(x & 63) | (y & 63) << 6] & 0x80) * 0x3p-10f;
-    }
-
-    public static float sin_(float turns)
-    {
-        return MathUtils.sinDeg(turns * 360f);
-    }
-
-    public static float cos_(float turns)
-    {
-        return MathUtils.cosDeg(turns * 360f);
     }
 
     /**
@@ -163,7 +155,7 @@ public class SpecialRenderer {
         final float flow = m.getTrait(VoxMaterial.MaterialTrait._flow);
         final float swirl = m.getTrait(VoxMaterial.MaterialTrait._swirl) + 1f;
         if(swirl != 1f) {
-            float ns = swirlNoise.getNoise(vx, vy, vz, frame);
+            float ns = swirlNoise.getNoise(vx, vy, vz, cosTurns(frame * 0x1p-7f) * 0.625f / swirlNoise.getFrequency(), sinTurns(frame * 0x1p-7f) * 0.625f / swirlNoise.getFrequency());
             if(ns > swirl) return;
         }
         final float emit = m.getTrait(VoxMaterial.MaterialTrait._emit) * 0.75f;
@@ -271,9 +263,9 @@ public class SpecialRenderer {
         int xSize = render.length - 1, ySize = render[0].length - 1, depth;
         int v, vx, vy, vz, fx, fy, fz;
         float hs = (size) * 0.5f, hsp = hs - fidget, ox, oy, oz, tx, ty, tz;
-        final float cYaw = cos_(yaw), sYaw = sin_(yaw);
-        final float cPitch = cos_(pitch), sPitch = sin_(pitch);
-        final float cRoll = cos_(roll), sRoll = sin_(roll);
+        final float cYaw = cosTurns(yaw), sYaw = sinTurns(yaw);
+        final float cPitch = cosTurns(pitch), sPitch = sinTurns(pitch);
+        final float cRoll = cosTurns(roll), sRoll = sinTurns(roll);
         final float x_x = cYaw * cPitch, y_x = cYaw * sPitch * sRoll - sYaw * cRoll, z_x = cYaw * sPitch * cRoll + sYaw * sRoll;
         final float x_y = sYaw * cPitch, y_y = sYaw * sPitch * sRoll + cYaw * cRoll, z_y = sYaw * sPitch * cRoll - cYaw * sRoll;
         final float x_z = -sPitch, y_z = cPitch * sRoll, z_z = cPitch * cRoll;
@@ -500,7 +492,7 @@ public class SpecialRenderer {
     public Pixmap drawSplats(byte[][][] colors, float angleTurns, int frame) {
         final int size = colors.length;
         final float hs = size * 0.5f;
-        final float c = cos_(angleTurns), s = sin_(angleTurns);
+        final float c = cosTurns(angleTurns), s = sinTurns(angleTurns);
         for (int z = 0; z < size; z++) {
             for (int x = 0; x < size; x++) {
                 for (int y = 0; y < size; y++) {
@@ -521,9 +513,9 @@ public class SpecialRenderer {
         final int size = colors.length;
         final float hs = size * 0.5f;
         float ox, oy, oz; // offset x,y,z
-        final float cYaw = cos_(yaw), sYaw = sin_(yaw);
-        final float cPitch = cos_(pitch), sPitch = sin_(pitch);
-        final float cRoll = cos_(roll), sRoll = sin_(roll);
+        final float cYaw = cosTurns(yaw), sYaw = sinTurns(yaw);
+        final float cPitch = cosTurns(pitch), sPitch = sinTurns(pitch);
+        final float cRoll = cosTurns(roll), sRoll = sinTurns(roll);
         final float x_x = cYaw * cPitch, y_x = cYaw * sPitch * sRoll - sYaw * cRoll, z_x = cYaw * sPitch * cRoll + sYaw * sRoll;
         final float x_y = sYaw * cPitch, y_y = sYaw * sPitch * sRoll + cYaw * cRoll, z_y = sYaw * sPitch * cRoll - cYaw * sRoll;
         final float x_z = -sPitch, y_z = cPitch * sRoll, z_z = cPitch * cRoll;
@@ -586,9 +578,9 @@ public class SpecialRenderer {
         final int size = g.length;
         final float hs = size * 0.5f;
         float ox, oy, oz; // offset x,y,z
-        final float cYaw = cos_(yaw), sYaw = sin_(yaw);
-        final float cPitch = cos_(pitch), sPitch = sin_(pitch);
-        final float cRoll = cos_(roll), sRoll = sin_(roll);
+        final float cYaw = cosTurns(yaw), sYaw = sinTurns(yaw);
+        final float cPitch = cosTurns(pitch), sPitch = sinTurns(pitch);
+        final float cRoll = cosTurns(roll), sRoll = sinTurns(roll);
         final float x_x = cYaw * cPitch, y_x = cYaw * sPitch * sRoll - sYaw * cRoll, z_x = cYaw * sPitch * cRoll + sYaw * sRoll;
         final float x_y = sYaw * cPitch, y_y = sYaw * sPitch * sRoll + cYaw * cRoll, z_y = sYaw * sPitch * cRoll - cYaw * sRoll;
         final float x_z = -sPitch, y_z = cPitch * sRoll, z_z = cPitch * cRoll;
