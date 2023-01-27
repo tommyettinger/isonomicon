@@ -70,12 +70,13 @@ public class StuffNotes extends ApplicationAdapter {
             r++;
         }
         batch.end();
+        PixmapIO.writePNG(Gdx.files.local("Notes_B_Palette.png"), Pixmap.createFromFrameBuffer(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()), 6, true);
     }
 
 
     public static void main(String[] arg) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-        config.setTitle("Isonomicon Test: Special Viewer");
+        config.setTitle("Isonomicon Test: Stuff Notes");
         config.setWindowedMode(600, 900);
         config.setIdleFPS(10);
         config.setForegroundFPS(60);

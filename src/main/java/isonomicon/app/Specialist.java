@@ -49,7 +49,10 @@ public class Specialist extends ApplicationAdapter {
         else 
         {
             System.out.println("INVALID ARGUMENTS. Please supply space-separated absolute paths to .vox models, or use the .bat file.");
-            inputs = new String[]{"b/vox/odyssey/Assassin_Dagger.vox", "palettes/b/TanClothDarkSkin.png"};
+            inputs = new String[]{
+                    "b/vox/odyssey/Assassin_Dagger.vox", "palettes/b/TanClothDarkSkin.png",
+                    "b/vox/odyssey/Noble_Knife.vox", "palettes/b/TanClothDarkSkin.png",
+            };
 //            inputs = new String[]{"b/vox/Figure.vox", "b/vox/Tree.vox"};
 //            inputs = new String[]{"b/vox/Figure_Split.vox", "palettes/b/TanClothDarkSkin.png"};
 //            inputs = new String[]{"b/vox/Damned.vox", "palettes/b/CherrySkinDarkCloth.png"};
