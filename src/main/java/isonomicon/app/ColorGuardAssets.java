@@ -159,6 +159,11 @@ public class ColorGuardAssets extends ApplicationAdapter {
                 System.out.println("Rendering " + name);
                 Gdx.files.local("out/color_guard/animated_diverse/" + name + '/').mkdirs();
                 load("specialized/b/vox/color_guard/" + name + ".vox");
+                if(name.startsWith("Terrain")){
+                    renderer.outline = 2;
+                } else {
+                    renderer.outline = 4;
+                }
                 Pixmap pixmap;
                 Array<Pixmap> pm = new Array<>(32 * armies.length);
                 pm.setSize(32 * armies.length);
@@ -366,6 +371,11 @@ public class ColorGuardAssets extends ApplicationAdapter {
                 String s = unit.name;
                 System.out.println("Rendering " + s);
                 load("specialized/b/vox/color_guard/" + s + ".vox");
+                if(name.startsWith("Terrain")){
+                    renderer.outline = 2;
+                } else {
+                    renderer.outline = 4;
+                }
                 Pixmap pixmap;
                 Array<Pixmap> pm = new Array<>(32 * armies.length);
                 pm.setSize(32 * armies.length);

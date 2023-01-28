@@ -192,6 +192,9 @@ public class SpecialRenderer {
                             outlineShading[ax][ay] = paletteL[voxel & 255] * (0.625f + emit * 2.5f);
                             outlineIndices[ax][ay] = voxel;
                         }
+                        else {
+                            outlines[ax][ay] = 0;
+                        }
                     }
                     else {
                         indices[ax][ay] = -16;
