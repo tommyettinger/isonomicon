@@ -3,6 +3,7 @@ package isonomicon.visual;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.math.MathUtils;
 import com.github.tommyettinger.colorful.oklab.ColorTools;
+import com.github.tommyettinger.digital.TrigTools;
 import com.github.tommyettinger.ds.IntObjectMap;
 import isonomicon.io.VoxIO;
 import isonomicon.io.extended.*;
@@ -13,6 +14,7 @@ import java.util.Arrays;
 
 import static com.github.tommyettinger.colorful.oklab.ColorTools.getRawGamutValue;
 import static com.github.tommyettinger.digital.ArrayTools.fill;
+import static com.github.tommyettinger.digital.TrigTools.*;
 
 /**
  * Renders {@code byte[][][]} voxel models to {@link Pixmap}s with arbitrary rotation; this version is from SpotVox.
@@ -60,76 +62,76 @@ public class SpotRenderer {
         alpha = Math.min(Math.max(alpha, 0f), 1f);
         final float A2 = (A - 0.5f);
         final float B2 = (B - 0.5f);
-        final float hue = atan2_(B2, A2);
+        final float hue = atan2Turns(B2, A2);
         final int idx = (int) (L * 255.999f) << 8 | (int)(256f * hue);
         final float dist = getRawGamutValue(idx) * 0.5f;
         if(dist * dist * 0x1p-16f >= (A2 * A2 + B2 * B2))
             return ColorTools.oklab(L, A, B, alpha);
         return Float.intBitsToFloat(
                 (int) (alpha * 127.999f) << 25 |
-                        (int) (sin_(hue) * dist + 128f) << 16 |
-                        (int) (cos_(hue) * dist + 128f) << 8 |
+                        (int) (sinTurns(hue) * dist + 128f) << 16 |
+                        (int) (cosTurns(hue) * dist + 128f) << 8 |
                         (int) (L * 255f));
     }
 
-    /**
-     * This one's weird; unlike {@link #atan2_(float, float)}, it can return negative results.
-     * @param v any finite float
-     * @return between -0.25 and 0.25
-     */
-    private static float atn_(final float v) {
-        final float n = Math.abs(v);
-        final float c = (n - 1f) / (n + 1f);
-        final float c2 = c * c;
-        final float c3 = c * c2;
-        final float c5 = c3 * c2;
-        final float c7 = c5 * c2;
-        return Math.copySign(0.125f + 0.1590300064615682f * c - 0.051117687016646825f * c3 + 0.02328064394867594f * c5
-                - 0.006205912780487965f * c7, v);
-    }
-
-    /**
-     * Altered-range approximation of the frequently-used trigonometric method atan2, taking y and x positions as floats
-     * and returning an angle measured in turns from 0.0f to 1.0f, with one cycle over the range equivalent to 360
-     * degrees or 2PI radians. You can multiply the angle by {@code 6.2831855f} to change to radians, or by {@code 360f}
-     * to change to degrees. Takes y and x (in that unusual order) as floats. Will never return a negative number, which
-     * may help avoid costly floating-point modulus when you actually want a positive number.
-     * <br>
-     * Credit for this goes to the 1955 research study "Approximations for Digital Computers," by RAND Corporation. This
-     * is sheet 9's algorithm, which is the second-fastest and second-least precise. The algorithm on sheet 8 is faster,
-     * but only by a very small degree, and is considerably less precise. That study provides an atan()
-     * method, and the small code to make that work as atan2_() was worked out from Wikipedia.
-     * @param y y-component of the point to find the angle towards; note the parameter order is unusual by convention
-     * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention
-     * @return the angle to the given point, as a float from 0.0f to 1.0f, inclusive
-     */
-    public static float atan2_(final float y, float x) {
-        float n = y / x;
-        if(n != n) n = (y == x ? 1f : -1f); // if both y and x are infinite, n would be NaN
-        else if(n - n != n - n) x = 0f; // if n is infinite, y is infinitely larger than x.
-        if(x > 0) {
-            if(y >= 0)
-                return atn_(n);
-            else
-                return atn_(n) + 1f;
-        }
-        else if(x < 0) {
-            return atn_(n) + 0.5f;
-        }
-        else if(y > 0) return x + 0.25f;
-        else if(y < 0) return x + 0.75f;
-        else return x + y; // returns 0 for 0,0 or NaN if either y or x is NaN
-    }
-
-    public static float sin_(float turns)
-    {
-        return MathUtils.sinDeg(turns * 360f);
-    }
-
-    public static float cos_(float turns)
-    {
-        return MathUtils.cosDeg(turns * 360f);
-    }
+//    /**
+//     * This one's weird; unlike {@link #atan2_(float, float)}, it can return negative results.
+//     * @param v any finite float
+//     * @return between -0.25 and 0.25
+//     */
+//    private static float atn_(final float v) {
+//        final float n = Math.abs(v);
+//        final float c = (n - 1f) / (n + 1f);
+//        final float c2 = c * c;
+//        final float c3 = c * c2;
+//        final float c5 = c3 * c2;
+//        final float c7 = c5 * c2;
+//        return Math.copySign(0.125f + 0.1590300064615682f * c - 0.051117687016646825f * c3 + 0.02328064394867594f * c5
+//                - 0.006205912780487965f * c7, v);
+//    }
+//
+//    /**
+//     * Altered-range approximation of the frequently-used trigonometric method atan2, taking y and x positions as floats
+//     * and returning an angle measured in turns from 0.0f to 1.0f, with one cycle over the range equivalent to 360
+//     * degrees or 2PI radians. You can multiply the angle by {@code 6.2831855f} to change to radians, or by {@code 360f}
+//     * to change to degrees. Takes y and x (in that unusual order) as floats. Will never return a negative number, which
+//     * may help avoid costly floating-point modulus when you actually want a positive number.
+//     * <br>
+//     * Credit for this goes to the 1955 research study "Approximations for Digital Computers," by RAND Corporation. This
+//     * is sheet 9's algorithm, which is the second-fastest and second-least precise. The algorithm on sheet 8 is faster,
+//     * but only by a very small degree, and is considerably less precise. That study provides an atan()
+//     * method, and the small code to make that work as atan2_() was worked out from Wikipedia.
+//     * @param y y-component of the point to find the angle towards; note the parameter order is unusual by convention
+//     * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention
+//     * @return the angle to the given point, as a float from 0.0f to 1.0f, inclusive
+//     */
+//    public static float atan2_(final float y, float x) {
+//        float n = y / x;
+//        if(n != n) n = (y == x ? 1f : -1f); // if both y and x are infinite, n would be NaN
+//        else if(n - n != n - n) x = 0f; // if n is infinite, y is infinitely larger than x.
+//        if(x > 0) {
+//            if(y >= 0)
+//                return atn_(n);
+//            else
+//                return atn_(n) + 1f;
+//        }
+//        else if(x < 0) {
+//            return atn_(n) + 0.5f;
+//        }
+//        else if(y > 0) return x + 0.25f;
+//        else if(y < 0) return x + 0.75f;
+//        else return x + y; // returns 0 for 0,0 or NaN if either y or x is NaN
+//    }
+//
+//    public static float sin_(float turns)
+//    {
+//        return MathUtils.sinDeg(turns * 360f);
+//    }
+//
+//    public static float cos_(float turns)
+//    {
+//        return MathUtils.cosDeg(turns * 360f);
+//    }
 
 //    public static float sin_(float turns)
 //    {
@@ -281,9 +283,9 @@ public class SpotRenderer {
         int xSize = depths.length - 1, ySize = depths[0].length - 1, depth;
         int v, vx, vy, vz, fx, fy, fz;
         float hs = (size) * 0.5f, ox, oy, oz, tx, ty, tz;
-        final float cYaw = cos_(yaw), sYaw = sin_(yaw);
-        final float cPitch = cos_(pitch), sPitch = sin_(pitch);
-        final float cRoll = cos_(roll), sRoll = sin_(roll);
+        final float cYaw = cosTurns(yaw), sYaw = sinTurns(yaw);
+        final float cPitch = cosTurns(pitch), sPitch = sinTurns(pitch);
+        final float cRoll = cosTurns(roll), sRoll = sinTurns(roll);
         final float x_x = cYaw * cPitch, y_x = cYaw * sPitch * sRoll - sYaw * cRoll, z_x = cYaw * sPitch * cRoll + sYaw * sRoll;
         final float x_y = sYaw * cPitch, y_y = sYaw * sPitch * sRoll + cYaw * cRoll, z_y = sYaw * sPitch * cRoll - cYaw * sRoll;
         final float x_z = -sPitch, y_z = cPitch * sRoll, z_z = cPitch * cRoll;
@@ -370,31 +372,41 @@ public class SpotRenderer {
                     int hy = y >>> shrink;
                     inner = outlines[x][y];
                     if (inner != 0) {
-                        if(outline == 2) outer = inner;
+                        if (outline == 2) outer = inner;
                         depth = depths[x][y];
                         if (outlines[x - step][y] == 0) {
-                            pixmap.drawPixel(hx - 1, hy    , outer);
-                        }
-                        else if (depths[x - step][y] < depth - threshold) {
-                            pixmap.drawPixel(hx - 1, hy    , inner);
+                            pixmap.drawPixel(hx - 1, hy, outer);
+                        } else if (depths[x - step][y] < depth - threshold) {
+                            pixmap.drawPixel(hx - 1, hy, inner);
                         }
                         if (outlines[x + step][y] == 0) {
-                            pixmap.drawPixel(hx + 1, hy    , outer);
-                        }
-                        else if (depths[x + step][y] < depth - threshold) {
-                            pixmap.drawPixel(hx + 1, hy    , inner);
+                            pixmap.drawPixel(hx + 1, hy, outer);
+                        } else if (depths[x + step][y] < depth - threshold) {
+                            pixmap.drawPixel(hx + 1, hy, inner);
                         }
                         if (outlines[x][y - step] == 0) {
-                            pixmap.drawPixel(hx    , hy - 1, outer);
-                        }
-                        else if (depths[x][y - step] < depth - threshold) {
-                            pixmap.drawPixel(hx    , hy - 1, inner);
+                            pixmap.drawPixel(hx, hy - 1, outer);
+                        } else if (depths[x][y - step] < depth - threshold) {
+                            pixmap.drawPixel(hx, hy - 1, inner);
                         }
                         if (outlines[x][y + step] == 0) {
-                            pixmap.drawPixel(hx    , hy + 1, outer);
+                            pixmap.drawPixel(hx, hy + 1, outer);
+                        } else if (depths[x][y + step] < depth - threshold) {
+                            pixmap.drawPixel(hx, hy + 1, inner);
                         }
-                        else if (depths[x][y + step] < depth - threshold) {
-                            pixmap.drawPixel(hx    , hy + 1, inner);
+
+
+                        if (outlines[x - step][y - step] == 0) {
+                            pixmap.drawPixel(hx - 1, hy - 1, outer);
+                        }
+                        if (outlines[x + step][y - step] == 0) {
+                            pixmap.drawPixel(hx + 1, hy - 1, outer);
+                        }
+                        if (outlines[x - step][y + step] == 0) {
+                            pixmap.drawPixel(hx - 1, hy + 1, outer);
+                        }
+                        if (outlines[x + step][y + step] == 0) {
+                            pixmap.drawPixel(hx + 1, hy + 1, outer);
                         }
                     }
                 }
@@ -427,7 +439,7 @@ public class SpotRenderer {
         this.materialMap = materialMap;
         final int size = colors.length;
         final float hs = (size) * 0.5f;
-        final float c = cos_(angleTurns), s = sin_(angleTurns);
+        final float c = cosTurns(angleTurns), s = sinTurns(angleTurns);
         for (int z = VoxIOExtended.minZ; z <= VoxIOExtended.maxZ; z++) {
             for (int x = VoxIOExtended.minX; x <= VoxIOExtended.maxX; x++) {
                 for (int y = VoxIOExtended.minY; y <= VoxIOExtended.maxY; y++) {
@@ -449,9 +461,9 @@ public class SpotRenderer {
         final int size = colors.length;
         final float hs = size * 0.5f;
         float ox, oy, oz; // offset x,y,z
-        final float cYaw = cos_(yaw), sYaw = sin_(yaw);
-        final float cPitch = cos_(pitch), sPitch = sin_(pitch);
-        final float cRoll = cos_(roll), sRoll = sin_(roll);
+        final float cYaw = cosTurns(yaw), sYaw = sinTurns(yaw);
+        final float cPitch = cosTurns(pitch), sPitch = sinTurns(pitch);
+        final float cRoll = cosTurns(roll), sRoll = sinTurns(roll);
         final float x_x = cYaw * cPitch, y_x = cYaw * sPitch * sRoll - sYaw * cRoll, z_x = cYaw * sPitch * cRoll + sYaw * sRoll;
         final float x_y = sYaw * cPitch, y_y = sYaw * sPitch * sRoll + cYaw * cRoll, z_y = sYaw * sPitch * cRoll - cYaw * sRoll;
         final float x_z = -sPitch, y_z = cPitch * sRoll, z_z = cPitch * cRoll;

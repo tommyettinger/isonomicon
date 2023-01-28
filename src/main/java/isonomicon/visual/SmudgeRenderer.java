@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.math.MathUtils;
 import com.github.tommyettinger.anim8.PaletteReducer;
 import com.github.tommyettinger.colorful.oklab.ColorTools;
-import com.github.tommyettinger.digital.TrigTools;
 import com.github.tommyettinger.ds.IntObjectMap;
 import isonomicon.io.VoxIO;
 import isonomicon.io.extended.*;
@@ -15,6 +14,7 @@ import java.util.Arrays;
 
 import static com.github.tommyettinger.colorful.oklab.ColorTools.getRawGamutValue;
 import static com.github.tommyettinger.digital.ArrayTools.fill;
+import static com.github.tommyettinger.digital.TrigTools.*;
 
 /**
  * Renders {@code byte[][][]} voxel models to {@link Pixmap}s with arbitrary yaw rotation.
@@ -64,15 +64,15 @@ public class SmudgeRenderer {
         alpha = Math.min(Math.max(alpha, 0f), 1f);
         final float A2 = (A - 0.5f);
         final float B2 = (B - 0.5f);
-        final float hue = atan2_(B2, A2);
+        final float hue = atan2Turns(B2, A2);
         final int idx = (int) (L * 255.999f) << 8 | (int)(256f * hue);
         final float dist = getRawGamutValue(idx) * 0.5f;
         if(dist * dist * 0x1p-16f >= (A2 * A2 + B2 * B2))
             return ColorTools.oklab(L, A, B, alpha);
         return Float.intBitsToFloat(
                 (int) (alpha * 127.999f) << 25 |
-                        (int) (sin_(hue) * dist + 128f) << 16 |
-                        (int) (cos_(hue) * dist + 128f) << 8 |
+                        (int) (sinTurns(hue) * dist + 128f) << 16 |
+                        (int) (cosTurns(hue) * dist + 128f) << 8 |
                         (int) (L * 255f));
     }
 
@@ -82,53 +82,6 @@ public class SmudgeRenderer {
 ////        return result;
 ////        return (((x | ~y) & 1) + (x + ~y & 1) + (x & y & 1)) * 0.333f;
 //        return (PaletteReducer.TRI_BLUE_NOISE[(x & 63) | (y & 63) << 6] + 128) * 0x1p-8f;
-//    }
-
-    /**
-     * Altered-range approximation of the frequently-used trigonometric method atan2, taking y and x positions as floats
-     * and returning an angle measured in turns from 0.0f to 1.0f, with one cycle over the range equivalent to 360
-     * degrees or 2PI radians. You can multiply the angle by {@code 6.2831855f} to change to radians, or by {@code 360f}
-     * to change to degrees. Takes y and x (in that unusual order) as floats. Will never return a negative number, which
-     * may help avoid costly floating-point modulus when you actually want a positive number.
-     * <br>
-     * Credit for this goes to the 1955 research study "Approximations for Digital Computers," by RAND Corporation. This
-     * is sheet 9's algorithm, which is the second-fastest and second-least precise. The algorithm on sheet 8 is faster,
-     * but only by a very small degree, and is considerably less precise. That study provides an atan()
-     * method, and the small code to make that work as atan2_() was worked out from Wikipedia.
-     * @param y y-component of the point to find the angle towards; note the parameter order is unusual by convention
-     * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention
-     * @return the angle to the given point, as a float from 0.0f to 1.0f, inclusive
-     */
-    public static float atan2_(final float y, float x) {
-        return TrigTools.atan2Turns(y, x);
-    }
-
-    public static float sin_(float turns)
-    {
-        return TrigTools.sinSmoothTurns(turns);
-    }
-
-    public static float cos_(float turns)
-    {
-        return TrigTools.cosSmoothTurns(turns);
-    }
-
-//    public static float sin_(float turns)
-//    {
-//        turns *= 4f;
-//        final long floor = (turns >= 0.0 ? (long) turns : (long) turns - 1L) & -2L;
-//        turns -= floor;
-//        turns *= 2f - turns;
-//        return turns * (-0.775f - 0.225f * turns) * ((floor & 2L) - 1L);
-//    }
-//
-//    public static float cos_(float turns)
-//    {
-//        turns = turns * 4f + 1f;
-//        final long floor = (turns >= 0.0 ? (long) turns : (long) turns - 1L) & -2L;
-//        turns -= floor;
-//        turns *= 2f - turns;
-//        return turns * (-0.775f - 0.225f * turns) * ((floor & 2L) - 1L);
 //    }
 
     /**
@@ -270,9 +223,9 @@ public class SmudgeRenderer {
         int xSize = render.length - 1, ySize = render[0].length - 1, depth;
         int v, vx, vy, vz, fx, fy, fz;
         float hs = (size) * 0.5f, hsp = hs - fidget, ox, oy, oz, tx, ty, tz;
-        final float cYaw = cos_(yaw), sYaw = sin_(yaw);
-        final float cPitch = cos_(pitch), sPitch = sin_(pitch);
-        final float cRoll = cos_(roll), sRoll = sin_(roll);
+        final float cYaw = cosTurns(yaw), sYaw = sinTurns(yaw);
+        final float cPitch = cosTurns(pitch), sPitch = sinTurns(pitch);
+        final float cRoll = cosTurns(roll), sRoll = sinTurns(roll);
         final float x_x = cYaw * cPitch, y_x = cYaw * sPitch * sRoll - sYaw * cRoll, z_x = cYaw * sPitch * cRoll + sYaw * sRoll;
         final float x_y = sYaw * cPitch, y_y = sYaw * sPitch * sRoll + cYaw * cRoll, z_y = sYaw * sPitch * cRoll - cYaw * sRoll;
         final float x_z = -sPitch, y_z = cPitch * sRoll, z_z = cPitch * cRoll;
@@ -445,6 +398,20 @@ public class SmudgeRenderer {
                         else if (depths[x][y + step] < depth - threshold) {
                             pixmap.drawPixel(hx    , hy + 1, o);
                         }
+
+                        if (outlines[x - step][y - step] == 0) {
+                            pixmap.drawPixel(hx - 1, hy - 1, o);
+                        }
+                        if (outlines[x + step][y - step] == 0) {
+                            pixmap.drawPixel(hx + 1, hy - 1, o);
+                        }
+                        if (outlines[x - step][y + step] == 0) {
+                            pixmap.drawPixel(hx - 1, hy + 1, o);
+                        }
+                        if (outlines[x + step][y + step] == 0) {
+                            pixmap.drawPixel(hx + 1, hy + 1, o);
+                        }
+
                     }
                 }
             }
@@ -481,7 +448,7 @@ public class SmudgeRenderer {
         this.materialMap = materialMap;
         final int size = colors.length;
         final float hs = (size) * 0.5f;
-        final float c = cos_(angleTurns), s = sin_(angleTurns);
+        final float c = cosTurns(angleTurns), s = sinTurns(angleTurns);
         for (int z = 0; z < size; z++) {
             for (int x = 0; x < size; x++) {
                 for (int y = 0; y < size; y++) {
@@ -511,9 +478,9 @@ public class SmudgeRenderer {
         final int size = colors.length;
         final float hs = size * 0.5f;
         float ox, oy, oz; // offset x,y,z
-        final float cYaw = cos_(yaw), sYaw = sin_(yaw);
-        final float cPitch = cos_(pitch), sPitch = sin_(pitch);
-        final float cRoll = cos_(roll), sRoll = sin_(roll);
+        final float cYaw = cosTurns(yaw), sYaw = sinTurns(yaw);
+        final float cPitch = cosTurns(pitch), sPitch = sinTurns(pitch);
+        final float cRoll = cosTurns(roll), sRoll = sinTurns(roll);
         final float x_x = cYaw * cPitch, y_x = cYaw * sPitch * sRoll - sYaw * cRoll, z_x = cYaw * sPitch * cRoll + sYaw * sRoll;
         final float x_y = sYaw * cPitch, y_y = sYaw * sPitch * sRoll + cYaw * cRoll, z_y = sYaw * sPitch * cRoll - cYaw * sRoll;
         final float x_z = -sPitch, y_z = cPitch * sRoll, z_z = cPitch * cRoll;
