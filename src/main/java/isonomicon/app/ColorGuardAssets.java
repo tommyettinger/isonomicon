@@ -80,8 +80,9 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Machine_Gun")).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Forward_Missile") || u.hasWeapon("Handgun")).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.name.equals("Submarine")).toList();
+//        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.name.startsWith("Terrain")).toList();
 //        ColorGuardData.units = ColorGuardData.units.subList(52, ColorGuardData.units.size());
-//        ColorGuardData.units = ColorGuardData.units.subList(0, 4);
+//        ColorGuardData.units = ColorGuardData.units.subList(0, 1);
         try {
             head = VoxIOExtended.readVox(new LittleEndianDataInputStream(new FileInputStream("specialized/b/vox/color_guard/human/Head.vox")));
         }
@@ -194,16 +195,18 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                 batch.end();
                                 pixmap = Pixmap.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
                                 fb.end();
-                                if(lk == canonicalLooks[j]) {
-                                    pm.set(j * 32 + i * 8 + f, pixmap);
-                                    pm.set(j * 32 + i * 8 + f + 4, pixmap);
-                                }
                                 try {
                                     png.write(Gdx.files.local("out/color_guard/" + armies[j] + "/" + name + '/' + armies[j] + "_look" + lk + '_' + name + "_angle" + i + "_" + f + ".png"), pixmap);
                                     if(look + j == 0)
                                         png.write(Gdx.files.local("out/color_guard/lab/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                                 } catch (IOException e) {
                                     e.printStackTrace();
+                                }
+                                if(lk == canonicalLooks[j]) {
+                                    pm.set(j * 32 + i * 8 + f, pixmap);
+                                    pm.set(j * 32 + i * 8 + f + 4, pixmap);
+                                } else {
+                                    pixmap.dispose();
                                 }
                             }
                         }
@@ -274,15 +277,17 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                         batch.end();
                                         pixmap = Pixmap.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
                                         fb.end();
-                                        if(lk == canonicalLooks[j]) {
-                                            pm.set(j * 32 + i * 8 + f, pixmap);
-                                        }
                                         try {
                                             png.write(Gdx.files.local("out/color_guard/" + armies[j] + "/" + name + '/' + armies[j] + "_look" + lk + "_" + name + ps + "_angle" + i + "_" + f + ".png"), pixmap);
                                             if (look + j == 0)
                                                 png.write(Gdx.files.local("out/color_guard/lab/" + name + '/' + name + ps + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                                         } catch (IOException e) {
                                             e.printStackTrace();
+                                        }
+                                        if(lk == canonicalLooks[j]) {
+                                            pm.set(j * 32 + i * 8 + f, pixmap);
+                                        } else {
+                                            pixmap.dispose();
                                         }
                                     }
                                 }
@@ -685,6 +690,8 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                 png.write(Gdx.files.local("out/color_guard/lab/Landscape/" + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                         } catch (IOException e) {
                             e.printStackTrace();
+                        } finally {
+                            pixmap.dispose();
                         }
                         t.dispose();
                     }
