@@ -35,13 +35,14 @@ public class SpecialRenderer {
     public final Stuff[] stuffs;
     public Pixmap palettePixmap;
     public ByteBuffer buffer;
-    public int[][] depths, voxels, render, outlines;
+    public int[][] depths, voxels, render;
+    public byte[][] outlines;
     public VoxMaterial[][] materials;
     public float[][] shadeX, shadeZ, shading, midShading, outlineShading, saturation;
     public byte[][] indices, outlineIndices, lightIndices;
     public int[] palette;
     public float[] paletteL, paletteA, paletteB;
-    public boolean outline = true;
+    public int outline = 4;
     public boolean variance = true;
     public boolean lighting = true;
     public boolean shadows = ColorGuardAssets.SHADOWS;
@@ -70,7 +71,7 @@ public class SpecialRenderer {
         palettePixmap.setBlending(Pixmap.Blending.None);
         buffer = palettePixmap.getPixels();
         render =   new int[w][h];
-        outlines = new int[w][h];
+        outlines = new byte[w][h];
         depths =   new int[w][h];
         indices =  new byte[w][h];
         outlineIndices =  new byte[w][h];
@@ -186,9 +187,11 @@ public class SpecialRenderer {
                     materials[ax][ay] = m;
                     if(voxel != 0) {
                         indices[ax][ay] = voxel;
-                        outlines[ax][ay] = 1;
-                        outlineShading[ax][ay] = paletteL[voxel & 255] * (0.625f + emit * 2.5f);
-                        outlineIndices[ax][ay] = voxel;
+                        if (emit == 0f) {
+                            outlines[ax][ay] = 1;
+                            outlineShading[ax][ay] = paletteL[voxel & 255] * (0.625f + emit * 2.5f);
+                            outlineIndices[ax][ay] = voxel;
+                        }
                     }
                     else {
                         indices[ax][ay] = -16;
@@ -417,8 +420,7 @@ public class SpecialRenderer {
 //                }
 //            }
 //        }
-        if (outline) {
-            int po;
+        if (outline > 0) {
             for (int x = step; x <= xSize - step; x+= step) {
 //                final int hx = x;
                 final int hx = x >>> shrink;
@@ -427,32 +429,40 @@ public class SpecialRenderer {
                     int hy = y >>> shrink;
                     if ((outlines[x][y]) != 0) {
                         depth = depths[x][y];
-                        po = (outlineIndices[x][y] & 255) << 24 | (int)MathUtils.clamp(64f * outlineShading[x][y], 0f, 255f) << 16 | 64 << 8 | 255;
-                        if (outlines[x - step][y] == 0 || depths[x - step][y] < depth - threshold) {
-                            palettePixmap.drawPixel(hx - 1, hy    , po);
+                        int inner = (outlineIndices[x][y] & 255) << 24 | (int) MathUtils.clamp(64f * outlineShading[x][y], 0f, 255f) << 16 | 64 << 8 | 255;
+                        int outer = (outline >= 4) ? 0x010000FF : inner;
+                        if (outlines[x - step][y] == 0) {
+                            palettePixmap.drawPixel(hx - 1, hy, outer);
+                        } else if (depths[x - step][y] < depth - threshold) {
+                            palettePixmap.drawPixel(hx - 1, hy, inner);
                         }
-                        if (outlines[x + step][y] == 0 || depths[x + step][y] < depth - threshold) {
-                            palettePixmap.drawPixel(hx + 1, hy    , po);
+                        if (outlines[x + step][y] == 0) {
+                            palettePixmap.drawPixel(hx + 1, hy, outer);
+                        } else if (depths[x + step][y] < depth - threshold) {
+                            palettePixmap.drawPixel(hx + 1, hy, inner);
                         }
-                        if (outlines[x][y - step] == 0 || depths[x][y - step] < depth - threshold) {
-                            palettePixmap.drawPixel(hx, hy - 1, po);
+                        if (outlines[x][y - step] == 0) {
+                            palettePixmap.drawPixel(hx, hy - 1, outer);
+                        } else if (depths[x][y - step] < depth - threshold) {
+                            palettePixmap.drawPixel(hx, hy - 1, inner);
                         }
-                        if (outlines[x][y + step] == 0 || depths[x][y + step] < depth - threshold) {
-                            palettePixmap.drawPixel(hx, hy + 1, po);
+                        if (outlines[x][y + step] == 0) {
+                            palettePixmap.drawPixel(hx, hy + 1, outer);
+                        } else if (depths[x][y + step] < depth - threshold) {
+                            palettePixmap.drawPixel(hx, hy + 1, inner);
                         }
 
-
-                        if (outlines[x - step][y - step] == 0 || depths[x - step][y - step] < depth - threshold) {
-                            palettePixmap.drawPixel(hx - 1, hy - 1, po);
+                        if (outlines[x - step][y - step] == 0) {
+                            palettePixmap.drawPixel(hx - 1, hy - 1, outer);
                         }
-                        if (outlines[x + step][y - step] == 0 || depths[x + step][y - step] < depth - threshold) {
-                            palettePixmap.drawPixel(hx + 1, hy - 1, po);
+                        if (outlines[x + step][y - step] == 0) {
+                            palettePixmap.drawPixel(hx + 1, hy - 1, outer);
                         }
-                        if (outlines[x - step][y - step] == 0 || depths[x - step][y - step] < depth - threshold) {
-                            palettePixmap.drawPixel(hx - 1, hy - 1, po);
+                        if (outlines[x - step][y + step] == 0) {
+                            palettePixmap.drawPixel(hx - 1, hy + 1, outer);
                         }
-                        if (outlines[x + step][y + step] == 0 || depths[x + step][y + step] < depth - threshold) {
-                            palettePixmap.drawPixel(hx + 1, hy + 1, po);
+                        if (outlines[x + step][y + step] == 0) {
+                            palettePixmap.drawPixel(hx + 1, hy + 1, outer);
                         }
 
                     }

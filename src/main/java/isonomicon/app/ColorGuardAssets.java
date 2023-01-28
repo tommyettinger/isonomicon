@@ -107,7 +107,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
 
         ShaderProgram indexShader = new ShaderProgram(ShaderUtils.stuffSelectVertex, ShaderUtils.stuffSelectFragment);
         if (!indexShader.isCompiled()) throw new GdxRuntimeException("Error compiling shader: " + indexShader.getLog());
-        batch = new SpriteBatch(256, indexShader);
+        batch = new SpriteBatch(16, indexShader);
 
         long startTime = TimeUtils.millis();
         png = new PixmapIO.PNG();
@@ -643,6 +643,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
         if(TERRAIN)
         {
             load("specialized/b/vox/color_guard/Terrain_Small.vox");
+            renderer.outline = 2;
             for (int n = 0; n < ColorGuardData.terrains.size(); n++) {
                 name = ColorGuardData.terrains.get(n);
                 System.out.println("Rendering " + name);
