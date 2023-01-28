@@ -440,6 +440,21 @@ public class SpecialRenderer {
                         if (outlines[x][y + step] == 0 || depths[x][y + step] < depth - threshold) {
                             palettePixmap.drawPixel(hx, hy + 1, po);
                         }
+
+
+                        if (outlines[x - step][y - step] == 0 || depths[x - step][y - step] < depth - threshold) {
+                            palettePixmap.drawPixel(hx - 1, hy - 1, po);
+                        }
+                        if (outlines[x + step][y - step] == 0 || depths[x + step][y - step] < depth - threshold) {
+                            palettePixmap.drawPixel(hx + 1, hy - 1, po);
+                        }
+                        if (outlines[x - step][y - step] == 0 || depths[x - step][y - step] < depth - threshold) {
+                            palettePixmap.drawPixel(hx - 1, hy - 1, po);
+                        }
+                        if (outlines[x + step][y + step] == 0 || depths[x + step][y + step] < depth - threshold) {
+                            palettePixmap.drawPixel(hx + 1, hy + 1, po);
+                        }
+
                     }
                 }
             }
