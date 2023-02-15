@@ -13,10 +13,14 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
+import isonomicon.app.Specialist;
 import isonomicon.physical.Stuff;
 import isonomicon.visual.Coloring;
+
+import java.io.IOException;
 
 public class StuffNotes extends ApplicationAdapter {
     public BitmapFont font;
@@ -31,7 +35,7 @@ public class StuffNotes extends ApplicationAdapter {
     public void create() {
         Texture fontTex = new Texture(Gdx.files.internal("canada1500.png"), true);
         fontTex.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
-        font = new BitmapFont(Gdx.files.internal("canada1500.fnt"), new TextureRegion(fontTex));
+        font = new BitmapFont(Gdx.files.internal("canada1500.fnt"), new TextureRegion(fontTex), false);
         font.setUseIntegerPositions(false);
         font.getData().setScale(0.2f);
         Pixmap px = new Pixmap(3, 3, Pixmap.Format.RGBA8888);
@@ -56,7 +60,11 @@ public class StuffNotes extends ApplicationAdapter {
 
     @Override
     public void render() {
-        ScreenUtils.clear(0f, 0f, 0f, 1f);
+        ScreenUtils.clear(Color.BLACK);
+        Texture t = new Texture(600, 900, Pixmap.Format.RGB888);
+        FrameBuffer fb = new FrameBuffer(Pixmap.Format.RGB888, 600, 900, false);
+        fb.begin();
+        ScreenUtils.clear(Color.BLACK);
 
         batch.begin();
         for (int i = 1, r = 0; i < 128;) {
@@ -70,7 +78,20 @@ public class StuffNotes extends ApplicationAdapter {
             r++;
         }
         batch.end();
-        PixmapIO.writePNG(Gdx.files.local("Notes_B_Palette.png"), Pixmap.createFromFrameBuffer(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()), 6, true);
+        Pixmap pixmap = Specialist.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
+        t.draw(pixmap, 0, 0);
+        fb.end();
+
+        try {
+            png.write(Gdx.files.local("Notes_B_Palette.png"), pixmap);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+//        PixmapIO.writePNG(Gdx.files.local("Notes_B_Palette.png"), Pixmap.createFromFrameBuffer(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()), 6, false);
+        ScreenUtils.clear(Color.BLACK);
+        batch.begin();
+        batch.draw(t, 0, 900, 600, -900);
+        batch.end();
     }
 
 

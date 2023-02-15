@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.g2d.Gdx2DPixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
@@ -29,6 +30,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
 public class Specialist extends ApplicationAdapter {
@@ -68,6 +70,15 @@ public class Specialist extends ApplicationAdapter {
             }
         }
     }
+
+    public static Pixmap createFromFrameBuffer(int x, int y, int w, int h) {
+        Gdx.gl.glPixelStorei(GL20.GL_PACK_ALIGNMENT, 1);
+        Pixmap pixmap = new Pixmap(new Gdx2DPixmap(w, h, Gdx2DPixmap.GDX2D_FORMAT_RGBA8888));
+        ByteBuffer pixels = pixmap.getPixels();
+        Gdx.gl.glReadPixels(x, y, w, h, GL20.GL_RGBA, GL20.GL_UNSIGNED_BYTE, pixels);
+        return pixmap;
+    }
+
     @Override
     public void create() {
         if (inputs == null) Gdx.app.exit();
@@ -80,9 +91,12 @@ public class Specialist extends ApplicationAdapter {
 //        Gdx.files.local("out/vox/").mkdirs();
         png = new PixmapIO.PNG();
         png.setCompression(2); // we are likely to compress these with something better, like oxipng.
+        png.setFlipY(false);
 //        png8 = new PNG8();
         gif = new AnimatedGif();
+        gif.setFlipY(false);
         apng = new AnimatedPNG();
+        apng.setFlipY(false);
         gif.setDitherAlgorithm(Dithered.DitherAlgorithm.NEUE);
 //        png8.setDitherAlgorithm(Dithered.DitherAlgorithm.SCATTER);
         gif.palette = new PaletteReducer();
@@ -125,9 +139,13 @@ public class Specialist extends ApplicationAdapter {
                     Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
                     batch.setColor(0f, 0.5f, 0.5f, 1f);
 
-                    batch.draw(t, 0, t.getHeight(), t.getWidth(), -t.getHeight());
+                    batch.draw(t, 0, 0, t.getWidth(), t.getHeight());
                     batch.end();
-                    pixmap = Pixmap.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
+
+//                    pixmap = Pixmap.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
+                    //// The above is equivalent to the following, but the above also fills the pixmap.
+                    pixmap = createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
+
                     fb.end();
                     pm.add(pixmap);
                     try {
@@ -171,9 +189,9 @@ public class Specialist extends ApplicationAdapter {
                     Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
                     batch.setColor(0f, 0.5f, 0.5f, 1f);
 
-                    batch.draw(t, 0, t.getHeight(), t.getWidth(), -t.getHeight());
+                    batch.draw(t, 0, 0, t.getWidth(), t.getHeight());
                     batch.end();
-                    pixmap = Pixmap.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
+                    pixmap = createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
                     fb.end();
                     pm.add(pixmap);
                     fb.dispose();

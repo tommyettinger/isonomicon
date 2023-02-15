@@ -156,7 +156,7 @@ public class ModelRotationVisualizer extends ApplicationAdapter {
             public boolean keyDown(int keycode) {
                 switch (keycode) {
                     case Input.Keys.F: // fringe, affects outline/edge
-                        renderer.outline = !renderer.outline;
+                        renderer.outline = (renderer.outline + 1) % 5;
                         break;
                     case Input.Keys.UP:
                         renderer.saturation(saturation = Math.min(1f, saturation + 0.01f));
