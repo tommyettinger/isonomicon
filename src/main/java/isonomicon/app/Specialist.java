@@ -39,7 +39,7 @@ public class Specialist extends ApplicationAdapter {
     private String[] inputs;
     private Apng png;
     private AnimatedGif gif;
-    private Apng apng;
+    private AnimatedPNG apng;
     private SpriteBatch batch;
     private Texture palette;
     public Specialist(String[] args){
@@ -92,7 +92,7 @@ public class Specialist extends ApplicationAdapter {
 //        png8 = new PNG8();
         gif = new AnimatedGif();
         gif.setFlipY(false);
-        apng = new Apng();
+        apng = new AnimatedPNG();
         apng.setCompression(2);
         apng.setFlipY(false);
         gif.setDitherAlgorithm(Dithered.DitherAlgorithm.NEUE);
