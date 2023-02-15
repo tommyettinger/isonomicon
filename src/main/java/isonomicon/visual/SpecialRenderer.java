@@ -189,11 +189,13 @@ public class SpecialRenderer {
                         indices[ax][ay] = voxel;
                         if (emit == 0f) {
                             outlines[ax][ay] = 1;
-                            outlineShading[ax][ay] = paletteL[voxel & 255] * (0.625f + emit * 2.5f);
+                            outlineShading[ax][ay] = paletteL[voxel & 255] * 0.625f;
                             outlineIndices[ax][ay] = voxel;
                         }
-                        else {
-                            outlines[ax][ay] = 0;
+                        else { //else if(outlineIndices[ax][ay] == 0) {
+                            outlines[ax][ay] = -1;
+                            outlineShading[ax][ay] = paletteL[voxel & 255] * (1f + emit * 2.5f);
+//                            outlineIndices[ax][ay] = 0;
                         }
                     }
                     else {
@@ -430,7 +432,7 @@ public class SpecialRenderer {
                 for (int y = step; y <= ySize - step; y+= step) {
 //                    final int hy = y;
                     int hy = y >>> shrink;
-                    if ((outlines[x][y]) != 0) {
+                    if ((outlines[x][y]) == 1) {
                         depth = depths[x][y];
                         int inner = (outlineIndices[x][y] & 255) << 24 | (int) Math.min(Math.max(64f * outlineShading[x][y],  0f),  255f) << 16 | 64 << 8 | 255;
                         int outer = (outline >= 4) ? 0x010000FF : inner;

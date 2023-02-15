@@ -38,7 +38,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
     public static boolean ATTACKS = true;
     public static boolean DEATHS = false;
     public static boolean EXPLOSION = true;
-    public static boolean TERRAIN = true;
+    public static boolean TERRAIN = false;
     public static boolean SHADOWS = true;
 
     public static final int SCREEN_WIDTH = 512;//640;
@@ -80,7 +80,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.name.equals("Submarine")).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.name.startsWith("Terrain")).toList();
 //        ColorGuardData.units = ColorGuardData.units.subList(52, ColorGuardData.units.size());
-        ColorGuardData.units = ColorGuardData.units.subList(0, 6);
+        ColorGuardData.units = ColorGuardData.units.subList(2, 3);
         try {
             head = VoxIOExtended.readVox(new LittleEndianDataInputStream(new FileInputStream("specialized/b/vox/color_guard/human/Head.vox")));
         }
