@@ -38,8 +38,8 @@ public class Specialist extends ApplicationAdapter {
     private String name;
     private String[] inputs;
     private Apng png;
-    private AnimatedGif gif;
-    private AnimatedPNG apng;
+    private Gif gif;
+    private Apng apng;
     private SpriteBatch batch;
     private Texture palette;
     public Specialist(String[] args){
@@ -90,9 +90,9 @@ public class Specialist extends ApplicationAdapter {
         png.setCompression(2); // we are likely to compress these with something better, like oxipng.
         png.setFlipY(false);
 //        png8 = new PNG8();
-        gif = new AnimatedGif();
+        gif = new Gif();
         gif.setFlipY(false);
-        apng = new AnimatedPNG();
+        apng = new Apng();
         apng.setCompression(2);
         apng.setFlipY(false);
         gif.setDitherAlgorithm(Dithered.DitherAlgorithm.NEUE);

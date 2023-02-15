@@ -160,7 +160,7 @@ public class SpotRenderer {
      * @return this, for chaining
      */
     public SpotRenderer saturation(float saturationModifier) {
-        neutral = (1f + MathUtils.clamp(saturationModifier, -1f, 0.5f));
+        neutral = (1f + Math.min(Math.max(saturationModifier,  -1f),  0.5f));
         return this;
     }
 

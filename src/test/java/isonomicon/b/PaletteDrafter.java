@@ -344,9 +344,9 @@ public class PaletteDrafter extends ApplicationAdapter {
             if (changed) {
                 for (int i = 0; i < group.length; i++) {
                     final float oklab = workingOklab[group[i] - 1 & 127];
-                    float l = MathUtils.clamp(ColorTools.channelL(oklab) + allL, 0f, 1f);
-                    float a = MathUtils.clamp((ColorTools.channelA(oklab) - 0.5f) * (1f + allS * 3f) + 0.5f + allA, 0f, 1f);
-                    float b = MathUtils.clamp((ColorTools.channelB(oklab) - 0.5f) * (1f + allS * 3f) + 0.5f + allB, 0f, 1f);
+                    float l = Math.min(Math.max(ColorTools.channelL(oklab) + allL,  0f),  1f);
+                    float a = Math.min(Math.max((ColorTools.channelA(oklab) - 0.5f) * (1f + allS * 3f) + 0.5f + allA,  0f),  1f);
+                    float b = Math.min(Math.max((ColorTools.channelB(oklab) - 0.5f) * (1f + allS * 3f) + 0.5f + allB,  0f),  1f);
                     float al = 1f;// - STUFFS[group[i]].material.getTrait(VoxMaterial.MaterialTrait._alpha);
                     float edited;
                     workingOklab[group[i] - 1 & 127] = edited = ColorTools.limitToGamut(l, a, b, al);
@@ -366,44 +366,44 @@ public class PaletteDrafter extends ApplicationAdapter {
         }
         else {
             if (Gdx.input.isKeyPressed(Input.Keys.L)) {
-                L = MathUtils.clamp(L + step, 0f, 1f);
+                L = Math.min(Math.max(L + step,  0f),  1f);
                 changed = true;
             }
             //dark
             else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-                L = MathUtils.clamp(L - step, 0f, 1f);
+                L = Math.min(Math.max(L - step,  0f),  1f);
                 changed = true;
             }
             //red
             else if (Gdx.input.isKeyPressed(Input.Keys.R)) {
-                A = MathUtils.clamp(A + step, 0f, 1f);
+                A = Math.min(Math.max(A + step,  0f),  1f);
                 changed = true;
             }
             //green...ish
             else if (Gdx.input.isKeyPressed(Input.Keys.G)) {
-                A = MathUtils.clamp(A - step, 0f, 1f);
+                A = Math.min(Math.max(A - step,  0f),  1f);
                 changed = true;
             }
             //yellow
             else if (Gdx.input.isKeyPressed(Input.Keys.Y)) {
-                B = MathUtils.clamp(B + step, 0f, 1f);
+                B = Math.min(Math.max(B + step,  0f),  1f);
                 changed = true;
             }
             //blue
             else if (Gdx.input.isKeyPressed(Input.Keys.B)) {
-                B = MathUtils.clamp(B - step, 0f, 1f);
+                B = Math.min(Math.max(B - step,  0f),  1f);
                 changed = true;
             }
             //saturate
             else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-                A = MathUtils.clamp((A - 0.5f) * (1f + step * 3f) + 0.5f, 0f, 1f);
-                B = MathUtils.clamp((B - 0.5f) * (1f + step * 3f) + 0.5f, 0f, 1f);
+                A = Math.min(Math.max((A - 0.5f) * (1f + step * 3f) + 0.5f,  0f),  1f);
+                B = Math.min(Math.max((B - 0.5f) * (1f + step * 3f) + 0.5f,  0f),  1f);
                 changed = true;
             }
             //fade
             else if (Gdx.input.isKeyPressed(Input.Keys.F)) {
-                A = MathUtils.clamp((A - 0.5f) * (1f - step * 3f) + 0.5f, 0f, 1f);
-                B = MathUtils.clamp((B - 0.5f) * (1f - step * 3f) + 0.5f, 0f, 1f);
+                A = Math.min(Math.max((A - 0.5f) * (1f - step * 3f) + 0.5f,  0f),  1f);
+                B = Math.min(Math.max((B - 0.5f) * (1f - step * 3f) + 0.5f,  0f),  1f);
                 changed = true;
             }
             currentPreview = ColorTools.toRGBA8888(workingOklab[group[stuffIndex] - 1 & 127] = ColorTools.limitToGamut(L, A, B, alpha));

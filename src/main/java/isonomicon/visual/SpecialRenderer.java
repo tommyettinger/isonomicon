@@ -104,7 +104,7 @@ public class SpecialRenderer {
      * @return this, for chaining
      */
     public SpecialRenderer saturation(float saturationModifier) {
-        neutral = 1f + MathUtils.clamp(saturationModifier, -1f, 0.5f);
+        neutral = 1f + Math.min(Math.max(saturationModifier,  -1f),  0.5f);
         return this;
     }
 
@@ -432,7 +432,7 @@ public class SpecialRenderer {
                     int hy = y >>> shrink;
                     if ((outlines[x][y]) != 0) {
                         depth = depths[x][y];
-                        int inner = (outlineIndices[x][y] & 255) << 24 | (int) MathUtils.clamp(64f * outlineShading[x][y], 0f, 255f) << 16 | 64 << 8 | 255;
+                        int inner = (outlineIndices[x][y] & 255) << 24 | (int) Math.min(Math.max(64f * outlineShading[x][y],  0f),  255f) << 16 | 64 << 8 | 255;
                         int outer = (outline >= 4) ? 0x010000FF : inner;
                         if (outlines[x - step][y] == 0) {
                             palettePixmap.drawPixel(hx - 1, hy, outer);

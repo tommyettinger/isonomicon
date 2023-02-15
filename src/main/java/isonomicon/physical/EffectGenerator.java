@@ -295,9 +295,9 @@ public class EffectGenerator {
                     for (int i = p; i <= p + (big ? p + 3 + n : p); i++) {
                         if(r.next(6) < 50)
                             grids[f]
-                                    [MathUtils.clamp(MathUtils.round(x + i * xAngle), 0, grids[0].length)]
-                                    [MathUtils.clamp(MathUtils.round(y + i * yAngle), 0, grids[0][0].length)]
-                                    [MathUtils.clamp(MathUtils.round(z + i * zAngle), 0, grids[0][0][0].length)] = sparks;
+                                    [Math.min(Math.max(MathUtils.round(x + i * xAngle),  0),  grids[0].length)]
+                                    [Math.min(Math.max(MathUtils.round(y + i * yAngle),  0),  grids[0][0].length)]
+                                    [Math.min(Math.max(MathUtils.round(z + i * zAngle),  0),  grids[0][0][0].length)] = sparks;
                     }
                 }
             }

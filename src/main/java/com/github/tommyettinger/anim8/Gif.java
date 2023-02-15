@@ -484,7 +484,6 @@ public class Gif implements AnimationWriter, Dithered {
         int flipped = flipY ? height - 1 : 0;
         int flipDir = flipY ? -1 : 1;
         ByteBuffer pixels = image.getPixels();
-        pixels.rewind();
         boolean hasTransparent = image.getFormat().equals(Pixmap.Format.RGBA8888);
         switch (ditherAlgorithm) {
             case NONE: {
@@ -737,11 +736,11 @@ public class Gif implements AnimationWriter, Dithered {
                         else {
                             float pos = (PaletteReducer.thresholdMatrix64[(px & 7) | (y & 7) << 3] - 31.5f) * 0.2f;
                             adj = ((PaletteReducer.TRI_BLUE_NOISE_B[(px & 63) | (y & 63) << 6] + 0.5f) * strength) + pos;
-                            int rr = MathUtils.clamp((int) (adj + r), 0, 255);
+                            int rr = Math.min(Math.max((int) (adj + r),  0),  255);
                             adj = ((PaletteReducer.TRI_BLUE_NOISE_C[(px & 63) | (y & 63) << 6] + 0.5f) * strength) + pos;
-                            int gg = MathUtils.clamp((int) (adj + g), 0, 255);
+                            int gg = Math.min(Math.max((int) (adj + g),  0),  255);
                             adj = ((PaletteReducer.TRI_BLUE_NOISE_D[(px & 63) | (y & 63) << 6] + 0.5f) * strength) + pos;
-                            int bb = MathUtils.clamp((int) (adj + b), 0, 255);
+                            int bb = Math.min(Math.max((int) (adj + b),  0),  255);
                             usedEntry[(indexedPixels[i] = paletteMapping[((rr << 7) & 0x7C00)
                                     | ((gg << 2) & 0x3E0)
                                     | ((bb >>> 3))]) & 255] = true;
@@ -990,9 +989,9 @@ public class Gif implements AnimationWriter, Dithered {
                             eg = adj + (curErrorGreen[px]);
                             eb = adj + (curErrorBlue[px]);
 
-                            int rr = MathUtils.clamp((int)(r + er + 0.5f), 0, 0xFF);
-                            int gg = MathUtils.clamp((int)(g + eg + 0.5f), 0, 0xFF);
-                            int bb = MathUtils.clamp((int)(b + eb + 0.5f), 0, 0xFF);
+                            int rr = Math.min(Math.max((int)(r + er + 0.5f),  0),  0xFF);
+                            int gg = Math.min(Math.max((int)(g + eg + 0.5f),  0),  0xFF);
+                            int bb = Math.min(Math.max((int)(b + eb + 0.5f),  0),  0xFF);
                             usedEntry[(indexedPixels[i] = paletteIndex =
                                     paletteMapping[((rr << 7) & 0x7C00)
                                             | ((gg << 2) & 0x3E0)
@@ -1035,6 +1034,7 @@ public class Gif implements AnimationWriter, Dithered {
             }
             break;
         }
+        pixels.rewind();
         colorDepth = 8;
         palSize = 7;
         // get the closest match to transparent color if specified

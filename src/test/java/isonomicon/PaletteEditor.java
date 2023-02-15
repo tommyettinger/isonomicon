@@ -188,19 +188,19 @@ public class PaletteEditor extends ApplicationAdapter {
         if(Gdx.input.isKeyPressed(Input.Keys.L)){
             if(UIUtils.shift()) L -= step;
             else L += step;
-            L = MathUtils.clamp(L, 0f, 1f);
+            L = Math.min(Math.max(L,  0f),  1f);
             changed = true;
         }
         if(Gdx.input.isKeyPressed(Input.Keys.A)){
             if(UIUtils.shift()) A -= step;
             else A += step;
-            A = MathUtils.clamp(A, 0f, 1f);
+            A = Math.min(Math.max(A,  0f),  1f);
             changed = true;
         }
         if(Gdx.input.isKeyPressed(Input.Keys.B)){
             if(UIUtils.shift()) B -= step;
             else B += step;
-            B = MathUtils.clamp(B, 0f, 1f);
+            B = Math.min(Math.max(B,  0f),  1f);
             changed = true;
         }
         int currentPreview = ColorTools.toRGBA8888(ColorTools.limitToGamut(L, A, B));
