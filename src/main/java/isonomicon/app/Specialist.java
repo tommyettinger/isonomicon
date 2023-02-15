@@ -13,10 +13,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
-import com.github.tommyettinger.anim8.AnimatedGif;
-import com.github.tommyettinger.anim8.AnimatedPNG;
-import com.github.tommyettinger.anim8.Dithered;
-import com.github.tommyettinger.anim8.PaletteReducer;
+import com.github.tommyettinger.anim8.*;
 import isonomicon.io.LittleEndianDataInputStream;
 import isonomicon.io.extended.VoxIOExtended;
 import isonomicon.io.extended.VoxModel;
@@ -40,9 +37,9 @@ public class Specialist extends ApplicationAdapter {
     private VoxModel voxels;
     private String name;
     private String[] inputs;
-    private PixmapIO.PNG png;
+    private Apng png;
     private AnimatedGif gif;
-    private AnimatedPNG apng;
+    private Apng apng;
     private SpriteBatch batch;
     private Texture palette;
     public Specialist(String[] args){
@@ -89,13 +86,14 @@ public class Specialist extends ApplicationAdapter {
 
         long startTime = TimeUtils.millis();
 //        Gdx.files.local("out/vox/").mkdirs();
-        png = new PixmapIO.PNG();
+        png = new Apng();
         png.setCompression(2); // we are likely to compress these with something better, like oxipng.
         png.setFlipY(false);
 //        png8 = new PNG8();
         gif = new AnimatedGif();
         gif.setFlipY(false);
-        apng = new AnimatedPNG();
+        apng = new Apng();
+        apng.setCompression(2);
         apng.setFlipY(false);
         gif.setDitherAlgorithm(Dithered.DitherAlgorithm.NEUE);
 //        png8.setDitherAlgorithm(Dithered.DitherAlgorithm.SCATTER);
@@ -126,8 +124,8 @@ public class Specialist extends ApplicationAdapter {
                     for (int j = 0; j < voxels.grids.size(); j++) {
                         Stuff.evolve(Stuff.STUFFS_B, voxels.grids.get(j), f);
                     }
-                    pixmap = renderer.drawModelSimple(voxels, i * 0.125f, 0f, 0f, f, 0, 0, 0);
-                    Texture t = new Texture(pixmap.getWidth(), pixmap.getHeight(), Pixmap.Format.RGBA8888);
+                    renderer.drawModelSimple(voxels, i * 0.125f, 0f, 0f, f, 0, 0, 0);
+                    Texture t = new Texture(renderer.palettePixmap.getWidth(), renderer.palettePixmap.getHeight(), Pixmap.Format.RGBA8888);
                     t.draw(renderer.palettePixmap, 0, 0);
                     FrameBuffer fb = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), false);
                     fb.begin();
@@ -148,12 +146,8 @@ public class Specialist extends ApplicationAdapter {
 
                     fb.end();
                     pm.add(pixmap);
-                    try {
-                        png.write(Gdx.files.local("out/b/specialized/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), pixmap);
-                        png.write(Gdx.files.local("out/b/special_lab/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    png.write(Gdx.files.local("out/b/specialized/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), pixmap);
+                    png.write(Gdx.files.local("out/b/special_lab/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                     fb.dispose();
                     t.dispose();
                 }
@@ -176,8 +170,8 @@ public class Specialist extends ApplicationAdapter {
                     for (int j = 0; j < voxels.grids.size(); j++) {
                         Stuff.evolve(Stuff.STUFFS_B, voxels.grids.get(j), i);
                     }
-                    pixmap = renderer.drawModelSimple(voxels, i * 0x1p-7f + 0.125f, 0f, 0f, i, 0, 0, 0);
-                    Texture t = new Texture(pixmap.getWidth(), pixmap.getHeight(), Pixmap.Format.RGBA8888);
+                    renderer.drawModelSimple(voxels, i * 0x1p-7f + 0.125f, 0f, 0f, i, 0, 0, 0);
+                    Texture t = new Texture(renderer.palettePixmap.getWidth(), renderer.palettePixmap.getHeight(), Pixmap.Format.RGBA8888);
                     t.draw(renderer.palettePixmap, 0, 0);
                     FrameBuffer fb = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), false);
                     fb.begin();
