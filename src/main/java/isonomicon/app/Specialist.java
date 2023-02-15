@@ -37,7 +37,7 @@ public class Specialist extends ApplicationAdapter {
     private VoxModel voxels;
     private String name;
     private String[] inputs;
-    private PixmapIO.PNG png;
+    private Apng png;
     private AnimatedGif gif;
     private Apng apng;
     private SpriteBatch batch;
@@ -86,7 +86,7 @@ public class Specialist extends ApplicationAdapter {
 
         long startTime = TimeUtils.millis();
 //        Gdx.files.local("out/vox/").mkdirs();
-        png = new PixmapIO.PNG();
+        png = new Apng();
         png.setCompression(2); // we are likely to compress these with something better, like oxipng.
         png.setFlipY(false);
 //        png8 = new PNG8();
@@ -146,12 +146,8 @@ public class Specialist extends ApplicationAdapter {
 
                     fb.end();
                     pm.add(pixmap);
-                    try {
-                        png.write(Gdx.files.local("out/b/specialized/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), pixmap);
-                        png.write(Gdx.files.local("out/b/special_lab/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    png.write(Gdx.files.local("out/b/specialized/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), pixmap);
+                    png.write(Gdx.files.local("out/b/special_lab/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                     fb.dispose();
                     t.dispose();
                 }
