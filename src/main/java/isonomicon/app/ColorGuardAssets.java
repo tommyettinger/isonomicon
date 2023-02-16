@@ -14,7 +14,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
-import com.github.tommyettinger.anim8.Apng;
+import com.github.tommyettinger.anim8.FastAPNG;
 import com.github.tommyettinger.anim8.Dithered;
 import com.github.tommyettinger.anim8.Gif;
 import com.github.tommyettinger.anim8.PaletteReducer;
@@ -38,7 +38,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
     public static boolean ATTACKS = true;
     public static boolean DEATHS = false;
     public static boolean EXPLOSION = true;
-    public static boolean TERRAIN = false;
+    public static boolean TERRAIN = true;
     public static boolean SHADOWS = true;
 
     public static final int SCREEN_WIDTH = 512;//640;
@@ -48,9 +48,9 @@ public class ColorGuardAssets extends ApplicationAdapter {
     private VoxModel[] frames = new VoxModel[8];
     private String name;
     private String[] armies;
-    private Apng png;
+    private FastAPNG png;
     private Gif gif;
-    private Apng apng;
+    private FastAPNG apng;
     private SpriteBatch batch;
     private Texture palette;
 
@@ -80,7 +80,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.name.equals("Submarine")).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.name.startsWith("Terrain")).toList();
 //        ColorGuardData.units = ColorGuardData.units.subList(52, ColorGuardData.units.size());
-        ColorGuardData.units = ColorGuardData.units.subList(2, 3);
+//        ColorGuardData.units = ColorGuardData.units.subList(2, 3);
         try {
             head = VoxIOExtended.readVox(new LittleEndianDataInputStream(new FileInputStream("specialized/b/vox/color_guard/human/Head.vox")));
         }
@@ -109,12 +109,12 @@ public class ColorGuardAssets extends ApplicationAdapter {
         batch = new SpriteBatch(16, indexShader);
 
         long startTime = TimeUtils.millis();
-        png = new Apng();
+        png = new FastAPNG();
         png.setFlipY(false);
         png.setCompression(2); // we are likely to compress these with something better, like oxipng.
         gif = new Gif();
         gif.setFlipY(false);
-        apng = new Apng();
+        apng = new FastAPNG();
         apng.setFlipY(false);
         apng.setCompression(2);
         //// Using Neue on a null palette takes 146.797 seconds with just the five units with an arc missile.

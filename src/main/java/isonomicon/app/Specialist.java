@@ -26,7 +26,6 @@ import isonomicon.visual.SpecialRenderer;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
@@ -37,9 +36,9 @@ public class Specialist extends ApplicationAdapter {
     private VoxModel voxels;
     private String name;
     private String[] inputs;
-    private Apng png;
+    private FastPNG png;
     private Gif gif;
-    private Apng apng;
+    private FastAPNG apng;
     private SpriteBatch batch;
     private Texture palette;
     public Specialist(String[] args){
@@ -86,13 +85,13 @@ public class Specialist extends ApplicationAdapter {
 
         long startTime = TimeUtils.millis();
 //        Gdx.files.local("out/vox/").mkdirs();
-        png = new Apng();
+        png = new FastPNG();
         png.setCompression(2); // we are likely to compress these with something better, like oxipng.
         png.setFlipY(false);
 //        png8 = new PNG8();
         gif = new Gif();
         gif.setFlipY(false);
-        apng = new Apng();
+        apng = new FastAPNG();
         apng.setCompression(2);
         apng.setFlipY(false);
         gif.setDitherAlgorithm(Dithered.DitherAlgorithm.NEUE);

@@ -78,7 +78,7 @@ import java.util.zip.DeflaterOutputStream;
  * @author Nathan Sweet
  * @author Tommy Ettinger
  */
-public class Apng implements AnimationWriter, Disposable {
+public class FastAPNG implements AnimationWriter, Disposable {
     static private final byte[] SIGNATURE = {(byte) 137, 80, 78, 71, 13, 10, 26, 10};
     static private final int IHDR = 0x49484452, acTL = 0x6163544C,
             fcTL = 0x6663544C, IDAT = 0x49444154,
@@ -97,34 +97,36 @@ public class Apng implements AnimationWriter, Disposable {
     private int lastLineLen;
 
     /**
-     * Creates an AnimatedPNG writer with an initial buffer size of 16384. The buffer can resize later if needed.
+     * Creates an AnimatedPNG writer with an initial buffer size of 1024. The buffer can resize later if needed.
      */
-    public Apng() {
-        this(16384);
+    public FastAPNG() {
+        this(1024);
     }
 
     /**
      * Creates an AnimatedPNG writer with the given initial buffer size. The buffer can resize if needed, so using a
      * small size is only a problem if it slows down writing by forcing a resize for several parts of a PNG. A default
-     * of 16384 is reasonable.
-     * @param initialBufferSize the initial size for the buffer that stores PNG chunks; 16384 is a reasonable default
+     * of 1024 is reasonable.
+     * @param initialBufferSize the initial size for the buffer that stores PNG chunks; 1024 is a reasonable default
      */
-    public Apng(int initialBufferSize) {
+    public FastAPNG(int initialBufferSize) {
         buffer = new ChunkBuffer(initialBufferSize);
-        deflater = new Deflater();
+        deflater = new Deflater(2);
     }
 
     /**
      * A no-op; this class never flips the image, regardless of the setting. This method
-     * is here for compatibility with PixmapIO.PNG, and also for possible future changes
+     * is here for API compatibility with PixmapIO.PNG, and also for possible future changes
      * if flipping becomes viable.
      */
     public void setFlipY(boolean flipY) {
     }
 
     /**
-     * Sets the deflate compression level. Default is {@link Deflater#DEFAULT_COMPRESSION}, which is currently 6 on all
-     * Java versions in the 8 to 14 range, but is permitted to change.
+     * Sets the deflate compression level. Default is 2 here instead of the default in PixmapIO.PNG, which is 6. Using
+     * compression level 2 is faster, but doesn't compress quite as well. You can set the compression level as low as 0,
+     * which is extremely fast but does no compression and so produces large files. You can set the compression level as
+     * high as 9, which is extremely slow and typically not much smaller than compression level 6.
      */
     public void setCompression(int level) {
         deflater.setLevel(level);
