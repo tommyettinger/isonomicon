@@ -14,10 +14,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
-import com.github.tommyettinger.anim8.FastAPNG;
-import com.github.tommyettinger.anim8.Dithered;
-import com.github.tommyettinger.anim8.Gif;
-import com.github.tommyettinger.anim8.PaletteReducer;
+import com.github.tommyettinger.anim8.*;
 import com.github.tommyettinger.ds.IntObjectMap;
 import com.github.tommyettinger.ds.ObjectIntMap;
 import isonomicon.io.LittleEndianDataInputStream;
@@ -48,7 +45,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
     private VoxModel[] frames = new VoxModel[8];
     private String name;
     private String[] armies;
-    private FastAPNG png;
+    private FastPNG png;
     private Gif gif;
     private FastAPNG apng;
     private SpriteBatch batch;
@@ -109,7 +106,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
         batch = new SpriteBatch(16, indexShader);
 
         long startTime = TimeUtils.millis();
-        png = new FastAPNG();
+        png = new FastPNG();
         png.setFlipY(false);
         png.setCompression(2); // we are likely to compress these with something better, like oxipng.
         gif = new Gif();
@@ -144,7 +141,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //        gif.palette = new PaletteReducer(Coloring.TETRA256, Gdx.files.local("assets/TetraPreload.dat").readBytes());
 //        gif.palette = new PaletteReducer(Coloring.BETSY256, Gdx.files.local("assets/BetsyPreload.dat").readBytes());
         //// BLUE_NOISE doesn't need this, but NEUE, GRADIENT_NOISE, and ROBERTS do.
-        gif.setDitherStrength(0.5f);
+        gif.setDitherStrength(0.25f);
         FrameBuffer fb = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), false);
         ObjectIntMap<String> doneReceive = new ObjectIntMap<>(16);
         doneReceive.setDefaultValue(-1);
@@ -166,6 +163,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                 } else {
                     renderer.outline = 4;
                 }
+                Texture t = new Texture(renderer.palettePixmap.getWidth(), renderer.palettePixmap.getHeight(), Pixmap.Format.RGBA8888);
                 Pixmap pixmap;
                 Array<Pixmap> pm = new Array<>(32 * armies.length);
                 pm.setSize(32 * armies.length);
@@ -176,8 +174,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                         for (int j = 0; j < voxels.grids.size(); j++) {
                             Stuff.evolve(Stuff.STUFFS_B, voxels.grids.get(j), f);
                         }
-                        pixmap = renderer.drawModelSimple(voxels, i * 0.25f, 0f, 0f, f, 0.00f, 0.00f, 0.00f);
-                        Texture t = new Texture(pixmap.getWidth(), pixmap.getHeight(), Pixmap.Format.RGBA8888);
+                        renderer.drawModelSimple(voxels, i * 0.25f, 0f, 0f, f, 0.00f, 0.00f, 0.00f);
                         t.draw(renderer.palettePixmap, 0, 0);
                         for (int look = 0, lk = 0; look < 153; look+=8, lk++) {
 //                            if(lk == 3 || lk == 8 || lk == 11 || lk == 18 || lk == 21 || lk == 25)
@@ -207,7 +204,6 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                 }
                             }
                         }
-                        t.dispose();
 //                png8.write(Gdx.files.local("out/" + name + '/' + name + "_angle" + i + ".png"), p, false, true);
                     }
                 }
@@ -256,8 +252,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                             else frames = anim;
 
                             for (int f = 0; f < frames.length; f++) {
-                                pixmap = renderer.drawModelSimple(frames[f], i * 0.25f, 0f, 0f, f, 0.00f, 0.00f, 0.00f);
-                                Texture t = new Texture(pixmap.getWidth(), pixmap.getHeight(), Pixmap.Format.RGBA8888);
+                                renderer.drawModelSimple(frames[f], i * 0.25f, 0f, 0f, f, 0.00f, 0.00f, 0.00f);
                                 t.draw(renderer.palettePixmap, 0, 0);
                                 for (int look = 0, lk = 0; look < 153; look+=8, lk++) {
                                     for (int j = 0; j < armies.length; j++) {
@@ -284,7 +279,6 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                         }
                                     }
                                 }
-                                t.dispose();
                                 byte[][][] g = frames[f].grids.get(0);
                                 for (int j = 1; j < frames[f].grids.size(); j++) {
                                     Tools3D.deepCopyInto(g, frames[f].grids.get(j));
@@ -312,8 +306,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                     for (int i = 0; i < 4; i++) {
                                         frames = recEff.runEffect(60 << 1, 8, strength);
                                         for (int f = 0; f < frames.length; f++) {
-                                            pixmap = renderer.drawModelSimple(frames[f], i * 0.25f, 0f, 0f, f, 0.00f, 0.00f, 0.00f);
-                                            Texture t = new Texture(pixmap.getWidth(), pixmap.getHeight(), Pixmap.Format.RGBA8888);
+                                            renderer.drawModelSimple(frames[f], i * 0.25f, 0f, 0f, f, 0.00f, 0.00f, 0.00f);
                                             t.draw(renderer.palettePixmap, 0, 0);
                                             int look = 0;
                                             for (int j = 0; j < armies.length; j++) {
@@ -335,7 +328,6 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                                 if (look + j == 0)
                                                     png.write(Gdx.files.local("out/color_guard/lab/" + attack + "_Receive/" + attack + "_Receive_" + strength + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                                             }
-                                            t.dispose();
                                         }
                                     }
                                     apng.write(Gdx.files.local("out/color_guard/animated_diverse/" + attack + "_Receive/" + attack + "_Receive_" + strength + ".png"), pm, 8);
@@ -355,6 +347,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                         ps = "_Secondary";
                     }
                 }
+                t.dispose();
             }
         }
         // just a single skin/hair combination
@@ -370,6 +363,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                 } else {
                     renderer.outline = 4;
                 }
+                Texture t = new Texture(renderer.palettePixmap.getWidth(), renderer.palettePixmap.getHeight(), Pixmap.Format.RGBA8888);
                 Pixmap pixmap;
                 Array<Pixmap> pm = new Array<>(32 * armies.length);
                 pm.setSize(32 * armies.length);
@@ -380,8 +374,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                         for (int j = 0; j < voxels.grids.size(); j++) {
                             Stuff.evolve(Stuff.STUFFS_B, voxels.grids.get(j), f);
                         }
-                        pixmap = renderer.drawModelSimple(voxels, i * 0.25f, 0f, 0f, f, 0.00f, 0.00f, 0.00f);
-                        Texture t = new Texture(pixmap.getWidth(), pixmap.getHeight(), Pixmap.Format.RGBA8888);
+                        renderer.drawModelSimple(voxels, i * 0.25f, 0f, 0f, f, 0.00f, 0.00f, 0.00f);
                         t.draw(renderer.palettePixmap, 0, 0);
                         int look = 0;
                         for (int j = 0; j < armies.length; j++) {
@@ -404,7 +397,6 @@ public class ColorGuardAssets extends ApplicationAdapter {
                             if (look + j == 0)
                                 png.write(Gdx.files.local("out/color_guard/lab/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                         }
-                        t.dispose();
 //                png8.write(Gdx.files.local("out/" + name + '/' + name + "_angle" + i + ".png"), p, false, true);
                     }
                 }
@@ -450,7 +442,6 @@ public class ColorGuardAssets extends ApplicationAdapter {
 
                             for (int f = 0; f < frames.length; f++) {
                                 pixmap = renderer.drawModelSimple(frames[f], i * 0.25f, 0f, 0f, f, 0.00f, 0.00f, 0.00f);
-                                Texture t = new Texture(pixmap.getWidth(), pixmap.getHeight(), Pixmap.Format.RGBA8888);
                                 t.draw(renderer.palettePixmap, 0, 0);
                                 int look = 0;
                                 for (int j = 0; j < armies.length; j++) {
@@ -474,7 +465,6 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //                                            VoxIOExtended.writeVOX("out/color_guard/vox/" + name + "/" + ps + "_angle" + i + "_" + f + ".vox", frames[f].grids.get(0), VoxIO.lastPalette, VoxIO.lastMaterials);
                                     }
                                 }
-                                t.dispose();
                                 byte[][][] g = frames[f].grids.get(0);
                                 for (int j = 1; j < frames[f].grids.size(); j++) {
                                     Tools3D.deepCopyInto(g, frames[f].grids.get(j));
@@ -498,8 +488,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                     for (int i = 0; i < 4; i++) {
                                         frames = recEff.runEffect(60 << 1, 8, strength);
                                         for (int f = 0; f < frames.length; f++) {
-                                            pixmap = renderer.drawModelSimple(frames[f], i * 0.25f, 0f, 0f, f, 0.00f, 0.00f, 0.00f);
-                                            Texture t = new Texture(pixmap.getWidth(), pixmap.getHeight(), Pixmap.Format.RGBA8888);
+                                            renderer.drawModelSimple(frames[f], i * 0.25f, 0f, 0f, f, 0.00f, 0.00f, 0.00f);
                                             t.draw(renderer.palettePixmap, 0, 0);
                                             int look = 0;
                                             for (int j = 0; j < armies.length; j++) {
@@ -521,7 +510,6 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                                 if (look + j == 0)
                                                     png.write(Gdx.files.local("out/color_guard/lab/" + attack + "_Receive/" + attack + "_Receive_" + strength + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                                             }
-                                            t.dispose();
                                         }
                                     }
                                     apng.write(Gdx.files.local("out/color_guard/animated/" + attack + "_Receive/" + attack + "_Receive_" + strength + ".png"), pm, 8);
@@ -542,6 +530,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
 
                     }
                 }
+                t.dispose();
             }
         }
         if(EXPLOSION)
@@ -591,6 +580,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
             byte[][][][] explosion = EffectGenerator.fireballAnimation(fireSeed, 12, 3, 0);
             Pixmap pixmap;
             Array<Pixmap> pm = new Array<>(4 * explosion.length);
+            Texture t = new Texture(renderer.palettePixmap.getWidth(), renderer.palettePixmap.getHeight(), Pixmap.Format.RGBA8888);
 
             for (int i = 0; i < 4; i++) {
                 for (int f = 0; f < explosion.length; f++) {
@@ -598,8 +588,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                     voxels.grids.add(explosion[f]);
 //                    Stuff.evolve(Stuff.STUFFS_B, fireSeed, f);
 //                    voxels.grids.add(fireSeed);
-                    pixmap = renderer.drawModelSimple(voxels, i * 0.25f, 0f, 0f, f, 0.00f, 0.00f, 0.00f);
-                    Texture t = new Texture(pixmap.getWidth(), pixmap.getHeight(), Pixmap.Format.RGBA8888);
+                    renderer.drawModelSimple(voxels, i * 0.25f, 0f, 0f, f, 0.00f, 0.00f, 0.00f);
                     t.draw(renderer.palettePixmap, 0, 0);
                     fb.begin();
                     palette.bind(1);
@@ -617,7 +606,6 @@ public class ColorGuardAssets extends ApplicationAdapter {
                     pm.add(pixmap);
                     png.write(Gdx.files.local("out/color_guard/effects/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), pixmap);
                     png.write(Gdx.files.local("out/color_guard/lab/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
-                    t.dispose();
                 }
             }
             apng.write(Gdx.files.local("out/color_guard/animated/" + name + '/' + name + ".png"), pm, 8);
@@ -627,11 +615,13 @@ public class ColorGuardAssets extends ApplicationAdapter {
                 if(!pix.isDisposed())
                     pix.dispose();
             }
+            t.dispose();
         }
         if(TERRAIN)
         {
             load("specialized/b/vox/color_guard/Terrain_Small.vox");
             renderer.outline = 2;
+            Texture t = new Texture(renderer.palettePixmap.getWidth(), renderer.palettePixmap.getHeight(), Pixmap.Format.RGBA8888);
             for (int n = 0; n < ColorGuardData.terrains.size(); n++) {
                 name = ColorGuardData.terrains.get(n);
                 System.out.println("Rendering " + name);
@@ -642,7 +632,6 @@ public class ColorGuardAssets extends ApplicationAdapter {
                     voxels = original.copy();
                     for (int f = 0; f < 1; f++) {
                         pixmap = renderer.drawModelSimple(voxels, i * 0.25f, 0f, 0f, f, 0.00f, 0.00f, 0.00f);
-                        Texture t = new Texture(pixmap.getWidth(), pixmap.getHeight(), Pixmap.Format.RGBA8888);
                         t.draw(renderer.palettePixmap, 0, 0);
                         fb.begin();
                         palette.bind(1);
@@ -664,10 +653,11 @@ public class ColorGuardAssets extends ApplicationAdapter {
                         } finally {
                             pixmap.dispose();
                         }
-                        t.dispose();
                     }
                 }
             }
+            t.dispose();
+
         }
         fb.dispose();
         System.out.println("Finished in " + TimeUtils.timeSinceMillis(startTime) * 0.001 + " seconds.");
