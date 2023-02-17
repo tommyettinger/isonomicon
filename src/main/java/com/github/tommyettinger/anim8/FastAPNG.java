@@ -87,13 +87,10 @@ public class FastAPNG implements AnimationWriter, Disposable {
     static private final byte COMPRESSION_DEFLATE = 0;
     static private final byte FILTER_NONE = 0;
     static private final byte INTERLACE_NONE = 0;
-    static private final byte FILTER_SUB = 1;
-    static private final byte FILTER_PAETH = 4;
 
     private final ChunkBuffer buffer;
     private final Deflater deflater;
     private ByteArray curLineBytes;
-    private ByteArray prevLineBytes;
     private int lastLineLen;
 
     /**
@@ -210,7 +207,6 @@ public class FastAPNG implements AnimationWriter, Disposable {
             buffer.endChunk(dataOutput);
 
             int lineLen = width * 4;
-//            byte[] lineOut;
             byte[] curLine;
             byte[] prevLine;
 
@@ -243,65 +239,18 @@ public class FastAPNG implements AnimationWriter, Disposable {
                 ByteBuffer pixels = pixmap.getPixels();
 
                 if (curLineBytes == null) {
-//                    lineOut = (lineOutBytes = new ByteArray(lineLen)).items;
                     curLine = (curLineBytes = new ByteArray(lineLen)).items;
-                    prevLine = (prevLineBytes = new ByteArray(lineLen)).items;
                 } else {
                     curLine = curLineBytes.ensureCapacity(lineLen);
-//                    lineOut = lineOutBytes.ensureCapacity(lineLen);
-                    prevLine = prevLineBytes.ensureCapacity(lineLen);
-                    for (int ln = 0, n = lastLineLen; ln < n; ln++)
-                        prevLine[ln] = 0;
                 }
                 lastLineLen = lineLen;
 
                 if(hasAlpha) {
                     for (int y = 0; y < height; y++) {
                         pixels.get(curLine, 0, lineLen);
-////PAETH
-//                    lineOut[0] = (byte) (curLine[0] - prevLine[0]);
-//                    lineOut[1] = (byte) (curLine[1] - prevLine[1]);
-//                    lineOut[2] = (byte) (curLine[2] - prevLine[2]);
-//                    lineOut[3] = (byte) (curLine[3] - prevLine[3]);
-//
-//                    for (int x = 4; x < lineLen; x++) {
-//                        int a = curLine[x - 4] & 0xff;
-//                        int b = prevLine[x] & 0xff;
-//                        int c = prevLine[x - 4] & 0xff;
-//                        int p = a + b - c;
-//                        int pa = p - a;
-//                        if (pa < 0) pa = -pa;
-//                        int pb = p - b;
-//                        if (pb < 0) pb = -pb;
-//                        int pc = p - c;
-//                        if (pc < 0) pc = -pc;
-//                        if (pa <= pb && pa <= pc)
-//                            c = a;
-//                        else if (pb <= pc) //
-//                            c = b;
-//                        lineOut[x] = (byte) (curLine[x] - c);
-//                    }
-//
-//                    deflaterOutput.write(PAETH);
-//                    deflaterOutput.write(lineOut, 0, lineLen);
-////NONE
+
                         deflaterOutput.write(FILTER_NONE);
                         deflaterOutput.write(curLine, 0, lineLen);
-////SUB
-//                    lineOut[0] = curLine[0];
-//                    lineOut[1] = curLine[1];
-//                    lineOut[2] = curLine[2];
-//                    lineOut[3] = curLine[3];
-//
-//                    for (int x = 4; x < lineLen; x++) {
-//                        lineOut[x] = (byte) (curLine[x] - curLine[x - 4]);
-//                    }
-//                    deflaterOutput.write(FILTER_SUB);
-//                    deflaterOutput.write(lineOut, 0, lineLen);
-//// end of filtering
-                        byte[] temp = curLine;
-                        curLine = prevLine;
-                        prevLine = temp;
                     }
                 }
                 else {
@@ -314,13 +263,8 @@ public class FastAPNG implements AnimationWriter, Disposable {
                             curLine[x++] = -1;
 
                         }
-////NONE
                         deflaterOutput.write(FILTER_NONE);
                         deflaterOutput.write(curLine, 0, lineLen);
-
-                        byte[] temp = curLine;
-                        curLine = prevLine;
-                        prevLine = temp;
                     }
                 }
                 pixels.rewind();
