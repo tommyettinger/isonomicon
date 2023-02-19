@@ -30,26 +30,29 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
-import java.util.Arrays;
 import java.util.zip.Deflater;
 import java.util.zip.DeflaterOutputStream;
 
 /**
- * Full-color animated PNG encoder with compression.
+ * Full-color animated PNG encoder with compression
+ * This is a variant on {@link AnimatedPNG} that has been optimized for speed over
+ * features; in particular, it does not support {@link #setFlipY(boolean)}.
  * This type of animated PNG supports both full color and a full alpha channel; it
  * does not reduce the colors to match a palette. If your image does not have a full
  * alpha channel and has 256 or fewer colors, you can use {@link AnimatedGif} or the
  * animated mode of {@link PNG8}, which have comparable APIs. An instance can be
  * reused to encode multiple animated PNGs with minimal allocation.
  * <br>
- * The animated PNG (often called APNG) files this produces default to using a high
- * compression level, but this is somewhat slow. You can use {@link #setCompression(int)}
- * to set compression to 2, which results in about 10-15% larger files that take about
- * half the time to write, or leave it at the default 6, which may take a few seconds
- * longer to write large files. You are encouraged to use some kind of tool to optimize
- * the file size of less-compressed APNGs that you want to host online;
+ * The animated PNG (often called APNG) files this produces default to using a fairly-low
+ * compression level (2), which makes larger files but writes them more quickly. You can
+ * use {@link #setCompression(int)} to set compression to 0 or 1, which make even larger
+ * files even more quickly, or as high as 9, which makes smaller files slowly. You are
+ * encouraged to use some kind of tool to optimize the file size of less-compressed
+ * APNGs that you want to host online;
  * <a href="http://sourceforge.net/projects/apng/files/APNG_Optimizer/">APNG Optimizer</a>
- * is a good choice.
+ * is a good choice. Because PNG uses the DEFLATE algorithm for compression, and so do ZIP
+ * and JAR, you can reasonably expect uncompressed and compressed PNGs to be about the
+ * same compressed size inside such an archive.
  * <br>
  * <pre>
  * Copyright (c) 2007 Matthias Mann - www.matthiasmann.de
@@ -73,7 +76,7 @@ import java.util.zip.DeflaterOutputStream;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  * </pre>
- *
+ * @see AnimatedPNG the slightly-slower variant on this class with better compression
  * @author Matthias Mann
  * @author Nathan Sweet
  * @author Tommy Ettinger
@@ -91,7 +94,6 @@ public class FastAPNG implements AnimationWriter, Disposable {
     private final ChunkBuffer buffer;
     private final Deflater deflater;
     private ByteArray curLineBytes;
-    private int lastLineLen;
 
     /**
      * Creates an AnimatedPNG writer with an initial buffer size of 1024. The buffer can resize later if needed.
@@ -120,7 +122,7 @@ public class FastAPNG implements AnimationWriter, Disposable {
     }
 
     /**
-     * Sets the deflate compression level. Default is 2 here instead of the default in PixmapIO.PNG, which is 6. Using
+     * Sets the deflate compression level. Default is 2 here instead of the default in AnimatedPNG, which is 6. Using
      * compression level 2 is faster, but doesn't compress quite as well. You can set the compression level as low as 0,
      * which is extremely fast but does no compression and so produces large files. You can set the compression level as
      * high as 9, which is extremely slow and typically not much smaller than compression level 6.
@@ -243,7 +245,6 @@ public class FastAPNG implements AnimationWriter, Disposable {
                 } else {
                     curLine = curLineBytes.ensureCapacity(lineLen);
                 }
-                lastLineLen = lineLen;
 
                 if(hasAlpha) {
                     for (int y = 0; y < height; y++) {

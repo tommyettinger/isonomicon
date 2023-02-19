@@ -37,7 +37,7 @@ public class Specialist extends ApplicationAdapter {
     private String name;
     private String[] inputs;
     private FastPNG png;
-    private Gif gif;
+    private FastGif gif;
     private FastAPNG apng;
     private SpriteBatch batch;
     private Texture palette;
@@ -89,7 +89,7 @@ public class Specialist extends ApplicationAdapter {
         png.setCompression(2); // we are likely to compress these with something better, like oxipng.
         png.setFlipY(false);
 //        png8 = new PNG8();
-        gif = new Gif();
+        gif = new FastGif();
         gif.setFlipY(false);
         apng = new FastAPNG();
         apng.setCompression(2);

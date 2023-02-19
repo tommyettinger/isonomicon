@@ -22,7 +22,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.FloatArray;
 import com.badlogic.gdx.utils.StreamUtils;
@@ -34,7 +33,16 @@ import java.util.Arrays;
 
 /**
  * GIF encoder using standard LZW compression; can write animated and non-animated GIF images.
- * An instance can be reused to encode multiple GIFs with minimal allocation.
+ * This is a variant on {@link AnimatedGif} that reads pixels in directly from a ByteBuffer, rather than retrieving each
+ * pixel by its position. An instance can be reused to encode multiple GIFs with minimal allocation.
+ * <br>
+ * This class is different from {@link AnimatedGif} in a few ways. First is that this isn't GWT-compatible, but
+ * AnimatedGif (probably?) is. It would be a bit of a challenge to actually test writing files on GWT, but is possible.
+ * Second is that this class reads in pixels byte-by-byte from the {@link Pixmap#getPixels()} ByteBuffer, instead of
+ * reading in pixels 32-bits-at-a-time using {@link Pixmap#getPixel(int, int)}, which can be slower. Third is that
+ * {@link #setFlipY(boolean)} does nothing here, but works in AnimatedGif; this is a consequence of how bytes are read.
+ * There may be other minor changes, but not much is different -- hopefully this class is faster on most input data, but
+ * it could very well be slower for certain types of input.
  * <br>
  * You can configure the target palette and how this can dither colors via the {@link #palette} field, which is a
  * {@link PaletteReducer} object that defaults to null and can be reused. If you assign a PaletteReducer to palette, the
@@ -50,18 +58,19 @@ import java.util.Arrays;
  * with {@link DitherAlgorithm#NONE}.
  * <br>
  * You can write non-animated GIFs with this, but libGDX can't read them back in, so you may want to prefer {@link PNG8}
- * for images with 256 or fewer colors and no animation (libGDX can read in non-animated PNG files, as well as the first
- * frame of animated PNG files). If you have an animation that doesn't look good with dithering or has multiple levels
- * of transparency (GIF only supports one fully transparent color), you can use {@link AnimatedPNG} to output a
- * full-color animation. If you have a non-animated image that you want to save in lossless full-color, just use
- * {@link com.badlogic.gdx.graphics.PixmapIO.PNG}; the API is slightly different, but the PNG code here is based on it.
+ * or {@link FastPNG} for images with 256 or fewer colors and no animation (libGDX can read in non-animated PNG files,
+ * as well as the first frame of animated PNG files). If you have an animation that doesn't look good with dithering or
+ * has multiple levels of transparency (GIF only supports one fully transparent color), you can use {@link AnimatedPNG}
+ * or {@link FastAPNG} to output a full-color animation. If you have a non-animated image that you want to save in
+ * lossless full-color, you can use {@link FastPNG}. You could use {@link com.badlogic.gdx.graphics.PixmapIO.PNG}
+ * instead; the PNG code here is based on it, and although it isn't as fast to write files, they are better-compressed.
  * <br>
  * Based on Nick Badal's Android port ( https://github.com/nbadal/android-gif-encoder/blob/master/GifEncoder.java ) of
  * Alessandro La Rossa's J2ME port ( http://www.jappit.com/blog/2008/12/04/j2me-animated-gif-encoder/ ) of this pure
  * Java animated GIF encoder by Kevin Weiner ( http://www.java2s.com/Code/Java/2D-Graphics-GUI/AnimatedGifEncoder.htm ).
  * The original has no copyright asserted, so this file continues that tradition and does not assert copyright either.
  */
-public class Gif implements AnimationWriter, Dithered {
+public class FastGif implements AnimationWriter, Dithered {
     /**
      * Writes the given Pixmap values in {@code frames}, in order, to an animated GIF at {@code file}. Always writes at
      * 30 frames per second, so if frames has less than 30 items, this animation will be under a second long.
@@ -139,8 +148,6 @@ public class Gif implements AnimationWriter, Dithered {
 
     protected int y = 0;
 
-    protected boolean flipY = true;
-
     protected int transIndex = -1; // transparent index in color table
 
     protected int repeat = 0; // loop repeat
@@ -201,7 +208,7 @@ public class Gif implements AnimationWriter, Dithered {
     protected float ditherStrength = 1f;
 
     /**
-     * Gets this Gif's dither strength, which will override the {@link PaletteReducer#getDitherStrength()} in
+     * Gets this FastGif's dither strength, which will override the {@link PaletteReducer#getDitherStrength()} in
      * the PaletteReducer this uses. This applies even if {@link #getPalette()} is null; in that case, when a temporary
      * PaletteReducer is created, it will use this dither strength.
      * @return the current dither strength override
@@ -211,7 +218,7 @@ public class Gif implements AnimationWriter, Dithered {
     }
 
     /**
-     * Sets this Gif's dither strength, which will override the {@link PaletteReducer#getDitherStrength()} in
+     * Sets this FastGif's dither strength, which will override the {@link PaletteReducer#getDitherStrength()} in
      * the PaletteReducer this uses. This applies even if {@link #getPalette()} is null; in that case, when a temporary
      * PaletteReducer is created, it will use this dither strength.
      * @param ditherStrength the desired dither strength, usually between 0 and 2 and defaulting to 1
@@ -279,19 +286,18 @@ public class Gif implements AnimationWriter, Dithered {
     }
 
     /**
-     * Returns true if the output is flipped top-to-bottom from the inputs (the default); otherwise returns false.
-     * @return true if the inputs are flipped on writing, false otherwise
+     * Always returns false; flipping vertically is not supported by the FastXYZ classes.
+     * @return always false
      */
     public boolean isFlipY() {
-        return flipY;
+        return false;
     }
 
     /**
-     * Sets whether this should flip inputs top-to-bottom (true, the default setting), or leave as-is (false).
-     * @param flipY true if this should flip inputs top-to-bottom when writing, false otherwise
+     * A no-op; this class never flips the image, regardless of the setting.
+     * @param flipY ignored
      */
     public void setFlipY(boolean flipY) {
-        this.flipY = flipY;
     }
 
     /**
@@ -481,8 +487,6 @@ public class Gif implements AnimationWriter, Dithered {
         }
         // map image pixels to new palette
         int used;
-        int flipped = flipY ? height - 1 : 0;
-        int flipDir = flipY ? -1 : 1;
         ByteBuffer pixels = image.getPixels();
         boolean hasTransparent = image.getFormat().equals(Pixmap.Format.RGBA8888);
         switch (ditherAlgorithm) {
@@ -974,8 +978,7 @@ public class Gif implements AnimationWriter, Dithered {
                     Arrays.fill(nextErrorGreen, (byte) 0);
                     Arrays.fill(nextErrorBlue, (byte) 0);
 
-                    int py = flipped + flipDir * y,
-                            ny = y + 1;
+                    int ny = y + 1;
                     for (int px = 0; px < width && i < nPix; px++) {
                         int r = pixels.get() & 255;
                         int g = pixels.get() & 255;
@@ -983,7 +986,7 @@ public class Gif implements AnimationWriter, Dithered {
                         if (hasTransparent && (pixels.get() & 0x80) == 0)
                             indexedPixels[i++] = 0;
                         else {
-                            adj = ((PaletteReducer.TRI_BLUE_NOISE[(px & 63) | (py & 63) << 6] + 0.5f) * 0.005f); // plus or minus 255/400
+                            adj = ((PaletteReducer.TRI_BLUE_NOISE[(px & 63) | (y & 63) << 6] + 0.5f) * 0.005f); // plus or minus 255/400
                             adj = Math.min(Math.max(adj * strength, -limit), limit);
                             er = adj + (curErrorRed[px]);
                             eg = adj + (curErrorGreen[px]);

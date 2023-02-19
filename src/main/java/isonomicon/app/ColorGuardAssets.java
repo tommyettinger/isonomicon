@@ -46,7 +46,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
     private String name;
     private String[] armies;
     private FastPNG png;
-    private Gif gif;
+    private FastGif gif;
     private FastAPNG apng;
     private SpriteBatch batch;
     private Texture palette;
@@ -109,7 +109,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
         png = new FastPNG();
         png.setFlipY(false);
         png.setCompression(2); // we are likely to compress these with something better, like oxipng.
-        gif = new Gif();
+        gif = new FastGif();
         gif.setFlipY(false);
         apng = new FastAPNG();
         apng.setFlipY(false);

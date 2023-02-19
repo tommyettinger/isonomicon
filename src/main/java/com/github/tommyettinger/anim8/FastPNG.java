@@ -33,7 +33,8 @@ import java.util.zip.Deflater;
 import java.util.zip.DeflaterOutputStream;
 
 /**
- * Full-color PNG encoder with compression, optimized for speed.
+ * An almost-drop-in replacement for {@link com.badlogic.gdx.graphics.PixmapIO.PNG},
+ * optimized for speed at the expense of features.
  * This type of PNG supports both full color and a full alpha channel; it
  * does not reduce the colors to match a palette. If your image does not have a full
  * alpha channel and has 256 or fewer colors, you can use {@link AnimatedGif} or
@@ -97,14 +98,14 @@ public class FastPNG implements Disposable {
     private ByteArray curLineBytes;
 
     /**
-     * Creates an AnimatedPNG writer with an initial buffer size of 1024. The buffer can resize later if needed.
+     * Creates an FastPNG writer with an initial buffer size of 1024. The buffer can resize later if needed.
      */
     public FastPNG() {
         this(1024);
     }
 
     /**
-     * Creates an AnimatedPNG writer with the given initial buffer size. The buffer can resize if needed, so using a
+     * Creates an FastPNG writer with the given initial buffer size. The buffer can resize if needed, so using a
      * small size is only a problem if it slows down writing by forcing a resize for several parts of a PNG. A default
      * of 1024 is reasonable.
      * @param initialBufferSize the initial size for the buffer that stores PNG chunks; 1024 is a reasonable default
@@ -118,6 +119,7 @@ public class FastPNG implements Disposable {
      * A no-op; this class never flips the image, regardless of the setting. This method
      * is here for API compatibility with PixmapIO.PNG, and also for possible future changes
      * if flipping becomes viable.
+     * @param flipY ignored
      */
     public void setFlipY(boolean flipY) {
     }
@@ -127,6 +129,7 @@ public class FastPNG implements Disposable {
      * compression level 2 is faster, but doesn't compress quite as well. You can set the compression level as low as 0,
      * which is extremely fast but does no compression and so produces large files. You can set the compression level as
      * high as 9, which is extremely slow and typically not much smaller than compression level 6.
+     * @param level from 0 (no compression) to 9 (max compression), both inclusive
      */
     public void setCompression(int level) {
         deflater.setLevel(level);
@@ -148,7 +151,7 @@ public class FastPNG implements Disposable {
 
 
     /**
-     * Writes the given Pixmap as an animated PNG to the given {@code output} stream without
+     * Writes the given Pixmap as a PNG to the given {@code output} stream without
      * closing the stream. This can use all 32-bit colors.
      * <br>
      * This makes some decisions in order to optimize speed at the expense of file size, by
