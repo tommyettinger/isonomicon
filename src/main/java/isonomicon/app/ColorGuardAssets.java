@@ -127,19 +127,19 @@ public class ColorGuardAssets extends ApplicationAdapter {
         //// The recent changes to GRADIENT_NOISE dither finally make it usable, and it's an ordered dither, too
 //        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.GRADIENT_NOISE);
         gif.setDitherAlgorithm(Dithered.DitherAlgorithm.ROBERTS);
-//        gif.palette = new PaletteReducer(Coloring.AURORA);
-        gif.palette = new PaletteReducer(); // uses AURORA, OklabCareful metric
-//        gif.palette = new PaletteReducer(PaletteReducer.YAMPED); // uses YAMPED, simplest RGB metric
-//        gif.palette = new PaletteReducer(PaletteReducer.YAMPED, Gdx.files.local("assets/YampedOklabPreload.dat").readBytes()); // uses YAMPED, OklabCareful metric
-//        gif.palette = new PaletteReducer(Coloring.MUNSELLISH255, Gdx.files.local("assets/MunsellishRGBPreload.dat").readBytes());
-//        gif.palette = new PaletteReducer(Coloring.MUNSELLISH255, Gdx.files.local("assets/MunsellishOklabPreload.dat").readBytes());
-//        gif.palette = new PaletteReducer(Coloring.AURORA, Gdx.files.local("assets/AuroraOklabPreload.dat").readBytes());
-//        gif.palette = new PaletteReducer(Coloring.CORN4, Gdx.files.local("assets/Corn4RGBPreload.dat").readBytes());
-//        gif.palette = new PaletteReducer(Coloring.CORN4, Gdx.files.local("assets/Corn4OklabPreload.dat").readBytes());
-//        gif.palette = new PaletteReducer(Coloring.YAM3, Gdx.files.local("assets/Yam3Preload.dat").readBytes());
-//        gif.palette = new PaletteReducer(Coloring.TATER255, Gdx.files.local("assets/TaterPreload.dat").readBytes());
-//        gif.palette = new PaletteReducer(Coloring.TETRA256, Gdx.files.local("assets/TetraPreload.dat").readBytes());
-//        gif.palette = new PaletteReducer(Coloring.BETSY256, Gdx.files.local("assets/BetsyPreload.dat").readBytes());
+//        gif.palette = new com.github.tommyettinger.anim8.FastPalette(Coloring.AURORA);
+        gif.palette = new com.github.tommyettinger.anim8.FastPalette(); // uses AURORA, OklabCareful metric
+//        gif.palette = new com.github.tommyettinger.anim8.FastPalette(PaletteReducer.YAMPED); // uses YAMPED, simplest RGB metric
+//        gif.palette = new com.github.tommyettinger.anim8.FastPalette(PaletteReducer.YAMPED, Gdx.files.local("assets/YampedOklabPreload.dat").readBytes()); // uses YAMPED, OklabCareful metric
+//        gif.palette = new com.github.tommyettinger.anim8.FastPalette(Coloring.MUNSELLISH255, Gdx.files.local("assets/MunsellishRGBPreload.dat").readBytes());
+//        gif.palette = new com.github.tommyettinger.anim8.FastPalette(Coloring.MUNSELLISH255, Gdx.files.local("assets/MunsellishOklabPreload.dat").readBytes());
+//        gif.palette = new com.github.tommyettinger.anim8.FastPalette(Coloring.AURORA, Gdx.files.local("assets/AuroraOklabPreload.dat").readBytes());
+//        gif.palette = new com.github.tommyettinger.anim8.FastPalette(Coloring.CORN4, Gdx.files.local("assets/Corn4RGBPreload.dat").readBytes());
+//        gif.palette = new com.github.tommyettinger.anim8.FastPalette(Coloring.CORN4, Gdx.files.local("assets/Corn4OklabPreload.dat").readBytes());
+//        gif.palette = new com.github.tommyettinger.anim8.FastPalette(Coloring.YAM3, Gdx.files.local("assets/Yam3Preload.dat").readBytes());
+//        gif.palette = new com.github.tommyettinger.anim8.FastPalette(Coloring.TATER255, Gdx.files.local("assets/TaterPreload.dat").readBytes());
+//        gif.palette = new com.github.tommyettinger.anim8.FastPalette(Coloring.TETRA256, Gdx.files.local("assets/TetraPreload.dat").readBytes());
+//        gif.palette = new com.github.tommyettinger.anim8.FastPalette(Coloring.BETSY256, Gdx.files.local("assets/BetsyPreload.dat").readBytes());
         //// BLUE_NOISE doesn't need this, but NEUE, GRADIENT_NOISE, and ROBERTS do.
         gif.setDitherStrength(0.25f);
         FrameBuffer fb = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), false);

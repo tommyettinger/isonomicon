@@ -94,10 +94,11 @@ public class Specialist extends ApplicationAdapter {
         apng = new FastAPNG();
         apng.setCompression(2);
         apng.setFlipY(false);
-        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.NEUE);
+        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.ROBERTS);
+        gif.setDitherStrength(0.375f);
 //        png8.setDitherAlgorithm(Dithered.DitherAlgorithm.SCATTER);
-        gif.palette = new PaletteReducer();
-//        gif.palette = new PaletteReducer(Coloring.YAM2, Gdx.files.local("assets/Yam2Preload.dat").readBytes());
+        gif.palette = new FastPalette();
+//        gif.palette = new com.github.tommyettinger.anim8.FastPalette(Coloring.YAM2, Gdx.files.local("assets/Yam2Preload.dat").readBytes());
         gif.setDitherStrength(0.5f);
 //        png8.palette = gif.palette;
         Gdx.files.local("out/vox").mkdirs();

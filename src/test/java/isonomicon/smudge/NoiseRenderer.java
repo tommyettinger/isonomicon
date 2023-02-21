@@ -89,7 +89,7 @@ public class NoiseRenderer extends ApplicationAdapter {
 //            pm.insertRange(pm.size - 4, 4);
         }
         System.out.println("Mostly done, animation stuff in progress...");
-        gif.palette = new PaletteReducer(pm);
+        gif.palette = new com.github.tommyettinger.anim8.FastPalette(pm);
         gif.write(Gdx.files.local("out/" + name + '/' + name + ".gif"), pm, 8);
 //                gif.palette.exact(Coloring.HALTONITE240, PRELOAD);
 //                gif.write(Gdx.files.local("out/" + name + '/' + name + "-256-color.gif"), pm, 1);

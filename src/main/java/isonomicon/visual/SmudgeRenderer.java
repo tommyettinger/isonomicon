@@ -24,7 +24,7 @@ public class SmudgeRenderer {
     public int[][] depths, voxels, render, outlines;
     public VoxMaterial[][] materials;
     public float[][] shadeX, shadeZ, colorL, colorA, colorB, midShading;
-    public PaletteReducer reducer = new PaletteReducer();
+    public PaletteReducer reducer = new com.github.tommyettinger.anim8.FastPalette();
     public int[] palette;
     public float[] paletteL, paletteA, paletteB;
     public boolean dither = false, outline = true;

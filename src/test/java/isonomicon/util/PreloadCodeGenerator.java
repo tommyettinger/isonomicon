@@ -25,7 +25,7 @@ public class PreloadCodeGenerator extends ApplicationAdapter {
     }
 
     public void create() { 
-        generatePreloadCode(new PaletteReducer(Coloring.BETSY256).paletteMapping, "BetsyPreload.txt");
+        generatePreloadCode(new com.github.tommyettinger.anim8.FastPalette(Coloring.BETSY256).paletteMapping, "BetsyPreload.txt");
         Gdx.app.exit();
     }
     /**

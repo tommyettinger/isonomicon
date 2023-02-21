@@ -81,7 +81,7 @@ public class Turntable extends ApplicationAdapter {
         gif = new AnimatedGif();
         apng = new AnimatedPNG();
         gif.setDitherAlgorithm(Dithered.DitherAlgorithm.BLUE_NOISE);
-        gif.palette = new PaletteReducer(); // Uses DB Aurora
+        gif.palette = new com.github.tommyettinger.anim8.FastPalette(); // Uses DB Aurora
         gif.palette.setDitherStrength(0.5f);
         Gdx.files.local("out/vox").mkdirs();
         for (String s : inputs) {
