@@ -109,6 +109,7 @@ public class Specialist extends ApplicationAdapter {
             load("specialized/" + s);
 //            VoxIO.writeVOX("out/" + s, voxels, renderer.palette, VoxIO.lastMaterials);
 //            load("out/"+s);
+            Texture t = new Texture(renderer.palettePixmap.getWidth(), renderer.palettePixmap.getHeight(), Pixmap.Format.RGBA8888);
             Pixmap pixmap;
             Array<Pixmap> pm = new Array<>(128);
             ArrayList<byte[][][]> original = new ArrayList<>(voxels.grids.size());
@@ -125,7 +126,6 @@ public class Specialist extends ApplicationAdapter {
                         Stuff.evolve(Stuff.STUFFS_B, voxels.grids.get(j), f);
                     }
                     renderer.drawModelSimple(voxels, i * 0.125f, 0f, 0f, f, 0, 0, 0);
-                    Texture t = new Texture(renderer.palettePixmap.getWidth(), renderer.palettePixmap.getHeight(), Pixmap.Format.RGBA8888);
                     t.draw(renderer.palettePixmap, 0, 0);
                     FrameBuffer fb = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), false);
                     fb.begin();
@@ -149,7 +149,6 @@ public class Specialist extends ApplicationAdapter {
                     png.write(Gdx.files.local("out/b/specialized/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), pixmap);
                     png.write(Gdx.files.local("out/b/special_lab/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                     fb.dispose();
-                    t.dispose();
                 }
                 pm.insertRange(pm.size - 4, 4);
             }
@@ -171,7 +170,6 @@ public class Specialist extends ApplicationAdapter {
                         Stuff.evolve(Stuff.STUFFS_B, voxels.grids.get(j), i);
                     }
                     renderer.drawModelSimple(voxels, i * 0x1p-7f + 0.125f, 0f, 0f, i, 0, 0, 0);
-                    Texture t = new Texture(renderer.palettePixmap.getWidth(), renderer.palettePixmap.getHeight(), Pixmap.Format.RGBA8888);
                     t.draw(renderer.palettePixmap, 0, 0);
                     FrameBuffer fb = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), false);
                     fb.begin();
@@ -189,7 +187,6 @@ public class Specialist extends ApplicationAdapter {
                     fb.end();
                     pm.add(pixmap);
                     fb.dispose();
-                    t.dispose();
                 }
                 gif.palette.analyze(pm, 75.0, 256);
                 gif.write(Gdx.files.local("out/b/specialized/" + name + '/' + name + "_Turntable.gif"), pm, 24);
@@ -199,6 +196,7 @@ public class Specialist extends ApplicationAdapter {
                         pix.dispose();
                 }
             }
+            t.dispose();
         }
         System.out.println("Finished in " + TimeUtils.timeSinceMillis(startTime) * 0.001 + " seconds.");
         Gdx.app.exit();
