@@ -68,7 +68,7 @@
         <jdk.version>17</jdk.version>
         <junit.version>4.13.2</junit.version>
         <anim8.version>0.3.13</anim8.version>
-        <squidsquad.version>eb93149b78</squidsquad.version><!-- was 095ed4c5d5 -->
+        <squidsquad.version>eb93149b78</squidsquad.version><!-- was eb93149b78, before that 6fd67bb418 -->
         <gdx.version>1.11.0</gdx.version>
         <digital.version>0.1.8</digital.version>
         <juniper.version>0.1.9</juniper.version>

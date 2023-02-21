@@ -54,7 +54,7 @@ public class SpecialRenderer {
     public static final byte LIGHTEN = (byte) 135;
 
     public static final Noise noise = new Noise(0x1337BEEF, 0.0125f, Noise.SIMPLEX_FRACTAL, 2);
-    public static final CyclicNoise swirlNoise = new CyclicNoise(0x1337BEEFBA77L, 6, 0.03125f);
+    public static final CyclicNoise swirlNoise = new CyclicNoise(0xDEADBEEFBA77L, 6, 0.03f);
 
     protected SpecialRenderer() {
         this(64);
@@ -156,7 +156,7 @@ public class SpecialRenderer {
         final float flow = m.getTrait(VoxMaterial.MaterialTrait._flow);
         final float swirl = m.getTrait(VoxMaterial.MaterialTrait._swirl) + 1f;
         if(swirl != 1f) {
-            float ns = swirlNoise.getNoise(vx, vy, vz, cosTurns(frame * 0x1p-7f) * 0.625f / swirlNoise.getFrequency(), sinTurns(frame * 0x1p-7f) * 0.625f / swirlNoise.getFrequency());
+            float ns = swirlNoise.getNoise(vx, vy, vz, cosTurns(frame * 0x1p-7f) * 0.625f / swirlNoise.getFrequency(), sinTurns(frame * 0x1p-7f) * 0.625f / swirlNoise.getFrequency()) * 2f;
             if(ns > swirl) return;
         }
         final float emit = m.getTrait(VoxMaterial.MaterialTrait._emit) * 0.75f;

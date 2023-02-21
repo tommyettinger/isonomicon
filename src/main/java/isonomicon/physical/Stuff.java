@@ -300,7 +300,7 @@ public class Stuff {
             new Stuff("speech particle", 91, "Roughness 0.0 Reflection 0.0 Flow 0.2 Rise 0.6 Missing 0.08", 91, 1, 92, 1),
             new Stuff("speech spawner", 92, "Transparency 1.0", 92, 3, 91, 4),
             new Stuff("dread spawner", 93, "Transparency 1.0", 94, 1, 93, 11), /*dark blue*/
-            new Stuff("dread particle", 94, "Emission -0.4 Roughness 0.0 Reflection 0.0 Swirl -0.05"), /*dark violet*/
+            new Stuff("dread particle", 94, "Emission -0.4 Roughness 0.0 Reflection 0.0 Swirl 0.45"), /*dark violet*/
             new Stuff("stored energy", 95, "Emission 0.4 Roughness 0.3 Reflection 0.0 Flow 0.7 Missing 0.8", 95, 5, 96, 1, 0, 1),
             new Stuff("shock spawner", 96, "Transparency 1.0", 97, 1, 96, 14),
             new Stuff("shock particle", 97, "Emission 0.6 Roughness 0.4 Reflection 0.0 Missing 0.6", 97, 2, 96, 3),
