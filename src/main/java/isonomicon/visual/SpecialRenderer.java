@@ -36,7 +36,9 @@ import static com.github.tommyettinger.digital.TrigTools.sinTurns;
  */
 public class SpecialRenderer {
     public static int shrink = 2;
-    public static float distortHXY = 2, distoryVXY = 1, distortVZ = 3;
+//        public static float distortHXY = 2, distoryVXY = 1, distortVZ = 3; // ground truth for isometric
+//    public static float distortHXY = 2, distoryVXY = 0, distortVZ = 3; // side view
+    public static float distortHXY = 2, distoryVXY = 0.5f, distortVZ = 3; // side view
     public static final float fidget = 0.5f;
 
     public final Stuff[] stuffs;
@@ -79,7 +81,7 @@ public class SpecialRenderer {
 
     public SpecialRenderer(final int size, Stuff[] stuffs) {
         this.size = size;
-        final int w = size * 4 + 4, h = size * 5 + 4;
+        final int w = MathUtils.ceil(size * distortHXY * 2 + 4), h = MathUtils.ceil(size * (distortVZ + distoryVXY * 2) + 4);
         palettePixmap = new Pixmap(w>>>shrink, h>>>shrink, Pixmap.Format.RGBA8888);
         palettePixmap.setBlending(Pixmap.Blending.None);
         buffer = palettePixmap.getPixels();
@@ -247,9 +249,9 @@ public class SpecialRenderer {
         xPos += fidget;
         yPos += fidget;
         final int
-                xx = (int)(0.5f + Math.max(0, (size + yPos - xPos) * 2 + 1)),
-                yy = (int)(0.5f + Math.max(0, (zPos * 3 + size * 3 - xPos - yPos) + 1 + rise * frame)),
-                depth = (int)(0.5f + (xPos + yPos) * 2 + zPos * 3);
+                xx = (int)(0.5f + Math.max(0, (size + yPos - xPos) * distortHXY + 1)),
+                yy = (int)(0.5f + Math.max(0, (zPos * distortVZ + size * ((distoryVXY) * 3) - distoryVXY * (xPos + yPos)) + 1 + rise * frame)),
+                depth = (int)(0.5f + (xPos + yPos) * distortHXY + zPos * distortVZ);
         boolean drawn = false;
         final float hs = size * 0.5f;
         for (int x = lowX, ax = xx; x < highX && ax < render.length; x++, ax++) {
