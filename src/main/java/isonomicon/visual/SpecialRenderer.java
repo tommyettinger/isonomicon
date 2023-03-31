@@ -1,10 +1,13 @@
 package isonomicon.visual;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.github.tommyettinger.anim8.PaletteReducer;
 import com.github.tommyettinger.colorful.oklab.ColorTools;
+import com.github.tommyettinger.digital.ArrayTools;
 import com.github.tommyettinger.ds.IntObjectMap;
 import com.github.yellowstonegames.grid.BlueNoise;
 import com.github.yellowstonegames.grid.CyclicNoise;
@@ -32,6 +35,10 @@ import static com.github.tommyettinger.digital.TrigTools.sinTurns;
  * unusual technique that stores a palette index in the R channel and a lightness adjustment in the G channel.
  */
 public class SpecialRenderer {
+    public static int shrink = 2;
+    public static float distortHXY = 2, distoryVXY = 1, distortVZ = 3;
+    public static final float fidget = 0.5f;
+
     public final Stuff[] stuffs;
     public Pixmap palettePixmap;
     public ByteBuffer buffer;
@@ -47,14 +54,20 @@ public class SpecialRenderer {
     public boolean lighting = true;
     public boolean shadows = ColorGuardAssets.SHADOWS;
     public int size;
-    public static int shrink = 2;
     public float neutral = 1f;
-    public static final float fidget = 0.5f;
+
     public static final byte DARKEN = (byte) 128;
     public static final byte LIGHTEN = (byte) 135;
 
     public static final Noise noise = new Noise(0x1337BEEF, 0.0125f, Noise.SIMPLEX_FRACTAL, 2);
     public static final CyclicNoise swirlNoise = new CyclicNoise(0xDEADBEEFBA77L, 6, 0.03f);
+
+    public Pixmap normalMap;
+    public boolean computeNormals;
+    public double blurSigma = 0.9;
+    public GaussianBlur blur;
+    public float[][] normals;
+    private final Vector3 out = new Vector3();
 
     protected SpecialRenderer() {
         this(64);
@@ -85,6 +98,14 @@ public class SpecialRenderer {
         shadeX = fill(-1f, size * 4, size * 4);
         shadeZ = fill(-1f, size * 4, size * 4);
         this.stuffs = stuffs;
+
+        if(computeNormals)
+        {
+            normals = new float[4][(w>>>shrink)*(h>>>shrink)];
+            normalMap = new Pixmap(w>>>shrink, h>>>shrink, Pixmap.Format.RGBA8888);
+            blur = new GaussianBlur(Math.max(blurSigma, 0.0));
+        }
+
     }
     
     protected float bn(int x, int y, int seed) {
@@ -139,7 +160,60 @@ public class SpecialRenderer {
         }
         return this;
     }
-    
+
+    /**
+     * Applies a Scharr filter to a given x,y point in the already-computed depths 2D array, assigning floats to
+     * {@link #normals}. The blue channel of the color represents the axis of the normal vector that points toward
+     * the camera, the green channel up, and the red channel right.
+     * <a href="https://forum.unity.com/threads/sobel-operator-height-to-normal-map-on-gpu.33159/">Thanks to apple_motion for writing the initial basis for this</a>,
+     * and <a href="https://gamedev.stackexchange.com/q/165575">Jarrett on the game dev StackExchange for providing a working solution.</a>
+     * @param x x position, looked up in depths
+     * @param y y position, looked up in depths
+     */
+    public void scharr(int x, int y) {
+        // if there is nothing here, don't bother computing anything.
+        if(indices[x][y] == 0) return;
+        int[][] data = this.depths;
+        // for other usage, this calculation will have to be different.
+        float maxDepth = 1.5f * (0.5f + (size + size) * distortHXY + size * distortVZ);
+        float invMaxDepth = 1f / maxDepth;
+        // how many pixels away from (x,y) each direction will move per step.
+        final int u = 1 << shrink;
+
+        float tl = (x < u || y < u) ? 0 : (data[x-u][y-u]) * invMaxDepth;                    // top left
+        float  l = (x < u) ? 0 : (data[x-u][y]) * invMaxDepth;                               // left
+        float bl = (x < u || y >= data[0].length - u) ? 0 : (data[x-u][y+u]) * invMaxDepth;  // bottom left
+        float  t = (y < u) ? 0 : (data[x][y-u]) * invMaxDepth;                               // top
+        float  b = (data[x][y]) * invMaxDepth;                                               // bottom
+        float tr = (y >= data[0].length - u) ? 0 : (data[x][y+u]) * invMaxDepth;             // top right
+        float  r = (x >= data.length - u || y < u) ? 0 : (data[x+u][y-u]) * invMaxDepth;     // right
+        float br = (x >= data.length - u) ? 0 : (data[x+u][y]) * invMaxDepth;                // bottom right
+
+        // Scharr operator
+        float cx = ((tl + bl - tr - br) * 47 + (l - r) * 162);
+        float cy = ((tl + tr - bl - br) * 47 + (t - b) * 162);
+        float cz = 12f; // adjustable
+
+        out.set(cx, cy, cz).nor().scl(0.5f).add(0.5f);
+        int xx = x >>> shrink, yy = y >>> shrink, w = palettePixmap.getWidth(), h = palettePixmap.getHeight(), i = xx + yy * w;
+        normals[0][i] = out.x;
+        normals[1][i] = out.y;
+        normals[2][i] = out.z;
+        normals[3][i] = 1f;
+
+        for (int px = -4, ax = xx + px; px <= 4; px++, ax++) {
+            if(ax >= 0 && ax < w) {
+                for (int py = -4, ay = yy + py; py <= 4; py++, ay++) {
+                    if(ay >= 0 && ay < h && normals[3][i = ax + ay * w] == 0f){
+                        normals[0][i] = out.x;
+                        normals[1][i] = out.y;
+                        normals[2][i] = out.z;
+                    }
+                }
+            }
+        }
+    }
+
     public void splat(float xPos, float yPos, float zPos, int vx, int vy, int vz, byte voxel, int frame) {
         if(xPos <= -1f || yPos <= -1f || zPos <= -1f
                 || xPos >= size * 2 || yPos >= size * 2 || zPos >= size * 2)
@@ -268,6 +342,13 @@ public class SpecialRenderer {
         final int threshold = 13;
         palettePixmap.setColor(0);
         palettePixmap.fill();
+
+        if(computeNormals) {
+            ArrayTools.fill(normals, 0f);
+            normalMap.setColor(0);
+            normalMap.fill();
+        }
+
         int xSize = render.length - 1, ySize = render[0].length - 1, depth;
         int v, vx, vy, vz, fx, fy, fz;
         float hs = (size) * 0.5f, hsp = hs - fidget, ox, oy, oz, tx, ty, tz;
@@ -471,6 +552,24 @@ public class SpecialRenderer {
                         }
 
                     }
+                }
+            }
+        }
+        if(computeNormals) {
+            for (int y = 0; y < ySize; y++) {
+                for (int x = 0; x < xSize; x++) {
+                    scharr(x, y);
+                }
+            }
+            blur.filter(normals[0], normalMap.getWidth(), normalMap.getHeight());
+            blur.filter(normals[1], normalMap.getWidth(), normalMap.getHeight());
+            blur.filter(normals[2], normalMap.getWidth(), normalMap.getHeight());
+            int color;
+            for (int y = 0, h = normalMap.getHeight(); y < h; y++) {
+                for (int x = 0, w = normalMap.getWidth(); x < w; x++) {
+                    int idx = x + y * w;
+                    color = Color.rgba8888(normals[0][idx], normals[1][idx], normals[2][idx], normals[3][idx]);
+                    normalMap.drawPixel(x, y, color);
                 }
             }
         }
