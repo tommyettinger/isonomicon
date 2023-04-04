@@ -95,7 +95,7 @@ public class Specialist extends ApplicationAdapter {
         apng.setCompression(2);
         apng.setFlipY(false);
         gif.setDitherAlgorithm(Dithered.DitherAlgorithm.ROBERTS);
-        gif.setDitherStrength(0.375f);
+        gif.setDitherStrength(0.75f);
 //        png8.setDitherAlgorithm(Dithered.DitherAlgorithm.SCATTER);
         gif.palette = new FastPalette();
 //        gif.palette = new com.github.tommyettinger.anim8.FastPalette(Coloring.YAM2, Gdx.files.local("assets/Yam2Preload.dat").readBytes());

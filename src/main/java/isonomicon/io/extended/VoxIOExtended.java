@@ -3,6 +3,7 @@ package isonomicon.io.extended;
 import com.badlogic.gdx.math.Vector3;
 import com.github.tommyettinger.ds.IntObjectMap;
 import com.github.tommyettinger.ds.LongOrderedSet;
+import com.github.tommyettinger.ds.support.util.IntIterator;
 import com.github.yellowstonegames.core.StringTools;
 import isonomicon.io.LittleEndianDataInputStream;
 import isonomicon.physical.Tools3D;
@@ -435,7 +436,7 @@ public class VoxIOExtended {
                     String term = ent.value.type.name();
                     writeInt(dos, term.length());
                     dos.writeBytes(term);
-                    PrimitiveIterator.OfInt it = ent.value.traits.keySet().iterator();
+                    IntIterator it = ent.value.traits.keySet().iterator();
                     for(int k; it.hasNext();) {
                         k = it.nextInt();
                         if(k > 9) continue;

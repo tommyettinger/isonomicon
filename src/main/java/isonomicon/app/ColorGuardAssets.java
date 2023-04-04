@@ -37,6 +37,8 @@ public class ColorGuardAssets extends ApplicationAdapter {
     public static boolean EXPLOSION = true;
     public static boolean TERRAIN = true;
     public static boolean SHADOWS = true;
+    
+    public static final String outDir = "out/cg_shallow";
 
     public static final int SCREEN_WIDTH = 512;//640;
     public static final int SCREEN_HEIGHT = 512;//720;
@@ -156,7 +158,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                 ColorGuardData.Unit unit = ColorGuardData.units.get(n);
                 name = unit.name;
                 System.out.println("Rendering " + name);
-                Gdx.files.local("out/color_guard/animated_diverse/" + name + '/').mkdirs();
+                Gdx.files.local(outDir + "/animated_diverse/" + name + '/').mkdirs();
                 load("specialized/b/vox/color_guard/" + name + ".vox");
                 if(name.startsWith("Terrain")){
                     renderer.outline = 2;
@@ -193,9 +195,9 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                 batch.end();
                                 pixmap = Pixmap.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
                                 fb.end();
-                                png.write(Gdx.files.local("out/color_guard/" + armies[j] + "/" + name + '/' + armies[j] + "_look" + lk + '_' + name + "_angle" + i + "_" + f + ".png"), pixmap);
+                                png.write(Gdx.files.local(outDir + "/" + armies[j] + "/" + name + '/' + armies[j] + "_look" + lk + '_' + name + "_angle" + i + "_" + f + ".png"), pixmap);
                                 if(look + j == 0)
-                                    png.write(Gdx.files.local("out/color_guard/lab/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
+                                    png.write(Gdx.files.local(outDir + "/lab/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                                 if(lk == canonicalLooks[j]) {
                                     pm.set(j * 32 + i * 8 + f, pixmap);
                                     pm.set(j * 32 + i * 8 + f + 4, pixmap);
@@ -208,10 +210,10 @@ public class ColorGuardAssets extends ApplicationAdapter {
                     }
                 }
 //                gif.palette.analyze(pm);
-                apng.write(Gdx.files.local("out/color_guard/animated_diverse/" + name + '/' + name + ".png"), pm, 8);
+                apng.write(Gdx.files.local(outDir + "/animated_diverse/" + name + '/' + name + ".png"), pm, 8);
                 SpecialRenderer.monoAlpha(pm);
-                gif.write(Gdx.files.local("out/color_guard/animated_diverse/" + name + '/' + name + ".gif"), pm, 8);
-//                apng.write(Gdx.files.local("out/color_guard/animated_diverse_flat/" + name + ".png"), pm, 8);
+                gif.write(Gdx.files.local(outDir + "/animated_diverse/" + name + '/' + name + ".gif"), pm, 8);
+//                apng.write(Gdx.files.local(outDir + "/animated_diverse_flat/" + name + ".png"), pm, 8);
                 for (Pixmap pix : pm) {
                     if (!pix.isDisposed())
                         pix.dispose();
@@ -269,9 +271,9 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                         batch.end();
                                         pixmap = Pixmap.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
                                         fb.end();
-                                        png.write(Gdx.files.local("out/color_guard/" + armies[j] + "/" + name + '/' + armies[j] + "_look" + lk + "_" + name + ps + "_angle" + i + "_" + f + ".png"), pixmap);
+                                        png.write(Gdx.files.local(outDir + "/" + armies[j] + "/" + name + '/' + armies[j] + "_look" + lk + "_" + name + ps + "_angle" + i + "_" + f + ".png"), pixmap);
                                         if (look + j == 0)
-                                            png.write(Gdx.files.local("out/color_guard/lab/" + name + '/' + name + ps + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
+                                            png.write(Gdx.files.local(outDir + "/lab/" + name + '/' + name + ps + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                                         if(lk == canonicalLooks[j]) {
                                             pm.set(j * 32 + i * 8 + f, pixmap);
                                         } else {
@@ -288,10 +290,10 @@ public class ColorGuardAssets extends ApplicationAdapter {
                             }
                         }
 //                gif.palette.analyze(pm);
-                        apng.write(Gdx.files.local("out/color_guard/animated_diverse/" + name + '/' + name + ps + ".png"), pm, 8);
+                        apng.write(Gdx.files.local(outDir + "/animated_diverse/" + name + '/' + name + ps + ".png"), pm, 8);
                         SpecialRenderer.monoAlpha(pm);
-                        gif.write(Gdx.files.local("out/color_guard/animated_diverse/" + name + '/' + name + ps + ".gif"), pm, 8);
-//                        apng.write(Gdx.files.local("out/color_guard/animated_diverse_flat/" + name + ps + ".png"), pm, 8);
+                        gif.write(Gdx.files.local(outDir + "/animated_diverse/" + name + '/' + name + ps + ".gif"), pm, 8);
+//                        apng.write(Gdx.files.local(outDir + "/animated_diverse_flat/" + name + ps + ".png"), pm, 8);
                         for (Pixmap pix : pm) {
                             if (!pix.isDisposed())
                                 pix.dispose();
@@ -324,15 +326,15 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                                 pixmap = Pixmap.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
                                                 fb.end();
                                                 pm.set(j * 32 + i * 8 + f, pixmap);
-                                                png.write(Gdx.files.local("out/color_guard/" + armies[j] + "/" + attack + "_Receive/" + armies[j] + "_look" + look + "_" + attack + "_Receive_" + strength + "_angle" + i + "_" + f + ".png"), pixmap);
+                                                png.write(Gdx.files.local(outDir + "/" + armies[j] + "/" + attack + "_Receive/" + armies[j] + "_look" + look + "_" + attack + "_Receive_" + strength + "_angle" + i + "_" + f + ".png"), pixmap);
                                                 if (look + j == 0)
-                                                    png.write(Gdx.files.local("out/color_guard/lab/" + attack + "_Receive/" + attack + "_Receive_" + strength + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
+                                                    png.write(Gdx.files.local(outDir + "/lab/" + attack + "_Receive/" + attack + "_Receive_" + strength + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                                             }
                                         }
                                     }
-                                    apng.write(Gdx.files.local("out/color_guard/animated_diverse/" + attack + "_Receive/" + attack + "_Receive_" + strength + ".png"), pm, 8);
+                                    apng.write(Gdx.files.local(outDir + "/animated_diverse/" + attack + "_Receive/" + attack + "_Receive_" + strength + ".png"), pm, 8);
                                     SpecialRenderer.monoAlpha(pm);
-                                    gif.write(Gdx.files.local("out/color_guard/animated_diverse/" + attack + "_Receive/" + attack + "_Receive_" + strength + ".gif"), pm, 8);
+                                    gif.write(Gdx.files.local(outDir + "/animated_diverse/" + attack + "_Receive/" + attack + "_Receive_" + strength + ".gif"), pm, 8);
                                     for (Pixmap pix : pm) {
                                         if (!pix.isDisposed())
                                             pix.dispose();
@@ -393,16 +395,16 @@ public class ColorGuardAssets extends ApplicationAdapter {
                             fb.end();
                             pm.set(j * 32 + i * 8 + f, pixmap);
                             pm.set(j * 32 + i * 8 + f + 4, pixmap);
-                            png.write(Gdx.files.local("out/color_guard/" + armies[j] + "/" + name + '/' + armies[j] + "_look0_" + name + "_angle" + i + "_" + f + ".png"), pixmap);
+                            png.write(Gdx.files.local(outDir + "/" + armies[j] + "/" + name + '/' + armies[j] + "_look0_" + name + "_angle" + i + "_" + f + ".png"), pixmap);
                             if (look + j == 0)
-                                png.write(Gdx.files.local("out/color_guard/lab/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
+                                png.write(Gdx.files.local(outDir + "/lab/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                         }
 //                png8.write(Gdx.files.local("out/" + name + '/' + name + "_angle" + i + ".png"), p, false, true);
                     }
                 }
-                apng.write(Gdx.files.local("out/color_guard/animated/" + name + '/' + name + ".png"), pm, 8);
+                apng.write(Gdx.files.local(outDir + "/animated/" + name + '/' + name + ".png"), pm, 8);
                 SpecialRenderer.monoAlpha(pm);
-                gif.write(Gdx.files.local("out/color_guard/animated/" + name + '/' + name + ".gif"), pm, 8);
+                gif.write(Gdx.files.local(outDir + "/animated/" + name + '/' + name + ".gif"), pm, 8);
                 for (Pixmap pix : pm) {
                     if (!pix.isDisposed())
                         pix.dispose();
@@ -459,10 +461,10 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                     pixmap = Pixmap.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
                                     fb.end();
                                     pm.set(j * 32 + i * 8 + f, pixmap);
-                                    png.write(Gdx.files.local("out/color_guard/" + armies[j] + "/" + name + '/' + armies[j] + "_look" + look + "_" + name + ps + "_angle" + i + "_" + f + ".png"), pixmap);
+                                    png.write(Gdx.files.local(outDir + "/" + armies[j] + "/" + name + '/' + armies[j] + "_look" + look + "_" + name + ps + "_angle" + i + "_" + f + ".png"), pixmap);
                                     if (look + j == 0) {
-                                        png.write(Gdx.files.local("out/color_guard/lab/" + name + '/' + name + ps + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
-//                                            VoxIOExtended.writeVOX("out/color_guard/vox/" + name + "/" + ps + "_angle" + i + "_" + f + ".vox", frames[f].grids.get(0), VoxIO.lastPalette, VoxIO.lastMaterials);
+                                        png.write(Gdx.files.local(outDir + "/lab/" + name + '/' + name + ps + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
+//                                            VoxIOExtended.writeVOX(outDir + "/vox/" + name + "/" + ps + "_angle" + i + "_" + f + ".vox", frames[f].grids.get(0), VoxIO.lastPalette, VoxIO.lastMaterials);
                                     }
                                 }
                                 byte[][][] g = frames[f].grids.get(0);
@@ -471,9 +473,9 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                 }
                             }
                         }
-                        apng.write(Gdx.files.local("out/color_guard/animated/" + name + '/' + name + ps + ".png"), pm, 8);
+                        apng.write(Gdx.files.local(outDir + "/animated/" + name + '/' + name + ps + ".png"), pm, 8);
                         SpecialRenderer.monoAlpha(pm);
-                        gif.write(Gdx.files.local("out/color_guard/animated/" + name + '/' + name + ps + ".gif"), pm, 8);
+                        gif.write(Gdx.files.local(outDir + "/animated/" + name + '/' + name + ps + ".gif"), pm, 8);
                         for (Pixmap pix : pm) {
                             if (!pix.isDisposed())
                                 pix.dispose();
@@ -506,15 +508,15 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                                 pixmap = Pixmap.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
                                                 fb.end();
                                                 pm.set(j * 32 + i * 8 + f, pixmap);
-                                                png.write(Gdx.files.local("out/color_guard/" + armies[j] + "/" + attack + "_Receive/" + armies[j] + "_look" + look + "_" + attack + "_Receive_" + strength + "_angle" + i + "_" + f + ".png"), pixmap);
+                                                png.write(Gdx.files.local(outDir + "/" + armies[j] + "/" + attack + "_Receive/" + armies[j] + "_look" + look + "_" + attack + "_Receive_" + strength + "_angle" + i + "_" + f + ".png"), pixmap);
                                                 if (look + j == 0)
-                                                    png.write(Gdx.files.local("out/color_guard/lab/" + attack + "_Receive/" + attack + "_Receive_" + strength + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
+                                                    png.write(Gdx.files.local(outDir + "/lab/" + attack + "_Receive/" + attack + "_Receive_" + strength + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                                             }
                                         }
                                     }
-                                    apng.write(Gdx.files.local("out/color_guard/animated/" + attack + "_Receive/" + attack + "_Receive_" + strength + ".png"), pm, 8);
+                                    apng.write(Gdx.files.local(outDir + "/animated/" + attack + "_Receive/" + attack + "_Receive_" + strength + ".png"), pm, 8);
                                     SpecialRenderer.monoAlpha(pm);
-                                    gif.write(Gdx.files.local("out/color_guard/animated/" + attack + "_Receive/" + attack + "_Receive_" + strength + ".gif"), pm, 8);
+                                    gif.write(Gdx.files.local(outDir + "/animated/" + attack + "_Receive/" + attack + "_Receive_" + strength + ".gif"), pm, 8);
                                     for (Pixmap pix : pm) {
                                         if (!pix.isDisposed())
                                             pix.dispose();
@@ -604,13 +606,13 @@ public class ColorGuardAssets extends ApplicationAdapter {
                     pixmap = Pixmap.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
                     fb.end();
                     pm.add(pixmap);
-                    png.write(Gdx.files.local("out/color_guard/effects/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), pixmap);
-                    png.write(Gdx.files.local("out/color_guard/lab/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
+                    png.write(Gdx.files.local(outDir + "/effects/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), pixmap);
+                    png.write(Gdx.files.local(outDir + "/lab/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                 }
             }
-            apng.write(Gdx.files.local("out/color_guard/animated/" + name + '/' + name + ".png"), pm, 8);
+            apng.write(Gdx.files.local(outDir + "/animated/" + name + '/' + name + ".png"), pm, 8);
             SpecialRenderer.monoAlpha(pm);
-            gif.write(Gdx.files.local("out/color_guard/animated/" + name + '/' + name + ".gif"), pm, 8);
+            gif.write(Gdx.files.local(outDir + "/animated/" + name + '/' + name + ".gif"), pm, 8);
             for (Pixmap pix : pm) {
                 if(!pix.isDisposed())
                     pix.dispose();
@@ -625,7 +627,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
             for (int n = 0; n < ColorGuardData.terrains.size(); n++) {
                 name = ColorGuardData.terrains.get(n);
                 System.out.println("Rendering " + name);
-                Gdx.files.local("out/color_guard/Landscape/" + name + '/').mkdirs();
+                Gdx.files.local(outDir + "/Landscape/" + name + '/').mkdirs();
                 Pixmap pixmap;
                 VoxModel original = voxels.copy();
                 for (int i = 0; i < 4; i++) {
@@ -647,9 +649,9 @@ public class ColorGuardAssets extends ApplicationAdapter {
                         pixmap = Pixmap.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
                         fb.end();
                         try {
-                            png.write(Gdx.files.local("out/color_guard/Landscape/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), pixmap);
+                            png.write(Gdx.files.local(outDir + "/Landscape/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), pixmap);
                             if (n == 0)
-                                png.write(Gdx.files.local("out/color_guard/lab/Landscape/" + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
+                                png.write(Gdx.files.local(outDir + "/lab/Landscape/" + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                         } finally {
                             pixmap.dispose();
                         }
