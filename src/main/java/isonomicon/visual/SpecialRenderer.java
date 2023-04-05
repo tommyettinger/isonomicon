@@ -341,7 +341,7 @@ public class SpecialRenderer {
      * @return {@link #palettePixmap}, edited to contain the render of all the voxels put in this with {@link #splat(float, float, float, int, int, int, byte, int)}
      */
     public Pixmap blit(float yaw, float pitch, float roll, int frame) {
-        final int threshold = 13;
+        final int threshold = 10+shrink*3;//13;
         palettePixmap.setColor(0);
         palettePixmap.fill();
 
@@ -401,8 +401,8 @@ public class SpecialRenderer {
                                 shading[sx][sy] += change;
                             }
                             int dist;
-                            for (int i = -3, si = sx + i; i <= 3; i++, si++) {
-                                for (int j = -3, sj = sy + j; j <= 3; j++, sj++) {
+                            for (int i = -4, si = sx + i; i <= 4; i++, si++) {
+                                for (int j = -4, sj = sy + j; j <= 4; j++, sj++) {
                                     if ((dist = i * i + j * j) > 9 || si < 0 || sj < 0 || si > xSize || sj > ySize)
                                         continue;
                                     float change = spread * (4 - (float) Math.sqrt(dist));
@@ -412,8 +412,8 @@ public class SpecialRenderer {
                         } else if (Math.abs(shadeZ[fx][fy] - tz) <= limit) {
                             float spread = MathUtils.lerp(0.005f, 0.002f, rough);
                             float dist;
-                            for (int i = -3, si = sx + i; i <= 3; i++, si++) {
-                                for (int j = -3, sj = sy + j; j <= 3; j++, sj++) {
+                            for (int i = -4, si = sx + i; i <= 4; i++, si++) {
+                                for (int j = -4, sj = sy + j; j <= 4; j++, sj++) {
                                     if ((dist = i * i + j * j) > 9 || si < 0 || sj < 0 || si > xSize || sj > ySize)
                                         continue;
                                     float change = spread * (4 - (float) Math.sqrt(dist));
@@ -430,7 +430,7 @@ public class SpecialRenderer {
                                     if (dist > radius * radius || si < 0 || sj < 0 || si > xSize || sj > ySize)
                                         continue;
                                     float change = spread * (radius - (float) Math.sqrt(dist));
-                                    midShading[si][sj] = Math.min(midShading[si][sj] + change * Math.abs(change), 0.25f);
+                                    midShading[si][sj] += change;// * Math.abs(change);
                                     lightIndices[si][sj] = (byte)Math.max(lightIndices[si][sj], indices[sx][sy]);
                                 }
                             }
@@ -479,7 +479,7 @@ public class SpecialRenderer {
 //                                128 << 16 |
 //                                128 << 8 | shade);
                         buffer.put(idx, lightIndices[x][y]);
-                        buffer.put(idx+1, (byte) 128);
+                        buffer.put(idx+1, (byte) shade);
                         buffer.put(idx+2, (byte) 96);
                         buffer.put(idx+3, (byte) shade);
                         outlineIndices[x][y] = 0;
@@ -493,7 +493,7 @@ public class SpecialRenderer {
 //                                128 << 16 |
 //                                128 << 8 | shade);
                         buffer.put(idx, lightIndices[x][y]);
-                        buffer.put(idx+1, (byte) 128);
+                        buffer.put(idx+1, (byte) (255 - shade));
                         buffer.put(idx+2, (byte) 96);
                         buffer.put(idx+3, (byte) shade);
                         outlineIndices[x][y] = 0;
@@ -517,6 +517,7 @@ public class SpecialRenderer {
                     int hy = y >>> shrink;
                     if ((outlines[x][y]) == 1) {
                         depth = depths[x][y];
+//                        int inner = 0x3880FFFF;
                         int inner = (outlineIndices[x][y] & 255) << 24 | (int) Math.min(Math.max(64f * outlineShading[x][y],  0f),  255f) << 16 | 64 << 8 | 255;
                         int outer = (outline >= 4) ? 0x010000FF : inner;
                         if (outlines[x - step][y] == 0) {
