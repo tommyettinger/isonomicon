@@ -76,7 +76,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Forward_Cannon")).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Machine_Gun")).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Forward_Missile") || u.hasWeapon("Handgun")).toList();
-        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.name.equals("Heavy_Cannon")).toList();
+//        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.name.equals("Heavy_Cannon")).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.name.startsWith("Terrain")).toList();
 //        ColorGuardData.units = ColorGuardData.units.subList(52, ColorGuardData.units.size());
 //        ColorGuardData.units = ColorGuardData.units.subList(2, 3);
@@ -128,9 +128,12 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.BLUE_NOISE);
         //// The recent changes to GRADIENT_NOISE dither finally make it usable, and it's an ordered dither, too
 //        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.GRADIENT_NOISE);
-        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.ROBERTS);
+        // can be pretty good, but this might be too strong by default. Ordered dither, again.
+//        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.ROBERTS);
+        // Not an ordered dither; let's see how this goes.
+        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.DODGY);
 //        gif.palette = new com.github.tommyettinger.anim8.FastPalette(Coloring.AURORA);
-        gif.palette = new com.github.tommyettinger.anim8.FastPalette(); // uses AURORA, OklabCareful metric
+        gif.palette = new com.github.tommyettinger.anim8.QualityPalette(); // uses AURORA, OklabCareful metric
 //        gif.palette = new com.github.tommyettinger.anim8.FastPalette(PaletteReducer.YAMPED); // uses YAMPED, simplest RGB metric
 //        gif.palette = new com.github.tommyettinger.anim8.FastPalette(PaletteReducer.YAMPED, Gdx.files.local("assets/YampedOklabPreload.dat").readBytes()); // uses YAMPED, OklabCareful metric
 //        gif.palette = new com.github.tommyettinger.anim8.FastPalette(Coloring.MUNSELLISH255, Gdx.files.local("assets/MunsellishRGBPreload.dat").readBytes());
@@ -143,7 +146,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //        gif.palette = new com.github.tommyettinger.anim8.FastPalette(Coloring.TETRA256, Gdx.files.local("assets/TetraPreload.dat").readBytes());
 //        gif.palette = new com.github.tommyettinger.anim8.FastPalette(Coloring.BETSY256, Gdx.files.local("assets/BetsyPreload.dat").readBytes());
         //// BLUE_NOISE doesn't need this, but NEUE, GRADIENT_NOISE, and ROBERTS do.
-        gif.setDitherStrength(0.25f);
+        gif.setDitherStrength(0.5f);
         FrameBuffer fb = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), false);
         ObjectIntMap<String> doneReceive = new ObjectIntMap<>(16);
         doneReceive.setDefaultValue(-1);
