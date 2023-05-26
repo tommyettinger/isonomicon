@@ -38,7 +38,7 @@ public class SpecialRenderer {
     public static int shrink = 2;
 //        public static float distortHXY = 2, distortVXY = 1, distortVZ = 3; // ground truth for isometric
 //    public static float distortHXY = 2, distortVXY = 0, distortVZ = 3; // side view
-    public static float distortHXY = 2, distortVXY = 0.5f, distortVZ = 3; // partially elevated side view
+    public static float distortHXY = 2, distortVXY = 0.5f, distortVZ = 3; // partially elevated side view ("shallow")
     public static final float fidget = 0.0f;
 
     public final Stuff[] stuffs;

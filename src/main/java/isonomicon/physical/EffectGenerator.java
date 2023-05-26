@@ -167,6 +167,9 @@ public class EffectGenerator {
                     for (int z = 0; z < zSize; z++) {
                         byte color = vls[x][y][z];
                         if ((color - 1 & 255) < 191) {
+                            if((color == hotFire || color == yellowFire || color == smoke) && r.nextInt(f1 + f1) >= frames) {
+                                color = smoke;
+                            }
                             float zMove = f1 * ((r.nextFloat() + r.nextFloat()) * 0.8f + 0.3f);
                             float xMove = r.nextFloat(2f) - 1f;
                             float yMove = r.nextFloat(2f) - 1f;
@@ -266,18 +269,18 @@ public class EffectGenerator {
             case 3:
             case 4:
             case 5:
+                return yellowFire;
             case 6:
             case 7:
-                return 114;
             case 8:
             case 9:
             case 10:
             case 11:
             case 12:
             case 13:
-                return 115;
+                return hotFire;
             default:
-                return 67;
+                return smoke;
         }
     }
 
