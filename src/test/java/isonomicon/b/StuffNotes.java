@@ -79,7 +79,8 @@ public class StuffNotes extends ApplicationAdapter {
                 batch.setColor(batch.getColor().set(Coloring.BETTS64[i]));
                 batch.draw(pixel, Gdx.graphics.getWidth() * n / 8f, Gdx.graphics.getHeight() * r / 16f, Gdx.graphics.getWidth() / 8f, Gdx.graphics.getHeight() / 16f);
 //                font.setColor(batch.getColor().set(Color.rgba8888(batch.getColor()) ^ 0xffffff00));
-                font.setColor((batch.getColor().r + 0.4f) % 1f, (batch.getColor().g + 0.4f) % 1f, (batch.getColor().b + 0.4f) % 1f, 1f);
+//                font.setColor((batch.getColor().r + 0.4f) % 1f, (batch.getColor().g + 0.4f) % 1f, (batch.getColor().b + 0.4f) % 1f, 1f);
+                font.setColor(batch.getColor().r + batch.getColor().g + batch.getColor().b >= 1f ? Color.BLACK : Color.WHITE);
                 font.draw(batch, STUFFS[i].name, Gdx.graphics.getWidth() * n / 8f, Gdx.graphics.getHeight() * (r + 0.92f) / 16f, Gdx.graphics.getWidth() / 8f, Align.center, true);
             }
             r++;
@@ -100,6 +101,7 @@ public class StuffNotes extends ApplicationAdapter {
 //        PixmapIO.writePNG(Gdx.files.local("Notes_B_Palette.png"), Pixmap.createFromFrameBuffer(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()), 6, false);
         ScreenUtils.clear(Color.BLACK);
         batch.begin();
+        batch.setColor(Color.WHITE);
         batch.draw(t, 0, HEIGHT, WIDTH, -HEIGHT);
         batch.end();
         pixmap.dispose();
