@@ -23,6 +23,9 @@ import isonomicon.visual.Coloring;
 import java.io.IOException;
 
 public class StuffNotes extends ApplicationAdapter {
+    public static final boolean WRITING = true;
+    public static final int WIDTH = 880;
+    public static final int HEIGHT = 900;
     public BitmapFont font;
     public SpriteBatch batch;
     public Texture pixel;
@@ -33,11 +36,15 @@ public class StuffNotes extends ApplicationAdapter {
 
     @Override
     public void create() {
-        Texture fontTex = new Texture(Gdx.files.internal("canada1500.png"), true);
-        fontTex.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
-        font = new BitmapFont(Gdx.files.internal("canada1500.fnt"), new TextureRegion(fontTex), false);
+//        Texture fontTex = new Texture(Gdx.files.internal("canada1500.png"), true);
+        Texture fontTex = new Texture(Gdx.files.internal("GentiumUnItalic-standard.png"), true);
+//        fontTex.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+        fontTex.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
+//        font = new BitmapFont(Gdx.files.internal("canada1500.fnt"), new TextureRegion(fontTex), false);
+        font = new BitmapFont(Gdx.files.internal("GentiumUnItalic-standard.fnt"));
         font.setUseIntegerPositions(false);
-        font.getData().setScale(0.2f);
+        font.getData().setScale(0.8f);
+//        font.getData().setScale(0.3f);
         Pixmap px = new Pixmap(3, 3, Pixmap.Format.RGBA8888);
         px.setColor(Color.WHITE);
         px.fill();
@@ -61,8 +68,8 @@ public class StuffNotes extends ApplicationAdapter {
     @Override
     public void render() {
         ScreenUtils.clear(Color.BLACK);
-        Texture t = new Texture(600, 900, Pixmap.Format.RGB888);
-        FrameBuffer fb = new FrameBuffer(Pixmap.Format.RGB888, 600, 900, false);
+        Texture t = new Texture(WIDTH, HEIGHT, Pixmap.Format.RGB888);
+        FrameBuffer fb = new FrameBuffer(Pixmap.Format.RGB888, WIDTH, HEIGHT, false);
         fb.begin();
         ScreenUtils.clear(Color.BLACK);
 
@@ -78,27 +85,31 @@ public class StuffNotes extends ApplicationAdapter {
             r++;
         }
         batch.end();
+//        Pixmap pixmap = Pixmap.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
         Pixmap pixmap = Specialist.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
         t.draw(pixmap, 0, 0);
         fb.end();
 
-        try {
-            png.write(Gdx.files.local("Notes_B_Palette.png"), pixmap);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if(WRITING) {
+            try {
+                png.write(Gdx.files.local("Notes_B_Palette.png"), pixmap);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
 //        PixmapIO.writePNG(Gdx.files.local("Notes_B_Palette.png"), Pixmap.createFromFrameBuffer(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()), 6, false);
         ScreenUtils.clear(Color.BLACK);
         batch.begin();
-        batch.draw(t, 0, 900, 600, -900);
+        batch.draw(t, 0, HEIGHT, WIDTH, -HEIGHT);
         batch.end();
+        pixmap.dispose();
     }
 
 
     public static void main(String[] arg) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         config.setTitle("Isonomicon Test: Stuff Notes");
-        config.setWindowedMode(600, 900);
+        config.setWindowedMode(WIDTH, HEIGHT);
         config.setIdleFPS(10);
         config.setForegroundFPS(60);
         config.useVsync(true);
