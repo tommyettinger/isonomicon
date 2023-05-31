@@ -38,14 +38,14 @@ public class StuffNotes extends ApplicationAdapter {
     public void create() {
 //        Texture fontTex = new Texture(Gdx.files.internal("canada1500.png"), true);
         Texture fontTex = new Texture(Gdx.files.internal("GentiumUnItalic-standard.png"), true);
-//        fontTex.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
-        fontTex.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
+        fontTex.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+//        fontTex.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
 //        font = new BitmapFont(Gdx.files.internal("canada1500.fnt"), new TextureRegion(fontTex), false);
-        font = new BitmapFont(Gdx.files.internal("GentiumUnItalic-standard.fnt"));
+        font = new BitmapFont(Gdx.files.internal("GentiumUnItalic-standard.fnt"), new TextureRegion(fontTex), false);
         font.setUseIntegerPositions(false);
-        font.getData().setScale(0.8f);
+        font.getData().setScale(0.75f);
 //        font.getData().setScale(0.3f);
-        Pixmap px = new Pixmap(3, 3, Pixmap.Format.RGBA8888);
+        Pixmap px = new Pixmap(3, 3, Pixmap.Format.RGB888);
         px.setColor(Color.WHITE);
         px.fill();
         pixel = new Texture(px);
@@ -104,6 +104,7 @@ public class StuffNotes extends ApplicationAdapter {
         batch.setColor(Color.WHITE);
         batch.draw(t, 0, HEIGHT, WIDTH, -HEIGHT);
         batch.end();
+        fb.dispose();
         pixmap.dispose();
     }
 
