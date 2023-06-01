@@ -42,15 +42,19 @@ public class Specialist extends ApplicationAdapter {
     private SpriteBatch batch;
     private Texture palette;
     public Specialist(String[] args){
+        VoxIOExtended.GENERAL = true;
         if(args != null && args.length > 0)
             inputs = args;
         else 
         {
             System.out.println("INVALID ARGUMENTS. Please supply space-separated absolute paths to .vox models, or use the .bat file.");
             inputs = new String[]{
-                    "b/vox/odyssey/Assassin_Dagger.vox", "palettes/b/TanClothDarkSkin.png",
-                    "b/vox/odyssey/Noble_Knife.vox", "palettes/b/TanClothDarkSkin.png",
+                    "b/vox/gratitude/A24.vox", "palettes/b/TanClothDarkSkin.png",
             };
+//            inputs = new String[]{
+//                    "b/vox/odyssey/Assassin_Dagger.vox", "palettes/b/TanClothDarkSkin.png",
+//                    "b/vox/odyssey/Noble_Knife.vox", "palettes/b/TanClothDarkSkin.png",
+//            };
 //            inputs = new String[]{"b/vox/Figure.vox", "b/vox/Tree.vox"};
 //            inputs = new String[]{"b/vox/Figure_Split.vox", "palettes/b/TanClothDarkSkin.png"};
 //            inputs = new String[]{"b/vox/Damned.vox", "palettes/b/CherrySkinDarkCloth.png"};

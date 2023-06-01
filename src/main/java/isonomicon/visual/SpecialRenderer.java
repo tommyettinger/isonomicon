@@ -759,7 +759,13 @@ public class SpecialRenderer {
         ArrayList<IntObjectMap<float[]>> links = new ArrayList<>(model.links.size());
         for (int i = 0; i < model.grids.size(); i++) {
             grids.add(Tools3D.deepCopy(model.grids.get(i)));
-            links.add(new IntObjectMap<>(model.links.get(i)));
+            if(i < model.links.size())
+                links.add(new IntObjectMap<>(model.links.get(i)));
+        }
+        if(links.isEmpty()) {
+            subDraw(grids, links, grids.remove(0), new IntObjectMap<>(0), yaw, pitch, roll, frame,
+                    translateX, translateY, translateZ);
+            return blit(yaw, pitch, roll, frame);
         }
         for (int i = 0; i < grids.size(); i++) {
             IntObjectMap<float[]> link = links.get(i);
