@@ -49,7 +49,7 @@ public class Specialist extends ApplicationAdapter {
         {
             System.out.println("INVALID ARGUMENTS. Please supply space-separated absolute paths to .vox models, or use the .bat file.");
             inputs = new String[]{
-                    "b/vox/gratitude/A24.vox", "palettes/b/TanClothDarkSkin.png",
+                    "b/vox/gratitude/A24.vox", "palettes/b/ColorGuardBaseDark.png",
             };
 //            inputs = new String[]{
 //                    "b/vox/odyssey/Assassin_Dagger.vox", "palettes/b/TanClothDarkSkin.png",
@@ -98,7 +98,7 @@ public class Specialist extends ApplicationAdapter {
         apng = new FastAPNG();
         apng.setCompression(2);
         apng.setFlipY(false);
-        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.ROBERTS);
+        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.DODGY);
         gif.setDitherStrength(0.75f);
 //        png8.setDitherAlgorithm(Dithered.DitherAlgorithm.SCATTER);
         gif.palette = new FastPalette();
