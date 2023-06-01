@@ -38,7 +38,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
     public static boolean TERRAIN = true;
     public static boolean SHADOWS = true;
     
-    public static final String outDir = "out/cg_shallow";
+    public static final String outDir = "out/color_guard";
 
     public static final int SCREEN_WIDTH = 512;//640;
     public static final int SCREEN_HEIGHT = 512;//720;

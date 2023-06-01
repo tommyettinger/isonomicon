@@ -36,9 +36,9 @@ import static com.github.tommyettinger.digital.TrigTools.sinTurns;
  */
 public class SpecialRenderer {
     public static int shrink = 2;
-//        public static float distortHXY = 2, distortVXY = 1, distortVZ = 3; // ground truth for isometric
+        public static float distortHXY = 2, distortVXY = 1, distortVZ = 3; // ground truth for isometric
 //    public static float distortHXY = 2, distortVXY = 0, distortVZ = 3; // side view
-    public static float distortHXY = 2, distortVXY = 0.5f, distortVZ = 3; // partially elevated side view ("shallow")
+//    public static float distortHXY = 2, distortVXY = 0.5f, distortVZ = 3; // partially elevated side view ("shallow")
     public static final float fidget = 0.0f;
 
     public final Stuff[] stuffs;
@@ -257,7 +257,7 @@ public class SpecialRenderer {
         for (int x = lowX, ax = xx; x < highX && ax < render.length; x++, ax++) {
             if (ax < 0) continue;
             for (int y = lowY, ay = yy; y < highY && ay < render[0].length; y++, ay++) {
-                if ((depth > depths[ax][ay] || (depth == depths[ax][ay] && (indices[ax][ay] & 255) < (voxel & 255)))) {
+                if ((depth > depths[ax][ay] || (depth == depths[ax][ay] && (indices[ax][ay] & 255) > (voxel & 255)))) {
                     drawn = true;
                     depths[ax][ay] = depth;
                     materials[ax][ay] = m;
