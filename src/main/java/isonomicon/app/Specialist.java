@@ -39,7 +39,7 @@ public class Specialist extends ApplicationAdapter {
     private FastPNG png;
     private FastGif gif;
     private FastAPNG apng;
-    private QualityPalette analyzed, bw;
+    private QualityPalette analyzed, bw, low;
     private SpriteBatch batch;
     private Texture palette;
     public Specialist(String[] args){
@@ -104,6 +104,11 @@ public class Specialist extends ApplicationAdapter {
 //        gif.palette = new com.github.tommyettinger.anim8.FastPalette(Coloring.YAM2, Gdx.files.local("assets/Yam2Preload.dat").readBytes());
         gif.setDitherStrength(0.5f);
         bw = new QualityPalette(new int[]{0, 255, -1});
+        low = new QualityPalette(new int[]{
+                // Equpix15, by Night
+                0x00000000,0x523c4eff,0x2a2a3aff,0x3e5442ff,0x84545cff,0x38607cff,0x5c7a56ff,0x101024ff,
+                0xb27e56ff,0xd44e52ff,0x55a894ff,0x80ac40ff,0xec8a4bff,0x8bd0baff,0xffcc68ff,0xfff8c0ff,
+        });
         Gdx.files.local("out/vox").mkdirs();
         for (int n = 0; n < inputs.length; n++) {
             String s = inputs[n++];
@@ -164,6 +169,9 @@ public class Specialist extends ApplicationAdapter {
             gif.setDitherAlgorithm(Dithered.DitherAlgorithm.DODGY);
             gif.setDitherStrength(0.25f);
             gif.write(Gdx.files.local("out/b/specializedBW/" + name + '/' + name + ".gif"), pm, 8);
+            gif.palette = low;
+            gif.setDitherStrength(0.375f);
+            gif.write(Gdx.files.local("out/b/specializedLow/" + name + '/' + name + ".gif"), pm, 8);
             for (Pixmap pix : pm) {
                 if (!pix.isDisposed())
                     pix.dispose();
@@ -206,6 +214,9 @@ public class Specialist extends ApplicationAdapter {
                 gif.setDitherAlgorithm(Dithered.DitherAlgorithm.DODGY);
                 gif.setDitherStrength(0.25f);
                 gif.write(Gdx.files.local("out/b/specializedBW/" + name + '/' + name + "_Turntable.gif"), pm, 24);
+                gif.palette = low;
+                gif.setDitherStrength(0.375f);
+                gif.write(Gdx.files.local("out/b/specializedLow/" + name + '/' + name + "_Turntable.gif"), pm, 24);
                 for (Pixmap pix : pm) {
                     if (!pix.isDisposed())
                         pix.dispose();
