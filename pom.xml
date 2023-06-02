@@ -68,11 +68,11 @@
         <jdk.version>17</jdk.version>
         <junit.version>4.13.2</junit.version>
         <anim8.version>0.3.15</anim8.version>
-        <squidsquad.version>7cfa8baa89</squidsquad.version><!-- was e0b82f0ded, before that eb93149b78, before that 6fd67bb418 -->
+        <squidsquad.version>ea651cf2c3</squidsquad.version><!-- was 7cfa8baa89, e0b82f0ded, eb93149b78, 6fd67bb418 -->
         <gdx.version>1.11.0</gdx.version>
-        <digital.version>0.3.2</digital.version>
-        <juniper.version>0.3.4</juniper.version>
-        <jdkgdxds.version>1.3.1</jdkgdxds.version>
+        <digital.version>0.3.3</digital.version>
+        <juniper.version>0.3.5</juniper.version>
+        <jdkgdxds.version>1.3.2</jdkgdxds.version>
         <colorful.version>0.8.4</colorful.version>
     </properties>
 
@@ -146,13 +146,13 @@
         <dependency>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-source-plugin</artifactId>
-            <version>3.2.1</version>
+            <version>3.3.0</version>
             <type>maven-plugin</type>
         </dependency>
         <dependency>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-javadoc-plugin</artifactId>
-            <version>3.4.0</version>
+            <version>3.5.0</version>
             <type>maven-plugin</type>
         </dependency>
     </dependencies>
