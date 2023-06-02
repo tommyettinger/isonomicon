@@ -50,8 +50,14 @@ public class Specialist extends ApplicationAdapter {
         {
             System.out.println("INVALID ARGUMENTS. Please supply space-separated absolute paths to .vox models, or use the .bat file.");
             inputs = new String[]{
-                    "b/vox/gratitude/A24.vox", "palettes/b/ColorGuardBaseRed.png",
-                    "b/vox/gratitude/A25.vox", "palettes/b/ColorGuardBaseRed.png",
+                    "b/vox/gratitude/A24.vox", "palettes/b/ColorGuardBaseDark.png", "Dark_Priest",
+                    "b/vox/gratitude/A24.vox", "palettes/b/ColorGuardBaseWhite.png", "Light_Priest",
+                    "b/vox/gratitude/A24.vox", "palettes/b/ColorGuardBaseRed.png", "War_Priest",
+                    "b/vox/gratitude/A25.vox", "palettes/b/ColorGuardBaseDark.png", "Man_In_Black",
+                    "b/vox/gratitude/A25.vox", "palettes/b/ColorGuardBaseWhite.png", "Man_In_White",
+                    "b/vox/gratitude/A25.vox", "palettes/b/ColorGuardBaseRed.png", "Man_In_Red",
+                    "b/vox/gratitude/A25.vox", "palettes/b/ColorGuardBaseGreen.png", "Man_In_Green",
+                    "b/vox/gratitude/A25.vox", "palettes/b/ColorGuardBaseBlue.png", "Man_In_Blue",
             };
 //            inputs = new String[]{
 //                    "b/vox/odyssey/Assassin_Dagger.vox", "palettes/b/TanClothDarkSkin.png",
@@ -111,10 +117,11 @@ public class Specialist extends ApplicationAdapter {
                 0xb27e56ff,0xd44e52ff,0x55a894ff,0x80ac40ff,0xec8a4bff,0x8bd0baff,0xffcc68ff,0xfff8c0ff,
         });
         Gdx.files.local("out/vox").mkdirs();
-        for (int n = 0; n < inputs.length; n++) {
+        for (int n = 0; n < inputs.length - 2;) {
             String s = inputs[n++];
-            palette = new Texture(Gdx.files.local("assets/" + inputs[n]));
-            System.out.println("Rendering " + s);
+            palette = new Texture(Gdx.files.local("assets/" + inputs[n++]));
+            String output = inputs[n++];
+            System.out.println("Rendering " + s + " to " + output);
             load("specialized/" + s);
 //            VoxIO.writeVOX("out/" + s, voxels, renderer.palette, VoxIO.lastMaterials);
 //            load("out/"+s);
@@ -155,7 +162,7 @@ public class Specialist extends ApplicationAdapter {
 
                     fb.end();
                     pm.add(pixmap);
-                    png.write(Gdx.files.local("out/b/specialized/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), pixmap);
+                    png.write(Gdx.files.local("out/b/specialized/" + output + '/' + output + "_angle" + i + "_" + f + ".png"), pixmap);
                     png.write(Gdx.files.local("out/b/special_lab/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                     fb.dispose();
                 }
@@ -164,15 +171,14 @@ public class Specialist extends ApplicationAdapter {
             analyzed.analyze(pm, 75.0, 256);
             gif.palette = analyzed;
             gif.setDitherAlgorithm(Dithered.DitherAlgorithm.DODGY);
-            gif.write(Gdx.files.local("out/b/specialized/" + name + '/' + name + ".gif"), pm, 8);
-            apng.write(Gdx.files.local("out/b/specialized/" + name + '/' + name + ".png"), pm, 8);
-            gif.palette = aurora;
-            gif.setDitherAlgorithm(Dithered.DitherAlgorithm.DODGY);
-            gif.setDitherStrength(0.5f);
-            gif.write(Gdx.files.local("out/b/specializedAurora/" + name + '/' + name + ".gif"), pm, 8);
-            gif.palette = low;
-            gif.setDitherStrength(0.375f);
-            gif.write(Gdx.files.local("out/b/specializedLow/" + name + '/' + name + ".gif"), pm, 8);
+            gif.write(Gdx.files.local("out/b/specialized/" + output + '/' + output + ".gif"), pm, 8);
+            apng.write(Gdx.files.local("out/b/specialized/" + output + '/' + output + ".png"), pm, 8);
+//            gif.palette = aurora;
+//            gif.setDitherStrength(0.5f);
+//            gif.write(Gdx.files.local("out/b/specializedAurora/" + name + '/' + name + ".gif"), pm, 8);
+//            gif.palette = low;
+//            gif.setDitherStrength(0.375f);
+//            gif.write(Gdx.files.local("out/b/specializedLow/" + name + '/' + name + ".gif"), pm, 8);
             for (Pixmap pix : pm) {
                 if (!pix.isDisposed())
                     pix.dispose();
@@ -209,15 +215,14 @@ public class Specialist extends ApplicationAdapter {
                 analyzed.analyze(pm, 75.0, 256);
                 gif.palette = analyzed;
                 gif.setDitherAlgorithm(Dithered.DitherAlgorithm.DODGY);
-                gif.write(Gdx.files.local("out/b/specialized/" + name + '/' + name + "_Turntable.gif"), pm, 24);
-                apng.write(Gdx.files.local("out/b/specialized/" + name + '/' + name + "_Turntable.png"), pm, 24);
-                gif.palette = aurora;
-                gif.setDitherAlgorithm(Dithered.DitherAlgorithm.DODGY);
-                gif.setDitherStrength(0.5f);
-                gif.write(Gdx.files.local("out/b/specializedAurora/" + name + '/' + name + "_Turntable.gif"), pm, 24);
-                gif.palette = low;
-                gif.setDitherStrength(0.375f);
-                gif.write(Gdx.files.local("out/b/specializedLow/" + name + '/' + name + "_Turntable.gif"), pm, 24);
+                gif.write(Gdx.files.local("out/b/specialized/" + output + '/' + output + "_Turntable.gif"), pm, 24);
+                apng.write(Gdx.files.local("out/b/specialized/" + output + '/' + output + "_Turntable.png"), pm, 24);
+//                gif.palette = aurora;
+//                gif.setDitherStrength(0.5f);
+//                gif.write(Gdx.files.local("out/b/specializedAurora/" + name + '/' + name + "_Turntable.gif"), pm, 24);
+//                gif.palette = low;
+//                gif.setDitherStrength(0.375f);
+//                gif.write(Gdx.files.local("out/b/specializedLow/" + name + '/' + name + "_Turntable.gif"), pm, 24);
                 for (Pixmap pix : pm) {
                     if (!pix.isDisposed())
                         pix.dispose();
