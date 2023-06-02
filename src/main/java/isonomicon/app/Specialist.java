@@ -39,7 +39,7 @@ public class Specialist extends ApplicationAdapter {
     private FastPNG png;
     private FastGif gif;
     private FastAPNG apng;
-    private QualityPalette analyzed, bw, low;
+    private QualityPalette analyzed, aurora, low;
     private SpriteBatch batch;
     private Texture palette;
     public Specialist(String[] args){
@@ -50,7 +50,8 @@ public class Specialist extends ApplicationAdapter {
         {
             System.out.println("INVALID ARGUMENTS. Please supply space-separated absolute paths to .vox models, or use the .bat file.");
             inputs = new String[]{
-                    "b/vox/gratitude/A24.vox", "palettes/b/ColorGuardBaseWhite.png",
+                    "b/vox/gratitude/A24.vox", "palettes/b/ColorGuardBaseRed.png",
+                    "b/vox/gratitude/A25.vox", "palettes/b/ColorGuardBaseRed.png",
             };
 //            inputs = new String[]{
 //                    "b/vox/odyssey/Assassin_Dagger.vox", "palettes/b/TanClothDarkSkin.png",
@@ -103,7 +104,7 @@ public class Specialist extends ApplicationAdapter {
         gif.palette = analyzed = new QualityPalette();
 //        gif.palette = new com.github.tommyettinger.anim8.FastPalette(Coloring.YAM2, Gdx.files.local("assets/Yam2Preload.dat").readBytes());
         gif.setDitherStrength(0.5f);
-        bw = new QualityPalette(new int[]{0, 255, -1});
+        aurora = new QualityPalette();
         low = new QualityPalette(new int[]{
                 // Equpix15, by Night
                 0x00000000,0x523c4eff,0x2a2a3aff,0x3e5442ff,0x84545cff,0x38607cff,0x5c7a56ff,0x101024ff,
@@ -165,10 +166,10 @@ public class Specialist extends ApplicationAdapter {
             gif.setDitherAlgorithm(Dithered.DitherAlgorithm.DODGY);
             gif.write(Gdx.files.local("out/b/specialized/" + name + '/' + name + ".gif"), pm, 8);
             apng.write(Gdx.files.local("out/b/specialized/" + name + '/' + name + ".png"), pm, 8);
-            gif.palette = bw;
+            gif.palette = aurora;
             gif.setDitherAlgorithm(Dithered.DitherAlgorithm.DODGY);
-            gif.setDitherStrength(0.25f);
-            gif.write(Gdx.files.local("out/b/specializedBW/" + name + '/' + name + ".gif"), pm, 8);
+            gif.setDitherStrength(0.5f);
+            gif.write(Gdx.files.local("out/b/specializedAurora/" + name + '/' + name + ".gif"), pm, 8);
             gif.palette = low;
             gif.setDitherStrength(0.375f);
             gif.write(Gdx.files.local("out/b/specializedLow/" + name + '/' + name + ".gif"), pm, 8);
@@ -210,10 +211,10 @@ public class Specialist extends ApplicationAdapter {
                 gif.setDitherAlgorithm(Dithered.DitherAlgorithm.DODGY);
                 gif.write(Gdx.files.local("out/b/specialized/" + name + '/' + name + "_Turntable.gif"), pm, 24);
                 apng.write(Gdx.files.local("out/b/specialized/" + name + '/' + name + "_Turntable.png"), pm, 24);
-                gif.palette = bw;
+                gif.palette = aurora;
                 gif.setDitherAlgorithm(Dithered.DitherAlgorithm.DODGY);
-                gif.setDitherStrength(0.25f);
-                gif.write(Gdx.files.local("out/b/specializedBW/" + name + '/' + name + "_Turntable.gif"), pm, 24);
+                gif.setDitherStrength(0.5f);
+                gif.write(Gdx.files.local("out/b/specializedAurora/" + name + '/' + name + "_Turntable.gif"), pm, 24);
                 gif.palette = low;
                 gif.setDitherStrength(0.375f);
                 gif.write(Gdx.files.local("out/b/specializedLow/" + name + '/' + name + "_Turntable.gif"), pm, 24);
