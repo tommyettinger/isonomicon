@@ -60,6 +60,10 @@ public class GratitudeAssets extends ApplicationAdapter {
                         "palettes/b/ColorGuardBaseRed.png", "Man_In_Red",
                         "palettes/b/ColorGuardBaseGreen.png", "Man_In_Green",
                         "palettes/b/ColorGuardBaseBlue.png", "Man_In_Blue",
+                },
+                "b/vox/gratitude/A26.vox", new String[]{
+                        "palettes/b/ColorGuardBaseDark.png", "Dark_Hunter",
+                        "palettes/b/ColorGuardBaseBlue.png", "Sea_Hunter",
                 }
         );
 //            inputs = new String[]{
@@ -241,7 +245,7 @@ public class GratitudeAssets extends ApplicationAdapter {
                     gif.palette = analyzed;
                     gif.setDitherAlgorithm(Dithered.DitherAlgorithm.DODGY);
                     gif.write(Gdx.files.local("out/gratitude_animated/" + output + '/' + output + "_Turntable.gif"), pm, 24);
-                    apng.write(Gdx.files.local("out/gratitude_animated/" + output + '/' + output + "_Turntable.gif"), pm, 24);
+                    apng.write(Gdx.files.local("out/gratitude_animated/" + output + '/' + output + "_Turntable.png"), pm, 24);
 //            gif.palette = aurora;
 //            gif.setDitherStrength(0.5f);
 //            gif.write(Gdx.files.local("out/b/specializedAurora/" + name + '/' + name + ".gif"), pm, 8);
