@@ -50,10 +50,10 @@ public class GratitudeAssets extends ApplicationAdapter {
         VoxIOExtended.GENERAL = true;
         System.out.println("INVALID ARGUMENTS. Please supply space-separated absolute paths to .vox models, or use the .bat file.");
         inputs = ObjectObjectOrderedMap.with("b/vox/gratitude/A24.vox", new String[]{
-                        "palettes/b/ColorGuardBaseDark.png", "Dark_Priest",
-                        "palettes/b/ColorGuardBaseWhite.png", "Light_Priest",
-                        "palettes/b/ColorGuardBaseRed.png", "War_Priest",
-                },
+                                "palettes/b/ColorGuardBaseDark.png", "Dark_Priest",
+                                "palettes/b/ColorGuardBaseWhite.png", "Light_Priest",
+                                "palettes/b/ColorGuardBaseRed.png", "War_Priest",
+                        },
                 "b/vox/gratitude/A25.vox", new String[]{
                         "palettes/b/ColorGuardBaseDark.png", "Man_In_Black",
                         "palettes/b/ColorGuardBaseWhite.png", "Man_In_White",
@@ -64,8 +64,12 @@ public class GratitudeAssets extends ApplicationAdapter {
                 "b/vox/gratitude/A26.vox", new String[]{
                         "palettes/b/ColorGuardBaseDark.png", "Dark_Hunter",
                         "palettes/b/ColorGuardBaseBlue.png", "Sea_Hunter",
-                }
-        );
+                },
+                "b/vox/gratitude/A27.vox", new String[]{
+                        "palettes/b/ColorGuardBaseDark.png", "Night_Warrior",
+                        "palettes/b/ColorGuardBaseYellow.png", "Mercenary_Warrior",
+                        "palettes/b/ColorGuardBaseRed.png", "Crimson_Warrior",
+                });
 //            inputs = new String[]{
 //                    "b/vox/odyssey/Assassin_Dagger.vox", "palettes/b/TanClothDarkSkin.png",
 //                    "b/vox/odyssey/Noble_Knife.vox", "palettes/b/TanClothDarkSkin.png",
