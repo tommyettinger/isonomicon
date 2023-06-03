@@ -46,10 +46,10 @@ public class NoiseRenderer extends ApplicationAdapter {
 //        noise = new Noise((int)System.nanoTime(), 0x1p-3f, Noise.CUBIC_FRACTAL, 2);
 //        noise = new Noise(Base.BASE36.readInt("VOXEL2"), 0x1p-2f, Noise.CUBIC_FRACTAL, 2);
 //        noise2 = new FastNoise(-4321, 0x1p-4f, FastNoise.PERLIN_FRACTAL, 2);
-//        noise.setFractalType(Noise.RIDGED_MULTI);
-        noise.setFractalType(Noise.FBM);
+        noise.setFractalType(Noise.RIDGED_MULTI);
+//        noise.setFractalType(Noise.FBM);
         noise.setPointHash(new CubeHash(~noise.getSeed(), 7));
-        this.name = Base.BASE36.unsigned(noise.getSeed());
+        this.name = "Noise_"+Base.BASE36.unsigned(noise.getSeed());
 
         long startTime = TimeUtils.millis();
 //        Gdx.files.local("out/vox/").mkdirs();
@@ -60,8 +60,8 @@ public class NoiseRenderer extends ApplicationAdapter {
 //        png.setFlipY(true);
 //        png.setCompression(2);
         apng = new AnimatedPNG();
-        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.WOVEN);
-        gif.setDitherStrength(0.5f);
+        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.DODGY);
+        gif.setDitherStrength(0.25f);
         Gdx.files.local("out/vox").mkdirs();
         System.out.println("Loading...");
 //        System.out.println("Produced "+SMALL_SIZE+"x"+SMALL_SIZE+"x"+SMALL_SIZE+" noise.");
@@ -69,9 +69,9 @@ public class NoiseRenderer extends ApplicationAdapter {
 //            VoxIO.writeVOX("out/" + s, voxels, renderer.palette, VoxIO.lastMaterials);
 //            load("out/"+s);
         Pixmap pixmap;
-        Array<Pixmap> pm = new Array<>(SMALL_SIZE);
-        final float fraction = 1f / SMALL_SIZE;
-        for (int i = 0; i < SMALL_SIZE; i++) {
+        Array<Pixmap> pm = new Array<>(MID_SIZE);
+        final float fraction = 1f / MID_SIZE;
+        for (int i = 0; i < MID_SIZE; i++) {
             for (int f = 0; f < 1; f++) {
                 System.out.print(i + ": ");
                 load(i);
@@ -89,11 +89,11 @@ public class NoiseRenderer extends ApplicationAdapter {
 //            pm.insertRange(pm.size - 4, 4);
         }
         System.out.println("Mostly done, animation stuff in progress...");
-        gif.palette = new com.github.tommyettinger.anim8.FastPalette(pm);
+        gif.palette = new com.github.tommyettinger.anim8.QualityPalette(pm);
         gif.write(Gdx.files.local("out/" + name + '/' + name + ".gif"), pm, 8);
 //                gif.palette.exact(Coloring.HALTONITE240, PRELOAD);
 //                gif.write(Gdx.files.local("out/" + name + '/' + name + "-256-color.gif"), pm, 1);
-                apng.write(Gdx.files.local("out/" + name + '/' + name + ".png"), pm, 8);
+        apng.write(Gdx.files.local("out/" + name + '/' + name + ".png"), pm, 8);
         for (Pixmap pix : pm) {
             if (!pix.isDisposed())
                 pix.dispose();
@@ -127,9 +127,9 @@ public class NoiseRenderer extends ApplicationAdapter {
 //                    sum += (tempVoxels[x][y][z] = (byte) ((Float.floatToRawIntBits(noise.getConfiguredNoise(x, y, z, frame)) >> 31) & 81)); // gray-green
 //                    sum += (tempVoxels[x][y][z] = (byte) (~(Float.floatToRawIntBits(noise.getConfiguredNoise(x, y, z, frame) - 0.875f) >> 31) & 81)); // gray-green
 //                    sum += (tempVoxels[x][y][z] = (byte) (~(Float.floatToRawIntBits(noise.getConfiguredNoise(x, y, z, frame) - 0.91f) >> 31) & 44)); // gray
-//                    sum += (tempVoxels[x][y][z] = (byte) (~(Float.floatToRawIntBits(noise.getConfiguredNoise(x, y, z, frame) - 0.8f) >> 31) & 175)); // blue
+                    sum += (tempVoxels[x][y][z] = (byte) (~(Float.floatToRawIntBits(noise.getConfiguredNoise(x, y, z, frame * 0.5f) - 0.8f) >> 31) & 175)); // blue
 //                    sum += (tempVoxels[x][y][z] = (byte) ((~(Float.floatToRawIntBits(noise.getConfiguredNoise(x, y, z, frame) - 0.92f) >> 31) & 68))); // orange
-                    sum += (tempVoxels[x][y][z] = (byte) ((~(Float.floatToRawIntBits(noise.getConfiguredNoise(x, y, z, frame) - 0.25f) >> 31) & 68))); // orange fbm
+//                    sum += (tempVoxels[x][y][z] = (byte) ((~(Float.floatToRawIntBits(noise.getConfiguredNoise(x, y, z, frame) - 0.25f) >> 31) & 68))); // orange fbm
 //                    sum += (tempVoxels[x][y][z] = (byte) ((~(Float.floatToRawIntBits(noise.getConfiguredNoise(x, y, z, frame) - 0.91f) >> 31) & (int)(12 + 2f * noise2.getConfiguredNoise(x, y, z, TrigTools.sin_(frame * 0x1p-6f), TrigTools.cos_(frame * 0x1p-6f)))))); // jungle greenery
 //                    sum += (tempVoxels[x][y][z] = (byte) (~(Float.floatToRawIntBits(noise.getConfiguredNoise(x, y, z, frame) - 0.91f) >> 31) & (x + y + z + frame & 63))); // rainbow
                 }

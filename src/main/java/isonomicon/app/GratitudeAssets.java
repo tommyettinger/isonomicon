@@ -46,7 +46,7 @@ public class GratitudeAssets extends ApplicationAdapter {
     private QualityPalette analyzed;
     private SpriteBatch batch;
     private Texture palette;
-    public GratitudeAssets(String[] args) {
+    public GratitudeAssets() {
         VoxIOExtended.GENERAL = true;
         System.out.println("INVALID ARGUMENTS. Please supply space-separated absolute paths to .vox models, or use the .bat file.");
         inputs = ObjectObjectOrderedMap.with("b/vox/gratitude/A24.vox", new String[]{
@@ -185,11 +185,12 @@ public class GratitudeAssets extends ApplicationAdapter {
             for (int p = 1; p < outputs.length; p+=2) {
                 String output = outputs[p];
                 Array<Pixmap> pm = pmm.get(output);
+                apng.write(Gdx.files.local("out/gratitude_animated/" + output + '/' + output + ".png"), pm, 8);
+                SpecialRenderer.monoAlpha(pm);
                 analyzed.analyze(pm, 75.0, 256);
                 gif.palette = analyzed;
                 gif.setDitherAlgorithm(Dithered.DitherAlgorithm.DODGY);
                 gif.write(Gdx.files.local("out/gratitude_animated/" + output + '/' + output + ".gif"), pm, 8);
-                apng.write(Gdx.files.local("out/gratitude_animated/" + output + '/' + output + ".png"), pm, 8);
 //            gif.palette = aurora;
 //            gif.setDitherStrength(0.5f);
 //            gif.write(Gdx.files.local("out/b/specializedAurora/" + name + '/' + name + ".gif"), pm, 8);
@@ -241,11 +242,12 @@ public class GratitudeAssets extends ApplicationAdapter {
                 for (int p = 1; p < outputs.length; p+=2) {
                     String output = outputs[p];
                     Array<Pixmap> pm = pmm.get(output);
+                    apng.write(Gdx.files.local("out/gratitude_animated/" + output + '/' + output + "_Turntable.png"), pm, 24);
+                    SpecialRenderer.monoAlpha(pm);
                     analyzed.analyze(pm, 75.0, 256);
                     gif.palette = analyzed;
                     gif.setDitherAlgorithm(Dithered.DitherAlgorithm.DODGY);
                     gif.write(Gdx.files.local("out/gratitude_animated/" + output + '/' + output + "_Turntable.gif"), pm, 24);
-                    apng.write(Gdx.files.local("out/gratitude_animated/" + output + '/' + output + "_Turntable.png"), pm, 24);
 //            gif.palette = aurora;
 //            gif.setDitherStrength(0.5f);
 //            gif.write(Gdx.files.local("out/b/specializedAurora/" + name + '/' + name + ".gif"), pm, 8);
@@ -279,7 +281,7 @@ public class GratitudeAssets extends ApplicationAdapter {
         config.useVsync(true);
         config.setResizable(false);
         config.disableAudio(true);
-        final GratitudeAssets app = new GratitudeAssets(arg);
+        final GratitudeAssets app = new GratitudeAssets();
         new Lwjgl3Application(app, config);
     }
 
