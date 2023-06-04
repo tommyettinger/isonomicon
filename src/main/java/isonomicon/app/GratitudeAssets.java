@@ -69,6 +69,12 @@ public class GratitudeAssets extends ApplicationAdapter {
                         "palettes/b/ColorGuardBaseDark.png", "Night_Warrior",
                         "palettes/b/ColorGuardBaseYellow.png", "Mercenary_Warrior",
                         "palettes/b/ColorGuardBaseRed.png", "Crimson_Warrior",
+                },
+                "b/vox/gratitude/A28.vox", new String[]{
+                        "palettes/b/ColorGuardBaseDark.png", "Death_Knight",
+                        "palettes/b/ColorGuardBaseYellow.png", "Mercenary_Knight",
+                        "palettes/b/ColorGuardBaseGreen.png", "Verdant_Knight",
+                        "palettes/b/ColorGuardBaseWhite.png", "Holy_Knight",
                 });
 //            inputs = new String[]{
 //                    "b/vox/odyssey/Assassin_Dagger.vox", "palettes/b/TanClothDarkSkin.png",
