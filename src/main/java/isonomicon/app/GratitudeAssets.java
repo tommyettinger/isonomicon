@@ -71,17 +71,23 @@ public class GratitudeAssets extends ApplicationAdapter {
 //                        "palettes/b/ColorGuardBaseYellow.png", "Mercenary_Warrior",
 //                        "palettes/b/ColorGuardBaseRed.png", "Crimson_Warrior",
 //                },
-                "b/vox/gratitude/A28.vox", new String[]{
-                        "palettes/b/ColorGuardBaseDark.png", "Death_Knight",
-                        "palettes/b/ColorGuardBaseYellow.png", "Mercenary_Knight",
-                        "palettes/b/ColorGuardBaseGreen.png", "Verdant_Knight",
-                        "palettes/b/ColorGuardBaseWhite.png", "Paladin",
-                },
-                "b/vox/gratitude/A29.vox", new String[]{
-                        "palettes/b/ColorGuardBaseDark.png", "Blackguard",
-                        "palettes/b/ColorGuardBaseRed.png", "Furious_Hoplite",
-                        "palettes/b/ColorGuardBasePurple.png", "Mystery_Spearman",
-                        "palettes/b/ColorGuardBaseWhite.png", "Holy_Lancer",
+//                "b/vox/gratitude/A28.vox", new String[]{
+//                        "palettes/b/ColorGuardBaseDark.png", "Death_Knight",
+//                        "palettes/b/ColorGuardBaseYellow.png", "Mercenary_Knight",
+//                        "palettes/b/ColorGuardBaseGreen.png", "Verdant_Knight",
+//                        "palettes/b/ColorGuardBaseWhite.png", "Paladin",
+//                },
+//                "b/vox/gratitude/A29.vox", new String[]{
+//                        "palettes/b/ColorGuardBaseDark.png", "Blackguard",
+//                        "palettes/b/ColorGuardBaseRed.png", "Furious_Hoplite",
+//                        "palettes/b/ColorGuardBasePurple.png", "Mystery_Spearman",
+//                        "palettes/b/ColorGuardBaseWhite.png", "Holy_Lancer",
+//                },
+                "b/vox/gratitude/A30.vox", new String[]{
+                        "palettes/b/ColorGuardBaseDark.png", "Dreadnought",
+                        "palettes/b/ColorGuardBaseBlue.png", "Defensive_Lineman",
+                        "palettes/b/ColorGuardBaseGreen.png", "Warden",
+                        "palettes/b/ColorGuardBaseWhite.png", "Heavy_Bouncer",
                 });
 //            inputs = new String[]{
 //                    "b/vox/odyssey/Assassin_Dagger.vox", "palettes/b/TanClothDarkSkin.png",
