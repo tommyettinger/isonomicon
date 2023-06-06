@@ -36,6 +36,7 @@ import java.util.ArrayList;
 public class GratitudeAssets extends ApplicationAdapter {
     public static final int SCREEN_WIDTH = 512;//640;
     public static final int SCREEN_HEIGHT = 512;//720;
+    public static final String ANIMATION_PATH = "out/gratitude_animated_ridgeback/";
     private SpecialRenderer renderer;
     private VoxModel voxels;
     private String name;
@@ -50,39 +51,39 @@ public class GratitudeAssets extends ApplicationAdapter {
         VoxIOExtended.GENERAL = true;
         System.out.println("INVALID ARGUMENTS. Please supply space-separated absolute paths to .vox models, or use the .bat file.");
         inputs = ObjectObjectOrderedMap.with(
-//                "b/vox/gratitude/A24.vox", new String[]{
-//                                "palettes/b/ColorGuardBaseDark.png", "Dark_Priest",
-//                                "palettes/b/ColorGuardBaseWhite.png", "Light_Priest",
-//                                "palettes/b/ColorGuardBaseRed.png", "War_Priest",
-//                        },
-//                "b/vox/gratitude/A25.vox", new String[]{
-//                        "palettes/b/ColorGuardBaseDark.png", "Man_In_Black",
-//                        "palettes/b/ColorGuardBaseWhite.png", "Man_In_White",
-//                        "palettes/b/ColorGuardBaseRed.png", "Man_In_Red",
-//                        "palettes/b/ColorGuardBaseGreen.png", "Man_In_Green",
-//                        "palettes/b/ColorGuardBaseBlue.png", "Man_In_Blue",
-//                },
-//                "b/vox/gratitude/A26.vox", new String[]{
-//                        "palettes/b/ColorGuardBaseDark.png", "Dark_Hunter",
-//                        "palettes/b/ColorGuardBaseBlue.png", "Sea_Hunter",
-//                },
-//                "b/vox/gratitude/A27.vox", new String[]{
-//                        "palettes/b/ColorGuardBaseDark.png", "Night_Warrior",
-//                        "palettes/b/ColorGuardBaseYellow.png", "Mercenary_Warrior",
-//                        "palettes/b/ColorGuardBaseRed.png", "Crimson_Warrior",
-//                },
-//                "b/vox/gratitude/A28.vox", new String[]{
-//                        "palettes/b/ColorGuardBaseDark.png", "Death_Knight",
-//                        "palettes/b/ColorGuardBaseYellow.png", "Mercenary_Knight",
-//                        "palettes/b/ColorGuardBaseGreen.png", "Verdant_Knight",
-//                        "palettes/b/ColorGuardBaseWhite.png", "Paladin",
-//                },
-//                "b/vox/gratitude/A29.vox", new String[]{
-//                        "palettes/b/ColorGuardBaseDark.png", "Blackguard",
-//                        "palettes/b/ColorGuardBaseRed.png", "Furious_Hoplite",
-//                        "palettes/b/ColorGuardBasePurple.png", "Mystery_Spearman",
-//                        "palettes/b/ColorGuardBaseWhite.png", "Holy_Lancer",
-//                },
+                "b/vox/gratitude/A24.vox", new String[]{
+                                "palettes/b/ColorGuardBaseDark.png", "Dark_Priest",
+                                "palettes/b/ColorGuardBaseWhite.png", "Light_Priest",
+                                "palettes/b/ColorGuardBaseRed.png", "War_Priest",
+                        },
+                "b/vox/gratitude/A25.vox", new String[]{
+                        "palettes/b/ColorGuardBaseDark.png", "Man_In_Black",
+                        "palettes/b/ColorGuardBaseWhite.png", "Man_In_White",
+                        "palettes/b/ColorGuardBaseRed.png", "Man_In_Red",
+                        "palettes/b/ColorGuardBaseGreen.png", "Man_In_Green",
+                        "palettes/b/ColorGuardBaseBlue.png", "Man_In_Blue",
+                },
+                "b/vox/gratitude/A26.vox", new String[]{
+                        "palettes/b/ColorGuardBaseDark.png", "Dark_Hunter",
+                        "palettes/b/ColorGuardBaseBlue.png", "Sea_Hunter",
+                },
+                "b/vox/gratitude/A27.vox", new String[]{
+                        "palettes/b/ColorGuardBaseDark.png", "Night_Warrior",
+                        "palettes/b/ColorGuardBaseYellow.png", "Mercenary_Warrior",
+                        "palettes/b/ColorGuardBaseRed.png", "Crimson_Warrior",
+                },
+                "b/vox/gratitude/A28.vox", new String[]{
+                        "palettes/b/ColorGuardBaseDark.png", "Death_Knight",
+                        "palettes/b/ColorGuardBaseYellow.png", "Mercenary_Knight",
+                        "palettes/b/ColorGuardBaseGreen.png", "Verdant_Knight",
+                        "palettes/b/ColorGuardBaseWhite.png", "Paladin",
+                },
+                "b/vox/gratitude/A29.vox", new String[]{
+                        "palettes/b/ColorGuardBaseDark.png", "Blackguard",
+                        "palettes/b/ColorGuardBaseRed.png", "Furious_Hoplite",
+                        "palettes/b/ColorGuardBasePurple.png", "Mystery_Spearman",
+                        "palettes/b/ColorGuardBaseWhite.png", "Holy_Lancer",
+                },
                 "b/vox/gratitude/A30.vox", new String[]{
                         "palettes/b/ColorGuardBaseDark.png", "Dreadnought",
                         "palettes/b/ColorGuardBaseBlue.png", "Defensive_Lineman",
@@ -134,9 +135,47 @@ public class GratitudeAssets extends ApplicationAdapter {
         apng = new FastAPNG();
         apng.setCompression(2);
         apng.setFlipY(false);
-        gif.setDitherStrength(0.75f);
-        gif.palette = analyzed = new QualityPalette();
+        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.DODGY);
         gif.setDitherStrength(0.5f);
+        gif.palette = analyzed =
+                // Aurora, unless analyze() is called
+//                new QualityPalette();
+                // Ridgeback2
+                new QualityPalette(new int[]{
+                        0x00000000, 0x000000FF, 0x111111FF, 0x1F1F1FFF, 0x2C2C2CFF, 0x393939FF, 0x474747FF, 0x545454FF,
+                        0x616161FF, 0x6E6E6EFF, 0x7C7C7CFF, 0x8B8B8BFF, 0x999999FF, 0xA7A7A7FF, 0xB6B6B6FF, 0xC6C6C6FF,
+                        0xD6D6D6FF, 0xE5E5E5FF, 0xF5F5F5FF, 0xFFFFFFFF, 0x0E0034FF, 0x0D1A49FF, 0x1F1444FF, 0x2A0F3DFF,
+                        0x330B30FF, 0x3B0020FF, 0x3E0010FF, 0x351E52FF, 0x431843FF, 0x4C1431FF, 0x501323FF, 0x51150CFF,
+                        0x00370FFF, 0x11295BFF, 0x24245AFF, 0x23430DFF, 0x004725FF, 0x22356CFF, 0x382F67FF, 0x4B285AFF,
+                        0x57234AFF, 0x5E213BFF, 0x612227FF, 0x5F260AFF, 0x713038FF, 0x713325FF, 0x6E3700FF, 0x3C4F13FF,
+                        0x1D5528FF, 0x29457DFF, 0x423F78FF, 0x52396FFF, 0x623262FF, 0x6E2E4DFF, 0x823A4DFF, 0x823E36FF,
+                        0x7F421FFF, 0x754A0BFF, 0x665200FF, 0x4F5B18FF, 0x34612EFF, 0x136443FF, 0x005C81FF, 0x295689FF,
+                        0x444E8DFF, 0x5B4783FF, 0x6D4175FF, 0x783D63FF, 0x465F9DFF, 0x5F5798FF, 0x72518DFF, 0x814C7BFF,
+                        0x8F4763FF, 0x93494CFF, 0x924C37FF, 0x8A5324FF, 0x7B5C11FF, 0x66651DFF, 0x506C2DFF, 0x337145FF,
+                        0x00745EFF, 0x006E88FF, 0x286795FF, 0x31815CFF, 0x008276FF, 0x008089FF, 0x1D7A9CFF, 0x4272A9FF,
+                        0x5D69ADFF, 0x7162A7FF, 0x855C98FF, 0x97577FFF, 0xA25467FF, 0xA45553FF, 0xA05B3DFF, 0x936429FF,
+                        0x826D21FF, 0x6F742AFF, 0x557C40FF, 0x2D89ABFF, 0x4781B9FF, 0x6478BDFF, 0x7E70B7FF, 0x9369A7FF,
+                        0xA56393FF, 0xB06179FF, 0xB4625FFF, 0xB06849FF, 0xA66F36FF, 0x95792FFF, 0x7D8237FF, 0x628A4CFF,
+                        0x428F63FF, 0x23907EFF, 0x138E98FF, 0x9D79BDFF, 0xB074A8FF, 0xBE6F93FF, 0xC37178FF, 0xC3745CFF,
+                        0xB97C4AFF, 0xAD843CFF, 0x958E44FF, 0x789753FF, 0x5B9D6CFF, 0x3DA082FF, 0x339E9DFF, 0x359AB7FF,
+                        0x5093C6FF, 0x668BCFFF, 0x8382C9FF, 0x629FDBFF, 0x7F96DFFF, 0x968FD9FF, 0xB285C7FF, 0xC57FB1FF,
+                        0xD27D96FF, 0xD57E80FF, 0xD28463FF, 0xC78C50FF, 0xB39649FF, 0x9F9E51FF, 0x7DA866FF, 0x5EAE7FFF,
+                        0x44AF9BFF, 0x3EADB1FF, 0x4AA7CCFF, 0xE68E7CFF, 0xE0946AFF, 0xCE9F5DFF, 0xB9A957FF, 0x9BB366FF,
+                        0x82B97AFF, 0x65BD98FF, 0x4ABEB5FF, 0x4CBAD1FF, 0x5EB4E1FF, 0x7DAAEBFF, 0x98A0EFFF, 0xB597E3FF,
+                        0xC891D2FF, 0xD98DB5FF, 0xE68A99FF, 0x95B5FFFF, 0xB3ABFAFF, 0xCBA4EDFF, 0xE09DD6FF, 0xF199B9FF,
+                        0xF69A9CFF, 0xF59E84FF, 0xE9A771FF, 0xD7B163FF, 0xBCBC6BFF, 0xA1C47AFF, 0x83CA94FF, 0x64CEB3FF,
+                        0x5BCCD0FF, 0x60C7E6FF, 0x78BFF6FF, 0xFBB77FFF, 0xE8C172FF, 0xCCCC7AFF, 0xB1D589FF, 0x92DBA3FF,
+                        0x73DFC3FF, 0x6BDDE1FF, 0x70D8F8FF, 0xDBB3FFFF, 0xF1ADE7FF, 0xFFA8C9FF, 0xCEE18FFF, 0xAEE9A5FF,
+                        0x94EDBFFF, 0x7BEFDFFF, 0x7CEBFDFF, 0xEED580FF, 0xF9E78FFF, 0xD8F39EFF, 0xB3FCBAFF, 0x9FFED5FF,
+                        0x86FFF5FF, 0xF6FEA5FF, 0x0A1189FF, 0x33179BFF, 0x4F0088FF, 0x3A2CB0FF, 0x5B1E9CFF, 0x740B81FF,
+                        0x3641C3FF, 0x5D32B7FF, 0x7C259BFF, 0x931677FF, 0xA4004BFF, 0xAA001DFF, 0x3B51D5FF, 0x6A40C9FF,
+                        0x8B32B0FF, 0xA42786FF, 0xB51B5DFF, 0xBC1B29FF, 0xD02B2EFF, 0x4B5EE7FF, 0x7C4CDBFF, 0x9F3EBCFF,
+                        0xB93290FF, 0xC82C65FF, 0xB948BDFF, 0xD23C90FF, 0xE0385DFF, 0xE14022FF, 0x009A29FF, 0x2876FBFF,
+                        0x6C65F8FF, 0x9755E2FF, 0xF4511CFF, 0xB060EFFF, 0xD154C4FF, 0xE84B95FF, 0xF34A60FF, 0x00BC4DFF,
+                        0xBB71FFFF, 0xE062D9FF, 0xFA59A4FF, 0xF370E4FF, 0x85BE00FF, 0x16CC61FF, 0x6BD646FF, 0xABDD25FF,
+                        0x5BEB6EFF, 0xC9E829FF, 0x7CFA6CFF, 0xF4F013FF, 0x3718FBFF, 0x980EFFFF, 0xEA1DE5FF, 0xFF2FECFF,
+                }
+                );
 //        aurora = new QualityPalette();
 //        low = new QualityPalette(new int[]{
 //                // Equpix15, by Night
@@ -208,12 +247,11 @@ public class GratitudeAssets extends ApplicationAdapter {
             for (int p = 1; p < outputs.length; p+=2) {
                 String output = outputs[p];
                 Array<Pixmap> pm = pmm.get(output);
-                apng.write(Gdx.files.local("out/gratitude_animated/" + output + '/' + output + ".png"), pm, 8);
+                apng.write(Gdx.files.local(ANIMATION_PATH + output + '/' + output + ".png"), pm, 8);
                 SpecialRenderer.monoAlpha(pm);
-                analyzed.analyze(pm, 75.0, 256);
+//                analyzed.analyze(pm, 75.0, 256);
                 gif.palette = analyzed;
-                gif.setDitherAlgorithm(Dithered.DitherAlgorithm.DODGY);
-                gif.write(Gdx.files.local("out/gratitude_animated/" + output + '/' + output + ".gif"), pm, 8);
+                gif.write(Gdx.files.local(ANIMATION_PATH + output + '/' + output + ".gif"), pm, 8);
 //            gif.palette = aurora;
 //            gif.setDitherStrength(0.5f);
 //            gif.write(Gdx.files.local("out/b/specializedAurora/" + name + '/' + name + ".gif"), pm, 8);
@@ -265,12 +303,11 @@ public class GratitudeAssets extends ApplicationAdapter {
                 for (int p = 1; p < outputs.length; p+=2) {
                     String output = outputs[p];
                     Array<Pixmap> pm = pmm.get(output);
-                    apng.write(Gdx.files.local("out/gratitude_animated/" + output + '/' + output + "_Turntable.png"), pm, 24);
+                    apng.write(Gdx.files.local(ANIMATION_PATH + output + '/' + output + "_Turntable.png"), pm, 24);
                     SpecialRenderer.monoAlpha(pm);
-                    analyzed.analyze(pm, 75.0, 256);
+//                    analyzed.analyze(pm, 75.0, 256);
                     gif.palette = analyzed;
-                    gif.setDitherAlgorithm(Dithered.DitherAlgorithm.DODGY);
-                    gif.write(Gdx.files.local("out/gratitude_animated/" + output + '/' + output + "_Turntable.gif"), pm, 24);
+                    gif.write(Gdx.files.local(ANIMATION_PATH + output + '/' + output + "_Turntable.gif"), pm, 24);
 //            gif.palette = aurora;
 //            gif.setDitherStrength(0.5f);
 //            gif.write(Gdx.files.local("out/b/specializedAurora/" + name + '/' + name + ".gif"), pm, 8);
