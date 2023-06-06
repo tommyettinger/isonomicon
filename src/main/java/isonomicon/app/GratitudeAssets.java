@@ -136,7 +136,7 @@ public class GratitudeAssets extends ApplicationAdapter {
         apng.setCompression(2);
         apng.setFlipY(false);
         gif.setDitherAlgorithm(Dithered.DitherAlgorithm.DODGY);
-        gif.setDitherStrength(0.5f);
+        gif.setDitherStrength(0.4f);
         gif.palette = analyzed =
                 // Aurora, unless analyze() is called
 //                new QualityPalette();
@@ -175,7 +175,24 @@ public class GratitudeAssets extends ApplicationAdapter {
                         0xBB71FFFF, 0xE062D9FF, 0xFA59A4FF, 0xF370E4FF, 0x85BE00FF, 0x16CC61FF, 0x6BD646FF, 0xABDD25FF,
                         0x5BEB6EFF, 0xC9E829FF, 0x7CFA6CFF, 0xF4F013FF, 0x3718FBFF, 0x980EFFFF, 0xEA1DE5FF, 0xFF2FECFF,
                 }
-                );
+                ){
+                    @Override
+                    public double difference(int r1, int g1, int b1, int r2, int g2, int b2) {
+                        float r = (r1 - r2) * 0.00392156862745098f; r *= r;
+                        float g = (g1 - g2) * 0.00392156862745098f; g *= g;
+                        float b = (b1 - b2) * 0.00392156862745098f; b *= b;
+
+                        float l = OtherMath.cbrt(0.4121656120f * r + 0.5362752080f * g + 0.0514575653f * b);
+                        float m = OtherMath.cbrt(0.2118591070f * r + 0.6807189584f * g + 0.1074065790f * b);
+                        float s = OtherMath.cbrt(0.0883097947f * r + 0.2818474174f * g + 0.6302613616f * b);
+
+                        float L = forwardLight(0.2104542553f * l + 0.7936177850f * m - 0.0040720468f * s) * 0.5f;
+                        float A = 1.9779984951f * l - 2.4285922050f * m + 0.4505937099f * s;
+                        float B = 0.0259040371f * l + 0.7827717662f * m - 0.8086757660f * s;
+
+                        return (L * L + A * A + B * B) * 0x1p17;
+                    }
+                };
 //        aurora = new QualityPalette();
 //        low = new QualityPalette(new int[]{
 //                // Equpix15, by Night
