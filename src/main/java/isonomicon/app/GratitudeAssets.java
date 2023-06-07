@@ -90,6 +90,12 @@ public class GratitudeAssets extends ApplicationAdapter {
                         "palettes/b/ColorGuardBaseBlue.png", "Defensive_Lineman",
                         "palettes/b/ColorGuardBaseGreen.png", "Warden",
                         "palettes/b/ColorGuardBaseWhite.png", "Heavy_Bouncer",
+                },
+                "b/vox/gratitude/A31.vox", new String[]{
+                        "palettes/b/ColorGuardBaseDark.png", "Terror_Knight",
+                        "palettes/b/ColorGuardBasePurple.png", "Eldritch_Knight",
+                        "palettes/b/ColorGuardBaseGreen.png", "Horned_Guardian",
+                        "palettes/b/ColorGuardBaseRed.png", "Ruined_Destroyer",
                 });
 //            inputs = new String[]{
 //                    "b/vox/odyssey/Assassin_Dagger.vox", "palettes/b/TanClothDarkSkin.png",
@@ -138,7 +144,7 @@ public class GratitudeAssets extends ApplicationAdapter {
         apng.setFlipY(false);
         gif.setDitherAlgorithm(Dithered.DitherAlgorithm.DODGY);
         gif.setDitherStrength(0.4f);
-        gif.palette = fixed =
+        fixed =
                 // Aurora, unless analyze() is called
 //                new QualityPalette();
                 // Aurora (of course)
@@ -197,7 +203,7 @@ public class GratitudeAssets extends ApplicationAdapter {
                         return (L * L + A * A + B * B) * 0x1p17;
                     }
                 };
-        analyzed = new QualityPalette() {
+        gif.palette = analyzed = new QualityPalette() {
             @Override
             public double difference(int r1, int g1, int b1, int r2, int g2, int b2) {
                 float r = (r1 - r2) * 0.00392156862745098f; r *= r;
