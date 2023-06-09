@@ -142,8 +142,8 @@ public class GratitudeAssets extends ApplicationAdapter {
         apng = new FastAPNG();
         apng.setCompression(2);
         apng.setFlipY(false);
-        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.DODGY);
-        gif.setDitherStrength(0.4f);
+        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.LOAF);
+        gif.setDitherStrength(1f);
         fixed =
                 // Aurora, unless analyze() is called
 //                new QualityPalette();
