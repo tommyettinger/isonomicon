@@ -31,14 +31,14 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 public class ColorGuardAssets extends ApplicationAdapter {
-    public static boolean DIVERSE = true;
+    public static boolean DIVERSE = false;
     public static boolean ATTACKS = true;
     public static boolean DEATHS = false;
     public static boolean EXPLOSION = true;
     public static boolean TERRAIN = true;
     public static boolean SHADOWS = true;
     
-    public static final String outDir = "out/color_guard";
+    public static final String outDir = "out/cg_shallow_limited";
 
     public static final int SCREEN_WIDTH = 512;//640;
     public static final int SCREEN_HEIGHT = 512;//720;
@@ -55,21 +55,26 @@ public class ColorGuardAssets extends ApplicationAdapter {
 
     public ColorGuardAssets() {
         armies = new String[]{
-                "Dark",
-                "White",
                 "Red",
-                "Orange",
-                "Yellow",
-                "Green",
                 "Blue",
-                "Purple",
         };
+//        armies = new String[]{
+//                "Dark",
+//                "White",
+//                "Red",
+//                "Orange",
+//                "Yellow",
+//                "Green",
+//                "Blue",
+//                "Purple",
+//        };
+
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.primaryStrength > 0).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Debug")).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Forward_Missile")).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Torpedo")).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Flame_Wave")).toList();
-        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Bomb_Drop")).toList();
+//        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Bomb_Drop")).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Hack")).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Arc_Missile")).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Arc_Cannon")).toList();
@@ -131,7 +136,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
         // can be pretty good, but this might be too strong by default. Ordered dither, again.
 //        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.ROBERTS);
         // Not an ordered dither; let's see how this goes.
-        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.DODGY);
+        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.LOAF);
 //        gif.palette = new com.github.tommyettinger.anim8.FastPalette(Coloring.AURORA);
         gif.palette = new com.github.tommyettinger.anim8.QualityPalette(); // uses AURORA, OklabCareful metric
 //        gif.palette = new com.github.tommyettinger.anim8.FastPalette(PaletteReducer.YAMPED); // uses YAMPED, simplest RGB metric
@@ -146,7 +151,9 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //        gif.palette = new com.github.tommyettinger.anim8.FastPalette(Coloring.TETRA256, Gdx.files.local("assets/TetraPreload.dat").readBytes());
 //        gif.palette = new com.github.tommyettinger.anim8.FastPalette(Coloring.BETSY256, Gdx.files.local("assets/BetsyPreload.dat").readBytes());
         //// BLUE_NOISE doesn't need this, but NEUE, GRADIENT_NOISE, and ROBERTS do.
-        gif.setDitherStrength(0.5f);
+//        gif.setDitherStrength(0.5f);
+        //// LOAF can be higher.
+        gif.setDitherStrength(0.75f);
         FrameBuffer fb = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), false);
         ObjectIntMap<String> doneReceive = new ObjectIntMap<>(16);
         doneReceive.setDefaultValue(-1);
@@ -371,7 +378,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                 Texture t = new Texture(renderer.palettePixmap.getWidth(), renderer.palettePixmap.getHeight(), Pixmap.Format.RGBA8888);
                 Pixmap pixmap;
                 Array<Pixmap> pm = new Array<>(32 * armies.length);
-                pm.setSize(32 * armies.length);
+                pm.setSize((4 * 4 * 2) * armies.length);
                 VoxModel original = voxels.copy();
                 for (int i = 0; i < 4; i++) {
                     voxels = original.copy();
@@ -381,8 +388,8 @@ public class ColorGuardAssets extends ApplicationAdapter {
                         }
                         renderer.drawModelSimple(voxels, i * 0.25f, 0f, 0f, f, 0.00f, 0.00f, 0.00f);
                         t.draw(renderer.palettePixmap, 0, 0);
-                        int look = 0;
                         for (int j = 0; j < armies.length; j++) {
+                            int look = j * 3 % 20;
                             fb.begin();
                             palette.bind(1);
                             ScreenUtils.clear(1f, 1f, 1f, 0f);
@@ -398,7 +405,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                             fb.end();
                             pm.set(j * 32 + i * 8 + f, pixmap);
                             pm.set(j * 32 + i * 8 + f + 4, pixmap);
-                            png.write(Gdx.files.local(outDir + "/" + armies[j] + "/" + name + '/' + armies[j] + "_look0_" + name + "_angle" + i + "_" + f + ".png"), pixmap);
+                            png.write(Gdx.files.local(outDir + "/" + armies[j] + "/" + name + '/' + armies[j] + "_look"+look+"_" + name + "_angle" + i + "_" + f + ".png"), pixmap);
                             if (look + j == 0)
                                 png.write(Gdx.files.local(outDir + "/lab/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                         }
@@ -446,10 +453,10 @@ public class ColorGuardAssets extends ApplicationAdapter {
                             else frames = anim;
 
                             for (int f = 0; f < frames.length; f++) {
-                                pixmap = renderer.drawModelSimple(frames[f], i * 0.25f, 0f, 0f, f, 0.00f, 0.00f, 0.00f);
+                                renderer.drawModelSimple(frames[f], i * 0.25f, 0f, 0f, f, 0.00f, 0.00f, 0.00f);
                                 t.draw(renderer.palettePixmap, 0, 0);
-                                int look = 0;
                                 for (int j = 0; j < armies.length; j++) {
+                                    int look = j * 3 % 20;
                                     fb.begin();
                                     palette.bind(1);
                                     ScreenUtils.clear(1f, 1f, 1f, 0f);
@@ -495,8 +502,8 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                         for (int f = 0; f < frames.length; f++) {
                                             renderer.drawModelSimple(frames[f], i * 0.25f, 0f, 0f, f, 0.00f, 0.00f, 0.00f);
                                             t.draw(renderer.palettePixmap, 0, 0);
-                                            int look = 0;
                                             for (int j = 0; j < armies.length; j++) {
+                                                int look = j * 3 % 20;
                                                 fb.begin();
                                                 palette.bind(1);
                                                 ScreenUtils.clear(1f, 1f, 1f, 0f);
