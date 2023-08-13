@@ -1632,7 +1632,7 @@ public class EffectGenerator {
         return next;
     }
 
-    static final IntIntMap fireToWater = IntIntMap.with(hotFire, 88, new int[]{ember, 87, yellowFire, 88, sparks, 88, smoke, 0});
+    static final IntIntMap fireToWater = IntIntMap.withPrimitive(hotFire, 88, ember, 87, yellowFire, 88, sparks, 88, smoke, 0);
 
     public static VoxModel[] torpedoReceiveAnimation(int size, int frames, int distance){
         VoxModel[] next = new VoxModel[frames];
