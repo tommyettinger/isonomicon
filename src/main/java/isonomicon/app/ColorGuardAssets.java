@@ -55,19 +55,15 @@ public class ColorGuardAssets extends ApplicationAdapter {
 
     public ColorGuardAssets() {
         armies = new String[]{
+                "Dark",
+                "White",
                 "Red",
+                "Orange",
+                "Yellow",
+                "Green",
                 "Blue",
+                "Purple",
         };
-//        armies = new String[]{
-//                "Dark",
-//                "White",
-//                "Red",
-//                "Orange",
-//                "Yellow",
-//                "Green",
-//                "Blue",
-//                "Purple",
-//        };
 
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.primaryStrength > 0).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Debug")).toList();
@@ -159,10 +155,10 @@ public class ColorGuardAssets extends ApplicationAdapter {
         doneReceive.setDefaultValue(-1);
         for(String s : EffectGenerator.KNOWN_RECEIVE_EFFECTS.keySet())
             doneReceive.put(s, 0);
+        int[] canonicalLooks ={0, 7, 15, 3, 18, 17, 1, 12};
         // many skin and hair colors
         if(DIVERSE)
         {
-            int[] canonicalLooks ={0, 7, 15, 3, 18, 17, 1, 12};
             EACH_INPUT:
             for (int n = 0; n < ColorGuardData.units.size(); n++) {
                 ColorGuardData.Unit unit = ColorGuardData.units.get(n);
@@ -389,7 +385,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                         renderer.drawModelSimple(voxels, i * 0.25f, 0f, 0f, f, 0.00f, 0.00f, 0.00f);
                         t.draw(renderer.palettePixmap, 0, 0);
                         for (int j = 0; j < armies.length; j++) {
-                            int look = j * 3 % 20;
+                            int look = canonicalLooks[j] * armies.length;
                             fb.begin();
                             palette.bind(1);
                             ScreenUtils.clear(1f, 1f, 1f, 0f);
@@ -456,7 +452,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                 renderer.drawModelSimple(frames[f], i * 0.25f, 0f, 0f, f, 0.00f, 0.00f, 0.00f);
                                 t.draw(renderer.palettePixmap, 0, 0);
                                 for (int j = 0; j < armies.length; j++) {
-                                    int look = j * 3 % 20;
+                                    int look = canonicalLooks[j] * armies.length;
                                     fb.begin();
                                     palette.bind(1);
                                     ScreenUtils.clear(1f, 1f, 1f, 0f);
@@ -503,7 +499,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                             renderer.drawModelSimple(frames[f], i * 0.25f, 0f, 0f, f, 0.00f, 0.00f, 0.00f);
                                             t.draw(renderer.palettePixmap, 0, 0);
                                             for (int j = 0; j < armies.length; j++) {
-                                                int look = j * 3 % 20;
+                                                int look = canonicalLooks[j] * armies.length;
                                                 fb.begin();
                                                 palette.bind(1);
                                                 ScreenUtils.clear(1f, 1f, 1f, 0f);
