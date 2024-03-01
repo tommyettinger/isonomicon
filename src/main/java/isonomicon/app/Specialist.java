@@ -37,8 +37,8 @@ public class Specialist extends ApplicationAdapter {
     private String name;
     private String[] inputs;
     private FastPNG png;
-    private FastGif gif;
-    private FastAPNG apng;
+    private AnimatedGif gif;
+    private AnimatedPNG apng;
     private QualityPalette analyzed, aurora, low;
     private SpriteBatch batch;
     private Texture palette;
@@ -101,21 +101,42 @@ public class Specialist extends ApplicationAdapter {
         png.setCompression(2); // we are likely to compress these with something better, like oxipng.
         png.setFlipY(false);
 //        png8 = new PNG8();
-        gif = new FastGif();
+        gif = new AnimatedGif();
         gif.setFlipY(false);
-        apng = new FastAPNG();
+        apng = new AnimatedPNG();
         apng.setCompression(2);
         apng.setFlipY(false);
-        gif.setDitherStrength(0.75f);
+        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.WREN);
         gif.palette = analyzed = new QualityPalette();
 //        gif.palette = new com.github.tommyettinger.anim8.FastPalette(Coloring.YAM2, Gdx.files.local("assets/Yam2Preload.dat").readBytes());
-        gif.setDitherStrength(0.5f);
+        gif.setDitherStrength(0.75f);
         aurora = new QualityPalette();
-        low = new QualityPalette(new int[]{
-                // Equpix15, by Night
-                0x00000000,0x523c4eff,0x2a2a3aff,0x3e5442ff,0x84545cff,0x38607cff,0x5c7a56ff,0x101024ff,
-                0xb27e56ff,0xd44e52ff,0x55a894ff,0x80ac40ff,0xec8a4bff,0x8bd0baff,0xffcc68ff,0xfff8c0ff,
-        });
+        low =
+//                new QualityPalette(new int[]{
+//                        // Prospecal-8
+//                        0x00000000,
+//                        0x6DB5BAFF, 0x26544CFF, 0x76AA3AFF, 0xFBFDBEFF, 0xD23C4FFF, 0x2B1328FF, 0x753D38FF, 0xEFAD5FFF
+//                });
+                new QualityPalette(new int[]{
+                        // azurestar-32
+                        0x00000000, 0x372B26FF, 0xC37C6BFF, 0xDD997EFF, 0x6E6550FF, 0x9A765EFF, 0xE1AD56FF, 0xC6B5A5FF,
+                        0xE9B58CFF, 0xEFCBB3FF, 0xF7DFAAFF, 0xFFEDD4FF, 0xBBD18AFF, 0x355525FF, 0x557A41FF, 0x112D19FF,
+                        0x45644FFF, 0x62966AFF, 0x86BB9AFF, 0x15452DFF, 0x396A76FF, 0x86A2B7FF, 0x92B3DBFF, 0x3D4186FF,
+                        0x6672BFFF, 0x15111BFF, 0x9A76BFFF, 0x925EA2FF, 0xC7A2CFFF, 0x553549FF, 0xA24D72FF, 0xC38E92FF,
+                        0xE3A6BBFF,
+                });
+//                new QualityPalette(new int[]{
+//                        // Nice-31
+//                        0x00000000, 0x636663FF, 0x87857CFF, 0xBCAD9FFF, 0xF2B888FF, 0xEB9661FF, 0xB55945FF, 0x734C44FF,
+//                        0x3D3333FF, 0x593E47FF, 0x7A5859FF, 0xA57855FF, 0xDE9F47FF, 0xFDD179FF, 0xFEE1B8FF, 0xD4C692FF,
+//                        0xA6B04FFF, 0x819447FF, 0x44702DFF, 0x2F4D2FFF, 0x546756FF, 0x89A477FF, 0xA4C5AFFF, 0xCAE6D9FF,
+//                        0xF1F6F0FF, 0xD5D6DBFF, 0xBBC3D0FF, 0x96A9C1FF, 0x6C81A1FF, 0x405273FF, 0x303843FF, 0x14233AFF,
+//                });
+//                new QualityPalette(new int[]{
+//                // Equpix15, by Night
+//                0x00000000,0x523c4eff,0x2a2a3aff,0x3e5442ff,0x84545cff,0x38607cff,0x5c7a56ff,0x101024ff,
+//                0xb27e56ff,0xd44e52ff,0x55a894ff,0x80ac40ff,0xec8a4bff,0x8bd0baff,0xffcc68ff,0xfff8c0ff,
+//        });
         Gdx.files.local("out/vox").mkdirs();
         for (int n = 0; n < inputs.length - 2;) {
             String s = inputs[n++];
@@ -170,15 +191,14 @@ public class Specialist extends ApplicationAdapter {
             }
             analyzed.analyze(pm, 75.0, 256);
             gif.palette = analyzed;
-            gif.setDitherAlgorithm(Dithered.DitherAlgorithm.DODGY);
             gif.write(Gdx.files.local("out/b/specialized/" + output + '/' + output + ".gif"), pm, 8);
             apng.write(Gdx.files.local("out/b/specialized/" + output + '/' + output + ".png"), pm, 8);
-//            gif.palette = aurora;
-//            gif.setDitherStrength(0.5f);
-//            gif.write(Gdx.files.local("out/b/specializedAurora/" + name + '/' + name + ".gif"), pm, 8);
-//            gif.palette = low;
-//            gif.setDitherStrength(0.375f);
-//            gif.write(Gdx.files.local("out/b/specializedLow/" + name + '/' + name + ".gif"), pm, 8);
+            gif.palette = aurora;
+            gif.setDitherStrength(0.5f);
+            gif.write(Gdx.files.local("out/b/specializedAurora/" + output + '/' + output + ".gif"), pm, 8);
+            gif.palette = low;
+            gif.setDitherStrength(0.75f);
+            gif.write(Gdx.files.local("out/b/specializedLow/" + output + '/' + output + ".gif"), pm, 8);
             for (Pixmap pix : pm) {
                 if (!pix.isDisposed())
                     pix.dispose();
@@ -214,7 +234,6 @@ public class Specialist extends ApplicationAdapter {
                 }
                 analyzed.analyze(pm, 75.0, 256);
                 gif.palette = analyzed;
-                gif.setDitherAlgorithm(Dithered.DitherAlgorithm.DODGY);
                 gif.write(Gdx.files.local("out/b/specialized/" + output + '/' + output + "_Turntable.gif"), pm, 24);
                 apng.write(Gdx.files.local("out/b/specialized/" + output + '/' + output + "_Turntable.png"), pm, 24);
 //                gif.palette = aurora;
