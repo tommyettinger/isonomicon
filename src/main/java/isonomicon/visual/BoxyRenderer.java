@@ -105,7 +105,41 @@ public class BoxyRenderer {
         }
 
     }
-    
+
+    /**
+     * A relatively close approximation of {@code Math.exp(-x * x - y * y)}, the Gaussian function in 2D. This returns
+     * 1.0f when x and y are both 0, and goes as low as 0.0051585725 when either or both of x or y are very significant.
+     * The Gaussian function is useful for making circular "bump" shapes, among lots of other things.
+     * <br>
+     * This uses the 2/2 Padé approximant to {@code Math.exp(-x*x-y*y)}, but halves the argument to exp() before
+     * approximating, ensures that that argument is at least -3.5f (to avoid major issues with larger inputs), runs the
+     * approximation, and squares the result. The halving/squaring keeps the calculation in a more precise span for a
+     * larger domain.
+     *
+     * @param x typically the difference between two x positions; will be squared, so may be positive or negative
+     * @param y typically the difference between two y positions; will be squared, so may be positive or negative
+     * @return the positive result of the Gaussian function in 2D for the given parameters; between 0.0051585725 and 1.0
+     */
+    public static float gaussian2D(float x, float y) {
+        x = Math.max(-3.5f, (x * x + y * y) * -0.5f);
+        x = (12 + x * (6 + x))/(12 + x * (-6 + x));
+        return x * x;
+    }
+
+    /**
+     * The same as {@link #gaussian2D(float, float)} except that its minimum is reduced to 0.0, while its maximum is
+     * still 1.0 . This is not precisely a Gaussian function, because it won't keep slowly decreasing given rising
+     * inputs, but being able to know the outside is 0 may be useful for various tasks.
+     * @param x typically the difference between two x positions; will be squared, so may be positive or negative
+     * @param y typically the difference between two y positions; will be squared, so may be positive or negative
+     * @return the positive result of the "Gaussian" function in 2D for the given parameters; between 0.0 and 1.0
+     */
+    public static float gaussianFinite2D(float x, float y) {
+        x = Math.max(-3.4060497f, (x * x + y * y) * -0.5f);
+        x = (12 + x * (6 + x))/(12 + x * (-6 + x));
+        return (x * x - 0.00516498f) * 1.0051918f;
+    }
+
     protected float bn(int x, int y, int seed) {
         return (BlueNoise.getSeededTriangular(x, y, seed) + 128) * 0x1p-8f;
     }
@@ -424,8 +458,8 @@ public class BoxyRenderer {
                                     if (dist > radius * radius || si < 0 || sj < 0 || si > xSize || sj > ySize)
                                         continue;
                                     float change = spread * (radius - (float) Math.sqrt(dist));
-                                    midShading[si][sj] += change;// * Math.abs(change);
-                                    lightIndices[si][sj] = (byte)Math.max(lightIndices[si][sj], indices[sx][sy]);
+                                    midShading[si][sj] += change;
+                                    lightIndices[si][sj] = (byte)Math.max(lightIndices[si][sj] & 255, indices[sx][sy] & 255);
                                 }
                             }
                         }
@@ -473,8 +507,8 @@ public class BoxyRenderer {
 //                                128 << 16 |
 //                                128 << 8 | shade);
                         buffer.put(idx, lightIndices[x][y]);
-                        buffer.put(idx+1, (byte) shade);
-                        buffer.put(idx+2, (byte) 96);
+                        buffer.put(idx+1, (byte) (shade + 256 >> 1));
+                        buffer.put(idx+2, (byte) 64);
                         buffer.put(idx+3, (byte) shade);
                         outlineIndices[x][y] = 0;
                     }
@@ -487,8 +521,8 @@ public class BoxyRenderer {
 //                                128 << 16 |
 //                                128 << 8 | shade);
                         buffer.put(idx, lightIndices[x][y]);
-                        buffer.put(idx+1, (byte) (255 - shade));
-                        buffer.put(idx+2, (byte) 96);
+                        buffer.put(idx+1, (byte) (255 - shade >> 1));
+                        buffer.put(idx+2, (byte) 64);
                         buffer.put(idx+3, (byte) shade);
                         outlineIndices[x][y] = 0;
                     }

@@ -189,7 +189,9 @@ public class Isologist extends ApplicationAdapter {
                     fb.end();
                     pm.add(pixmap);
                     png.write(Gdx.files.local("out/boxy/specialized/" + output + '/' + output + "_angle" + i + "_" + f + ".png"), pixmap);
+                    png.setFlipY(true);
                     png.write(Gdx.files.local("out/boxy/special_lab/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
+                    png.setFlipY(false);
                     fb.dispose();
                 }
                 pm.insertRange(pm.size - 4, 4);
