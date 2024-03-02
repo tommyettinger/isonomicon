@@ -451,7 +451,7 @@ public class BoxyRenderer {
                         }
                         if (emit != 0) {
                             float spread = emit * 0.08f;
-                            final int radius = 9;
+                            final int radius = 3 * (1 + shrink);
                             for (int i = -radius, si = sx + i; i <= radius; i++, si++) {
                                 for (int j = -radius, sj = sy + j; j <= radius; j++, sj++) {
                                     final int dist = i * i + j * j;
