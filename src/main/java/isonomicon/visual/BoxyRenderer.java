@@ -267,7 +267,7 @@ public class BoxyRenderer {
             if(ns > swirl) return;
         }
         final float emit = m.getTrait(VoxMaterial.MaterialTrait._emit) * 0.75f;
-        int lowX = 1, highX = 3, lowY = 1, highY = 3;
+        int lowX = 0, highX = 4, lowY = 0, highY = 4;
 //        if(emit != 0f) {
 //            lowX = lowY = 1;
 //            highX = highY = 3;

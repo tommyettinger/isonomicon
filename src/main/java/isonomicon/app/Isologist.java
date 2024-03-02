@@ -49,7 +49,7 @@ public class Isologist extends ApplicationAdapter {
     public Isologist(String[] args){
         VoxIOExtended.GENERAL = false;
         VoxIOExtended.SCALE = false;
-        VoxIOExtended.SOAK = true;
+        VoxIOExtended.SOAK = false;
         if(args != null && args.length > 0)
             inputs = args;
         else 
