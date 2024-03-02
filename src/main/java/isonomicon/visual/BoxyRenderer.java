@@ -36,6 +36,7 @@ import static com.github.tommyettinger.digital.TrigTools.sinTurns;
 public class BoxyRenderer {
     public static int shrink = 0;
     public static int distortHXY = 2, distortVXY = 1, distortVZ = 2; // ground truth for isometric
+    public static boolean CORNER_OUTLINES = false;
 
     public final Stuff[] stuffs;
     public Pixmap palettePixmap;
@@ -266,7 +267,7 @@ public class BoxyRenderer {
             if(ns > swirl) return;
         }
         final float emit = m.getTrait(VoxMaterial.MaterialTrait._emit) * 0.75f;
-        int lowX = 0, highX = 4, lowY = 0, highY = 4;
+        int lowX = 1, highX = 3, lowY = 1, highY = 3;
 //        if(emit != 0f) {
 //            lowX = lowY = 1;
 //            highX = highY = 3;
@@ -279,7 +280,8 @@ public class BoxyRenderer {
         final int
                 xx = (int)(0.5f + Math.max(0, (size + yPos - xPos) * distortHXY + 1)),
                 yy = (int)(0.5f + Math.max(0, (zPos * distortVZ + size * ((distortVXY) * 3) - distortVXY * (xPos + yPos)) + 1 + rise * frame)),
-                depth = (int)(0.5f + (xPos + yPos) * distortHXY + zPos * distortVZ);
+                depth = (int)(0.5f + xPos + yPos + zPos);
+//                depth = (int)(0.5f + (xPos + yPos) * distortHXY + zPos * distortVZ);
         boolean drawn = false;
         final float hs = size * 0.5f;
         for (int x = lowX, ax = xx; x < highX && ax < render.length; x++, ax++) {
@@ -569,19 +571,20 @@ public class BoxyRenderer {
                             palettePixmap.drawPixel(hx, hy + 1, inner);
                         }
 
-                        if (outlines[x - step][y - step] == 0) {
-                            palettePixmap.drawPixel(hx - 1, hy - 1, outer);
+                        if(CORNER_OUTLINES) {
+                            if (outlines[x - step][y - step] == 0) {
+                                palettePixmap.drawPixel(hx - 1, hy - 1, outer);
+                            }
+                            if (outlines[x + step][y - step] == 0) {
+                                palettePixmap.drawPixel(hx + 1, hy - 1, outer);
+                            }
+                            if (outlines[x - step][y + step] == 0) {
+                                palettePixmap.drawPixel(hx - 1, hy + 1, outer);
+                            }
+                            if (outlines[x + step][y + step] == 0) {
+                                palettePixmap.drawPixel(hx + 1, hy + 1, outer);
+                            }
                         }
-                        if (outlines[x + step][y - step] == 0) {
-                            palettePixmap.drawPixel(hx + 1, hy - 1, outer);
-                        }
-                        if (outlines[x - step][y + step] == 0) {
-                            palettePixmap.drawPixel(hx - 1, hy + 1, outer);
-                        }
-                        if (outlines[x + step][y + step] == 0) {
-                            palettePixmap.drawPixel(hx + 1, hy + 1, outer);
-                        }
-
                     }
                 }
             }

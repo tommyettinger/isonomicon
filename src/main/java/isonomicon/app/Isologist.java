@@ -49,7 +49,7 @@ public class Isologist extends ApplicationAdapter {
     public Isologist(String[] args){
         VoxIOExtended.GENERAL = false;
         VoxIOExtended.SCALE = false;
-        VoxIOExtended.SOAK = false;
+        VoxIOExtended.SOAK = true;
         if(args != null && args.length > 0)
             inputs = args;
         else 
@@ -74,7 +74,10 @@ public class Isologist extends ApplicationAdapter {
 //            inputs = new String[]{"b/vox/Damned.vox", "palettes/b/CherrySkinDarkCloth.png"};
 //            inputs = new String[]{"b/vox/Direction_Cube.vox", "palettes/b/TanClothDarkSkin.png"};
 //            inputs = new String[]{"b/vox/Lomuk.vox", "palettes/b/BlueFurCyanCrystal.png"};
-            inputs = new String[]{"b/vox/Lomuk.vox", "palettes/b/BlueFurCyanCrystal.png", "Lomuk",
+            inputs = new String[]{
+                    "b/vox/Box.vox", "palettes/palettes-b.png", "Box",
+                    "b/vox/Direction_Cube.vox", "palettes/b/TanClothDarkSkin.png", "Direction_Cube",
+                    "b/vox/Lomuk.vox", "palettes/b/BlueFurCyanCrystal.png", "Lomuk",
                     "b/vox/Damned.vox", "palettes/b/CherrySkinDarkCloth.png", "Damned",
                     "b/vox/Figure.vox", "palettes/b/TanClothDarkSkin.png", "Figure"};
             if(!new File("specialized/" + inputs[0]).exists()) {
@@ -114,7 +117,7 @@ public class Isologist extends ApplicationAdapter {
         gif.setDitherAlgorithm(Dithered.DitherAlgorithm.WREN);
         gif.palette = analyzed = new QualityPalette();
 //        gif.palette = new com.github.tommyettinger.anim8.FastPalette(Coloring.YAM2, Gdx.files.local("assets/Yam2Preload.dat").readBytes());
-        gif.setDitherStrength(0.75f);
+        gif.setDitherStrength(0.375f);
         aurora = new QualityPalette();
         azu =
 //                new QualityPalette(new int[]{
@@ -201,10 +204,10 @@ public class Isologist extends ApplicationAdapter {
             gif.write(Gdx.files.local("out/boxy/specialized/" + output + '/' + output + ".gif"), pm, 8);
 //            apng.write(Gdx.files.local("out/b/specialized/" + output + '/' + output + ".png"), pm, 8);
             gif.palette = aurora;
-            gif.setDitherStrength(0.5f);
+            gif.setDitherStrength(0.375f);
             gif.write(Gdx.files.local("out/boxy/specializedAurora/" + output + '/' + output + ".gif"), pm, 8);
             gif.palette = azu;
-            gif.setDitherStrength(0.75f);
+            gif.setDitherStrength(0.625f);
             gif.write(Gdx.files.local("out/boxy/specializedAzu/" + output + '/' + output + ".gif"), pm, 8);
             for (Pixmap pix : pm) {
                 if (!pix.isDisposed())
