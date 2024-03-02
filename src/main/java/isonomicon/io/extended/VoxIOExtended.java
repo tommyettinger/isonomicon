@@ -30,6 +30,10 @@ public class VoxIOExtended {
      * If this is a general-purpose .vox loader, this should be true. For CG-specialized models, false.
      */
     public static boolean GENERAL = false;
+    /**
+     * If this should scale up the voxels by a factor of 2, this should be true.
+     */
+    public static boolean SCALE = true;
     public static int minX = Integer.MAX_VALUE;
     public static int maxX;
     public static int minY = Integer.MAX_VALUE;
@@ -203,9 +207,12 @@ public class VoxIOExtended {
                                 }
                             }
                         }
-//                        Tools3D.soakInPlace(voxelData);
-//                        model.grids.add(voxelData);
-                        model.grids.add(voxelData = Tools3D.scaleAndSoak(voxelData));
+                        if(SCALE){
+                            voxelData = Tools3D.scaleAndSoak(voxelData);
+                        } else {
+                            Tools3D.soakInPlace(voxelData);
+                        }
+                        model.grids.add(voxelData);
                         shp.minX = Math.min(shp.minX, 0);
                         shp.minY = Math.min(shp.minY, 0);
                         shp.minZ = Math.min(shp.minZ, 0);
