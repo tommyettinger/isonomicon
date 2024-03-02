@@ -33,12 +33,9 @@ import static com.github.tommyettinger.digital.TrigTools.sinTurns;
  * Renders {@code byte[][][]} voxel models to pairs of {@link Pixmap}s, one using normal RGBA colors and one using an
  * unusual technique that stores a palette index in the R channel and a lightness adjustment in the G channel.
  */
-public class SpecialRenderer {
-    public static int shrink = 2;
-        public static float distortHXY = 2, distortVXY = 1, distortVZ = 3; // ground truth for isometric
-//    public static float distortHXY = 2, distortVXY = 0, distortVZ = 3; // side view
-//    public static float distortHXY = 2, distortVXY = 0.5f, distortVZ = 3; // partially elevated side view ("shallow")
-    public static final float fidget = 0.0f;
+public class BoxyRenderer {
+    public static int shrink = 0;
+    public static int distortHXY = 2, distortVXY = 1, distortVZ = 2; // ground truth for isometric
 
     public final Stuff[] stuffs;
     public Pixmap palettePixmap;
@@ -70,15 +67,15 @@ public class SpecialRenderer {
     public float[][] normals;
     private final Vector3 out = new Vector3();
 
-    protected SpecialRenderer() {
+    protected BoxyRenderer() {
         this(64);
     }
 
-    public SpecialRenderer(final int size) {
+    public BoxyRenderer(final int size) {
         this(size, Stuff.STUFFS);
     }
 
-    public SpecialRenderer(final int size, Stuff[] stuffs) {
+    public BoxyRenderer(final int size, Stuff[] stuffs) {
         this.size = size;
         final int w = MathUtils.ceil(size * distortHXY * 2 + 4), h = MathUtils.ceil(size * (distortVZ + distortVXY * 2) + 4);
         palettePixmap = new Pixmap(w>>>shrink, h>>>shrink, Pixmap.Format.RGBA8888);
@@ -125,7 +122,7 @@ public class SpecialRenderer {
      * @param saturationModifier a float between -0.5f and 0.2f; negative decreases saturation, positive increases
      * @return this, for chaining
      */
-    public SpecialRenderer saturation(float saturationModifier) {
+    public BoxyRenderer saturation(float saturationModifier) {
         neutral = 1f + Math.min(Math.max(saturationModifier,  -1f),  0.5f);
         return this;
     }
@@ -134,14 +131,14 @@ public class SpecialRenderer {
         return palette;
     }
 
-    public SpecialRenderer palette(PaletteReducer color) {
+    public BoxyRenderer palette(PaletteReducer color) {
         return palette(color.paletteArray, color.colorCount);
     }
 
-    public SpecialRenderer palette(int[] color) {
+    public BoxyRenderer palette(int[] color) {
         return palette(color, 256);
     }
-    public SpecialRenderer palette(int[] color, int count) {
+    public BoxyRenderer palette(int[] color, int count) {
         this.palette = color;
         count = Math.min(256, count);
         if(paletteL == null) paletteL = new float[256];
@@ -245,8 +242,6 @@ public class SpecialRenderer {
                 if (ns > 0) highX = (int) (4.5 + ns * (3 << shrink));
                 else if (ns < 0) lowX = Math.round(lowX + ns * (3 << shrink));
             }
-        xPos += fidget;
-        yPos += fidget;
         final int
                 xx = (int)(0.5f + Math.max(0, (size + yPos - xPos) * distortHXY + 1)),
                 yy = (int)(0.5f + Math.max(0, (zPos * distortVZ + size * ((distortVXY) * 3) - distortVXY * (xPos + yPos)) + 1 + rise * frame)),
@@ -299,7 +294,7 @@ public class SpecialRenderer {
         }
     }
     
-    public SpecialRenderer clear() {
+    public BoxyRenderer clear() {
         palettePixmap.setColor(0);
         palettePixmap.fill();
         fill(depths, 0);
@@ -352,7 +347,7 @@ public class SpecialRenderer {
 
         int xSize = render.length - 1, ySize = render[0].length - 1, depth;
         int v, vx, vy, vz, fx, fy, fz;
-        float hs = (size) * 0.5f, hsp = hs - fidget, ox, oy, oz, tx, ty, tz;
+        float hs = (size) * 0.5f, hsp = hs, ox, oy, oz, tx, ty, tz;
         final float cYaw = cosTurns(yaw), sYaw = sinTurns(yaw);
         final float cPitch = cosTurns(pitch), sPitch = sinTurns(pitch);
         final float cRoll = cosTurns(roll), sRoll = sinTurns(roll);
@@ -653,8 +648,8 @@ public class SpecialRenderer {
         if (shadows) {
             for (int x = 0; x < size; x++) {
                 for (int y = 0; y < size; y++) {
-                    ox = x - hs + fidget;
-                    oy = y - hs + fidget;
+                    ox = x - hs;
+                    oy = y - hs;
                     oz = -hs;
                     splat(ox * x_x + oy * y_x + oz * z_x + size + translateX,
                             ox * x_y + oy * y_y + oz * z_y + size + translateY,
@@ -667,8 +662,8 @@ public class SpecialRenderer {
                 for (int y = 0; y < size; y++) {
                     final byte v = colors[x][y][z];
                     if (v != 0) {
-                        ox = x - hs + fidget;
-                        oy = y - hs + fidget;
+                        ox = x - hs;
+                        oy = y - hs;
                         oz = z - hs;
                         splat(ox * x_x + oy * y_x + oz * z_x + size + translateX,
                                 ox * x_y + oy * y_y + oz * z_y + size + translateY,
@@ -721,8 +716,8 @@ public class SpecialRenderer {
                     final byte v = g[x][y][z];
                     if(v != 0)
                     {
-                        ox = x - hs + fidget;
-                        oy = y - hs + fidget;
+                        ox = x - hs;
+                        oy = y - hs;
                         oz = z - hs;
                         splat(  ox * x_x + oy * y_x + oz * z_x + size + translateX,
                                 ox * x_y + oy * y_y + oz * z_y + size + translateY,
@@ -737,8 +732,8 @@ public class SpecialRenderer {
             for (int j = 0; j < links.size(); j++) {
                 float[] got;
                 if((got = links.get(j).get(ent.key)) != null) {
-                    ox = ent.value[0] - got[0] + fidget;
-                    oy = ent.value[1] - got[1] + fidget;
+                    ox = ent.value[0] - got[0];
+                    oy = ent.value[1] - got[1];
                     oz = ent.value[2] - got[2];
 
                     subDraw(grids, links, grids.remove(j), links.remove(j), yaw, pitch, roll, frame,

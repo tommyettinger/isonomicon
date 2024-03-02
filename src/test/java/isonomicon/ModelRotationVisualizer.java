@@ -14,10 +14,10 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import isonomicon.app.ColorGuardAssets;
 import isonomicon.io.LittleEndianDataInputStream;
 import isonomicon.io.extended.VoxIOExtended;
 import isonomicon.io.extended.VoxModel;
+import isonomicon.physical.Tools3D;
 import isonomicon.visual.Coloring;
 import isonomicon.visual.ShaderUtils;
 import isonomicon.visual.SpecialRenderer;
@@ -43,7 +43,7 @@ public class ModelRotationVisualizer extends ApplicationAdapter {
     
     @Override
     public void create() {
-        ColorGuardAssets.SHADOWS = false;
+        Tools3D.SHADOWS = false;
         palettes = new Texture("palettes/palettes.png");
         batch = new SpriteBatch();
         indexShader = new ShaderProgram(ShaderUtils.stuffSelectVertex, ShaderUtils.stuffSelectFragment);

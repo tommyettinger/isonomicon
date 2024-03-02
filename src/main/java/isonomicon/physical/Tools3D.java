@@ -16,6 +16,7 @@ import static com.github.tommyettinger.digital.Hasher.*;
 public class Tools3D {
 
     public static Stuff[] STUFFS = Stuff.STUFFS_B;
+    public static boolean SHADOWS = true;
 
     public static byte[][][] deepCopy(byte[][][] voxels)
     {

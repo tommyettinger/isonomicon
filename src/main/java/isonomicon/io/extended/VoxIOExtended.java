@@ -34,6 +34,10 @@ public class VoxIOExtended {
      * If this should scale up the voxels by a factor of 2, this should be true.
      */
     public static boolean SCALE = true;
+    /**
+     * If this should call {@link Tools3D#soak} or a related method on the voxels, this should be true.
+     */
+    public static boolean SOAK = true;
     public static int minX = Integer.MAX_VALUE;
     public static int maxX;
     public static int minY = Integer.MAX_VALUE;
@@ -208,9 +212,13 @@ public class VoxIOExtended {
                             }
                         }
                         if(SCALE){
-                            voxelData = Tools3D.scaleAndSoak(voxelData);
+                            if(SOAK)
+                                voxelData = Tools3D.scaleAndSoak(voxelData);
+                            else
+                                voxelData = Tools3D.simpleScale(voxelData);
                         } else {
-                            Tools3D.soakInPlace(voxelData);
+                            if(SOAK)
+                                Tools3D.soakInPlace(voxelData);
                         }
                         model.grids.add(voxelData);
                         shp.minX = Math.min(shp.minX, 0);
