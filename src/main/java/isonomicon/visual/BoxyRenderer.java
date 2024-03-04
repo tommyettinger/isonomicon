@@ -280,16 +280,18 @@ public class BoxyRenderer {
         final int
                 xx = (int)(0.5f + Math.max(0, (size + yPos - xPos) * distortHXY + 1)),
                 yy = (int)(0.5f + Math.max(0, (zPos * distortVZ + size * ((distortVXY) * 3) - distortVXY * (xPos + yPos)) + 1 + rise * frame)),
-                depth = (int)(0.5f + xPos + yPos + zPos);
+                depth = (int)(0.5f + (xPos + yPos + zPos));
 //                depth = (int)(0.5f + (xPos + yPos) * distortHXY + zPos * distortVZ);
         boolean drawn = false;
         final float hs = size * 0.5f;
         for (int x = lowX, ax = xx; x < highX && ax < render.length; x++, ax++) {
             if (ax < 0) continue;
             for (int y = lowY, ay = yy; y < highY && ay < render[0].length; y++, ay++) {
+                if((x == lowX && y == lowY) || (x == lowX && y == highY-1) || (x == highX-1 && y == lowY) || (x == highX-1 && y == highY-1))
+                    continue;
                 if ((depth > depths[ax][ay] || (depth == depths[ax][ay] && (indices[ax][ay] & 255) > (voxel & 255)))) {
                     drawn = true;
-                    depths[ax][ay] = depth;
+                    depths[ax][ay] = (x == lowX || x == highX-1 || y == lowY || y == highY-1) ? depth - 1 :  depth;
                     materials[ax][ay] = m;
                     if(voxel != 0) {
                         indices[ax][ay] = voxel;
