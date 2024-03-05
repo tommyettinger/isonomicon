@@ -280,7 +280,7 @@ public class BoxyRenderer {
         final int
                 xx = (int)(0.5f + Math.max(0, (size + yPos - xPos) * distortHXY + 1)),
                 yy = (int)(0.5f + Math.max(0, (zPos * distortVZ + size * ((distortVXY) * 3) - distortVXY * (xPos + yPos)) + 1 + rise * frame)),
-                depth = (int)(0.5f + (xPos + yPos + zPos));
+                depth = (int)(0.5f + (xPos + yPos + zPos)*2);
 //                depth = (int)(0.5f + (xPos + yPos) * distortHXY + zPos * distortVZ);
         boolean drawn = false;
         final float hs = size * 0.5f;
@@ -373,7 +373,7 @@ public class BoxyRenderer {
      * @return {@link #palettePixmap}, edited to contain the render of all the voxels put in this with {@link #splat(float, float, float, int, int, int, byte, int)}
      */
     public Pixmap blit(float yaw, float pitch, float roll, int frame) {
-        final int threshold = 10+shrink*3;//13;
+        final int threshold = 20+shrink*6;
         palettePixmap.setColor(0);
         palettePixmap.fill();
 
@@ -463,7 +463,8 @@ public class BoxyRenderer {
                                         continue;
                                     float change = spread * (radius - (float) Math.sqrt(dist));
                                     midShading[si][sj] += change;
-                                    lightIndices[si][sj] = (byte)Math.max(lightIndices[si][sj] & 255, indices[sx][sy] & 255);
+                                    lightIndices[si][sj] = indices[sx][sy];
+//                                    lightIndices[si][sj] = (byte)Math.max(lightIndices[si][sj] & 255, indices[sx][sy] & 255);
                                 }
                             }
                         }
@@ -504,33 +505,53 @@ public class BoxyRenderer {
                     }
                 }
                 else if(midShading[x][y] > 0f) {
-                    int shade = (int) (Math.min(Math.max((shading[x][y] + midShading[x][y]) * 0.625f + 0.1328125f, 0f), 1f) * 255.999f);
+                    int shade = (int) Math.min(Math.max(127.5f + midShading[x][y] * 256f, 0f), 255f);
                     int idx = (y >>> shrink) * palettePixmap.getWidth() + (x >>> shrink) << 2;
-                    if ((buffer.get(idx+3) & 255) < shade) {
-//                        palettePixmap.drawPixel(x >>> shrink, y >>> shrink, LIGHTEN << 24 |
-//                                128 << 16 |
-//                                128 << 8 | shade);
+                    if ((buffer.get(idx+3) & 255) < (shade>>1)) {
+                        System.out.println("Writing light pixel at " + x + "," + y + " with shade " + shade + ", shading " + shading[x][y] + ", mid " + midShading[x][y]);
                         buffer.put(idx, lightIndices[x][y]);
-                        buffer.put(idx+1, (byte) (shade + 256 >> 1));
+                        buffer.put(idx+1, (byte) shade);
                         buffer.put(idx+2, (byte) 64);
-                        buffer.put(idx+3, (byte) shade);
+                        buffer.put(idx+3, (byte) (shade));
                         outlineIndices[x][y] = 0;
                     }
                 }
                 else if(midShading[x][y] < 0f) {
-                    int shade = (int) ((1f - Math.min(Math.max((shading[x][y] + midShading[x][y]) * 0.625f + 0.1328125f, 0f), 1f)) * 255.999f);
+                    int shade = (int) Math.min(Math.max(127.5f + midShading[x][y] * 256f, 0f), 255f);
                     int idx = (y >>> shrink) * palettePixmap.getWidth() + (x >>> shrink) << 2;
-                    if ((buffer.get(idx+3) & 255) < shade) {
-//                        palettePixmap.drawPixel(x >>> shrink, y >>> shrink, DARKEN << 24 |
-//                                128 << 16 |
-//                                128 << 8 | shade);
+                    if ((buffer.get(idx+3) & 255) < (255-shade>>1)) {
+                        System.out.println("Writing dark pixel at " + x + "," + y + " with shade " + shade + ", shading " + shading[x][y] + ", mid " + midShading[x][y]);
                         buffer.put(idx, lightIndices[x][y]);
-                        buffer.put(idx+1, (byte) (255 - shade >> 1));
+                        buffer.put(idx+1, (byte) (shade));
                         buffer.put(idx+2, (byte) 64);
-                        buffer.put(idx+3, (byte) shade);
+                        buffer.put(idx+3, (byte) (255-shade));
                         outlineIndices[x][y] = 0;
                     }
                 }
+//                else if(midShading[x][y] > 0f) {
+//                    int shade = (int) (Math.min(Math.max((shading[x][y] + midShading[x][y]) * 0.625f + 0.1328125f, 0f), 1f) * 255.999f);
+//                    int idx = (y >>> shrink) * palettePixmap.getWidth() + (x >>> shrink) << 2;
+//                    if ((buffer.get(idx+3) & 255) < shade) {
+//                        System.out.println("Writing light pixel at " + x + "," + y + " with shade " + shade + ", shading " + shading[x][y] + ", mid " + midShading[x][y]);
+//                        buffer.put(idx, lightIndices[x][y]);
+//                        buffer.put(idx+1, (byte) (shade + 256 >> 1));
+//                        buffer.put(idx+2, (byte) 64);
+//                        buffer.put(idx+3, (byte) shade);
+//                        outlineIndices[x][y] = 0;
+//                    }
+//                }
+//                else if(midShading[x][y] < 0f) {
+//                    int shade = (int) ((Math.min(Math.max((shading[x][y] + midShading[x][y]) * 0.625f + 0.1328125f, 0f), 1f)) * 255.999f);
+//                    int idx = (y >>> shrink) * palettePixmap.getWidth() + (x >>> shrink) << 2;
+//                    if ((buffer.get(idx+3) & 255) < 255+shade) {
+//                        System.out.println("Writing dark pixel at " + x + "," + y + " with shade " + shade + ", shading " + shading[x][y] + ", mid " + midShading[x][y]);
+//                        buffer.put(idx, lightIndices[x][y]);
+//                        buffer.put(idx+1, (byte) (255 + shade >> 1));
+//                        buffer.put(idx+2, (byte) 64);
+//                        buffer.put(idx+3, (byte) (255+shade));
+//                        outlineIndices[x][y] = 0;
+//                    }
+//                }
             }
         }
 //        for (int x = xSize; x >= 0; x--) {

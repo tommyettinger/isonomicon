@@ -71,15 +71,16 @@ public class Isologist extends ApplicationAdapter {
 //            };
 //            inputs = new String[]{"b/vox/Figure.vox", "b/vox/Tree.vox"};
 //            inputs = new String[]{"b/vox/Figure_Split.vox", "palettes/b/TanClothDarkSkin.png"};
-//            inputs = new String[]{"b/vox/Damned.vox", "palettes/b/CherrySkinDarkCloth.png"};
+//            inputs = new String[]{"b/vox/Damned.vox", "palettes/b/CherrySkinDarkCloth.png", "Damned"};
 //            inputs = new String[]{"b/vox/Direction_Cube.vox", "palettes/b/TanClothDarkSkin.png"};
-//            inputs = new String[]{"b/vox/Lomuk.vox", "palettes/b/BlueFurCyanCrystal.png"};
-            inputs = new String[]{
-                    "b/vox/Box.vox", "palettes/palettes-b.png", "Box",
-                    "b/vox/Direction_Cube.vox", "palettes/b/TanClothDarkSkin.png", "Direction_Cube",
-                    "b/vox/Lomuk.vox", "palettes/b/BlueFurCyanCrystal.png", "Lomuk",
-                    "b/vox/Damned.vox", "palettes/b/CherrySkinDarkCloth.png", "Damned",
-                    "b/vox/Figure.vox", "palettes/b/TanClothDarkSkin.png", "Figure"};
+            inputs = new String[]{"b/vox/Lomuk.vox", "palettes/b/BlueFurCyanCrystal.png", "Lomuk"};
+
+//            inputs = new String[]{
+//                    "b/vox/Box.vox", "palettes/palettes-b.png", "Box",
+//                    "b/vox/Direction_Cube.vox", "palettes/b/TanClothDarkSkin.png", "Direction_Cube",
+//                    "b/vox/Lomuk.vox", "palettes/b/BlueFurCyanCrystal.png", "Lomuk",
+//                    "b/vox/Damned.vox", "palettes/b/CherrySkinDarkCloth.png", "Damned",
+//                    "b/vox/Figure.vox", "palettes/b/TanClothDarkSkin.png", "Figure"};
             if(!new File("specialized/" + inputs[0]).exists()) {
                 System.out.println("File not found: specialized/" + inputs[0]);
                 System.exit(0);
@@ -175,7 +176,7 @@ public class Isologist extends ApplicationAdapter {
                     FrameBuffer fb = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), false);
                     fb.begin();
                     palette.bind(1);
-                    ScreenUtils.clear(Color.CLEAR);
+                    ScreenUtils.clear(1f, 1f, 1f, 0f);
                     batch.begin();
 
                     indexShader.setUniformi("u_texPalette", 1);
