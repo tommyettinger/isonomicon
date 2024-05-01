@@ -31,13 +31,13 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 public class ColorGuardAssets extends ApplicationAdapter {
-    public static boolean DIVERSE = false;
+    public static boolean DIVERSE = true;
     public static boolean ATTACKS = true;
     public static boolean DEATHS = false;
     public static boolean EXPLOSION = true;
     public static boolean TERRAIN = true;
 
-    public static final String outDir = "out/cg_shallow_limited";
+    public static final String outDir = "out/cg";
 
     public static final int SCREEN_WIDTH = 512;//640;
     public static final int SCREEN_HEIGHT = 512;//720;
