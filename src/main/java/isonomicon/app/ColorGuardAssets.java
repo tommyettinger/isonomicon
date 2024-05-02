@@ -18,6 +18,7 @@ import com.github.tommyettinger.anim8.*;
 import com.github.tommyettinger.ds.IntObjectMap;
 import com.github.tommyettinger.ds.ObjectIntMap;
 import isonomicon.io.LittleEndianDataInputStream;
+import isonomicon.io.LoafGif;
 import isonomicon.io.extended.VoxIOExtended;
 import isonomicon.io.extended.VoxModel;
 import isonomicon.physical.EffectGenerator;
@@ -37,6 +38,10 @@ public class ColorGuardAssets extends ApplicationAdapter {
     public static boolean EXPLOSION = true;
     public static boolean TERRAIN = true;
 
+    public static boolean PNG = false;
+    public static boolean APNG = false;
+    public static boolean GIF = true;
+
     public static final String outDir = "out/cg";
 
     public static final int SCREEN_WIDTH = 512;//640;
@@ -47,8 +52,8 @@ public class ColorGuardAssets extends ApplicationAdapter {
     private String name;
     private String[] armies;
     private FastPNG png;
-    private FastGif gif;
-    private FastAPNG apng;
+    private LoafGif gif;
+    private AnimatedPNG apng;
     private SpriteBatch batch;
     private Texture palette;
 
@@ -108,14 +113,23 @@ public class ColorGuardAssets extends ApplicationAdapter {
         batch = new SpriteBatch(16, indexShader);
 
         long startTime = TimeUtils.millis();
-        png = new FastPNG();
-        png.setFlipY(false);
-        png.setCompression(2); // we are likely to compress these with something better, like oxipng.
-        gif = new FastGif();
-        gif.setFlipY(false);
-        apng = new FastAPNG();
-        apng.setFlipY(false);
-        apng.setCompression(2);
+        if(PNG) {
+            png = new FastPNG();
+            png.setFlipY(false);
+            png.setCompression(2); // we are likely to compress these with something better, like oxipng.
+        }
+        if(GIF) {
+            gif = new LoafGif();
+            gif.setFlipY(false);
+            gif.setDitherAlgorithm(Dithered.DitherAlgorithm.LOAF);
+            gif.palette = new com.github.tommyettinger.anim8.QualityPalette(); // uses AURORA, OklabCareful metric
+            gif.setDitherStrength(0.75f);
+        }
+        if(APNG) {
+            apng = new AnimatedPNG();
+            apng.setFlipY(false);
+            apng.setCompression(2);
+        }
         //// Using Neue on a null palette takes 146.797 seconds with just the five units with an arc missile.
         //// (with fastAnalysis=false.)
         //// Now with fastAnalysis=true, 34.407 seconds.
@@ -130,25 +144,9 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.GRADIENT_NOISE);
         // can be pretty good, but this might be too strong by default. Ordered dither, again.
 //        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.ROBERTS);
-        // Not an ordered dither; let's see how this goes.
-        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.LOAF);
-//        gif.palette = new com.github.tommyettinger.anim8.FastPalette(Coloring.AURORA);
-        gif.palette = new com.github.tommyettinger.anim8.QualityPalette(); // uses AURORA, OklabCareful metric
-//        gif.palette = new com.github.tommyettinger.anim8.FastPalette(PaletteReducer.YAMPED); // uses YAMPED, simplest RGB metric
-//        gif.palette = new com.github.tommyettinger.anim8.FastPalette(PaletteReducer.YAMPED, Gdx.files.local("assets/YampedOklabPreload.dat").readBytes()); // uses YAMPED, OklabCareful metric
-//        gif.palette = new com.github.tommyettinger.anim8.FastPalette(Coloring.MUNSELLISH255, Gdx.files.local("assets/MunsellishRGBPreload.dat").readBytes());
-//        gif.palette = new com.github.tommyettinger.anim8.FastPalette(Coloring.MUNSELLISH255, Gdx.files.local("assets/MunsellishOklabPreload.dat").readBytes());
-//        gif.palette = new com.github.tommyettinger.anim8.FastPalette(Coloring.AURORA, Gdx.files.local("assets/AuroraOklabPreload.dat").readBytes());
-//        gif.palette = new com.github.tommyettinger.anim8.FastPalette(Coloring.CORN4, Gdx.files.local("assets/Corn4RGBPreload.dat").readBytes());
-//        gif.palette = new com.github.tommyettinger.anim8.FastPalette(Coloring.CORN4, Gdx.files.local("assets/Corn4OklabPreload.dat").readBytes());
-//        gif.palette = new com.github.tommyettinger.anim8.FastPalette(Coloring.YAM3, Gdx.files.local("assets/Yam3Preload.dat").readBytes());
-//        gif.palette = new com.github.tommyettinger.anim8.FastPalette(Coloring.TATER255, Gdx.files.local("assets/TaterPreload.dat").readBytes());
-//        gif.palette = new com.github.tommyettinger.anim8.FastPalette(Coloring.TETRA256, Gdx.files.local("assets/TetraPreload.dat").readBytes());
-//        gif.palette = new com.github.tommyettinger.anim8.FastPalette(Coloring.BETSY256, Gdx.files.local("assets/BetsyPreload.dat").readBytes());
         //// BLUE_NOISE doesn't need this, but NEUE, GRADIENT_NOISE, and ROBERTS do.
 //        gif.setDitherStrength(0.5f);
         //// LOAF can be higher.
-        gif.setDitherStrength(0.75f);
         FrameBuffer fb = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), false);
         ObjectIntMap<String> doneReceive = new ObjectIntMap<>(16);
         doneReceive.setDefaultValue(-1);
@@ -200,9 +198,9 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                 batch.end();
                                 pixmap = Pixmap.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
                                 fb.end();
-                                png.write(Gdx.files.local(outDir + "/" + armies[j] + "/" + name + '/' + armies[j] + "_look" + lk + '_' + name + "_angle" + i + "_" + f + ".png"), pixmap);
+                                if(png != null) png.write(Gdx.files.local(outDir + "/" + armies[j] + "/" + name + '/' + armies[j] + "_look" + lk + '_' + name + "_angle" + i + "_" + f + ".png"), pixmap);
                                 if(look + j == 0)
-                                    png.write(Gdx.files.local(outDir + "/lab/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
+                                    if(png != null) png.write(Gdx.files.local(outDir + "/lab/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                                 if(lk == canonicalLooks[j]) {
                                     pm.set(j * 32 + i * 8 + f, pixmap);
                                     pm.set(j * 32 + i * 8 + f + 4, pixmap);
@@ -215,10 +213,10 @@ public class ColorGuardAssets extends ApplicationAdapter {
                     }
                 }
 //                gif.palette.analyze(pm);
-                apng.write(Gdx.files.local(outDir + "/animated_diverse/" + name + '/' + name + ".png"), pm, 8);
+                if(apng != null) apng.write(Gdx.files.local(outDir + "/animated_diverse/" + name + '/' + name + ".png"), pm, 8);
                 SpecialRenderer.monoAlpha(pm);
                 gif.write(Gdx.files.local(outDir + "/animated_diverse/" + name + '/' + name + ".gif"), pm, 8);
-//                apng.write(Gdx.files.local(outDir + "/animated_diverse_flat/" + name + ".png"), pm, 8);
+//                if(apng != null) apng.write(Gdx.files.local(outDir + "/animated_diverse_flat/" + name + ".png"), pm, 8);
                 for (Pixmap pix : pm) {
                     if (!pix.isDisposed())
                         pix.dispose();
@@ -276,9 +274,9 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                         batch.end();
                                         pixmap = Pixmap.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
                                         fb.end();
-                                        png.write(Gdx.files.local(outDir + "/" + armies[j] + "/" + name + '/' + armies[j] + "_look" + lk + "_" + name + ps + "_angle" + i + "_" + f + ".png"), pixmap);
+                                        if(png != null) png.write(Gdx.files.local(outDir + "/" + armies[j] + "/" + name + '/' + armies[j] + "_look" + lk + "_" + name + ps + "_angle" + i + "_" + f + ".png"), pixmap);
                                         if (look + j == 0)
-                                            png.write(Gdx.files.local(outDir + "/lab/" + name + '/' + name + ps + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
+                                            if(png != null) png.write(Gdx.files.local(outDir + "/lab/" + name + '/' + name + ps + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                                         if(lk == canonicalLooks[j]) {
                                             pm.set(j * 32 + i * 8 + f, pixmap);
                                         } else {
@@ -295,10 +293,10 @@ public class ColorGuardAssets extends ApplicationAdapter {
                             }
                         }
 //                gif.palette.analyze(pm);
-                        apng.write(Gdx.files.local(outDir + "/animated_diverse/" + name + '/' + name + ps + ".png"), pm, 8);
+                        if(apng != null) apng.write(Gdx.files.local(outDir + "/animated_diverse/" + name + '/' + name + ps + ".png"), pm, 8);
                         SpecialRenderer.monoAlpha(pm);
                         gif.write(Gdx.files.local(outDir + "/animated_diverse/" + name + '/' + name + ps + ".gif"), pm, 8);
-//                        apng.write(Gdx.files.local(outDir + "/animated_diverse_flat/" + name + ps + ".png"), pm, 8);
+//                        if(apng != null) apng.write(Gdx.files.local(outDir + "/animated_diverse_flat/" + name + ps + ".png"), pm, 8);
                         for (Pixmap pix : pm) {
                             if (!pix.isDisposed())
                                 pix.dispose();
@@ -331,13 +329,13 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                                 pixmap = Pixmap.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
                                                 fb.end();
                                                 pm.set(j * 32 + i * 8 + f, pixmap);
-                                                png.write(Gdx.files.local(outDir + "/" + armies[j] + "/" + attack + "_Receive/" + armies[j] + "_look" + look + "_" + attack + "_Receive_" + strength + "_angle" + i + "_" + f + ".png"), pixmap);
+                                                if(png != null) png.write(Gdx.files.local(outDir + "/" + armies[j] + "/" + attack + "_Receive/" + armies[j] + "_look" + look + "_" + attack + "_Receive_" + strength + "_angle" + i + "_" + f + ".png"), pixmap);
                                                 if (look + j == 0)
-                                                    png.write(Gdx.files.local(outDir + "/lab/" + attack + "_Receive/" + attack + "_Receive_" + strength + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
+                                                    if(png != null) png.write(Gdx.files.local(outDir + "/lab/" + attack + "_Receive/" + attack + "_Receive_" + strength + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                                             }
                                         }
                                     }
-                                    apng.write(Gdx.files.local(outDir + "/animated_diverse/" + attack + "_Receive/" + attack + "_Receive_" + strength + ".png"), pm, 8);
+                                    if(apng != null) apng.write(Gdx.files.local(outDir + "/animated_diverse/" + attack + "_Receive/" + attack + "_Receive_" + strength + ".png"), pm, 8);
                                     SpecialRenderer.monoAlpha(pm);
                                     gif.write(Gdx.files.local(outDir + "/animated_diverse/" + attack + "_Receive/" + attack + "_Receive_" + strength + ".gif"), pm, 8);
                                     for (Pixmap pix : pm) {
@@ -400,14 +398,14 @@ public class ColorGuardAssets extends ApplicationAdapter {
                             fb.end();
                             pm.set(j * 32 + i * 8 + f, pixmap);
                             pm.set(j * 32 + i * 8 + f + 4, pixmap);
-                            png.write(Gdx.files.local(outDir + "/" + armies[j] + "/" + name + '/' + armies[j] + "_look"+look+"_" + name + "_angle" + i + "_" + f + ".png"), pixmap);
+                            if(png != null) png.write(Gdx.files.local(outDir + "/" + armies[j] + "/" + name + '/' + armies[j] + "_look"+look+"_" + name + "_angle" + i + "_" + f + ".png"), pixmap);
                             if (look + j == 0)
-                                png.write(Gdx.files.local(outDir + "/lab/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
+                                if(png != null) png.write(Gdx.files.local(outDir + "/lab/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                         }
 //                png8.write(Gdx.files.local("out/" + name + '/' + name + "_angle" + i + ".png"), p, false, true);
                     }
                 }
-                apng.write(Gdx.files.local(outDir + "/animated/" + name + '/' + name + ".png"), pm, 8);
+                if(apng != null) apng.write(Gdx.files.local(outDir + "/animated/" + name + '/' + name + ".png"), pm, 8);
                 SpecialRenderer.monoAlpha(pm);
                 gif.write(Gdx.files.local(outDir + "/animated/" + name + '/' + name + ".gif"), pm, 8);
                 for (Pixmap pix : pm) {
@@ -466,9 +464,9 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                     pixmap = Pixmap.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
                                     fb.end();
                                     pm.set(j * 32 + i * 8 + f, pixmap);
-                                    png.write(Gdx.files.local(outDir + "/" + armies[j] + "/" + name + '/' + armies[j] + "_look" + look + "_" + name + ps + "_angle" + i + "_" + f + ".png"), pixmap);
+                                    if(png != null) png.write(Gdx.files.local(outDir + "/" + armies[j] + "/" + name + '/' + armies[j] + "_look" + look + "_" + name + ps + "_angle" + i + "_" + f + ".png"), pixmap);
                                     if (look + j == 0) {
-                                        png.write(Gdx.files.local(outDir + "/lab/" + name + '/' + name + ps + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
+                                        if(png != null) png.write(Gdx.files.local(outDir + "/lab/" + name + '/' + name + ps + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
 //                                            VoxIOExtended.writeVOX(outDir + "/vox/" + name + "/" + ps + "_angle" + i + "_" + f + ".vox", frames[f].grids.get(0), VoxIO.lastPalette, VoxIO.lastMaterials);
                                     }
                                 }
@@ -478,7 +476,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                 }
                             }
                         }
-                        apng.write(Gdx.files.local(outDir + "/animated/" + name + '/' + name + ps + ".png"), pm, 8);
+                        if(apng != null) apng.write(Gdx.files.local(outDir + "/animated/" + name + '/' + name + ps + ".png"), pm, 8);
                         SpecialRenderer.monoAlpha(pm);
                         gif.write(Gdx.files.local(outDir + "/animated/" + name + '/' + name + ps + ".gif"), pm, 8);
                         for (Pixmap pix : pm) {
@@ -513,13 +511,13 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                                 pixmap = Pixmap.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
                                                 fb.end();
                                                 pm.set(j * 32 + i * 8 + f, pixmap);
-                                                png.write(Gdx.files.local(outDir + "/" + armies[j] + "/" + attack + "_Receive/" + armies[j] + "_look" + look + "_" + attack + "_Receive_" + strength + "_angle" + i + "_" + f + ".png"), pixmap);
+                                                if(png != null) png.write(Gdx.files.local(outDir + "/" + armies[j] + "/" + attack + "_Receive/" + armies[j] + "_look" + look + "_" + attack + "_Receive_" + strength + "_angle" + i + "_" + f + ".png"), pixmap);
                                                 if (look + j == 0)
-                                                    png.write(Gdx.files.local(outDir + "/lab/" + attack + "_Receive/" + attack + "_Receive_" + strength + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
+                                                    if(png != null) png.write(Gdx.files.local(outDir + "/lab/" + attack + "_Receive/" + attack + "_Receive_" + strength + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                                             }
                                         }
                                     }
-                                    apng.write(Gdx.files.local(outDir + "/animated/" + attack + "_Receive/" + attack + "_Receive_" + strength + ".png"), pm, 8);
+                                    if(apng != null) apng.write(Gdx.files.local(outDir + "/animated/" + attack + "_Receive/" + attack + "_Receive_" + strength + ".png"), pm, 8);
                                     SpecialRenderer.monoAlpha(pm);
                                     gif.write(Gdx.files.local(outDir + "/animated/" + attack + "_Receive/" + attack + "_Receive_" + strength + ".gif"), pm, 8);
                                     for (Pixmap pix : pm) {
@@ -611,11 +609,11 @@ public class ColorGuardAssets extends ApplicationAdapter {
                     pixmap = Pixmap.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
                     fb.end();
                     pm.add(pixmap);
-                    png.write(Gdx.files.local(outDir + "/effects/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), pixmap);
-                    png.write(Gdx.files.local(outDir + "/lab/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
+                    if(png != null) png.write(Gdx.files.local(outDir + "/effects/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), pixmap);
+                    if(png != null) png.write(Gdx.files.local(outDir + "/lab/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                 }
             }
-            apng.write(Gdx.files.local(outDir + "/animated/" + name + '/' + name + ".png"), pm, 8);
+            if(apng != null) apng.write(Gdx.files.local(outDir + "/animated/" + name + '/' + name + ".png"), pm, 8);
             SpecialRenderer.monoAlpha(pm);
             gif.write(Gdx.files.local(outDir + "/animated/" + name + '/' + name + ".gif"), pm, 8);
             for (Pixmap pix : pm) {
@@ -654,9 +652,9 @@ public class ColorGuardAssets extends ApplicationAdapter {
                         pixmap = Pixmap.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
                         fb.end();
                         try {
-                            png.write(Gdx.files.local(outDir + "/Landscape/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), pixmap);
+                            if(png != null) png.write(Gdx.files.local(outDir + "/Landscape/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), pixmap);
                             if (n == 0)
-                                png.write(Gdx.files.local(outDir + "/lab/Landscape/" + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
+                                if(png != null) png.write(Gdx.files.local(outDir + "/lab/Landscape/" + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                         } finally {
                             pixmap.dispose();
                         }
