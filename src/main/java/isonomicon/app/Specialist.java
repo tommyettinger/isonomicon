@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.github.tommyettinger.anim8.*;
 import isonomicon.io.LittleEndianDataInputStream;
+import isonomicon.io.LoafGif;
 import isonomicon.io.extended.VoxIOExtended;
 import isonomicon.io.extended.VoxModel;
 import isonomicon.physical.Stuff;
@@ -101,12 +102,12 @@ public class Specialist extends ApplicationAdapter {
         png.setCompression(2); // we are likely to compress these with something better, like oxipng.
         png.setFlipY(false);
 //        png8 = new PNG8();
-        gif = new AnimatedGif();
+        gif = new LoafGif();
+        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.LOAF);
         gif.setFlipY(false);
         apng = new AnimatedPNG();
         apng.setCompression(2);
         apng.setFlipY(false);
-        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.WREN);
         gif.palette = analyzed = new QualityPalette();
 //        gif.palette = new com.github.tommyettinger.anim8.FastPalette(Coloring.YAM2, Gdx.files.local("assets/Yam2Preload.dat").readBytes());
         gif.setDitherStrength(0.75f);

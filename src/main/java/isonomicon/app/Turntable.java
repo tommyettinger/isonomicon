@@ -13,6 +13,7 @@ import com.github.tommyettinger.anim8.AnimatedPNG;
 import com.github.tommyettinger.anim8.Dithered;
 import com.github.tommyettinger.anim8.PaletteReducer;
 import isonomicon.io.LittleEndianDataInputStream;
+import isonomicon.io.LoafGif;
 import isonomicon.io.VoxIO;
 import isonomicon.io.extended.VoxIOExtended;
 import isonomicon.io.extended.VoxModel;
@@ -44,7 +45,7 @@ public class Turntable extends ApplicationAdapter {
         {
             System.out.println("INVALID ARGUMENTS. Please supply space-separated absolute paths to .vox models, or use the .bat file.");
 //            inputs = new String[]{"vox/Eye_Tyrant_Floor.vox", "vox/Eye_Tyrant.vox", "vox/Damned.vox", "vox/Bear.vox", "vox/Infantry.vox", "vox/Infantry_Firing.vox", "vox/Lomuk.vox", "vox/Tree.vox", "vox/Box.vox", "vox/Direction_Cube.vox", "vox/teapot.vox"};
-//            inputs = new String[]{"vox/Eye_Tyrant_Floor.vox", "vox/Eye_Tyrant.vox", "vox/Bear.vox", "vox/Infantry_Firing.vox", "vox/Lomuk.vox", "vox/Tree.vox"};
+            inputs = new String[]{"vox/Eye_Tyrant_Floor.vox", "vox/Eye_Tyrant.vox", "vox/Bear.vox", "vox/Infantry_Firing.vox", "vox/Lomuk.vox", "vox/Tree.vox"};
 //            inputs = new String[]{"vox/Eye_Tyrant_Floor.vox", "vox/Bear.vox", "vox/Infantry_Firing.vox", "vox/Tree.vox"};
 //            inputs = new String[]{"vox/Tree.vox"};
 //            inputs = new String[]{"vox/Eye_Tyrant.vox", "vox/Infantry_Firing.vox", "vox/Lomuk.vox", "vox/Tree.vox", "vox/LAB.vox"};
@@ -57,7 +58,7 @@ public class Turntable extends ApplicationAdapter {
 //            inputs = new String[]{"vox/IPT.vox"};
 //            inputs = new String[]{"vox/LAB.vox"};
 //            inputs = new String[]{"vox/Oklab.vox"};
-            inputs = new String[]{"vox/Oklab.vox", "vox/LAB.vox"};
+//            inputs = new String[]{"vox/Oklab.vox", "vox/LAB.vox"};
 //            inputs = new String[]{"vox/Oklab.vox", "vox/LAB.vox", "vox/IPT.vox"};
 //            inputs = new String[]{"vox/Eye_Tyrant_Floor.vox"};
 //            inputs = new String[]{"vox/Eye_Tyrant.vox"};
@@ -79,9 +80,9 @@ public class Turntable extends ApplicationAdapter {
         if (inputs == null) Gdx.app.exit();
         long startTime = TimeUtils.millis();
 //        Gdx.files.local("out/vox/").mkdirs();
-        gif = new AnimatedGif();
-        apng = new AnimatedPNG();
+        gif = new LoafGif();
         gif.setDitherAlgorithm(Dithered.DitherAlgorithm.LOAF);
+        apng = new AnimatedPNG();
         gif.palette = new com.github.tommyettinger.anim8.QualityPalette(); // Uses DB Aurora
         gif.palette.setDitherStrength(0.5f);
         gif.fastAnalysis = false;

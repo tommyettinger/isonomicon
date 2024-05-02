@@ -12,6 +12,7 @@ import com.github.tommyettinger.anim8.AnimatedGif;
 import com.github.tommyettinger.anim8.Dithered;
 import com.github.tommyettinger.anim8.PaletteReducer;
 import isonomicon.io.LittleEndianDataInputStream;
+import isonomicon.io.LoafGif;
 import isonomicon.io.VoxIO;
 import isonomicon.io.extended.*;
 import isonomicon.physical.Stuff;
@@ -32,7 +33,7 @@ public class Isomodeler extends ApplicationAdapter {
     private String name;
     private String[] inputs;
     private PixmapIO.PNG png;
-    private AnimatedGif gif;
+    private LoafGif gif;
 //    private PNG8 png8;
 //    private AnimatedPNG apng;
     public Isomodeler(String[] args){
@@ -81,9 +82,8 @@ public class Isomodeler extends ApplicationAdapter {
         png = new PixmapIO.PNG();
         png.setCompression(2); // we are likely to compress these with something better, like oxipng.
 //        png8 = new PNG8();
-        gif = new AnimatedGif();
-//        apng = new AnimatedPNG();
-        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.WREN);
+        gif = new LoafGif();
+        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.LOAF);
 //        png8.setDitherAlgorithm(Dithered.DitherAlgorithm.NEUE);
         gif.palette = new com.github.tommyettinger.anim8.QualityPalette(); // Uses DB Aurora
 //        gif.palette = new com.github.tommyettinger.anim8.FastPalette(Coloring.YAM2, Gdx.files.local("assets/Yam2Preload.dat").readBytes());

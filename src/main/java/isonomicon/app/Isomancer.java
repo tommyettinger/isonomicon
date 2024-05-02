@@ -13,6 +13,7 @@ import com.github.tommyettinger.anim8.Dithered;
 import com.github.tommyettinger.anim8.FastPalette;
 import com.github.tommyettinger.anim8.QualityPalette;
 import isonomicon.io.LittleEndianDataInputStream;
+import isonomicon.io.LoafGif;
 import isonomicon.io.VoxIO;
 import isonomicon.physical.Stuff;
 import isonomicon.physical.Tools3D;
@@ -29,7 +30,7 @@ public class Isomancer extends ApplicationAdapter {
     private String name;
     private String[] inputs;
     private PixmapIO.PNG png;
-    private AnimatedGif gif;
+    private LoafGif gif;
 //    private PNG8 png8;
 //    private AnimatedPNG apng;
     public Isomancer(String[] args){
@@ -76,10 +77,10 @@ public class Isomancer extends ApplicationAdapter {
         png = new PixmapIO.PNG();
         png.setCompression(2); // we are likely to compress these with something better, like oxipng.
 //        png8 = new PNG8();
-        gif = new AnimatedGif();
+        gif = new LoafGif();
+        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.LOAF);
 //        apng = new AnimatedPNG();
-        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.WREN);
-//        png8.setDitherAlgorithm(Dithered.DitherAlgorithm.NEUE);
+//        png8.setDitherAlgorithm(Dithered.DitherAlgorithm.WREN);
         gif.palette = new QualityPalette();
 //        gif.palette = new com.github.tommyettinger.anim8.FastPalette(Coloring.YAM2, Gdx.files.local("assets/Yam2Preload.dat").readBytes());
         gif.palette.setDitherStrength(0.25f);
