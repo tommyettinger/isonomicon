@@ -42,7 +42,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
     public static boolean APNG = false;
     public static boolean GIF = true;
 
-    public static final String outDir = "out/cg";
+    public static final String outDir = "out/cgLoafExperiment";
 
     public static final int SCREEN_WIDTH = 512;//640;
     public static final int SCREEN_HEIGHT = 512;//720;
