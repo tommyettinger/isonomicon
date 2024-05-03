@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Array;
 import com.github.tommyettinger.anim8.PaletteReducer;
 import com.github.tommyettinger.colorful.oklab.ColorTools;
 import com.github.tommyettinger.digital.ArrayTools;
+import com.github.tommyettinger.digital.RoughMath;
 import com.github.tommyettinger.ds.IntObjectMap;
 import com.github.yellowstonegames.grid.BlueNoise;
 import com.github.yellowstonegames.grid.CyclicNoise;
@@ -108,6 +109,13 @@ public class SpecialRenderer {
         }
 
     }
+
+    /**
+     * Like the logistic distribution, but shifted to lower results; an input of 0 produces 0, max is 0.5, min is -0.5.
+     * @param x
+     * @return
+     */
+    public static float logisticky(float x) { return 1f / (1f + RoughMath.expRough(-x)) - 0.5f; }
     
     protected float bn(int x, int y, int seed) {
         return (BlueNoise.getSeededTriangular(x, y, seed) + 128) * 0x1p-8f;
@@ -451,7 +459,8 @@ public class SpecialRenderer {
                     sh = shading[x][y];
                     if(sh >= 1000f)
                         continue;
-                    byte shade = (byte) (Math.min(Math.max((sh + midShading[x][y]) * 0.625f + 0.1328125f, 0f), 1f) * 255.999f);
+                    byte shade = (byte) (Math.min(Math.max((sh + logisticky(midShading[x][y])) * 0.625f + 0.1328125f, 0f), 1f) * 255.999f);
+//                    byte shade = (byte) (Math.min(Math.max((sh + midShading[x][y]) * 0.625f + 0.1328125f, 0f), 1f) * 255.999f);
                     byte sat = (byte) (Math.min(Math.max((saturation[x][y]) * 0.5f + 0.5f, 0f), 1f) * 255.999f);
 //                    palettePixmap.drawPixel(x >>> shrink, y >>> shrink, (indices[x][y] & 255) << 24 |
 //                            shade << 16 |
@@ -471,7 +480,9 @@ public class SpecialRenderer {
                     }
                 }
                 else if(midShading[x][y] > 0f) {
-                    int shade = (int) (Math.min(Math.max((shading[x][y] + midShading[x][y]) * 0.625f + 0.1328125f, 0f), 1f) * 255.999f);
+//                    int shade = (int) (logisticky((shading[x][y] + midShading[x][y])) * 255.999f);
+                    int shade = (int) (Math.min(Math.max((shading[x][y] + logisticky(midShading[x][y])) * 0.625f + 0.1328125f, 0f), 1f) * 255.999f);
+//                    int shade = (int) ((1f - Math.min(Math.max((shading[x][y] + midShading[x][y]) * 0.625f + 0.1328125f, 0f), 1f)) * 255.999f);
                     int idx = (y >>> shrink) * palettePixmap.getWidth() + (x >>> shrink) << 2;
                     if ((buffer.get(idx+3) & 255) < shade) {
 //                        palettePixmap.drawPixel(x >>> shrink, y >>> shrink, LIGHTEN << 24 |
@@ -485,7 +496,9 @@ public class SpecialRenderer {
                     }
                 }
                 else if(midShading[x][y] < 0f) {
-                    int shade = (int) ((1f - Math.min(Math.max((shading[x][y] + midShading[x][y]) * 0.625f + 0.1328125f, 0f), 1f)) * 255.999f);
+//                    int shade = (int) (logisticky((shading[x][y] + midShading[x][y])) * 255.999f);
+                    int shade = (int) (1f - Math.min(Math.max((shading[x][y] + logisticky(midShading[x][y])) * 0.625f + 0.1328125f, 0f), 1f) * 255.999f);
+//                    int shade = (int) ((1f - Math.min(Math.max((shading[x][y] + midShading[x][y]) * 0.625f + 0.1328125f, 0f), 1f)) * 255.999f);
                     int idx = (y >>> shrink) * palettePixmap.getWidth() + (x >>> shrink) << 2;
                     if ((buffer.get(idx+3) & 255) < shade) {
 //                        palettePixmap.drawPixel(x >>> shrink, y >>> shrink, DARKEN << 24 |

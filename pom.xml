@@ -76,7 +76,7 @@
         <jdk.version>17</jdk.version>
         <junit.version>4.13.2</junit.version>
         <anim8.version>0.4.2</anim8.version>
-        <squidsquad.version>fcc1520a3f</squidsquad.version><!-- was 01570da485, 7cfa8baa89, e0b82f0ded, eb93149b78, 6fd67bb418, ea651cf2c3, 2b64d37c39 -->
+        <squidsquad.version>1a58b4cb26</squidsquad.version><!-- was fcc1520a3f, before that 01570da485, 7cfa8baa89, e0b82f0ded, eb93149b78, 6fd67bb418, ea651cf2c3, 2b64d37c39 -->
         <gdx.version>1.12.1</gdx.version>
         <digital.version>0.4.8</digital.version>
         <juniper.version>0.6.1</juniper.version>
@@ -92,13 +92,13 @@
             <version>${gdx.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.github.yellowstonegames.SquidSquad</groupId>
-            <artifactId>SquidCore</artifactId>
+            <groupId>com.github.yellowstonegames.squidsquad</groupId>
+            <artifactId>squidcore</artifactId>
             <version>${squidsquad.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.github.yellowstonegames.SquidSquad</groupId>
-            <artifactId>SquidGrid</artifactId>
+            <groupId>com.github.yellowstonegames.squidsquad</groupId>
+            <artifactId>squidgrid</artifactId>
             <version>${squidsquad.version}</version>
         </dependency>
 <!--        <dependency>-->
