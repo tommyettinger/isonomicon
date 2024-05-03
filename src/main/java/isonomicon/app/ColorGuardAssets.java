@@ -42,7 +42,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
     public static boolean APNG = false;
     public static boolean GIF = true;
 
-    public static final String outDir = "out/cgLoafExperiment";
+    public static final String outDir = "out/cg";
 
     public static final int SCREEN_WIDTH = 512;//640;
     public static final int SCREEN_HEIGHT = 512;//720;
@@ -81,7 +81,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Forward_Cannon")).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Machine_Gun")).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Forward_Missile") || u.hasWeapon("Handgun")).toList();
-//        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.name.equals("Heavy_Cannon")).toList();
+//        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.name.equals("Laboratory")).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.name.startsWith("Terrain")).toList();
 //        ColorGuardData.units = ColorGuardData.units.subList(52, ColorGuardData.units.size());
 //        ColorGuardData.units = ColorGuardData.units.subList(2, 3);
@@ -123,7 +123,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
             gif.setFlipY(false);
             gif.setDitherAlgorithm(Dithered.DitherAlgorithm.LOAF);
             gif.palette = new com.github.tommyettinger.anim8.QualityPalette(); // uses AURORA, OklabCareful metric
-            gif.setDitherStrength(0.75f);
+            gif.setDitherStrength(0.5f);
         }
         if(APNG) {
             apng = new AnimatedPNG();
@@ -636,7 +636,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                 for (int i = 0; i < 4; i++) {
                     voxels = original.copy();
                     for (int f = 0; f < 1; f++) {
-                        pixmap = renderer.drawModelSimple(voxels, i * 0.25f, 0f, 0f, f, 0.00f, 0.00f, 0.00f);
+                        renderer.drawModelSimple(voxels, i * 0.25f, 0f, 0f, f, 0.00f, 0.00f, 0.00f);
                         t.draw(renderer.palettePixmap, 0, 0);
                         fb.begin();
                         palette.bind(1);
