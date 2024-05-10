@@ -19,7 +19,6 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.github.tommyettinger.anim8.*;
 import com.github.tommyettinger.ds.ObjectObjectOrderedMap;
 import isonomicon.io.LittleEndianDataInputStream;
-import isonomicon.io.LoafGif;
 import isonomicon.io.extended.VoxIOExtended;
 import isonomicon.io.extended.VoxModel;
 import isonomicon.physical.Stuff;
@@ -44,7 +43,7 @@ public class GratitudeAssets extends ApplicationAdapter {
     private String name;
     private ObjectObjectOrderedMap<String, String[]> inputs;
     private FastPNG png;
-    private LoafGif gif;
+    private AnimatedGif gif;
     private FastAPNG apng;
     private QualityPalette analyzed, fixed;
     private SpriteBatch batch;
@@ -138,13 +137,13 @@ public class GratitudeAssets extends ApplicationAdapter {
         png.setCompression(2); // we are likely to compress these with something better, like oxipng.
         png.setFlipY(false);
 //        png8 = new PNG8();
-        gif = new LoafGif();
+        gif = new AnimatedGif();
         gif.setDitherAlgorithm(Dithered.DitherAlgorithm.LOAF);
         gif.setFlipY(false);
         apng = new FastAPNG();
         apng.setCompression(2);
         apng.setFlipY(false);
-        gif.setDitherStrength(1f);
+        gif.setDitherStrength(1.0_0f);
         fixed =
                 // Aurora, unless analyze() is called
 //                new QualityPalette();

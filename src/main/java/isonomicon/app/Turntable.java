@@ -5,15 +5,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.github.tommyettinger.anim8.AnimatedGif;
 import com.github.tommyettinger.anim8.AnimatedPNG;
 import com.github.tommyettinger.anim8.Dithered;
-import com.github.tommyettinger.anim8.PaletteReducer;
 import isonomicon.io.LittleEndianDataInputStream;
-import isonomicon.io.LoafGif;
 import isonomicon.io.VoxIO;
 import isonomicon.io.extended.VoxIOExtended;
 import isonomicon.io.extended.VoxModel;
@@ -24,7 +21,6 @@ import isonomicon.visual.SmudgeRenderer;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 
 public class Turntable extends ApplicationAdapter {
     public static final int SCREEN_WIDTH = 512;//640;
@@ -80,11 +76,11 @@ public class Turntable extends ApplicationAdapter {
         if (inputs == null) Gdx.app.exit();
         long startTime = TimeUtils.millis();
 //        Gdx.files.local("out/vox/").mkdirs();
-        gif = new LoafGif();
+        gif = new AnimatedGif();
         gif.setDitherAlgorithm(Dithered.DitherAlgorithm.LOAF);
         apng = new AnimatedPNG();
         gif.palette = new com.github.tommyettinger.anim8.QualityPalette(); // Uses DB Aurora
-        gif.palette.setDitherStrength(0.5f);
+        gif.setDitherStrength(1.0_0f);
         gif.fastAnalysis = false;
         Gdx.files.local("out/vox").mkdirs();
         for (String s : inputs) {

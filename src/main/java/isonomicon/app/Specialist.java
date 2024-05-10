@@ -15,7 +15,6 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.github.tommyettinger.anim8.*;
 import isonomicon.io.LittleEndianDataInputStream;
-import isonomicon.io.LoafGif;
 import isonomicon.io.extended.VoxIOExtended;
 import isonomicon.io.extended.VoxModel;
 import isonomicon.physical.Stuff;
@@ -102,7 +101,7 @@ public class Specialist extends ApplicationAdapter {
         png.setCompression(2); // we are likely to compress these with something better, like oxipng.
         png.setFlipY(false);
 //        png8 = new PNG8();
-        gif = new LoafGif();
+        gif = new AnimatedGif();
         gif.setDitherAlgorithm(Dithered.DitherAlgorithm.LOAF);
         gif.setFlipY(false);
         apng = new AnimatedPNG();
@@ -110,7 +109,7 @@ public class Specialist extends ApplicationAdapter {
         apng.setFlipY(false);
         gif.palette = analyzed = new QualityPalette();
 //        gif.palette = new com.github.tommyettinger.anim8.FastPalette(Coloring.YAM2, Gdx.files.local("assets/Yam2Preload.dat").readBytes());
-        gif.setDitherStrength(0.75f);
+        gif.setDitherStrength(1.0_0f);
         aurora = new QualityPalette();
         low =
 //                new QualityPalette(new int[]{
@@ -195,10 +194,9 @@ public class Specialist extends ApplicationAdapter {
             gif.write(Gdx.files.local("out/b/specialized/" + output + '/' + output + ".gif"), pm, 8);
             apng.write(Gdx.files.local("out/b/specialized/" + output + '/' + output + ".png"), pm, 8);
             gif.palette = aurora;
-            gif.setDitherStrength(0.5f);
+            gif.setDitherStrength(1.0_0f);
             gif.write(Gdx.files.local("out/b/specializedAurora/" + output + '/' + output + ".gif"), pm, 8);
             gif.palette = low;
-            gif.setDitherStrength(0.75f);
             gif.write(Gdx.files.local("out/b/specializedLow/" + output + '/' + output + ".gif"), pm, 8);
             for (Pixmap pix : pm) {
                 if (!pix.isDisposed())
@@ -238,7 +236,7 @@ public class Specialist extends ApplicationAdapter {
                 gif.write(Gdx.files.local("out/b/specialized/" + output + '/' + output + "_Turntable.gif"), pm, 24);
                 apng.write(Gdx.files.local("out/b/specialized/" + output + '/' + output + "_Turntable.png"), pm, 24);
 //                gif.palette = aurora;
-//                gif.setDitherStrength(0.5f);
+//                gif.setDitherStrength(1.0_0f);
 //                gif.write(Gdx.files.local("out/b/specializedAurora/" + name + '/' + name + "_Turntable.gif"), pm, 24);
 //                gif.palette = low;
 //                gif.setDitherStrength(0.375f);

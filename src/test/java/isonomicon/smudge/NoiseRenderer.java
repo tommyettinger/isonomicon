@@ -10,7 +10,6 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.github.tommyettinger.anim8.AnimatedGif;
 import com.github.tommyettinger.anim8.AnimatedPNG;
 import com.github.tommyettinger.anim8.Dithered;
-import com.github.tommyettinger.anim8.PaletteReducer;
 import com.github.tommyettinger.digital.Base;
 import com.github.yellowstonegames.grid.FlawedPointHash;
 import com.github.yellowstonegames.grid.IPointHash;
@@ -60,8 +59,8 @@ public class NoiseRenderer extends ApplicationAdapter {
 //        png.setFlipY(true);
 //        png.setCompression(2);
         apng = new AnimatedPNG();
-        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.DODGY);
-        gif.setDitherStrength(0.25f);
+        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.LOAF);
+        gif.setDitherStrength(1.0_0f);
         Gdx.files.local("out/vox").mkdirs();
         System.out.println("Loading...");
 //        System.out.println("Produced "+SMALL_SIZE+"x"+SMALL_SIZE+"x"+SMALL_SIZE+" noise.");

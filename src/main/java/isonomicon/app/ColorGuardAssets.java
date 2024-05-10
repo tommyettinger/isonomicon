@@ -18,7 +18,6 @@ import com.github.tommyettinger.anim8.*;
 import com.github.tommyettinger.ds.IntObjectMap;
 import com.github.tommyettinger.ds.ObjectIntMap;
 import isonomicon.io.LittleEndianDataInputStream;
-import isonomicon.io.LoafGif;
 import isonomicon.io.extended.VoxIOExtended;
 import isonomicon.io.extended.VoxModel;
 import isonomicon.physical.EffectGenerator;
@@ -38,11 +37,11 @@ public class ColorGuardAssets extends ApplicationAdapter {
     public static boolean EXPLOSION = true;
     public static boolean TERRAIN = true;
 
-    public static boolean PNG = true;
+    public static boolean PNG = false;
     public static boolean APNG = false;
     public static boolean GIF = true;
 
-    public static final String outDir = "out/cg";
+    public static final String outDir = "out/cgLoaf_May_9_2024";
 
     public static final int SCREEN_WIDTH = 512;//640;
     public static final int SCREEN_HEIGHT = 512;//720;
@@ -52,7 +51,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
     private String name;
     private String[] armies;
     private FastPNG png;
-    private LoafGif gif;
+    private AnimatedGif gif;
     private AnimatedPNG apng;
     private SpriteBatch batch;
     private Texture palette;
@@ -119,11 +118,11 @@ public class ColorGuardAssets extends ApplicationAdapter {
             png.setCompression(2); // we are likely to compress these with something better, like oxipng.
         }
         if(GIF) {
-            gif = new LoafGif();
+            gif = new AnimatedGif();
             gif.setFlipY(false);
             gif.setDitherAlgorithm(Dithered.DitherAlgorithm.LOAF);
             gif.palette = new com.github.tommyettinger.anim8.QualityPalette(); // uses AURORA, OklabCareful metric
-            gif.setDitherStrength(0.5f);
+            gif.setDitherStrength(1.0_0f);
         }
         if(APNG) {
             apng = new AnimatedPNG();
@@ -145,7 +144,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
         // can be pretty good, but this might be too strong by default. Ordered dither, again.
 //        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.ROBERTS);
         //// BLUE_NOISE doesn't need this, but NEUE, GRADIENT_NOISE, and ROBERTS do.
-//        gif.setDitherStrength(0.5f);
+//        gif.setDitherStrength(1.0_0f);
         //// LOAF can be higher.
         FrameBuffer fb = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), false);
         ObjectIntMap<String> doneReceive = new ObjectIntMap<>(16);

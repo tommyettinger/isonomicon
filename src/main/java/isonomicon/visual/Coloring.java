@@ -2,8 +2,6 @@ package isonomicon.visual;
 
 import com.badlogic.gdx.math.MathUtils;
 
-import java.nio.charset.StandardCharsets;
-
 /**
  * Created by Tommy Ettinger on 11/4/2017.
  */

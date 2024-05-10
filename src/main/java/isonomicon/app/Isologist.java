@@ -4,7 +4,6 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -18,7 +17,6 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.github.tommyettinger.anim8.*;
 import isonomicon.io.LittleEndianDataInputStream;
-import isonomicon.io.LoafGif;
 import isonomicon.io.extended.VoxIOExtended;
 import isonomicon.io.extended.VoxModel;
 import isonomicon.physical.Stuff;
@@ -26,7 +24,6 @@ import isonomicon.physical.Tools3D;
 import isonomicon.visual.BoxyRenderer;
 import isonomicon.visual.Coloring;
 import isonomicon.visual.ShaderUtils;
-import isonomicon.visual.SpecialRenderer;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -42,7 +39,7 @@ public class Isologist extends ApplicationAdapter {
     private String name;
     private String[] inputs;
     private FastPNG png;
-    private LoafGif gif;
+    private AnimatedGif gif;
 //    private AnimatedPNG apng;
     private QualityPalette analyzed, aurora, azu;
     private SpriteBatch batch;
@@ -111,7 +108,7 @@ public class Isologist extends ApplicationAdapter {
         png.setCompression(2); // we are likely to compress these with something better, like oxipng.
         png.setFlipY(false);
 //        png8 = new PNG8();
-        gif = new LoafGif();
+        gif = new AnimatedGif();
         gif.setDitherAlgorithm(Dithered.DitherAlgorithm.LOAF);
 
         gif.setFlipY(false);
@@ -120,7 +117,7 @@ public class Isologist extends ApplicationAdapter {
 //        apng.setFlipY(false);
         gif.palette = analyzed = new QualityPalette();
 //        gif.palette = new com.github.tommyettinger.anim8.FastPalette(Coloring.YAM2, Gdx.files.local("assets/Yam2Preload.dat").readBytes());
-        gif.setDitherStrength(0.375f);
+        gif.setDitherStrength(1.0_0f);
         aurora = new QualityPalette();
         azu =
 //                new QualityPalette(new int[]{
@@ -207,10 +204,8 @@ public class Isologist extends ApplicationAdapter {
             gif.write(Gdx.files.local("out/boxy/specialized/" + output + '/' + output + ".gif"), pm, 8);
 //            apng.write(Gdx.files.local("out/b/specialized/" + output + '/' + output + ".png"), pm, 8);
             gif.palette = aurora;
-            gif.setDitherStrength(0.375f);
             gif.write(Gdx.files.local("out/boxy/specializedAurora/" + output + '/' + output + ".gif"), pm, 8);
             gif.palette = azu;
-            gif.setDitherStrength(0.625f);
             gif.write(Gdx.files.local("out/boxy/specializedAzu/" + output + '/' + output + ".gif"), pm, 8);
             for (Pixmap pix : pm) {
                 if (!pix.isDisposed())

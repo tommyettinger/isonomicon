@@ -16,13 +16,9 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import isonomicon.io.LittleEndianDataInputStream;
 import isonomicon.io.VoxIO;
-import isonomicon.io.extended.VoxIOExtended;
-import isonomicon.io.extended.VoxModel;
 import isonomicon.physical.Tools3D;
-import isonomicon.visual.Coloring;
 import isonomicon.visual.ShaderUtils;
 import isonomicon.visual.SmudgeRenderer;
-import isonomicon.visual.SpecialRenderer;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

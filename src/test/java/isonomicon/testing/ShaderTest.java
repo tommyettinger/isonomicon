@@ -9,29 +9,13 @@ import com.badlogic.gdx.graphics.g2d.Gdx2DPixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.github.tommyettinger.anim8.*;
-import isonomicon.io.LittleEndianDataInputStream;
-import isonomicon.io.extended.VoxIOExtended;
-import isonomicon.io.extended.VoxModel;
-import isonomicon.physical.Stuff;
-import isonomicon.physical.Tools3D;
-import isonomicon.visual.Coloring;
 import isonomicon.visual.ShaderUtils;
-import isonomicon.visual.SpecialRenderer;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
 
 public class ShaderTest extends ApplicationAdapter {
     public static final int SCREEN_WIDTH = 1024;//640;

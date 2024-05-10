@@ -3,7 +3,6 @@ package isonomicon.visual;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.math.MathUtils;
 import com.github.tommyettinger.colorful.oklab.ColorTools;
-import com.github.tommyettinger.digital.TrigTools;
 import com.github.tommyettinger.ds.IntObjectMap;
 import isonomicon.io.VoxIO;
 import isonomicon.io.extended.*;
