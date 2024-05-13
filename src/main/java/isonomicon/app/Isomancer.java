@@ -80,7 +80,7 @@ public class Isomancer extends ApplicationAdapter {
 //        png8.setDitherAlgorithm(Dithered.DitherAlgorithm.WREN);
         gif.palette = new QualityPalette();
 //        gif.palette = new com.github.tommyettinger.anim8.FastPalette(Coloring.YAM2, Gdx.files.local("assets/Yam2Preload.dat").readBytes());
-        gif.setDitherStrength(1.0_0f);
+        gif.setDitherStrength(0.5_0f);
 //        png8.palette = gif.palette;
         Gdx.files.local("out/vox").mkdirs();
         for (String s : inputs) {

@@ -60,7 +60,7 @@ public class NoiseRenderer extends ApplicationAdapter {
 //        png.setCompression(2);
         apng = new AnimatedPNG();
         gif.setDitherAlgorithm(Dithered.DitherAlgorithm.LOAF);
-        gif.setDitherStrength(1.0_0f);
+        gif.setDitherStrength(0.5_0f);
         Gdx.files.local("out/vox").mkdirs();
         System.out.println("Loading...");
 //        System.out.println("Produced "+SMALL_SIZE+"x"+SMALL_SIZE+"x"+SMALL_SIZE+" noise.");

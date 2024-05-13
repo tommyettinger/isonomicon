@@ -417,7 +417,7 @@ public class SmudgeRenderer {
             }
         }
         if(dither) {
-            reducer.setDitherStrength(1.0_0f);
+            reducer.setDitherStrength(0.5_0f);
             reducer.reduceRoberts(pixmap);
         }
 

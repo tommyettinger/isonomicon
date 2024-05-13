@@ -85,7 +85,7 @@ public class Isomodeler extends ApplicationAdapter {
 //        png8.setDitherAlgorithm(Dithered.DitherAlgorithm.NEUE);
         gif.palette = new com.github.tommyettinger.anim8.QualityPalette(); // Uses DB Aurora
 //        gif.palette = new com.github.tommyettinger.anim8.FastPalette(Coloring.YAM2, Gdx.files.local("assets/Yam2Preload.dat").readBytes());
-        gif.palette.setDitherStrength(1.0_0f);
+        gif.palette.setDitherStrength(0.5_0f);
 //        png8.palette = gif.palette;
         Gdx.files.local("out/vox").mkdirs();
         for (String s : inputs) {

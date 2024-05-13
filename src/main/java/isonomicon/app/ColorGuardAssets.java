@@ -41,7 +41,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
     public static boolean APNG = false;
     public static boolean GIF = true;
 
-    public static final String outDir = "out/cgLoaf_May_9_2024";
+    public static final String outDir = "out/cgLoaf_May_12_2024";
 
     public static final int SCREEN_WIDTH = 512;//640;
     public static final int SCREEN_HEIGHT = 512;//720;
@@ -122,7 +122,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
             gif.setFlipY(false);
             gif.setDitherAlgorithm(Dithered.DitherAlgorithm.LOAF);
             gif.palette = new com.github.tommyettinger.anim8.QualityPalette(); // uses AURORA, OklabCareful metric
-            gif.setDitherStrength(1.0_0f);
+            gif.setDitherStrength(0.5_0f);
         }
         if(APNG) {
             apng = new AnimatedPNG();
@@ -144,7 +144,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
         // can be pretty good, but this might be too strong by default. Ordered dither, again.
 //        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.ROBERTS);
         //// BLUE_NOISE doesn't need this, but NEUE, GRADIENT_NOISE, and ROBERTS do.
-//        gif.setDitherStrength(1.0_0f);
+//        gif.setDitherStrength(0.5_0f);
         //// LOAF can be higher.
         FrameBuffer fb = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), false);
         ObjectIntMap<String> doneReceive = new ObjectIntMap<>(16);

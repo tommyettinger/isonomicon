@@ -117,7 +117,7 @@ public class Isologist extends ApplicationAdapter {
 //        apng.setFlipY(false);
         gif.palette = analyzed = new QualityPalette();
 //        gif.palette = new com.github.tommyettinger.anim8.FastPalette(Coloring.YAM2, Gdx.files.local("assets/Yam2Preload.dat").readBytes());
-        gif.setDitherStrength(1.0_0f);
+        gif.setDitherStrength(0.5_0f);
         aurora = new QualityPalette();
         azu =
 //                new QualityPalette(new int[]{

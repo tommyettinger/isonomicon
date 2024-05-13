@@ -109,7 +109,7 @@ public class Specialist extends ApplicationAdapter {
         apng.setFlipY(false);
         gif.palette = analyzed = new QualityPalette();
 //        gif.palette = new com.github.tommyettinger.anim8.FastPalette(Coloring.YAM2, Gdx.files.local("assets/Yam2Preload.dat").readBytes());
-        gif.setDitherStrength(1.0_0f);
+        gif.setDitherStrength(0.5_0f);
         aurora = new QualityPalette();
         low =
 //                new QualityPalette(new int[]{
@@ -194,7 +194,7 @@ public class Specialist extends ApplicationAdapter {
             gif.write(Gdx.files.local("out/b/specialized/" + output + '/' + output + ".gif"), pm, 8);
             apng.write(Gdx.files.local("out/b/specialized/" + output + '/' + output + ".png"), pm, 8);
             gif.palette = aurora;
-            gif.setDitherStrength(1.0_0f);
+            gif.setDitherStrength(0.5_0f);
             gif.write(Gdx.files.local("out/b/specializedAurora/" + output + '/' + output + ".gif"), pm, 8);
             gif.palette = low;
             gif.write(Gdx.files.local("out/b/specializedLow/" + output + '/' + output + ".gif"), pm, 8);
@@ -236,7 +236,7 @@ public class Specialist extends ApplicationAdapter {
                 gif.write(Gdx.files.local("out/b/specialized/" + output + '/' + output + "_Turntable.gif"), pm, 24);
                 apng.write(Gdx.files.local("out/b/specialized/" + output + '/' + output + "_Turntable.png"), pm, 24);
 //                gif.palette = aurora;
-//                gif.setDitherStrength(1.0_0f);
+//                gif.setDitherStrength(0.5_0f);
 //                gif.write(Gdx.files.local("out/b/specializedAurora/" + name + '/' + name + "_Turntable.gif"), pm, 24);
 //                gif.palette = low;
 //                gif.setDitherStrength(0.375f);
