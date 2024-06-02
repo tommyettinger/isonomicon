@@ -38,11 +38,12 @@ public class ColorGuardAssets extends ApplicationAdapter {
     public static boolean EXPLOSION = true;
     public static boolean TERRAIN = true;
 
-    public static boolean PNG = false;
+    public static boolean PNG = true;
     public static boolean APNG = false;
-    public static boolean GIF = true;
+    public static boolean GIF = false;
 
-    public static final String outDir = "out/cgLoaf_June_1_2024";
+    public static final String outDir = "out/color_guard";
+//    public static final String outDir = "out/cgLoaf_June_1_2024";
 
     public static final int SCREEN_WIDTH = 512;//640;
     public static final int SCREEN_HEIGHT = 512;//720;
@@ -115,19 +116,19 @@ public class ColorGuardAssets extends ApplicationAdapter {
         long startTime = TimeUtils.millis();
         if(PNG) {
             png = new FastPNG();
-            png.setFlipY(false);
+            png.setFlipY(true);
             png.setCompression(2); // we are likely to compress these with something better, like oxipng.
         }
         if(GIF) {
             gif = new LoafGif();
-            gif.setFlipY(false);
+            gif.setFlipY(true);
             gif.setDitherAlgorithm(Dithered.DitherAlgorithm.LOAF);
             gif.palette = new com.github.tommyettinger.anim8.QualityPalette(); // uses AURORA, OklabCareful metric
             gif.setDitherStrength(0.5_0f);
         }
         if(APNG) {
             apng = new AnimatedPNG();
-            apng.setFlipY(false);
+            apng.setFlipY(true);
             apng.setCompression(2);
         }
         //// Using Neue on a null palette takes 146.797 seconds with just the five units with an arc missile.
@@ -194,7 +195,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                 Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
                                 batch.setColor((look + j) / 255f, 0.5f, 0.5f, 1f);
 
-                                batch.draw(t, 0, 0, t.getWidth(), t.getHeight());
+                                batch.draw(t, 0, t.getHeight(), t.getWidth(), -t.getHeight());
                                 batch.end();
                                 pixmap = Pixmap.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
                                 fb.end();
@@ -270,7 +271,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                         Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
                                         batch.setColor((look + j) / 255f, 0.5f, 0.5f, 1f);
 
-                                        batch.draw(t, 0, 0, t.getWidth(), t.getHeight());
+                                        batch.draw(t, 0, t.getHeight(), t.getWidth(), -t.getHeight());
                                         batch.end();
                                         pixmap = Pixmap.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
                                         fb.end();
@@ -324,7 +325,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                                 Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
                                                 batch.setColor((look + j) / 255f, 0.5f, 0.5f, 1f);
 
-                                                batch.draw(t, 0, 0, t.getWidth(), t.getHeight());
+                                                batch.draw(t, 0, t.getHeight(), t.getWidth(), -t.getHeight());
                                                 batch.end();
                                                 pixmap = Pixmap.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
                                                 fb.end();
@@ -392,7 +393,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                             Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
                             batch.setColor((look + j) / 255f, 0.5f, 0.5f, 1f);
 
-                            batch.draw(t, 0, 0, t.getWidth(), t.getHeight());
+                            batch.draw(t, 0, t.getHeight(), t.getWidth(), -t.getHeight());
                             batch.end();
                             pixmap = Pixmap.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
                             fb.end();
@@ -459,7 +460,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                     Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
                                     batch.setColor((look + j) / 255f, 0.5f, 0.5f, 1f);
 
-                                    batch.draw(t, 0, 0, t.getWidth(), t.getHeight());
+                                    batch.draw(t, 0, t.getHeight(), t.getWidth(), -t.getHeight());
                                     batch.end();
                                     pixmap = Pixmap.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
                                     fb.end();
@@ -506,7 +507,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                                 Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
                                                 batch.setColor((look + j) / 255f, 0.5f, 0.5f, 1f);
 
-                                                batch.draw(t, 0, 0, t.getWidth(), t.getHeight());
+                                                batch.draw(t, 0, t.getHeight(), t.getWidth(), -t.getHeight());
                                                 batch.end();
                                                 pixmap = Pixmap.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
                                                 fb.end();
@@ -604,7 +605,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                     Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
                     batch.setColor(0f, 0.5f, 0.5f, 1f);
 
-                    batch.draw(t, 0, 0, t.getWidth(), t.getHeight());
+                    batch.draw(t, 0, t.getHeight(), t.getWidth(), -t.getHeight());
                     batch.end();
                     pixmap = Pixmap.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
                     fb.end();
@@ -647,7 +648,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                         Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
                         batch.setColor((160 + n) / 255f, 0.625f, 0.5f, 1f);
 
-                        batch.draw(t, 0, 0, t.getWidth(), t.getHeight());
+                        batch.draw(t, 0, t.getHeight(), t.getWidth(), -t.getHeight());
                         batch.end();
                         pixmap = Pixmap.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
                         fb.end();
