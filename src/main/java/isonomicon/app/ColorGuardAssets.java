@@ -18,6 +18,7 @@ import com.github.tommyettinger.anim8.*;
 import com.github.tommyettinger.ds.IntObjectMap;
 import com.github.tommyettinger.ds.ObjectIntMap;
 import isonomicon.io.LittleEndianDataInputStream;
+import isonomicon.io.LoafGif;
 import isonomicon.io.extended.VoxIOExtended;
 import isonomicon.io.extended.VoxModel;
 import isonomicon.physical.EffectGenerator;
@@ -41,7 +42,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
     public static boolean APNG = false;
     public static boolean GIF = true;
 
-    public static final String outDir = "out/cgLoaf_May_12_2024";
+    public static final String outDir = "out/cgLoaf_June_1_2024";
 
     public static final int SCREEN_WIDTH = 512;//640;
     public static final int SCREEN_HEIGHT = 512;//720;
@@ -80,7 +81,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Forward_Cannon")).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Machine_Gun")).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Forward_Missile") || u.hasWeapon("Handgun")).toList();
-//        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.name.equals("Laboratory")).toList();
+//        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.name.equals("Light_Tank")).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.name.startsWith("Terrain")).toList();
 //        ColorGuardData.units = ColorGuardData.units.subList(52, ColorGuardData.units.size());
 //        ColorGuardData.units = ColorGuardData.units.subList(2, 3);
@@ -118,7 +119,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
             png.setCompression(2); // we are likely to compress these with something better, like oxipng.
         }
         if(GIF) {
-            gif = new AnimatedGif();
+            gif = new LoafGif();
             gif.setFlipY(false);
             gif.setDitherAlgorithm(Dithered.DitherAlgorithm.LOAF);
             gif.palette = new com.github.tommyettinger.anim8.QualityPalette(); // uses AURORA, OklabCareful metric

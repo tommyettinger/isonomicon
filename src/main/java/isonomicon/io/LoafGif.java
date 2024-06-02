@@ -16,16 +16,19 @@ public class LoafGif extends AnimatedGif {
         final int[] paletteArray = palette.paletteArray;
         final byte[] paletteMapping = palette.paletteMapping;
         boolean hasTransparent = paletteArray[0] == 0;
-        final double strength = ditherStrength;
+        final float strength = ditherStrength * 0.75f;
+//        final int strength = (int) (8 * ditherStrength + 0.5f);
         for (int y = 0, i = 0; y < height && i < nPix; y++) {
             for (int px = 0; px < width & i < nPix; px++) {
                 color = image.getPixel(px, flipped + flipDir * y);
                 if ((color & 0x80) == 0 && hasTransparent)
                     indexedPixels[i++] = 0;
                 else {
-//                    int adj = (int)(((px + y & 1) << 5 ^ ((px ^ y) & 2) << 3) * ditherStrength);
-                    int adj = (int)((((px + y & 1) << 5) - 16) * strength);
-//                    int adj = (px + y & 1) << 3;
+                    int flip = -(((px ^ y) >>> 2) & 1);
+                    int mask = -((1 + px ^ y ^ flip) & 2);
+                    int adj = (int) ((((px + y & 1) << 3)
+                                      - ((px & y & 1) << 4 & mask)
+                                      - ((1 - ((px | y) & 1)) << 4 & mask)) * strength);
                     int rr = Math.min(Math.max(((color >>> 24))        + adj, 0), 255);
                     int gg = Math.min(Math.max(((color >>> 16) & 0xFF) + adj, 0), 255);
                     int bb = Math.min(Math.max(((color >>> 8) & 0xFF)  + adj, 0), 255);
