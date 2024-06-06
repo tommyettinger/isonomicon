@@ -38,12 +38,12 @@ public class ColorGuardAssets extends ApplicationAdapter {
     public static boolean EXPLOSION = true;
     public static boolean TERRAIN = true;
 
-    public static boolean PNG = true;
+    public static boolean PNG = false;
     public static boolean APNG = false;
-    public static boolean GIF = false;
+    public static boolean GIF = true;
 
-    public static final String outDir = "out/color_guard";
-//    public static final String outDir = "out/cgLoaf_June_1_2024";
+//    public static final String outDir = "out/color_guard";
+    public static final String outDir = "out/cg_June_5_2024";
 
     public static final int SCREEN_WIDTH = 512;//640;
     public static final int SCREEN_HEIGHT = 512;//720;
@@ -123,7 +123,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
             gif = new LoafGif();
             gif.setFlipY(true);
             gif.setDitherAlgorithm(Dithered.DitherAlgorithm.LOAF);
-            gif.palette = new com.github.tommyettinger.anim8.QualityPalette(); // uses AURORA, OklabCareful metric
+            gif.palette = new com.github.tommyettinger.anim8.QualityPalette(Coloring.SNUGGLY255); // uses OklabCareful metric
             gif.setDitherStrength(0.5_0f);
         }
         if(APNG) {
@@ -213,7 +213,6 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //                png8.write(Gdx.files.local("out/" + name + '/' + name + "_angle" + i + ".png"), p, false, true);
                     }
                 }
-//                gif.palette.analyze(pm);
                 if(apng != null) apng.write(Gdx.files.local(outDir + "/animated_diverse/" + name + '/' + name + ".png"), pm, 8);
                 if(gif != null) SpecialRenderer.monoAlpha(pm);
                 if(gif != null) gif.write(Gdx.files.local(outDir + "/animated_diverse/" + name + '/' + name + ".gif"), pm, 8);
@@ -293,7 +292,6 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //                png8.write(Gdx.files.local("out/" + name + '/' + name + "_angle" + i + ".png"), p, false, true);
                             }
                         }
-//                gif.palette.analyze(pm);
                         if(apng != null) apng.write(Gdx.files.local(outDir + "/animated_diverse/" + name + '/' + name + ps + ".png"), pm, 8);
                         if(gif != null) SpecialRenderer.monoAlpha(pm);
                         if(gif != null) gif.write(Gdx.files.local(outDir + "/animated_diverse/" + name + '/' + name + ps + ".gif"), pm, 8);
