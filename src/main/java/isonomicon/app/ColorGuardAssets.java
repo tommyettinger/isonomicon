@@ -35,15 +35,16 @@ public class ColorGuardAssets extends ApplicationAdapter {
     public static boolean DIVERSE = false;
     public static boolean ATTACKS = true;
     public static boolean DEATHS = false;
-    public static boolean EXPLOSION = false;
-    public static boolean TERRAIN = false;
+    public static boolean EXPLOSION = true;
+    public static boolean TERRAIN = true;
 
-    public static boolean PNG = false;
+    public static boolean PNG = true;
     public static boolean APNG = false;
     public static boolean GIF = true;
 
 //    public static final String outDir = "out/color_guard";
-    public static final String outDir = "out/cg_June_15_2024";
+    public static final String outDir = "out/cg";
+//    public static final String outDir = "out/cg_June_15_2024";
 
     public static final int SCREEN_WIDTH = 512;//640;
     public static final int SCREEN_HEIGHT = 512;//720;
@@ -82,7 +83,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Forward_Cannon")).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Machine_Gun")).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Forward_Missile") || u.hasWeapon("Handgun")).toList();
-        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.name.equals("Light_Tank")).toList();
+//        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.name.equals("Light_Tank")).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.name.startsWith("Terrain")).toList();
 //        ColorGuardData.units = ColorGuardData.units.subList(52, ColorGuardData.units.size());
 //        ColorGuardData.units = ColorGuardData.units.subList(2, 3);
@@ -165,8 +166,10 @@ public class ColorGuardAssets extends ApplicationAdapter {
                 Gdx.files.local(outDir + "/animated_diverse/" + name + '/').mkdirs();
                 load("specialized/b/vox/color_guard/" + name + ".vox");
                 if(name.startsWith("Terrain")){
+                    renderer.shadows = false;
                     renderer.outline = 2;
                 } else {
+                    renderer.shadows = true;
                     renderer.outline = 4;
                 }
                 Texture t = new Texture(renderer.palettePixmap.getWidth(), renderer.palettePixmap.getHeight(), Pixmap.Format.RGBA8888);
@@ -363,8 +366,10 @@ public class ColorGuardAssets extends ApplicationAdapter {
                 System.out.println("Rendering " + s);
                 load("specialized/b/vox/color_guard/" + s + ".vox");
                 if(name.startsWith("Terrain")){
+                    renderer.shadows = false;
                     renderer.outline = 2;
                 } else {
+                    renderer.shadows = true;
                     renderer.outline = 4;
                 }
                 Texture t = new Texture(renderer.palettePixmap.getWidth(), renderer.palettePixmap.getHeight(), Pixmap.Format.RGBA8888);
@@ -624,6 +629,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
         if(TERRAIN)
         {
             load("specialized/b/vox/color_guard/Terrain_Small.vox");
+            renderer.shadows = false;
             renderer.outline = 2;
             Texture t = new Texture(renderer.palettePixmap.getWidth(), renderer.palettePixmap.getHeight(), Pixmap.Format.RGBA8888);
             for (int n = 0; n < ColorGuardData.terrains.size(); n++) {
