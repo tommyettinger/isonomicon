@@ -613,7 +613,7 @@ public class SpecialRenderer {
         final int limit = buffer.limit();
         int alpha, rgba;
         for (int i = 3; i < limit; i += 4) {
-            if((alpha = buffer.get(i)) < -1) {
+            if((alpha = buffer.get(i)) != -1) {
                 rgba = buffer.getInt(i - 3);
                 buffer.putInt(i - 3, Coloring.lerp(0xC0C0C0FF, rgba | 255, (alpha & 255) / 255f));
             }
@@ -666,12 +666,40 @@ public class SpecialRenderer {
         if (shadows) {
             for (int x = 0; x < size; x++) {
                 for (int y = 0; y < size; y++) {
-                    ox = x - hs + fidget;
-                    oy = y - hs + fidget;
-                    oz = -hs;
-                    splat(ox * x_x + oy * y_x + oz * z_x + size + translateX,
-                            ox * x_y + oy * y_y + oz * z_y + size + translateY,
-                            0, x, y, 0, (byte) -16, frame);
+                    for (int z = 0; z < size; z++) {
+                        byte voxel = colors[x][y][z];
+                        final Stuff stuff = stuffs[Math.min(voxel & 255, stuffs.length - 1)];
+                        final VoxMaterial m = stuff.material;
+                        final float alpha = m.getTrait(VoxMaterial.MaterialTrait._alpha);
+                        if(alpha >= 1f) continue;
+                        voxel = (byte) stuff.appearsAs;
+                        final float flip = m.getTrait(VoxMaterial.MaterialTrait._frame);
+                        if(Tools3D.randomizePointRare(x, y, z, frame) < m.getTrait(VoxMaterial.MaterialTrait._metal) || (frame & 1) == flip)
+                            continue;
+                        final float swirl = m.getTrait(VoxMaterial.MaterialTrait._swirl) + 1f;
+                        if(swirl != 1f) {
+                            float ns = swirlNoise.getNoise(x, y, z, cosTurns(frame * 0x1p-7f) * 0.625f / swirlNoise.getFrequency(), sinTurns(frame * 0x1p-7f) * 0.625f / swirlNoise.getFrequency()) * 2f;
+                            if(ns > swirl) continue;
+                        }
+                        final float emit = m.getTrait(VoxMaterial.MaterialTrait._emit) * 0.75f;
+                        if(emit != 0f) continue;
+
+                        if (voxel != 0) {
+                            float oox = x - hs + fidget;
+                            float ooy = y - hs + fidget;
+                            oz = -hs;
+                            for (int ax = -2; ax <= 2; ax++) {
+                                for (int ay = -2; ay <= 2; ay++) {
+                                    ox = oox + ax;
+                                    oy = ooy + ay;
+                                    splat(ox * x_x + oy * y_x + oz * z_x + size + translateX,
+                                            ox * x_y + oy * y_y + oz * z_y + size + translateY,
+                                            0, x+ax, y+ay, 0, (byte) -16, frame);
+                                }
+                            }
+                            break;
+                        }
+                    }
                 }
             }
         }
