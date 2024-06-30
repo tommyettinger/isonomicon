@@ -24,11 +24,11 @@ public class LoafGif extends AnimatedGif {
                 if ((color & 0x80) == 0 && hasTransparent)
                     indexedPixels[i++] = 0;
                 else {
-                    int flip = -(((px ^ y) >>> 2) & 1);
-                    int mask = -((1 + px ^ y ^ flip) & 2);
+//                    int flip = -(((px ^ y) >>> 2) & 1);
+//                    int mask = -((1 + px ^ y ^ flip) & 2);
                     int adj = (int) ((((px + y & 1) << 3)
-                                      - ((px & y & 1) << 4 & mask)
-                                      - ((1 - ((px | y) & 1)) << 4 & mask)) * strength);
+                                      - ((px & y & 1) << 3)
+                                      - ((1 - ((px | y) & 1)) << 3)) * strength);
                     int rr = Math.min(Math.max(((color >>> 24))        + adj, 0), 255);
                     int gg = Math.min(Math.max(((color >>> 16) & 0xFF) + adj, 0), 255);
                     int bb = Math.min(Math.max(((color >>> 8) & 0xFF)  + adj, 0), 255);
