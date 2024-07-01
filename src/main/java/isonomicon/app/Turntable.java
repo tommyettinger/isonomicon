@@ -11,7 +11,6 @@ import com.github.tommyettinger.anim8.AnimatedGif;
 import com.github.tommyettinger.anim8.AnimatedPNG;
 import com.github.tommyettinger.anim8.Dithered;
 import isonomicon.io.LittleEndianDataInputStream;
-import isonomicon.io.LoafGif;
 import isonomicon.io.VoxIO;
 import isonomicon.io.extended.VoxIOExtended;
 import isonomicon.io.extended.VoxModel;
@@ -78,12 +77,13 @@ public class Turntable extends ApplicationAdapter {
         if (inputs == null) Gdx.app.exit();
         long startTime = TimeUtils.millis();
 //        Gdx.files.local("out/vox/").mkdirs();
-        gif = new LoafGif();
+//        gif = new LoafGif();
+        gif = new AnimatedGif();
         gif.setDitherAlgorithm(Dithered.DitherAlgorithm.LOAF);
-        apng = new AnimatedPNG();
         gif.palette = new com.github.tommyettinger.anim8.QualityPalette(Coloring.SNUGGLY255); // Uses DB Aurora
-        gif.setDitherStrength(0.5_0f);
+        gif.setDitherStrength(0.2_0f);
 //        gif.fastAnalysis = false;
+        apng = new AnimatedPNG();
         Gdx.files.local("out/vox").mkdirs();
         for (String s : inputs) {
             System.out.println("Rendering " + s);

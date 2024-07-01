@@ -18,7 +18,6 @@ import com.github.tommyettinger.anim8.*;
 import com.github.tommyettinger.ds.IntObjectMap;
 import com.github.tommyettinger.ds.ObjectIntMap;
 import isonomicon.io.LittleEndianDataInputStream;
-import isonomicon.io.LoafGif;
 import isonomicon.io.extended.VoxIOExtended;
 import isonomicon.io.extended.VoxModel;
 import isonomicon.physical.EffectGenerator;
@@ -117,19 +116,20 @@ public class ColorGuardAssets extends ApplicationAdapter {
         long startTime = TimeUtils.millis();
         if(PNG) {
             png = new FastPNG();
-            png.setFlipY(true);
             png.setCompression(2); // we are likely to compress these with something better, like oxipng.
         }
         if(GIF) {
-            gif = new LoafGif();
-            gif.setFlipY(true);
+//        gif = new LoafGif();
+            gif = new AnimatedGif();
             gif.setDitherAlgorithm(Dithered.DitherAlgorithm.LOAF);
-            gif.palette = new com.github.tommyettinger.anim8.QualityPalette(Coloring.SNUGGLY255); // uses OklabCareful metric
-            gif.setDitherStrength(0.5_0f);
+            gif.palette = new com.github.tommyettinger.anim8.QualityPalette(Coloring.SNUGGLY255); // Uses DB Aurora
+            gif.setDitherStrength(0.2_0f);
+//            gif.setDitherAlgorithm(Dithered.DitherAlgorithm.LOAF);
+//            gif.palette = new com.github.tommyettinger.anim8.QualityPalette(Coloring.SNUGGLY255); // uses OklabCareful metric
+//            gif.setDitherStrength(0.5_0f);
         }
         if(APNG) {
             apng = new AnimatedPNG();
-            apng.setFlipY(true);
             apng.setCompression(2);
         }
         //// Using Neue on a null palette takes 146.797 seconds with just the five units with an arc missile.
