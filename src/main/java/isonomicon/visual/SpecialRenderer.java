@@ -400,6 +400,8 @@ public class SpecialRenderer {
                     }
                     if(lighting) {
                         float limit = 2;
+//                        if(fy >= shadeX.length || fz >= shadeX[fy].length)
+//                            System.out.println("fx="+fx+",fy="+fy+",fz="+fz);
                         if (Math.abs(shadeX[fy][fz] - tx) <= limit || ((fy > 1 && Math.abs(shadeX[fy - 2][fz] - tx) <= limit) || (fy < shadeX.length - 2 && Math.abs(shadeX[fy + 2][fz] - tx) <= limit))) {
                             float spread = MathUtils.lerp(0.0025f, 0.001f, rough);
                             if (Math.abs(shadeZ[fx][fy] - tz) <= limit) {
@@ -690,11 +692,13 @@ public class SpecialRenderer {
                             oz = -hs;
                             for (int ax = -2; ax <= 2; ax++) {
                                 for (int ay = -2; ay <= 2; ay++) {
-                                    ox = oox + ax;
-                                    oy = ooy + ay;
-                                    splat(ox * x_x + oy * y_x + oz * z_x + size + translateX,
-                                            ox * x_y + oy * y_y + oz * z_y + size + translateY,
-                                            0, x+ax, y+ay, 0, (byte) -16, frame);
+                                    if (x + ax >= 0 && y + ay >= 0 && x + ax < size && y + ay < size) {
+                                        ox = oox + ax;
+                                        oy = ooy + ay;
+                                        splat(ox * x_x + oy * y_x + oz * z_x + size + translateX,
+                                                ox * x_y + oy * y_y + oz * z_y + size + translateY,
+                                                0, x + ax, y + ay, 0, (byte) -16, frame);
+                                    }
                                 }
                             }
                             break;
