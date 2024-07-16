@@ -32,6 +32,7 @@ import java.util.ArrayList;
 public class Specialist extends ApplicationAdapter {
     public static final int SCREEN_WIDTH = 512;//640;
     public static final int SCREEN_HEIGHT = 512;//720;
+    public static final boolean TURNTABLE = false;
     private SpecialRenderer renderer;
     private VoxModel voxels;
     private String name;
@@ -207,7 +208,7 @@ public class Specialist extends ApplicationAdapter {
                     pix.dispose();
             }
             pm.clear();
-            if(true) {
+            if(TURNTABLE) {
                 voxels.grids.clear();
                 for (int j = 0; j < original.size(); j++) {
                     voxels.grids.add(Tools3D.deepCopy(original.get(j)));
