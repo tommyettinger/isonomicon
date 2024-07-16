@@ -31,7 +31,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 public class ColorGuardAssets extends ApplicationAdapter {
-    public static boolean DIVERSE = false;
+    public static boolean DIVERSE = true;
     public static boolean ATTACKS = true;
     public static boolean DEATHS = false;
     public static boolean EXPLOSION = true;

@@ -39,7 +39,7 @@ public class Specialist extends ApplicationAdapter {
     private FastPNG png;
     private AnimatedGif gif;
     private AnimatedPNG apng;
-    private QualityPalette analyzed, aurora, low;
+    private QualityPalette analyzed, snuggly256, low;
     private SpriteBatch batch;
     private Texture palette;
     public Specialist(String[] args){
@@ -50,15 +50,19 @@ public class Specialist extends ApplicationAdapter {
         {
             System.out.println("INVALID ARGUMENTS. Please supply space-separated absolute paths to .vox models, or use the .bat file.");
             inputs = new String[]{
-                    "b/vox/gratitude/A24.vox", "palettes/b/ColorGuardBaseDark.png", "Dark_Priest",
-                    "b/vox/gratitude/A24.vox", "palettes/b/ColorGuardBaseWhite.png", "Light_Priest",
-                    "b/vox/gratitude/A24.vox", "palettes/b/ColorGuardBaseRed.png", "War_Priest",
-                    "b/vox/gratitude/A25.vox", "palettes/b/ColorGuardBaseDark.png", "Man_In_Black",
-                    "b/vox/gratitude/A25.vox", "palettes/b/ColorGuardBaseWhite.png", "Man_In_White",
-                    "b/vox/gratitude/A25.vox", "palettes/b/ColorGuardBaseRed.png", "Man_In_Red",
-                    "b/vox/gratitude/A25.vox", "palettes/b/ColorGuardBaseGreen.png", "Man_In_Green",
-                    "b/vox/gratitude/A25.vox", "palettes/b/ColorGuardBaseBlue.png", "Man_In_Blue",
+                    "b/vox/color_guard/Plains.vox", "palettes/b/ColorGuardBaseDark.png", "Plains",
+                    "b/vox/color_guard/Forest.vox", "palettes/b/ColorGuardBaseDark.png", "Forest",
             };
+//            inputs = new String[]{
+//                    "b/vox/gratitude/A24.vox", "palettes/b/ColorGuardBaseDark.png", "Dark_Priest",
+//                    "b/vox/gratitude/A24.vox", "palettes/b/ColorGuardBaseWhite.png", "Light_Priest",
+//                    "b/vox/gratitude/A24.vox", "palettes/b/ColorGuardBaseRed.png", "War_Priest",
+//                    "b/vox/gratitude/A25.vox", "palettes/b/ColorGuardBaseDark.png", "Man_In_Black",
+//                    "b/vox/gratitude/A25.vox", "palettes/b/ColorGuardBaseWhite.png", "Man_In_White",
+//                    "b/vox/gratitude/A25.vox", "palettes/b/ColorGuardBaseRed.png", "Man_In_Red",
+//                    "b/vox/gratitude/A25.vox", "palettes/b/ColorGuardBaseGreen.png", "Man_In_Green",
+//                    "b/vox/gratitude/A25.vox", "palettes/b/ColorGuardBaseBlue.png", "Man_In_Blue",
+//            };
 //            inputs = new String[]{
 //                    "b/vox/odyssey/Assassin_Dagger.vox", "palettes/b/TanClothDarkSkin.png",
 //                    "b/vox/odyssey/Noble_Knife.vox", "palettes/b/TanClothDarkSkin.png",
@@ -110,7 +114,7 @@ public class Specialist extends ApplicationAdapter {
         gif.palette = analyzed = new QualityPalette();
 //        gif.palette = new com.github.tommyettinger.anim8.FastPalette(Coloring.YAM2, Gdx.files.local("assets/Yam2Preload.dat").readBytes());
         gif.setDitherStrength(0.5_0f);
-        aurora = new QualityPalette();
+        snuggly256 = new QualityPalette();
         low =
 //                new QualityPalette(new int[]{
 //                        // Prospecal-8
@@ -193,11 +197,11 @@ public class Specialist extends ApplicationAdapter {
             gif.palette = analyzed;
             gif.write(Gdx.files.local("out/b/specialized/" + output + '/' + output + ".gif"), pm, 8);
             apng.write(Gdx.files.local("out/b/specialized/" + output + '/' + output + ".png"), pm, 8);
-            gif.palette = aurora;
+            gif.palette = snuggly256;
             gif.setDitherStrength(0.5_0f);
-            gif.write(Gdx.files.local("out/b/specializedAurora/" + output + '/' + output + ".gif"), pm, 8);
-            gif.palette = low;
-            gif.write(Gdx.files.local("out/b/specializedLow/" + output + '/' + output + ".gif"), pm, 8);
+            gif.write(Gdx.files.local("out/b/specializedSnuggly256/" + output + '/' + output + ".gif"), pm, 8);
+//            gif.palette = low;
+//            gif.write(Gdx.files.local("out/b/specializedLow/" + output + '/' + output + ".gif"), pm, 8);
             for (Pixmap pix : pm) {
                 if (!pix.isDisposed())
                     pix.dispose();
