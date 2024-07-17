@@ -51,8 +51,10 @@ public class Specialist extends ApplicationAdapter {
         {
             System.out.println("INVALID ARGUMENTS. Please supply space-separated absolute paths to .vox models, or use the .bat file.");
             inputs = new String[]{
-                    "b/vox/color_guard/Plains.vox", "palettes/b/ColorGuardBaseDark.png", "Plains",
+                    "b/vox/color_guard/Coast.vox", "palettes/b/ColorGuardBaseDark.png", "Coast",
+                    "b/vox/color_guard/Desert.vox", "palettes/b/ColorGuardBaseDark.png", "Desert",
                     "b/vox/color_guard/Forest.vox", "palettes/b/ColorGuardBaseDark.png", "Forest",
+                    "b/vox/color_guard/Plains.vox", "palettes/b/ColorGuardBaseDark.png", "Plains",
             };
 //            inputs = new String[]{
 //                    "b/vox/gratitude/A24.vox", "palettes/b/ColorGuardBaseDark.png", "Dark_Priest",
