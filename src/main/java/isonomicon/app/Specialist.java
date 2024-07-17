@@ -54,6 +54,8 @@ public class Specialist extends ApplicationAdapter {
                     "b/vox/color_guard/Coast.vox", "palettes/b/ColorGuardBaseDark.png", "Coast",
                     "b/vox/color_guard/Desert.vox", "palettes/b/ColorGuardBaseDark.png", "Desert",
                     "b/vox/color_guard/Forest.vox", "palettes/b/ColorGuardBaseDark.png", "Forest",
+                    "b/vox/color_guard/Ice.vox", "palettes/b/ColorGuardBaseDark.png", "Ice",
+                    "b/vox/color_guard/Jungle.vox", "palettes/b/ColorGuardBaseDark.png", "Jungle",
                     "b/vox/color_guard/Plains.vox", "palettes/b/ColorGuardBaseDark.png", "Plains",
             };
 //            inputs = new String[]{
