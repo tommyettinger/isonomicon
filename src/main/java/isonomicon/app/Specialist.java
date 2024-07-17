@@ -56,8 +56,10 @@ public class Specialist extends ApplicationAdapter {
 //                    "b/vox/color_guard/Forest.vox", "palettes/b/ColorGuardBaseDark.png", "Forest",
 //                    "b/vox/color_guard/Ice.vox", "palettes/b/ColorGuardBaseDark.png", "Ice",
 //                    "b/vox/color_guard/Jungle.vox", "palettes/b/ColorGuardBaseDark.png", "Jungle",
-                    "b/vox/color_guard/Mountains.vox", "palettes/b/ColorGuardBaseDark.png", "Mountains",
-                    "b/vox/color_guard/Ocean.vox", "palettes/b/ColorGuardBaseDark.png", "Ocean",
+//                    "b/vox/color_guard/Mountains.vox", "palettes/b/ColorGuardBaseDark.png", "Mountains",
+//                    "b/vox/color_guard/Ocean.vox", "palettes/b/ColorGuardBaseDark.png", "Ocean",
+                    "b/vox/color_guard/River.vox", "palettes/b/ColorGuardBaseDark.png", "River",
+                    "b/vox/color_guard/Rocky.vox", "palettes/b/ColorGuardBaseDark.png", "Rocky",
 //                    "b/vox/color_guard/Plains.vox", "palettes/b/ColorGuardBaseDark.png", "Plains",
             };
 //            inputs = new String[]{
