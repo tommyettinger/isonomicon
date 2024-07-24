@@ -2,6 +2,7 @@ package isonomicon.app;
 
 import com.github.tommyettinger.ds.HolderOrderedSet;
 import com.github.tommyettinger.ds.ObjectList;
+import com.github.tommyettinger.ds.ObjectOrderedSet;
 
 import java.util.List;
 
@@ -113,8 +114,13 @@ public class ColorGuardData {
             new Unit("Oil_Well"),
             new Unit("Laboratory"),
             new Unit("Hospital"),
-            new Unit("Terrain"),
-            new Unit("Terrain_Small"),
+
+            new Unit("Coast"), new Unit("Desert"), new Unit("Forest"), new Unit("Ice"),
+            new Unit("Jungle"), new Unit("Mountains"), new Unit("Ocean"), new Unit("Plains"),
+            new Unit("River"), new Unit("Rocky"), new Unit("Ruins"), new Unit("Volcano"),
+
+//            new Unit("Terrain"),
+//            new Unit("Terrain_Small"),
             new Unit("Road_Straight"),
             new Unit("Road_Center"),
             new Unit("Valor"),
@@ -125,11 +131,10 @@ public class ColorGuardData {
             new Unit("Money"),
             new Unit("Fire"),
             new Unit("Poison")
-//            new Unit("Shadow_Blob", "Arc_Missile", false, 1),
             );
 
     public static HolderOrderedSet<Unit, String> byName = new HolderOrderedSet<>(Unit::getName, units);
 
-    public static List<String> terrains = ObjectList.with("Coast", "Desert", "Forest", "Ice", "Jungle", "Mountains",
+    public static ObjectOrderedSet<String> terrains = ObjectOrderedSet.with("Coast", "Desert", "Forest", "Ice", "Jungle", "Mountains",
             "Ocean", "Plains", "River", "Rocky", "Ruins", "Volcano");
 }

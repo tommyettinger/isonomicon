@@ -31,18 +31,19 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 public class ColorGuardAssets extends ApplicationAdapter {
-    public static boolean DIVERSE = true;
+    public static boolean DIVERSE = false;
     public static boolean ATTACKS = true;
     public static boolean DEATHS = false;
     public static boolean EXPLOSION = true;
-    public static boolean TERRAIN = true;
+    public static boolean TERRAIN = false;
 
     public static boolean PNG = true;
     public static boolean APNG = false;
     public static boolean GIF = true;
 
 //    public static final String outDir = "out/color_guard";
-    public static final String outDir = "out/cg";
+//    public static final String outDir = "out/cg";
+    public static final String outDir = "out/cg_July_23_2024";
 //    public static final String outDir = "out/cg_June_15_2024";
 
     public static final int SCREEN_WIDTH = 512;//640;
@@ -163,15 +164,15 @@ public class ColorGuardAssets extends ApplicationAdapter {
                 ColorGuardData.Unit unit = ColorGuardData.units.get(n);
                 name = unit.name;
                 System.out.println("Rendering " + name);
-                Gdx.files.local(outDir + "/animated_diverse/" + name + '/').mkdirs();
-                load("specialized/b/vox/color_guard/" + name + ".vox");
-                if(name.startsWith("Terrain")){
+                if(ColorGuardData.terrains.contains(name) || name.startsWith("Terrain")){
                     renderer.shadows = false;
                     renderer.outline = 2;
                 } else {
                     renderer.shadows = true;
                     renderer.outline = 4;
                 }
+                Gdx.files.local(outDir + "/animated_diverse/" + name + '/').mkdirs();
+                load("specialized/b/vox/color_guard/" + name + ".vox");
                 Texture t = new Texture(renderer.palettePixmap.getWidth(), renderer.palettePixmap.getHeight(), Pixmap.Format.RGBA8888);
                 Pixmap pixmap;
                 Array<Pixmap> pm = new Array<>(32 * armies.length);
@@ -365,7 +366,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                 String s = unit.name;
                 System.out.println("Rendering " + s);
                 load("specialized/b/vox/color_guard/" + s + ".vox");
-                if(name.startsWith("Terrain")){
+                if(ColorGuardData.terrains.contains(name) || name.startsWith("Terrain")){
                     renderer.shadows = false;
                     renderer.outline = 2;
                 } else {
@@ -633,7 +634,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
             renderer.outline = 2;
             Texture t = new Texture(renderer.palettePixmap.getWidth(), renderer.palettePixmap.getHeight(), Pixmap.Format.RGBA8888);
             for (int n = 0; n < ColorGuardData.terrains.size(); n++) {
-                name = ColorGuardData.terrains.get(n);
+                name = ColorGuardData.terrains.getAt(n);
                 System.out.println("Rendering " + name);
                 Gdx.files.local(outDir + "/Landscape/" + name + '/').mkdirs();
                 Pixmap pixmap;
