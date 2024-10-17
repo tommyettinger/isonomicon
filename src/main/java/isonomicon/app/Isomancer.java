@@ -75,7 +75,7 @@ public class Isomancer extends ApplicationAdapter {
         png.setCompression(2); // we are likely to compress these with something better, like oxipng.
 //        png8 = new PNG8();
         gif = new AnimatedGif();
-        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.LOAF);
+        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.OCEANIC);
 //        apng = new AnimatedPNG();
 //        png8.setDitherAlgorithm(Dithered.DitherAlgorithm.WREN);
         gif.palette = new QualityPalette();

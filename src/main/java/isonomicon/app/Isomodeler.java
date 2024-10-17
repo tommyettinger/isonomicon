@@ -81,9 +81,9 @@ public class Isomodeler extends ApplicationAdapter {
         png.setCompression(2); // we are likely to compress these with something better, like oxipng.
 //        png8 = new PNG8();
         gif = new AnimatedGif();
-        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.LOAF);
+        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.OCEANIC);
 //        png8.setDitherAlgorithm(Dithered.DitherAlgorithm.NEUE);
-        gif.palette = new com.github.tommyettinger.anim8.QualityPalette(); // Uses DB Aurora
+        gif.palette = new com.github.tommyettinger.anim8.QualityPalette(); // Uses Snuggly255
 //        gif.palette = new com.github.tommyettinger.anim8.FastPalette(Coloring.YAM2, Gdx.files.local("assets/Yam2Preload.dat").readBytes());
         gif.palette.setDitherStrength(0.5_0f);
 //        png8.palette = gif.palette;

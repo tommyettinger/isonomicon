@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.github.tommyettinger.colorful.oklab.ColorTools;
 import com.github.tommyettinger.ds.ObjectObjectOrderedMap;
 import com.github.tommyettinger.digital.ArrayTools;
+import isonomicon.app.ColorGuardAssets;
 import isonomicon.physical.Stuff;
 
 import java.io.IOException;
@@ -177,8 +178,8 @@ public class PaletteDrafter extends ApplicationAdapter {
         images = new Texture[32];
         for (int a = 0, i = 0; a < 4; a++) {
             for (int f = 0; f < 4; f++) {
-                images[i] = new Texture(Gdx.files.local("out/color_guard/lab/"+name+"/"+name+"_angle"+a+"_"+f+".png"));
-                images[16 + i++] = new Texture(Gdx.files.local("out/color_guard/lab/"+name2+"/"+name2+"_angle"+a+"_"+f+".png"));
+                images[i] = new Texture(Gdx.files.local(ColorGuardAssets.outDir +"/lab/"+name+"/"+name+"_angle"+a+"_"+f+".png"));
+                images[16 + i++] = new Texture(Gdx.files.local(ColorGuardAssets.outDir +"/lab/"+name2+"/"+name2+"_angle"+a+"_"+f+".png"));
             }
         }
 //        for (int a = 0, i = 0; a < 8; a++) {

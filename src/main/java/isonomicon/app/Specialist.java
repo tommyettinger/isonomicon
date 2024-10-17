@@ -117,7 +117,7 @@ public class Specialist extends ApplicationAdapter {
         png.setFlipY(false);
 //        png8 = new PNG8();
         gif = new AnimatedGif();
-        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.LOAF);
+        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.OCEANIC);
         gif.setFlipY(false);
         apng = new AnimatedPNG();
         apng.setCompression(2);
