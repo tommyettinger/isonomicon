@@ -417,8 +417,8 @@ public class SmudgeRenderer {
             }
         }
         if(dither) {
-            reducer.setDitherStrength(0.5_0f);
-            reducer.reduceOceanic(pixmap);
+            reducer.setDitherStrength(0.2_0f);
+            reducer.reduceLoaf(pixmap);
         }
 
         fill(depths, 0);

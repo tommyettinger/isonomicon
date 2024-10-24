@@ -117,14 +117,14 @@ public class Specialist extends ApplicationAdapter {
         png.setFlipY(false);
 //        png8 = new PNG8();
         gif = new AnimatedGif();
-        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.OCEANIC);
+        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.LOAF);
         gif.setFlipY(false);
         apng = new AnimatedPNG();
         apng.setCompression(2);
         apng.setFlipY(false);
         gif.palette = analyzed = new QualityPalette();
 //        gif.palette = new com.github.tommyettinger.anim8.FastPalette(Coloring.YAM2, Gdx.files.local("assets/Yam2Preload.dat").readBytes());
-        gif.setDitherStrength(0.5_0f);
+        gif.setDitherStrength(0.2_0f);
         snuggly256 = new QualityPalette();
         low =
 //                new QualityPalette(new int[]{
@@ -209,7 +209,7 @@ public class Specialist extends ApplicationAdapter {
             gif.write(Gdx.files.local("out/b/specialized/" + output + '/' + output + ".gif"), pm, 8);
             apng.write(Gdx.files.local("out/b/specialized/" + output + '/' + output + ".png"), pm, 8);
             gif.palette = snuggly256;
-            gif.setDitherStrength(0.5_0f);
+            gif.setDitherStrength(0.2_0f);
             gif.write(Gdx.files.local("out/b/specializedSnuggly256/" + output + '/' + output + ".gif"), pm, 8);
 //            gif.palette = low;
 //            gif.write(Gdx.files.local("out/b/specializedLow/" + output + '/' + output + ".gif"), pm, 8);

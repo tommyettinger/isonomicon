@@ -122,7 +122,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
         if(GIF) {
 //        gif = new LoafGif();
             gif = new AnimatedGif();
-            gif.setDitherAlgorithm(Dithered.DitherAlgorithm.OCEANIC);
+            gif.setDitherAlgorithm(Dithered.DitherAlgorithm.LOAF);
             gif.palette = new com.github.tommyettinger.anim8.QualityPalette(); // Uses Snuggly255
             gif.setDitherStrength(0.2_0f);
 //            gif.setDitherAlgorithm(Dithered.DitherAlgorithm.LOAF);

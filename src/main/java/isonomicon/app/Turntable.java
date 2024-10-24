@@ -79,7 +79,7 @@ public class Turntable extends ApplicationAdapter {
 //        Gdx.files.local("out/vox/").mkdirs();
 //        gif = new LoafGif();
         gif = new AnimatedGif();
-        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.OCEANIC);
+        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.LOAF);
         gif.palette = new com.github.tommyettinger.anim8.QualityPalette();
         gif.setDitherStrength(0.2_0f);
 //        gif.fastAnalysis = false;

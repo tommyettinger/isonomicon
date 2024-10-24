@@ -109,7 +109,7 @@ public class Isologist extends ApplicationAdapter {
         png.setFlipY(false);
 //        png8 = new PNG8();
         gif = new AnimatedGif();
-        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.OCEANIC);
+        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.LOAF);
 
         gif.setFlipY(false);
 //        apng = new AnimatedPNG();
@@ -117,7 +117,7 @@ public class Isologist extends ApplicationAdapter {
 //        apng.setFlipY(false);
         gif.palette = analyzed = new QualityPalette();
 //        gif.palette = new com.github.tommyettinger.anim8.FastPalette(Coloring.YAM2, Gdx.files.local("assets/Yam2Preload.dat").readBytes());
-        gif.setDitherStrength(0.5_0f);
+        gif.setDitherStrength(0.2_0f);
         aurora = new QualityPalette();
         azu =
 //                new QualityPalette(new int[]{

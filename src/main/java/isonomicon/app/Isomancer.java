@@ -75,12 +75,12 @@ public class Isomancer extends ApplicationAdapter {
         png.setCompression(2); // we are likely to compress these with something better, like oxipng.
 //        png8 = new PNG8();
         gif = new AnimatedGif();
-        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.OCEANIC);
+        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.LOAF);
 //        apng = new AnimatedPNG();
 //        png8.setDitherAlgorithm(Dithered.DitherAlgorithm.WREN);
         gif.palette = new QualityPalette();
 //        gif.palette = new com.github.tommyettinger.anim8.FastPalette(Coloring.YAM2, Gdx.files.local("assets/Yam2Preload.dat").readBytes());
-        gif.setDitherStrength(0.5_0f);
+        gif.setDitherStrength(0.2_0f);
 //        png8.palette = gif.palette;
         Gdx.files.local("out/vox").mkdirs();
         for (String s : inputs) {
