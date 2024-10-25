@@ -9,6 +9,7 @@ import com.github.tommyettinger.digital.TrigTools;
 import com.github.tommyettinger.random.ChopRandom;
 import com.github.yellowstonegames.grid.IntPointHash;
 import com.github.yellowstonegames.grid.LongPointHash;
+import com.github.yellowstonegames.grid.Noise;
 import isonomicon.io.VoxIO;
 import isonomicon.visual.Coloring;
 
@@ -332,188 +333,9 @@ public class ModelMaker {
         return shipLargeSmoothColorized();
     }
 
-    /**
-     * @return a 3D byte array storing a spaceship
-     */
-    public byte[][][] shipLargeRandomColorized()
-    {
-        xSize = shipLarge.length;
-        ySize = shipLarge[0].length;
-        zSize = shipLarge[0][0].length;
-        byte[][][] nextShip = new byte[xSize][ySize][zSize];
-        final int halfY = ySize >> 1, smallYSize = ySize - 1;
-        int color;
-        int seed = rng.nextInt(), current, paint;
-        final byte mainColor = colorizer.darken(colorizer.getReducer().paletteMapping[(int) seed & 0x7FFF]), // bottom 15 bits
-                highlightColor = colorizer.brighten(colorizer.getReducer().paletteMapping[(int) seed >>> 17]), // top 15 of 32 bits
-                cockpitColor = colorizer.darken(colorizer.reduce((0x20 + determineBounded(seed + 0x11111, 0x60) << 24)
-                        | (0xA0 + determineBounded(seed + 0x22222, 0x60) << 16)
-                        | (0xC8 + determineBounded(seed + 0x33333, 0x38) << 8) | 0xFF));
-        int xx, yy, zz;
-        for (int x = 0; x < xSize; x++) {
-            for (int y = 0; y < halfY; y++) {
-                for (int z = 0; z < zSize; z++) {
-                    color = (shipLarge[x][y][z] & 255);
-                    if (color != 0) {
-                        // this 4-input-plus-state hash is really a slight modification on LightRNG.determine(), but
-                        // it mixes the x, y, and z inputs more thoroughly than other techniques do, and we then use
-                        // different sections of the random bits for different purposes. This helps reduce the possible
-                        // issues from using rng.next(5) and rng.next(6) all over if the bits those use have a pattern.
-                        // In the original model, all voxels of the same color will be hashed with similar behavior but
-                        // any with different colors will get unrelated values.
-                        xx = x + 1;
-                        yy = y + 1;
-                        zz = z / 3;
-                        current = hashAll(xx + (xx | zz) >> 3, (yy + (yy | zz)) / 3, zz, color, seed);
-                        paint = hashAll((xx + (xx | z)) / 7, (yy + (yy | z)) / 5, z, color, seed);
-                        if (color < 8) { // checks bottom 6 bits
-                            if((current >>> 6 & 0x7L) != 0)
-                                nextShip[x][smallYSize - y][z] = nextShip[x][y][z] =
-                                        cockpitColor;
-                            //Dimmer.AURORA_RAMPS[cockpitColor & 255][3 - (z + 6 >> 3) & 3];
-                        } else {
-                            nextShip[x][smallYSize - y][z] = nextShip[x][y][z] =
-                                    // checks 9 bits
-                                    ((current & 0x1FF) < color * 6)
-                                            ? 0
-                                            // checks another 6 bits, starting after discarding 9 bits from the bottom
-                                            : ((paint >>> 9 & 0x3F) < 40)
-                                            ? colorizer.grayscale()[determineBounded(paint, colorizer.grayscale().length - 2) + 1]
-                                            // Dimmer.AURORA_RAMPS[10][(int) paint & 3]
-                                            // checks another 6 bits, starting after discarding 15 bits from the bottom
-                                            : ((paint >>> 15 & 0x3F) < 8)
-                                            ? highlightColor
-                                            : mainColor;
-                        }
-                    }
-                }
-            }
-        }
-        return Tools3D.largestPart(nextShip);
-        //return nextShip;
-        //return Tools3D.runCA(nextShip, 1);
-    }
 
     /**
-     * Uses some simplex noise from {@link FastNoise} to make paint patterns and shapes more "flowing" and less
-     * haphazard in their placement. Still uses point hashes for a lot of its operations.
-     * @return a 12x12x8 3D byte array representing a spaceship
-     */
-    public byte[][][] shipNoiseColorized()
-    {
-        return shipNoiseColorized(ship);
-    }
-    /**
-     * Uses some simplex noise from {@link FastNoise} to make paint patterns and shapes more "flowing" and less
-     * haphazard in their placement. Still uses point hashes for a lot of its operations.
-     * @return a larger (40x40x30) 3D byte array representing a spaceship
-     */
-    public byte[][][] shipLargeNoiseColorized()
-    {
-        return Tools3D.largestPart(shipNoiseColorized(shipLarge));
-    }
-    /**
-     * Uses some simplex noise from {@link FastNoise} to make paint patterns and shapes more "flowing" and less
-     * haphazard in their placement. Still uses point hashes for a lot of its operations.
-     * @param ship one of the two ships loaded from resources here, probably, {@link #ship} and {@link #shipLarge}
-     * @return 3D byte array representing a spaceship
-     */
-    private byte[][][] shipNoiseColorized(byte[][][] ship)
-    {
-        xSize = ship.length;
-        ySize = ship[0].length;
-        zSize = ship[0][0].length;
-        byte[][][] nextShip = new byte[xSize][ySize][zSize];
-        final int halfY = ySize >> 1, smallYSize = ySize - 1;
-        int color;
-        int seed = rng.nextInt(), current = seed, paint = seed;
-        int thrust = Coloring.RINSED[randomMainColor(seed ^ 0x44444) & 0xFF];
-        byte[] grays = colorizer.grayscale();
-        byte mainColor = colorizer.getReducer().paletteMapping[seed & 0x7FFF], // bottom 15 bits
-                highlightColor = colorizer.brighten(colorizer.getReducer().paletteMapping[seed >>> 17]), // top 15 bits
-                cockpitColor = colorizer.darken(colorizer.reduce((0x20 + determineBounded(seed ^ 0x11111, 0x60) << 24)
-                        | (0xA0 + determineBounded(seed ^ 0x22222, 0x60) << 16)
-                        | (0xC8 + determineBounded(seed ^ 0x33333, 0x38) << 8) | 0xFF)),
-                thrustColor = colorizer.reduce(thrust),
-                lightColor = (byte) (colorizer.brighten(colorizer.getReducer().paletteMapping[(seed ^ seed >>> 4 ^ seed >>> 13) & 0x7FFF]) | colorizer.getShadeBit() | colorizer.getWaveBit());
-        thrustColor = (byte) (colorizer.brighten(thrustColor) | colorizer.getWaveBit() | colorizer.getShadeBit());
-        for (int i = 0; i < grays.length; i++) {
-            if(highlightColor == grays[i])
-            {
-                highlightColor = colorizer.getReducer().paletteMapping[determineInt(~seed) & 0x7FFF];
-                break;
-            }
-        }
-        final FastNoise noise = new FastNoise(seed ^ seed >>> 21 ^ seed << 6, 0x1.4p0f / xSize);
-        int xx, yy, zz;
-        for (int x = 0; x < xSize; x++) {
-            for (int y = 0; y < halfY; y++) {
-                for (int z = 0; z < zSize; z++) {
-                    color = (ship[x][y][z] & 255);
-                    if (color != 0) {
-                        // this 4-input-plus-state hash is really a slight modification on LightRNG.determine(), but
-                        // it mixes the x, y, and z inputs more thoroughly than other techniques do, and we then use
-                        // different sections of the random bits for different purposes. This helps reduce the possible
-                        // issues from using rng.next(5) and rng.next(6) all over if the bits those use have a pattern.
-                        // In the original model, all voxels of the same color will be hashed with similar behavior but
-                        // any with different colors will get unrelated values.
-                        xx = x + 1;
-                        yy = y + 1;
-                        zz = z / 3;
-                        current = hashAll(xx + (xx | zz) >> 3, (yy + (yy | zz)) / 3, zz, color, seed)
-                                + (int) (noise.getSimplex(x * 0.5f, y * 0.75f, z * 0.666f) * 0x800000) + 0x800000;
-                        paint = hashAll((xx + (xx | z)) / 7, (yy + (yy | z)) / 5, z, color, seed + 0x12345);
-                        if (color < 8) {
-                            // checks sorta-top 3 bits
-                            if((current >>> 21 & 7) != 0)
-                                nextShip[x][smallYSize - y][z] = nextShip[x][y][z] = cockpitColor;
-                        } else {
-                            nextShip[x][smallYSize - y][z] = nextShip[x][y][z] =
-                                    // checks sorta-top 9 bits, different branch
-                                    ((current >>> 15 & 0x1FF) < color * 6)
-                                            ? 0
-                                            // checks 6 bits of paint
-                                            : ((paint & 0x3F) < 36) // is a random number from 0-63 less than 36? 
-                                            ? grays[(int)((noise.getSimplex(x * 0.125f, y * 0.2f, z * 0.24f) * 0.4f + 0.599f) * (grays.length - 1))]
-                                            : (noise.getSimplex(x * 0.04f, y * 0.07f, z * 0.09f) > 0.15f)
-                                            ? highlightColor
-                                            : mainColor;
-                        }
-                    }
-                }
-            }
-        }
-        paint ^= paint << 7 ^ paint >>> 23;
-        current ^= current << 5 ^ current >>> 19;
-        for (int y = 0; y < halfY; y++) {
-            for (int z = 0; z < zSize; z++) {
-                if(IntPointHash.hash64(z, y, paint) < 3)
-                {
-                    for (int x = xSize - 2; x >= 0; x--) {
-                        if(nextShip[x][y][z] != 0 && nextShip[x][y][z] != cockpitColor)
-                        {
-                            nextShip[x+1][smallYSize - y][z] = nextShip[x+1][y][z] = lightColor;
-                            break;
-                        }
-                    }
-                }
-                if(hash32(z * 3 >>> 2, y * 5 + (z >>> 1) >>> 3, current) < 15)
-                {
-                    for (int x = 1; x < xSize; x++) {
-                        if(nextShip[x][y][z] != 0 && nextShip[x][y][z] != cockpitColor)
-                        {
-                            nextShip[x-1][smallYSize - y][z] = nextShip[x-1][y][z] = thrustColor;
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-        return nextShip;
-    }
-
-    /**
-     * Uses some simplex noise from {@link FastNoise} and some curving shapes from "Merlin Noise" to make paint patterns
+     * Uses some simplex noise from {@link Noise} and some curving shapes from "Merlin Noise" to make paint patterns
      * and shapes more "flowing" and less haphazard in their placement. Still uses point hashes for some operations.
      * @return a 12x12x8 3D byte array representing a spaceship
      */
@@ -522,7 +344,7 @@ public class ModelMaker {
         return shipSmoothColorized(ship);
     }
     /**
-     * Uses some simplex noise from {@link FastNoise} and some curving shapes from "Merlin Noise" to make paint patterns
+     * Uses some simplex noise from {@link Noise} and some curving shapes from "Merlin Noise" to make paint patterns
      * and shapes more "flowing" and less haphazard in their placement. Still uses point hashes for some operations.
      * @return a larger (60x60x60) 3D byte array representing a spaceship
      */
@@ -533,7 +355,7 @@ public class ModelMaker {
         return next;
     }
     /**
-     * Uses some simplex noise from {@link FastNoise} and some curving shapes from "Merlin Noise" to make paint patterns
+     * Uses some simplex noise from {@link Noise} and some curving shapes from "Merlin Noise" to make paint patterns
      * and shapes more "flowing" and less haphazard in their placement. Still uses point hashes for some operations.
      * @param ship one of the two ships loaded from resources here, probably, {@link #ship} and {@link #shipLarge}
      * @return 3D byte array representing a spaceship
@@ -547,16 +369,11 @@ public class ModelMaker {
         final int halfY = ySize >> 1, smallYSize = ySize - 1;
         int color;
         int seed = rng.nextInt(), current = seed;
-        int thrust = Coloring.RINSED[randomMainColor(seed ^ 0x44444) & 0xFF];
-        byte[] grays = colorizer.grayscale();
-        byte mainColor = colorizer.getReducer().paletteMapping[seed & 0x7FFF], // bottom 15 bits
+        byte mainColor = (byte) (28), // bottom 15 bits
                 //highlightColor = colorizer.brighten(colorizer.getReducer().paletteMapping[seed >>> 17]), // top 15 bits
-                cockpitColor = colorizer.reduce((0x10 + determineBounded(seed ^ 0x11111, 0x30) << 24)
-                        | (0x90 + determineBounded(seed ^ 0x22222, 0x40) << 16)
-                        | (0xB0 + determineBounded(seed ^ 0x33333, 0x40) << 8) | 0xFF),
-                thrustColor = colorizer.reduce(thrust);
+                cockpitColor = 108,
+                thrustColor = (byte)136;
 //        byte lightColor = (byte) (colorizer.brighten(colorizer.getReducer().paletteMapping[(seed ^ seed >>> 4 ^ seed >>> 13) & 0x7FFF]) | colorizer.getShadeBit() | colorizer.getWaveBit());
-        thrustColor = (byte) (colorizer.brighten(thrustColor) | colorizer.getWaveBit() | colorizer.getShadeBit());
 //        for (int i = 0; i < grays.length; i++) {
 //            if(highlightColor == grays[i])
 //            {
@@ -564,7 +381,7 @@ public class ModelMaker {
 //                break;
 //            }
 //        }
-        final FastNoise noise = new FastNoise(seed ^ seed >>> 21 ^ seed << 6, 0xBp-2f / xSize);
+        final Noise noise = new Noise(seed ^ seed >>> 21 ^ seed << 6, 0xBp-2f / xSize);
         for (int x = 0; x < xSize; x++) {
             for (int y = 0; y < halfY; y++) {
                 for (int z = 0; z < zSize; z++) {
@@ -582,8 +399,8 @@ public class ModelMaker {
                                             ? 0
                                             // checks 6 bits of paint
                                             : (merlin3D(x, y, z, seed) == 0) 
-                                            ? grays[(int)((noise.getFoam(x * 0.125f, y * 0.2f, z * 0.24f) * 0.4f + 0.599f) * (grays.length - 1))]
-                                            : colorizer.colorize(mainColor, (int)(noise.getFoam(x * 0.0625f, y * 0.1f, z * 0.14f) * 2.25f));
+                                            ? (byte) ((noise.getFoam(x * 0.125f, y * 0.2f, z * 0.24f) * 0.4f + 0.599f) * 4 + 3)
+                                            : (byte) MathTools.clamp(mainColor + (noise.getFoam(x * 0.0625f, y * 0.1f, z * 0.14f) * 2.25f), 26, 29);
                         }
                     }
                 }
@@ -596,7 +413,7 @@ public class ModelMaker {
                 if (antennaHash < 9) {
                     for (int z = zSize - 2; z >= 0; z--) {
                         if (nextShip[x][y][z] != 0 && nextShip[x][y][z] != cockpitColor) {
-                            byte antennaColor = grays[grays.length - 2 - (antennaHash % (grays.length-1))];
+                            byte antennaColor = (byte) ((antennaHash & 3) + 3);
                             nextShip[x][smallYSize - y][z] = nextShip[x][y][z] =
                                     nextShip[x][smallYSize - y][z + 1] = nextShip[x][y][z + 1] = antennaColor;
                             if (antennaHash < 5 && z < zSize - 2) {
