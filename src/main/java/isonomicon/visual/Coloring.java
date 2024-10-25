@@ -17,6 +17,13 @@ public class Coloring {
 //                (int)(g + amount) << 16 |
 //                (int)(b + amount) << 8 |
 //                (rgba & 255);
+        if(amount < 0f){
+            amount++;
+            return (int)((rgba >>> 24) * amount) << 24 |
+                    (int)((rgba >>> 16 & 255) * amount) << 16 |
+                    (int)((rgba >>> 8 & 255) * amount) << 8 |
+                    (rgba & 255);
+        }
         return  (int) MathUtils.lerp(rgba >>> 24, 255.5f, amount) << 24 |
                 (int) MathUtils.lerp(rgba >>> 16 & 255, 255.5f, amount) << 16 |
                 (int) MathUtils.lerp(rgba >>> 8 & 255, 255.5f, amount) << 8 |
