@@ -44,10 +44,10 @@ public class ModelMaker {
     public ModelMaker(long seed, PaletteReducer colorizer)
     {
         rng = new ChopRandom(seed);
-        InputStream is = Gdx.files.internal("ship_12_12_8.vox").read();
+        InputStream is = Gdx.files.local("assets/ship_12_12_8.vox").read();
         ship = VoxIO.readVox(is);
         if(ship == null) ship = new byte[12][12][8];
-        is = Gdx.files.internal("ship_40_40_30.vox").read();
+        is = Gdx.files.local("assets/ship_40_40_30.vox").read();
         shipLarge = VoxIO.readVox(is);
         if(shipLarge == null) shipLarge = new byte[40][40][30];
         xSize = ship.length;

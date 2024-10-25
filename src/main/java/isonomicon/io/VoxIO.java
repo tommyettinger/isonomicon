@@ -216,6 +216,7 @@ public class VoxIO {
                     writeInt(dos, term.length());
                     dos.writeBytes(term);
                     for(IntFloatMap.Entry et : ent.value.traits) {
+                        if(et.key < 0) continue;
                         VoxMaterial.MaterialTrait mt = VoxMaterial.ALL_TRAITS[et.key];
                         term = mt.name();
                         writeInt(dos, term.length());
