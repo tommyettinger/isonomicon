@@ -38,6 +38,10 @@ public class VoxIOExtended {
      * If this should call {@link Tools3D#soak} or a related method on the voxels, this should be true.
      */
     public static boolean SOAK = true;
+    /**
+     * Can be set to false if old or incorrectly-made models need to be loaded.
+     */
+    public static boolean USE_MATERIALS = true;
     public static int minX = Integer.MAX_VALUE;
     public static int maxX;
     public static int minY = Integer.MAX_VALUE;
@@ -244,7 +248,7 @@ public class VoxIOExtended {
                         }
                         System.arraycopy(lastPalette, 0, model.palette, 0, 256);
                         stream.readInt();
-                    } else if(chunkName.equals("MATL")){ // remove this block if you don't handle materials
+                    } else if(USE_MATERIALS && chunkName.equals("MATL")){ // remove this block if you don't handle materials
                         int materialID = stream.readInt();
                         int dictSize = stream.readInt();
                         for (int i = 0; i < dictSize; i++) {

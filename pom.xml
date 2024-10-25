@@ -101,6 +101,11 @@
             <artifactId>squidgrid</artifactId>
             <version>${squidsquad.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.yellowstonegames.squidsquad</groupId>
+            <artifactId>squidtext</artifactId>
+            <version>${squidsquad.version}</version>
+        </dependency>
 <!--        <dependency>-->
 <!--            <groupId>com.github.tommyettinger</groupId>-->
 <!--            <artifactId>digital</artifactId>-->
