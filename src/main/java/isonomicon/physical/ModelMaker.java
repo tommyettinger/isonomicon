@@ -28,7 +28,7 @@ public class ModelMaker {
     private int xSize, ySize, zSize;
 
     private PaletteReducer colorizer;
-    public static boolean GRAY_ONLY = true;
+    public static boolean GRAY_ONLY = false;
 
     public ModelMaker()
     {
@@ -375,7 +375,7 @@ public class ModelMaker {
                 for (int z = 0; z < zSize; z++) {
                     color = (ship[x][y][z] & 255);
                     if (color != 0) {
-                        current = (int) (noise.getFoam(x * 0.5f, y * 0.75f, z * 0.666f) * 0x1.5p27f) + 0x8000000;
+                        current = (int) (noise.getFoam(x * 0.5f, y * 0.75f, z * 1.1666f) * 0x1.5p27f) + 0x8000000;
                         if (color < 8) {
                             // checks sorta-top 4 bits
                             if((current >>> 21 & 15) != 0)
