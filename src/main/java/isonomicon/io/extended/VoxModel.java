@@ -9,6 +9,9 @@ import isonomicon.physical.VoxMaterial;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static isonomicon.io.extended.VoxIOExtended.SCALE;
+import static isonomicon.io.extended.VoxIOExtended.SOAK;
+
 public class VoxModel {
     public int[] palette;
     public ArrayList<byte[][][]> grids;
@@ -24,10 +27,41 @@ public class VoxModel {
         links = new ArrayList<>(1);
         markers = new ArrayList<>(1);
         materials = new IntObjectMap<>(256);
-        transformChunks = new IntObjectMap<>(8);
         groupChunks = new IntObjectMap<>(1);
+        transformChunks = new IntObjectMap<>(8);
         shapeChunks = new IntObjectMap<>(8);
     }
+
+    public VoxModel(byte[][][] voxelData, int[] palette, IntObjectMap<VoxMaterial> materials){
+        this.palette = Arrays.copyOf(palette, 256);
+        grids = new ArrayList<>(1);
+        if(SCALE){
+            if(SOAK)
+                voxelData = Tools3D.scaleAndSoak(voxelData);
+            else
+                voxelData = Tools3D.simpleScale(voxelData);
+        } else {
+            if(SOAK)
+                Tools3D.soakInPlace(voxelData);
+        }
+
+        grids.add(voxelData);
+        links = new ArrayList<>(1);
+        markers = new ArrayList<>(1);
+        this.materials = new IntObjectMap<>(materials);
+        groupChunks = new IntObjectMap<>(1);
+        groupChunks.put(0, new GroupChunk(0, new String[0][2], new int[]{0}));
+        transformChunks = new IntObjectMap<>(8);
+        TransformChunk latest = new TransformChunk(0, new String[0][2], 0, 0, 0, new String[1][0][2]);
+        latest.translation.z -= voxelData[0][0].length * 0.5f;
+        transformChunks.put(0, latest);
+        shapeChunks = new IntObjectMap<>(8);
+        ShapeModel sm = new ShapeModel(0, new String[2][0]);
+        ShapeChunk sc = new ShapeChunk(0, new String[0][2], new ShapeModel[]{sm});
+        shapeChunks.put(0, sc);
+
+    }
+
     public VoxModel mergeWith(VoxModel other) {
         grids.addAll(other.grids);
         links.addAll(other.links);

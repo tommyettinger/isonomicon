@@ -101,8 +101,6 @@ public class ShipSpecialist extends ApplicationAdapter {
 
         inputs = new String[3 * all.length];
 
-        DistinctRandom gen = new DistinctRandom(123L);
-//        NameGenerator ng = new NameGenerator(NameGenerator.STAR_WARS_STYLE_NAMES, 3, gen);
         Language lang = Language.randomLanguage(1234567890L).mix(Language.MALAY, 0.6f).removeAccents();
         int id = 0;
         for (int i = 0; i < all.length; i++) {
@@ -130,7 +128,6 @@ public class ShipSpecialist extends ApplicationAdapter {
         apng.setCompression(2);
         apng.setFlipY(false);
         gif.palette = analyzed = new QualityPalette();
-//        gif.palette = new com.github.tommyettinger.anim8.FastPalette(Coloring.YAM2, Gdx.files.local("assets/Yam2Preload.dat").readBytes());
         gif.setDitherStrength(0.5f);
         Gdx.files.local("out/vox").mkdirs();
         for (int n = 0; n < inputs.length - 2;) {
