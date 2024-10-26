@@ -1,8 +1,6 @@
 package isonomicon.physical;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.math.MathUtils;
 import com.github.tommyettinger.anim8.PaletteReducer;
 import com.github.tommyettinger.digital.MathTools;
 import com.github.tommyettinger.digital.TrigTools;
@@ -16,8 +14,6 @@ import isonomicon.visual.Coloring;
 import java.io.InputStream;
 
 import static com.github.tommyettinger.digital.Hasher.randomize3Bounded;
-import static com.github.tommyettinger.digital.Hasher.randomize3;
-import static com.github.tommyettinger.digital.MathTools.clamp;
 import static com.github.yellowstonegames.grid.IntPointHash.hash32;
 import static com.github.yellowstonegames.grid.IntPointHash.hashAll;
 /**
@@ -32,6 +28,7 @@ public class ModelMaker {
     private int xSize, ySize, zSize;
 
     private PaletteReducer colorizer;
+    public static boolean GRAY_ONLY = true;
 
     public ModelMaker()
     {
@@ -369,18 +366,9 @@ public class ModelMaker {
         final int halfY = ySize >> 1, smallYSize = ySize - 1;
         int color;
         int seed = rng.nextInt(), current = seed;
-        byte mainColor = (byte) (28), // bottom 15 bits
-                //highlightColor = colorizer.brighten(colorizer.getReducer().paletteMapping[seed >>> 17]), // top 15 bits
+        byte mainColor = (byte) (28),
                 cockpitColor = 108,
                 thrustColor = (byte)136;
-//        byte lightColor = (byte) (colorizer.brighten(colorizer.getReducer().paletteMapping[(seed ^ seed >>> 4 ^ seed >>> 13) & 0x7FFF]) | colorizer.getShadeBit() | colorizer.getWaveBit());
-//        for (int i = 0; i < grays.length; i++) {
-//            if(highlightColor == grays[i])
-//            {
-//                highlightColor = colorizer.getReducer().paletteMapping[determineInt(~seed) & 0x7FFF];
-//                break;
-//            }
-//        }
         final Noise noise = new Noise(seed ^ seed >>> 21 ^ seed << 6, 0xBp-2f / xSize);
         for (int x = 0; x < xSize; x++) {
             for (int y = 0; y < halfY; y++) {
@@ -398,9 +386,9 @@ public class ModelMaker {
                                     ((current >>> 15 & 0x3FF) < color * 13)
                                             ? 0
                                             // checks 6 bits of paint
-                                            : (merlin3D(x, y, z, seed) == 0) 
-                                            ? (byte) ((noise.getFoam(x * 0.125f, y * 0.2f, z * 0.24f) * 0.4f + 0.599f) * 4 + 3)
-                                            : (byte) MathTools.clamp(mainColor + (noise.getFoam(x * 0.0625f, y * 0.1f, z * 0.14f) * 2.25f), 26, 29);
+                                            : (GRAY_ONLY || merlin3D(x, y, z, seed) == 0)
+                                            ? (byte) ((noise.getFoam(x * 0.125f, y * 0.2f, z * 0.24f) * 0.4f + 0.599f) * 4 + 3) // gray
+                                            : (byte) MathTools.clamp(mainColor + (noise.getFoam(x * 0.0625f, y * 0.1f, z * 0.14f) * 2.25f), 26, 29); // mark colors
                         }
                     }
                 }

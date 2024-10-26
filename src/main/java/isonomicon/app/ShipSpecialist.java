@@ -131,7 +131,7 @@ public class ShipSpecialist extends ApplicationAdapter {
         apng.setFlipY(false);
         gif.palette = analyzed = new QualityPalette();
 //        gif.palette = new com.github.tommyettinger.anim8.FastPalette(Coloring.YAM2, Gdx.files.local("assets/Yam2Preload.dat").readBytes());
-        gif.setDitherStrength(0.2_0f);
+        gif.setDitherStrength(0.5f);
         Gdx.files.local("out/vox").mkdirs();
         for (int n = 0; n < inputs.length - 2;) {
             String s = inputs[n++];
