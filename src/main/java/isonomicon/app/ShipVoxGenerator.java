@@ -21,8 +21,8 @@ public class ShipVoxGenerator extends ApplicationAdapter {
     }
     @Override
     public void create() {
-        long startTime = TimeUtils.nanoTime(), seed = Hasher.randomize3(startTime);
         Gdx.files.local("out/vox").mkdirs();
+        long startTime = TimeUtils.nanoTime(), seed = Hasher.randomize3(startTime);
         ModelMaker mm = new ModelMaker(seed, new PaletteReducer());
         for (int i = 0; i < 16; i++) {
             mm.rng.setSeed(seed = Hasher.randomize3(seed));
