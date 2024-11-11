@@ -14,6 +14,7 @@ import com.github.tommyettinger.digital.Base;
 import com.github.yellowstonegames.grid.FlawedPointHash;
 import com.github.yellowstonegames.grid.IPointHash;
 import com.github.yellowstonegames.grid.Noise;
+import isonomicon.app.AppConfig;
 import isonomicon.io.VoxIO;
 import isonomicon.physical.Tools3D;
 import isonomicon.physical.VoxMaterial;
@@ -59,8 +60,8 @@ public class NoiseRenderer extends ApplicationAdapter {
 //        png.setFlipY(true);
 //        png.setCompression(2);
         apng = new AnimatedPNG();
-        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.LOAF);
-        gif.setDitherStrength(0.2_0f);
+        gif.setDitherAlgorithm(AppConfig.DITHER);
+        gif.setDitherStrength(AppConfig.STRENGTH);
         Gdx.files.local("out/vox").mkdirs();
         System.out.println("Loading...");
 //        System.out.println("Produced "+SMALL_SIZE+"x"+SMALL_SIZE+"x"+SMALL_SIZE+" noise.");

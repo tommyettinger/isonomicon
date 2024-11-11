@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.github.tommyettinger.anim8.PaletteReducer;
 import com.github.tommyettinger.colorful.oklab.ColorTools;
 import com.github.tommyettinger.ds.IntObjectMap;
+import isonomicon.app.AppConfig;
 import isonomicon.io.VoxIO;
 import isonomicon.io.extended.*;
 import isonomicon.physical.Tools3D;
@@ -24,7 +25,7 @@ public class SmudgeRenderer {
     public int[][] depths, voxels, render, outlines;
     public VoxMaterial[][] materials;
     public float[][] shadeX, shadeZ, colorL, colorA, colorB, midShading;
-    public PaletteReducer reducer = new com.github.tommyettinger.anim8.FastPalette();
+    public PaletteReducer reducer = new com.github.tommyettinger.anim8.QualityPalette();
     public int[] palette;
     public float[] paletteL, paletteA, paletteB;
     public boolean dither = false, outline = true;
@@ -417,8 +418,8 @@ public class SmudgeRenderer {
             }
         }
         if(dither) {
-            reducer.setDitherStrength(0.2_0f);
-            reducer.reduceLoaf(pixmap);
+            reducer.setDitherStrength(AppConfig.STRENGTH);
+            reducer.reduce(pixmap, AppConfig.DITHER);
         }
 
         fill(depths, 0);

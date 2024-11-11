@@ -88,13 +88,13 @@ public class ShipSpecialGenerator extends ApplicationAdapter {
         png.setFlipY(false);
 //        png8 = new PNG8();
         gif = new AnimatedGif();
-        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.LOAF);
+        gif.setDitherAlgorithm(AppConfig.DITHER);
         gif.setFlipY(false);
         apng = new AnimatedPNG();
         apng.setCompression(2);
         apng.setFlipY(false);
         gif.palette = analyzed = new QualityPalette();
-        gif.setDitherStrength(0.5f);
+        gif.setDitherStrength(AppConfig.STRENGTH);
         long startTime = TimeUtils.nanoTime();
         long seed = Hasher.randomize3(startTime);
         ModelMaker mm = new ModelMaker(seed, new PaletteReducer());

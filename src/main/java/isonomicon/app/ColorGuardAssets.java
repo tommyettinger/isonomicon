@@ -122,10 +122,10 @@ public class ColorGuardAssets extends ApplicationAdapter {
         if(GIF) {
 //        gif = new LoafGif();
             gif = new AnimatedGif();
-            gif.setDitherAlgorithm(Dithered.DitherAlgorithm.LOAF);
+            gif.setDitherAlgorithm(AppConfig.DITHER);
             gif.palette = new com.github.tommyettinger.anim8.QualityPalette(); // Uses Snuggly255
-            gif.setDitherStrength(0.2_0f);
-//            gif.setDitherAlgorithm(Dithered.DitherAlgorithm.LOAF);
+            gif.setDitherStrength(AppConfig.STRENGTH);
+//            gif.setDitherAlgorithm(AppConfig.DITHER);
 //            gif.palette = new com.github.tommyettinger.anim8.QualityPalette(Coloring.SNUGGLY255); // uses OklabCareful metric
 //            gif.setDitherStrength(0.5_0f);
         }

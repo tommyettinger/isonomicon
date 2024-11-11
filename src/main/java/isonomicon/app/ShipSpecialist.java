@@ -122,13 +122,13 @@ public class ShipSpecialist extends ApplicationAdapter {
         png.setFlipY(false);
 //        png8 = new PNG8();
         gif = new AnimatedGif();
-        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.LOAF);
+        gif.setDitherAlgorithm(AppConfig.DITHER);
         gif.setFlipY(false);
         apng = new AnimatedPNG();
         apng.setCompression(2);
         apng.setFlipY(false);
         gif.palette = analyzed = new QualityPalette();
-        gif.setDitherStrength(0.5f);
+        gif.setDitherStrength(AppConfig.STRENGTH);
         Gdx.files.local("out/vox").mkdirs();
         for (int n = 0; n < inputs.length - 2;) {
             String s = inputs[n++];
