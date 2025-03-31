@@ -264,7 +264,9 @@ public class SpecialRenderer {
         for (int x = lowX, ax = xx; x < highX && ax < render.length; x++, ax++) {
             if (ax < 0) continue;
             for (int y = lowY, ay = yy; y < highY && ay < render[0].length; y++, ay++) {
-                if ((depth > depths[ax][ay] || (depth == depths[ax][ay] && (indices[ax][ay] & 255) > (voxel & 255)))) {
+                if ((depth > depths[ax][ay] || (depth == depths[ax][ay] &&
+                        (indices[ax][ay] == 0 || stuffs[Math.min((indices[ax][ay] & 255), stuffs.length - 1)].material.getTrait(VoxMaterial.MaterialTrait._priority)
+                                <= stuffs[Math.min((voxel & 255), stuffs.length - 1)].material.getTrait(VoxMaterial.MaterialTrait._priority))))) {
                     drawn = true;
                     depths[ax][ay] = depth;
                     materials[ax][ay] = m;

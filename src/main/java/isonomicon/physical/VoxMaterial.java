@@ -74,7 +74,9 @@ public class VoxMaterial {
 		_disperse("Disperse"),
 		//18 A threshold noise value between -1.0 and 1.0; if some CyclicNoise is greater than this threshold, the voxel isn't drawn.
 		_swirl("Swirl"),
-		//19 used in newer MV instead of a separate MaterialType
+		//19 The material with the greatest priority in a group of pixels is always rendered if greater than 0.
+		_priority("Priority"),
+		//20 used in newer MV instead of a separate MaterialType
 		_type("Type")
 		;
 		

@@ -34,8 +34,8 @@ public class ColorGuardAssets extends ApplicationAdapter {
     public static boolean DIVERSE = false;
     public static boolean ATTACKS = true;
     public static boolean DEATHS = false;
-    public static boolean EXPLOSION = true;
-    public static boolean TERRAIN = true;
+    public static boolean EXPLOSION = false;
+    public static boolean TERRAIN = false;
 
     public static boolean PNG = true;
     public static boolean APNG = false;

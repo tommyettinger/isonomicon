@@ -256,13 +256,13 @@ public class Stuff {
             new Stuff("marked fluff", 48, "Roughness 0.6 Reflection 0.15 Dapple -0.16"), /*dark orange*/
             new Stuff("base fluff", 49, "Roughness 0.5 Reflection 0.4"),                        // Dapple -0.08
             new Stuff("highlight fluff", 50, "Roughness 0.4 Reflection 0.75"), /*hot orange*/   // Dapple -0.04
-            new Stuff("scar", 51, "Roughness 0.7 Reflection 0.05 Damage 121"), /*light skin*/
+            new Stuff("scar", 51, "Roughness 0.7 Reflection 0.05 Damage 121 Priority 1"), /*light skin*/
             new Stuff("base skin", 52, "Roughness 0.6 Reflection 0.2 Damage 121"),
             new Stuff("nose", 53, "Roughness 0.6 Reflection 0.3 Damage 121"),
-            new Stuff("freckle", 54, "Roughness 0.6 Reflection 0.2 Vary -0.1 Damage 121"),
-            new Stuff("ears", 55, "Roughness 0.5 Reflection 0.1 Damage 121"),
+            new Stuff("freckle", 54, "Roughness 0.6 Reflection 0.2 Vary -0.1 Damage 121 Priority 1"),
+            new Stuff("ears", 55, "Roughness 0.5 Reflection 0.1 Damage 121 Priority 1"),
             new Stuff("overripe fruit or rot", 56, "Roughness 0.2 Reflection 0.02 Dapple -0.15 Vary -0.1"), /*dark skin*/
-            new Stuff("lips blood gore", 57, "Roughness 0.04 Reflection 0.4"), /*gore*/
+            new Stuff("lips blood gore", 57, "Roughness 0.04 Reflection 0.4 Priority 2"), /*gore*/
             new Stuff("knotted wood", 58, "Roughness 0.5 Reflection 0.1 Dapple -0.1 Damage 122"), /*dark brown*/
             new Stuff("old wood", 59, "Roughness 0.6 Reflection 0.0 Dapple -0.25 Vary -0.35 Damage 122"),
             new Stuff("fresh wood", 60, "Roughness 0.4 Reflection 0.0 Dapple -0.15 Vary -0.1 Damage 122"), /*medium brown*/
@@ -271,13 +271,13 @@ public class Stuff {
             new Stuff("bone beak claw", 63, "Roughness 0.4 Reflection 0.4"), /*light yellow*/
 
             new Stuff("dark glass", 64, "Transparency 0.3 Roughness 0.0 Reflection 0.4 Damage 153"),
-            new Stuff("dark eye", 65, "Roughness 0.0 Reflection 0.1 Damage 121"), /*black*/
+            new Stuff("dark eye", 65, "Roughness 0.0 Reflection 0.1 Damage 121 Priority 10"), /*black*/
             new Stuff("shadow", 66, "Roughness 0.0 Reflection 0.0 Emission -0.25"),
             new Stuff("smoke", 67, "Roughness 0.5 Reflection 0.0 Missing 0.05 Rise 0.4 Dapple -0.15 Disperse 0.3 Emission -0.04", 0, 2, 67, 7),
             new Stuff("gray glass", 68, "Transparency 0.5 Roughness 0.0 Reflection 0.65 Damage 153"),
-            new Stuff("dead eye", 69, "Roughness 0.5 Reflection 0.0"),
+            new Stuff("dead eye", 69, "Roughness 0.5 Reflection 0.0 Priority 10"),
             new Stuff("steam", 70, "Transparency 0.5 Roughness 0.3 Missing 0.2 Flow 0.3 Rise 0.7 Disperse 0.1", 0, 3, 70, 5),
-            new Stuff("light eye", 71, "Roughness 1.0 Reflection 1.0 Damage 121"), /*white*/
+            new Stuff("light eye", 71, "Roughness 1.0 Reflection 1.0 Damage 121 Priority 50"), /*white*/
             new Stuff("radioactive glow", 72, "Roughness 0.0 Reflection 0.0 Emission 0.6 Transparency 1.0"), /*light lime*/
             new Stuff("miasma", 73, "Roughness 0.3 Reflection 0.0 Flow 0.5 Rise -0.1 Missing 0.05 Disperse 0.05", 75, 2, 73, 5),
             new Stuff("rustling leaf", 74, "Roughness 0.4 Reflection 0.05 Dapple -0.35 Missing 0.2 Disperse -0.05"),
@@ -309,7 +309,7 @@ public class Stuff {
             new Stuff("purple glass", 100, "Transparency 0.5 Roughness 0.0 Reflection 0.65 Damage 153"),
             new Stuff("toxic sludge", 101, "Roughness 0.6 Reflection 0.2 Flow 0.15 Vary -0.3 Dapple 0.15", 101, 6, 99, 1),
             new Stuff("void", 102, "Roughness 0.0 Reflection 0.0 Emission -0.9 Transparency 1.0"), /*dark purple*/
-            new Stuff("evil eye", 103, "Roughness 0.75 Reflection 0.5 Emission 0.15 Damage 121"), /*burgundy*/
+            new Stuff("evil eye", 103, "Roughness 0.75 Reflection 0.5 Emission 0.15 Damage 121 Priority 50"), /*burgundy*/
             new Stuff("red glass", 104, "Transparency 0.5 Roughness 0.0 Reflection 0.65 Damage 153"), /*medium magenta*/
             new Stuff("love spawner", 105, "Transparency 1.0", 106, 1, 105, 5),
             new Stuff("love particle", 106, "Emission 0.1 Roughness 0.5 Reflection 0.4 Rise 0.3", 106, 2, 105, 1),

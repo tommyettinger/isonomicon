@@ -32,7 +32,7 @@ import java.util.ArrayList;
 public class Specialist extends ApplicationAdapter {
     public static final int SCREEN_WIDTH = 512;//640;
     public static final int SCREEN_HEIGHT = 512;//720;
-    public static final boolean TURNTABLE = false;
+    public static final boolean TURNTABLE = true;
     private SpecialRenderer renderer;
     private VoxModel voxels;
     private String name;
@@ -40,7 +40,7 @@ public class Specialist extends ApplicationAdapter {
     private FastPNG png;
     private AnimatedGif gif;
     private AnimatedPNG apng;
-    private QualityPalette analyzed, snuggly256, low;
+    private QualityPalette analyzed, snuggly256;
     private SpriteBatch batch;
     private Texture palette;
     public Specialist(String[] args){
@@ -50,7 +50,7 @@ public class Specialist extends ApplicationAdapter {
         else 
         {
             System.out.println("INVALID ARGUMENTS. Please supply space-separated absolute paths to .vox models, or use the .bat file.");
-            inputs = new String[]{
+//            inputs = new String[]{
 //                    "b/vox/color_guard/Coast.vox", "palettes/b/ColorGuardBaseDark.png", "Coast",
 //                    "b/vox/color_guard/Desert.vox", "palettes/b/ColorGuardBaseDark.png", "Desert",
 //                    "b/vox/color_guard/Forest.vox", "palettes/b/ColorGuardBaseDark.png", "Forest",
@@ -61,9 +61,9 @@ public class Specialist extends ApplicationAdapter {
 //                    "b/vox/color_guard/Plains.vox", "palettes/b/ColorGuardBaseDark.png", "Plains",
 //                    "b/vox/color_guard/River.vox", "palettes/b/ColorGuardBaseDark.png", "River",
 //                    "b/vox/color_guard/Rocky.vox", "palettes/b/ColorGuardBaseDark.png", "Rocky",
-                    "b/vox/color_guard/Ruins.vox", "palettes/b/ColorGuardBaseDark.png", "Ruins",
-                    "b/vox/color_guard/Volcano.vox", "palettes/b/ColorGuardBaseDark.png", "Volcano",
-            };
+//                    "b/vox/color_guard/Ruins.vox", "palettes/b/ColorGuardBaseDark.png", "Ruins",
+//                    "b/vox/color_guard/Volcano.vox", "palettes/b/ColorGuardBaseDark.png", "Volcano",
+//            };
 //            inputs = new String[]{
 //                    "b/vox/gratitude/A24.vox", "palettes/b/ColorGuardBaseDark.png", "Dark_Priest",
 //                    "b/vox/gratitude/A24.vox", "palettes/b/ColorGuardBaseWhite.png", "Light_Priest",
@@ -82,7 +82,7 @@ public class Specialist extends ApplicationAdapter {
 //            inputs = new String[]{"b/vox/Figure_Split.vox", "palettes/b/TanClothDarkSkin.png"};
 //            inputs = new String[]{"b/vox/Damned.vox", "palettes/b/CherrySkinDarkCloth.png"};
 //            inputs = new String[]{"b/vox/Direction_Cube.vox", "palettes/b/TanClothDarkSkin.png"};
-//            inputs = new String[]{"b/vox/Lomuk.vox", "palettes/b/BlueFurCyanCrystal.png"};
+            inputs = new String[]{"b/vox/Lomuk.vox", "palettes/b/BlueFurCyanCrystal.png", "Blue Lomuk"};
 //            inputs = new String[]{"b/vox/Lomuk.vox", "palettes/b/BlueFurCyanCrystal.png",
 //                    "b/vox/Damned.vox", "palettes/b/CherrySkinDarkCloth.png",
 //                    "b/vox/Figure.vox", "palettes/b/TanClothDarkSkin.png",
@@ -126,32 +126,32 @@ public class Specialist extends ApplicationAdapter {
 //        gif.palette = new com.github.tommyettinger.anim8.FastPalette(Coloring.YAM2, Gdx.files.local("assets/Yam2Preload.dat").readBytes());
         gif.setDitherStrength(AppConfig.STRENGTH);
         snuggly256 = new QualityPalette();
-        low =
+//        low =
+////                new QualityPalette(new int[]{
+////                        // Prospecal-8
+////                        0x00000000,
+////                        0x6DB5BAFF, 0x26544CFF, 0x76AA3AFF, 0xFBFDBEFF, 0xD23C4FFF, 0x2B1328FF, 0x753D38FF, 0xEFAD5FFF
+////                });
 //                new QualityPalette(new int[]{
-//                        // Prospecal-8
-//                        0x00000000,
-//                        0x6DB5BAFF, 0x26544CFF, 0x76AA3AFF, 0xFBFDBEFF, 0xD23C4FFF, 0x2B1328FF, 0x753D38FF, 0xEFAD5FFF
+//                        // azurestar-32
+//                        0x00000000, 0x372B26FF, 0xC37C6BFF, 0xDD997EFF, 0x6E6550FF, 0x9A765EFF, 0xE1AD56FF, 0xC6B5A5FF,
+//                        0xE9B58CFF, 0xEFCBB3FF, 0xF7DFAAFF, 0xFFEDD4FF, 0xBBD18AFF, 0x355525FF, 0x557A41FF, 0x112D19FF,
+//                        0x45644FFF, 0x62966AFF, 0x86BB9AFF, 0x15452DFF, 0x396A76FF, 0x86A2B7FF, 0x92B3DBFF, 0x3D4186FF,
+//                        0x6672BFFF, 0x15111BFF, 0x9A76BFFF, 0x925EA2FF, 0xC7A2CFFF, 0x553549FF, 0xA24D72FF, 0xC38E92FF,
+//                        0xE3A6BBFF,
 //                });
-                new QualityPalette(new int[]{
-                        // azurestar-32
-                        0x00000000, 0x372B26FF, 0xC37C6BFF, 0xDD997EFF, 0x6E6550FF, 0x9A765EFF, 0xE1AD56FF, 0xC6B5A5FF,
-                        0xE9B58CFF, 0xEFCBB3FF, 0xF7DFAAFF, 0xFFEDD4FF, 0xBBD18AFF, 0x355525FF, 0x557A41FF, 0x112D19FF,
-                        0x45644FFF, 0x62966AFF, 0x86BB9AFF, 0x15452DFF, 0x396A76FF, 0x86A2B7FF, 0x92B3DBFF, 0x3D4186FF,
-                        0x6672BFFF, 0x15111BFF, 0x9A76BFFF, 0x925EA2FF, 0xC7A2CFFF, 0x553549FF, 0xA24D72FF, 0xC38E92FF,
-                        0xE3A6BBFF,
-                });
-//                new QualityPalette(new int[]{
-//                        // Nice-31
-//                        0x00000000, 0x636663FF, 0x87857CFF, 0xBCAD9FFF, 0xF2B888FF, 0xEB9661FF, 0xB55945FF, 0x734C44FF,
-//                        0x3D3333FF, 0x593E47FF, 0x7A5859FF, 0xA57855FF, 0xDE9F47FF, 0xFDD179FF, 0xFEE1B8FF, 0xD4C692FF,
-//                        0xA6B04FFF, 0x819447FF, 0x44702DFF, 0x2F4D2FFF, 0x546756FF, 0x89A477FF, 0xA4C5AFFF, 0xCAE6D9FF,
-//                        0xF1F6F0FF, 0xD5D6DBFF, 0xBBC3D0FF, 0x96A9C1FF, 0x6C81A1FF, 0x405273FF, 0x303843FF, 0x14233AFF,
-//                });
-//                new QualityPalette(new int[]{
-//                // Equpix15, by Night
-//                0x00000000,0x523c4eff,0x2a2a3aff,0x3e5442ff,0x84545cff,0x38607cff,0x5c7a56ff,0x101024ff,
-//                0xb27e56ff,0xd44e52ff,0x55a894ff,0x80ac40ff,0xec8a4bff,0x8bd0baff,0xffcc68ff,0xfff8c0ff,
-//        });
+////                new QualityPalette(new int[]{
+////                        // Nice-31
+////                        0x00000000, 0x636663FF, 0x87857CFF, 0xBCAD9FFF, 0xF2B888FF, 0xEB9661FF, 0xB55945FF, 0x734C44FF,
+////                        0x3D3333FF, 0x593E47FF, 0x7A5859FF, 0xA57855FF, 0xDE9F47FF, 0xFDD179FF, 0xFEE1B8FF, 0xD4C692FF,
+////                        0xA6B04FFF, 0x819447FF, 0x44702DFF, 0x2F4D2FFF, 0x546756FF, 0x89A477FF, 0xA4C5AFFF, 0xCAE6D9FF,
+////                        0xF1F6F0FF, 0xD5D6DBFF, 0xBBC3D0FF, 0x96A9C1FF, 0x6C81A1FF, 0x405273FF, 0x303843FF, 0x14233AFF,
+////                });
+////                new QualityPalette(new int[]{
+////                // Equpix15, by Night
+////                0x00000000,0x523c4eff,0x2a2a3aff,0x3e5442ff,0x84545cff,0x38607cff,0x5c7a56ff,0x101024ff,
+////                0xb27e56ff,0xd44e52ff,0x55a894ff,0x80ac40ff,0xec8a4bff,0x8bd0baff,0xffcc68ff,0xfff8c0ff,
+////        });
         Gdx.files.local("out/vox").mkdirs();
         for (int n = 0; n < inputs.length - 2;) {
             String s = inputs[n++];
