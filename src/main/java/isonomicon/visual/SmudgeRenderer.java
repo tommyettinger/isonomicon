@@ -149,7 +149,11 @@ public class SmudgeRenderer {
         final float hs = size * 0.5f;
         for (int x = 0, ax = xx; x < 4 && ax < render.length; x++, ax++) {
             for (int y = 0, ay = yy; y < 4 && ay < render[0].length; y++, ay++) {
-                if ((depth > depths[ax][ay] || (depth == depths[ax][ay] && colorL[ax][ay] < paletteL[voxel & 255])) && (alpha == 0f)) {
+                if ((depth > depths[ax][ay] || (depth == depths[ax][ay] &&
+//                        colorL[ax][ay] < paletteL[voxel & 255]
+                        (materials[ax][ay] == null || materials[ax][ay].getTrait(VoxMaterial.MaterialTrait._priority)
+                                <= m.getTrait(VoxMaterial.MaterialTrait._priority))
+                )) && (alpha == 0f)) {
                     drawn = true;
                     colorL[ax][ay] = paletteL[voxel & 255];
                     colorA[ax][ay] = paletteA[voxel & 255];
