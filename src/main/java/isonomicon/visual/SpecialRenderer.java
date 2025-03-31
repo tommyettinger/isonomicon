@@ -122,7 +122,7 @@ public class SpecialRenderer {
     }
 
     protected float bnBlocky(int x, int y, int seed) {
-        return (BlueNoise.TILE_NOISE[seed & 63][(x & 63) | (y & 63) << 6] & 0x80) * 0x3p-10f;
+        return (BlueNoise.getSeeded(x, y, seed) & 0x80) * 0x3p-10f;
     }
 
     /**
