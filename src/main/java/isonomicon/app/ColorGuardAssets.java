@@ -34,8 +34,8 @@ public class ColorGuardAssets extends ApplicationAdapter {
     public static boolean DIVERSE = false;
     public static boolean ATTACKS = true;
     public static boolean DEATHS = false;
-    public static boolean EXPLOSION = false;
-    public static boolean TERRAIN = false;
+    public static boolean EXPLOSION = true;
+    public static boolean TERRAIN = true;
 
     public static boolean PNG = true;
     public static boolean APNG = false;
@@ -44,7 +44,9 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //    public static final String outDir = "out/color_guard";
 //    public static final String outDir = "out/cg";
 //    public static final String outDir = "out/cg_July_23_2024";
-    public static final String outDir = "out/cg_March_30_2025";
+//    public static final String outDir = "out/cg_Gourd_0_3";
+//    public static final String outDir = "out/cg_Banter_0_7";
+    public static final String outDir = "out/cg_Banter_0_4";
 
     public static final int SCREEN_WIDTH = 512;//640;
     public static final int SCREEN_HEIGHT = 512;//720;
@@ -87,6 +89,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.name.startsWith("Terrain")).toList();
 //        ColorGuardData.units = ColorGuardData.units.subList(52, ColorGuardData.units.size());
 //        ColorGuardData.units = ColorGuardData.units.subList(2, 3);
+//        ColorGuardData.units = ColorGuardData.units.subList(6, 9);
         try {
             head = VoxIOExtended.readVox(new LittleEndianDataInputStream(new FileInputStream("specialized/b/vox/color_guard/human/Head.vox")));
         }
@@ -218,7 +221,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                     }
                 }
                 if(apng != null) apng.write(Gdx.files.local(outDir + "/animated_diverse/" + name + '/' + name + ".png"), pm, 8);
-                if(gif != null) SpecialRenderer.monoAlpha(pm);
+//                if(gif != null) SpecialRenderer.monoAlpha(pm);
                 if(gif != null) gif.write(Gdx.files.local(outDir + "/animated_diverse/" + name + '/' + name + ".gif"), pm, 8);
 //                if(apng != null) apng.write(Gdx.files.local(outDir + "/animated_diverse_flat/" + name + ".png"), pm, 8);
                 for (Pixmap pix : pm) {
@@ -297,7 +300,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                             }
                         }
                         if(apng != null) apng.write(Gdx.files.local(outDir + "/animated_diverse/" + name + '/' + name + ps + ".png"), pm, 8);
-                        if(gif != null) SpecialRenderer.monoAlpha(pm);
+//                        if(gif != null) SpecialRenderer.monoAlpha(pm);
                         if(gif != null) gif.write(Gdx.files.local(outDir + "/animated_diverse/" + name + '/' + name + ps + ".gif"), pm, 8);
 //                        if(apng != null) apng.write(Gdx.files.local(outDir + "/animated_diverse_flat/" + name + ps + ".png"), pm, 8);
                         for (Pixmap pix : pm) {
@@ -339,7 +342,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                         }
                                     }
                                     if(apng != null) apng.write(Gdx.files.local(outDir + "/animated_diverse/" + attack + "_Receive/" + attack + "_Receive_" + strength + ".png"), pm, 8);
-                                    if(gif != null) SpecialRenderer.monoAlpha(pm);
+//                                    if(gif != null) SpecialRenderer.monoAlpha(pm);
                                     if(gif != null) gif.write(Gdx.files.local(outDir + "/animated_diverse/" + attack + "_Receive/" + attack + "_Receive_" + strength + ".gif"), pm, 8);
                                     for (Pixmap pix : pm) {
                                         if (!pix.isDisposed())
@@ -411,7 +414,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                     }
                 }
                 if(apng != null) apng.write(Gdx.files.local(outDir + "/animated/" + name + '/' + name + ".png"), pm, 8);
-                if(gif != null) SpecialRenderer.monoAlpha(pm);
+//                if(gif != null) SpecialRenderer.monoAlpha(pm);
                 if(gif != null) gif.write(Gdx.files.local(outDir + "/animated/" + name + '/' + name + ".gif"), pm, 8);
                 for (Pixmap pix : pm) {
                     if (!pix.isDisposed())
@@ -482,7 +485,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                             }
                         }
                         if(apng != null) apng.write(Gdx.files.local(outDir + "/animated/" + name + '/' + name + ps + ".png"), pm, 8);
-                        if(gif != null) SpecialRenderer.monoAlpha(pm);
+//                        if(gif != null) SpecialRenderer.monoAlpha(pm);
                         if(gif != null) gif.write(Gdx.files.local(outDir + "/animated/" + name + '/' + name + ps + ".gif"), pm, 8);
                         for (Pixmap pix : pm) {
                             if (!pix.isDisposed())
@@ -523,7 +526,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                         }
                                     }
                                     if(apng != null) apng.write(Gdx.files.local(outDir + "/animated/" + attack + "_Receive/" + attack + "_Receive_" + strength + ".png"), pm, 8);
-                                    if(gif != null) SpecialRenderer.monoAlpha(pm);
+//                                    if(gif != null) SpecialRenderer.monoAlpha(pm);
                                     if(gif != null) gif.write(Gdx.files.local(outDir + "/animated/" + attack + "_Receive/" + attack + "_Receive_" + strength + ".gif"), pm, 8);
                                     for (Pixmap pix : pm) {
                                         if (!pix.isDisposed())
@@ -619,7 +622,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                 }
             }
             if(apng != null) apng.write(Gdx.files.local(outDir + "/animated/" + name + '/' + name + ".png"), pm, 8);
-            if(gif != null) SpecialRenderer.monoAlpha(pm);
+//            if(gif != null) SpecialRenderer.monoAlpha(pm);
             if(gif != null) gif.write(Gdx.files.local(outDir + "/animated/" + name + '/' + name + ".gif"), pm, 8);
             for (Pixmap pix : pm) {
                 if(!pix.isDisposed())
