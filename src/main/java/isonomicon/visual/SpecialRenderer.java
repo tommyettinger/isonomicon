@@ -14,6 +14,7 @@ import com.github.yellowstonegames.grid.BlueNoise;
 import com.github.yellowstonegames.grid.CyclicNoise;
 import com.github.yellowstonegames.grid.IntPointHash;
 import com.github.yellowstonegames.grid.Noise;
+import isonomicon.app.AppConfig;
 import isonomicon.io.extended.GroupChunk;
 import isonomicon.io.extended.ShapeModel;
 import isonomicon.io.extended.TransformChunk;
@@ -625,8 +626,10 @@ public class SpecialRenderer {
     }
 
     public static void monoAlpha(Array<Pixmap> pms) {
-        for(Pixmap pm : pms) {
-            monoAlpha(pm);
+        if(AppConfig.GRAY_BG) {
+            for (Pixmap pm : pms) {
+                monoAlpha(pm);
+            }
         }
     }
 
