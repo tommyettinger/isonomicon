@@ -244,3 +244,5 @@ target/
 /package/*.jar
 
 /vox/Predator.vox
+
+/raw/

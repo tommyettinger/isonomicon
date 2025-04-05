@@ -246,7 +246,7 @@ public class SpecialRenderer {
         final float emit = m.getTrait(VoxMaterial.MaterialTrait._emit) * 0.75f;
         int lowX = 0, highX = 4, lowY = 0, highY = 4;
 //        int lowX = 0, highX = 1 << shrink, lowY = 0, highY = 1 << shrink;
-        
+
 //        if(emit != 0f) {
 //            lowX = lowY = 1;
 //            highX = highY = 3;
