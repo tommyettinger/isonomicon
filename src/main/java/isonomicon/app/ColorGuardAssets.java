@@ -44,10 +44,11 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //    public static final String outDir = "out/color_guard";
 //    public static final String outDir = "out/cg";
 //    public static final String outDir = "out/cg_July_23_2024";
+    public static final String outDir = "out/cg_small_Gourd_0_3";
 //    public static final String outDir = "out/cg_Gourd_0_3";
 //    public static final String outDir = "out/cg_Banter_0_7";
 //    public static final String outDir = "out/cg_Banter_0_4";
-    public static final String outDir = "out/cg_Banter_0_3";
+//    public static final String outDir = "out/cg_Banter_0_3";
 
     public static final int SCREEN_WIDTH = 512;//640;
     public static final int SCREEN_HEIGHT = 512;//720;
@@ -92,7 +93,10 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //        ColorGuardData.units = ColorGuardData.units.subList(2, 3);
 //        ColorGuardData.units = ColorGuardData.units.subList(6, 9);
         try {
-            head = VoxIOExtended.readVox(new LittleEndianDataInputStream(new FileInputStream("specialized/b/vox/color_guard/human/Head.vox")));
+            if(SpecialRenderer.shrink == 3)
+                head = VoxIOExtended.readVox(new LittleEndianDataInputStream(new FileInputStream("specialized/b/vox/color_guard/human/Head_Shrink_3.vox")));
+            else
+                head = VoxIOExtended.readVox(new LittleEndianDataInputStream(new FileInputStream("specialized/b/vox/color_guard/human/Head.vox")));
         }
         catch (FileNotFoundException ignored){
             System.out.println("Head model not found; this was run from the wrong path. Exiting.");
@@ -176,7 +180,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                     renderer.outline = 4;
                 }
                 Gdx.files.local(outDir + "/animated_diverse/" + name + '/').mkdirs();
-                load("specialized/b/vox/color_guard/" + name + ".vox");
+                load("specialized/b/vox/color_guard/" + name, ".vox");
                 Texture t = new Texture(renderer.palettePixmap.getWidth(), renderer.palettePixmap.getHeight(), Pixmap.Format.RGBA8888);
                 Pixmap pixmap;
                 Array<Pixmap> pm = new Array<>(32 * armies.length);
@@ -241,11 +245,11 @@ public class ColorGuardAssets extends ApplicationAdapter {
                             continue;
                         }
                         if (pose) {
-                            load("specialized/b/vox/color_guard/" + unit.name + "_Firing.vox");
+                            load("specialized/b/vox/color_guard/" + unit.name, "_Firing.vox");
                             name = unit.name;
                             original = voxels.copy();
                         } else {
-                            load("specialized/b/vox/color_guard/" + unit.name + ".vox");
+                            load("specialized/b/vox/color_guard/" + unit.name, ".vox");
                             name = unit.name;
                             original = voxels.copy();
                         }
@@ -369,7 +373,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                 ColorGuardData.Unit unit = ColorGuardData.units.get(n);
                 String s = unit.name;
                 System.out.println("Rendering " + s);
-                load("specialized/b/vox/color_guard/" + s + ".vox");
+                load("specialized/b/vox/color_guard/" + s, ".vox");
                 if(ColorGuardData.terrains.contains(name) || name.startsWith("Terrain")){
                     renderer.shadows = false;
                     renderer.outline = 2;
@@ -433,9 +437,9 @@ public class ColorGuardAssets extends ApplicationAdapter {
                             continue;
                         }
                         if (pose) {
-                            load("specialized/b/vox/color_guard/" + unit.name + "_Firing.vox");
+                            load("specialized/b/vox/color_guard/" + unit.name, "_Firing.vox");
                         } else {
-                            load("specialized/b/vox/color_guard/" + unit.name + ".vox");
+                            load("specialized/b/vox/color_guard/" + unit.name, ".vox");
                         }
                         name = unit.name;
                         original = voxels.copy();
@@ -633,7 +637,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
         }
         if(TERRAIN)
         {
-            load("specialized/b/vox/color_guard/Terrain_Small.vox");
+            load("specialized/b/vox/color_guard/Terrain_Small", ".vox");
             renderer.shadows = false;
             renderer.outline = 2;
             Texture t = new Texture(renderer.palettePixmap.getWidth(), renderer.palettePixmap.getHeight(), Pixmap.Format.RGBA8888);
@@ -696,10 +700,13 @@ public class ColorGuardAssets extends ApplicationAdapter {
         new Lwjgl3Application(app, config);
     }
 
-    public void load(String name) {
+    public void load(String name, String suffix) {
         try {
             //// loads a file by its full path, which we get via a command-line arg
-            voxels = VoxIOExtended.readVox(new LittleEndianDataInputStream(new FileInputStream(name)));
+            if(Gdx.files.absolute(name + ("_Shrink_" + SpecialRenderer.shrink) + suffix).exists())
+                voxels = VoxIOExtended.readVox(new LittleEndianDataInputStream(new FileInputStream(name + "_Shrink_" + SpecialRenderer.shrink + suffix)));
+            else
+                voxels = VoxIOExtended.readVox(new LittleEndianDataInputStream(new FileInputStream(name + suffix)));
             if(voxels == null) {
                 voxels = new VoxModel();
                 return;
@@ -707,8 +714,8 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //            voxels = Tools3D.scaleAndSoak(voxels);
 //            voxels = Tools3D.soak(voxels);
             voxels.mergeWith(head);
-            int nameStart = Math.max(name.lastIndexOf('/'), name.lastIndexOf('\\')) + 1;
-            this.name = name.substring(nameStart, name.indexOf('.', nameStart));
+            int nameStart = Math.max((name+suffix).lastIndexOf('/'), (name+suffix).lastIndexOf('\\')) + 1;
+            this.name = (name+suffix).substring(nameStart, (name+suffix).indexOf('.', nameStart));
 //            renderer = new NextRenderer(voxels.length, QUALITY);
 //            renderer = new AngledRenderer(voxels.length);
 //            SpecialRenderer.shrink = 1;

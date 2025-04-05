@@ -36,7 +36,7 @@ import static com.github.tommyettinger.digital.TrigTools.sinTurns;
  * unusual technique that stores a palette index in the R channel and a lightness adjustment in the G channel.
  */
 public class SpecialRenderer {
-    public static int shrink = 2;
+    public static int shrink = 3;
         public static float distortHXY = 2, distortVXY = 1, distortVZ = 3; // ground truth for isometric
 //    public static float distortHXY = 2, distortVXY = 0, distortVZ = 3; // side view
 //    public static float distortHXY = 2, distortVXY = 0.5f, distortVZ = 3; // partially elevated side view ("shallow")
@@ -245,6 +245,8 @@ public class SpecialRenderer {
         }
         final float emit = m.getTrait(VoxMaterial.MaterialTrait._emit) * 0.75f;
         int lowX = 0, highX = 4, lowY = 0, highY = 4;
+//        int lowX = 0, highX = 1 << shrink, lowY = 0, highY = 1 << shrink;
+        
 //        if(emit != 0f) {
 //            lowX = lowY = 1;
 //            highX = highY = 3;
