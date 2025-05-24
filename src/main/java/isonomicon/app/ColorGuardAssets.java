@@ -44,7 +44,8 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //    public static final String outDir = "out/color_guard";
 //    public static final String outDir = "out/cg";
 //    public static final String outDir = "out/cg_July_23_2024";
-    public static final String outDir = "out/cg_small_Gourd_0_3";
+    public static final String outDir = "out/cg_small_Marten_0_6";
+//    public static final String outDir = "out/cg_small_Gourd_0_3";
 //    public static final String outDir = "out/cg_Gourd_0_3";
 //    public static final String outDir = "out/cg_Banter_0_7";
 //    public static final String outDir = "out/cg_Banter_0_4";

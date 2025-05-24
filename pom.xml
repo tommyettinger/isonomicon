@@ -75,12 +75,12 @@
         <maven.gpg.version>1.6</maven.gpg.version>
         <jdk.version>21</jdk.version>
         <junit.version>4.13.2</junit.version>
-        <anim8.version>0.5.2</anim8.version>
-        <squidsquad.version>60828c4a1c</squidsquad.version><!-- was fcf95825bd, before that fa55957446, before that 1a58b4cb26 -->
+        <anim8.version>0.5.3</anim8.version>
+        <squidsquad.version>9226756bfe</squidsquad.version><!-- was 60828c4a1c, before that fcf95825bd, fa55957446, before that 1a58b4cb26 -->
         <gdx.version>1.13.1</gdx.version>
         <digital.version>0.6.2</digital.version>
-        <juniper.version>0.6.5</juniper.version>
-        <jdkgdxds.version>1.8.0</jdkgdxds.version>
+        <juniper.version>0.6.9</juniper.version>
+        <jdkgdxds.version>1.9.2</jdkgdxds.version>
         <colorful.version>0.9.0</colorful.version>
     </properties>
 
