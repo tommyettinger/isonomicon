@@ -547,28 +547,23 @@ public class Stuff {
         }
     }
 
-    public static void damage(Stuff[] stuffs, byte[][][] model, int frame, float amount){
-        int damageCounter = 0, checkCounter = 0;
-
+    public static void damage(Stuff[] stuffs, byte[][][] model, float amount){
+        long seed = noise.getSeed();
         amount *= 32f;
         for (int x = 0; x < model.length; x++) {
             for (int y = 0; y < model[x].length; y++) {
                 for (int z = 0; z < model[x][y].length; z++) {
                     int v = model[x][y][z] & 255;
-                    if(v == 0) continue;
-                    float rate = stuffs[v].material.traits.getOrDefault(VoxMaterial.MaterialTrait._rate.ordinal(), 1f);
-                    int rf = (int)(rate * frame);
-                    if(rf != (int)(rate * (frame + 1))) {
-                        checkCounter++;
-                        if((LongPointHash.hash32(x, y, z, v)) < amount) {
-                            if (0 == (model[x][y][z] = (byte) stuffs[v].material.traits.getOrDefault(VoxMaterial.MaterialTrait._damage.ordinal(), 0)))
-                                damageCounter++;
+                    if (v == 0) continue;
+                    if ((LongPointHash.hash32(x, y, z, seed)) < amount) {
+                        model[x][y][z] = (byte) stuffs[v].material.traits.getOrDefault(VoxMaterial.MaterialTrait._damage.ordinal(), 0);
+//                            if (0 == (model[x][y][z] = (byte) stuffs[v].material.traits.getOrDefault(VoxMaterial.MaterialTrait._damage.ordinal(), 0)))
+//                                damageCounter++;
 //                            else System.out.print(model[x][y][z] + " ");
-                        }
                     }
                 }
             }
         }
-        System.out.println("\nFrame " + frame + " had " + damageCounter + " removed voxels out of " + checkCounter + " checked.");
+//        System.out.println("\nFrame " + frame + " had " + damageCounter + " removed voxels out of " + checkCounter + " checked.");
     }
 }

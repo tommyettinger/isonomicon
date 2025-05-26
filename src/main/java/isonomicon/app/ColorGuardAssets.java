@@ -37,7 +37,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
     public static boolean EXPLOSION = true;
     public static boolean TERRAIN = true;
     public static final String SPECIES = "human";
-    public static final float DAMAGED = 0.4f;
+    public static final float DAMAGED = 0.65f;
 
     public static boolean PNG = true;
     public static boolean APNG = false;
@@ -176,12 +176,15 @@ public class ColorGuardAssets extends ApplicationAdapter {
                 Array<Pixmap> pm = new Array<>(32 * armies.length);
                 pm.setSize(32 * armies.length);
                 VoxModel original = voxels.copy();
+                if(DAMAGED > 0f) {
+                    for (int j = 0; j < original.grids.size(); j++) {
+                        Stuff.damage(Stuff.STUFFS_B, original.grids.get(j), DAMAGED);
+                    }
+                }
                 for (int i = 0; i < 4; i++) {
                     voxels = original.copy();
                     for (int f = 0; f < 4; f++) {
                         for (int j = 0; j < voxels.grids.size(); j++) {
-                            if(DAMAGED > 0f)
-                                Stuff.damage(Stuff.STUFFS_B, voxels.grids.get(j), f, DAMAGED);
                             Stuff.evolve(Stuff.STUFFS_B, voxels.grids.get(j), f);
                         }
                         renderer.drawModelSimple(voxels, i * 0.25f, 0f, 0f, f, 0.00f, 0.00f, 0.00f);
@@ -238,21 +241,22 @@ public class ColorGuardAssets extends ApplicationAdapter {
                         }
                         if (pose) {
                             load("specialized/b/vox/color_guard/" + unit.name, "_Firing.vox");
-                            name = unit.name;
-                            original = voxels.copy();
                         } else {
                             load("specialized/b/vox/color_guard/" + unit.name, ".vox");
-                            name = unit.name;
-                            original = voxels.copy();
                         }
+                        name = unit.name;
+                        original = voxels.copy();
                         EffectGenerator.r.setSeed(unit.name.hashCode() ^ which);
+                        if(DAMAGED > 0f) {
+                            for (int j = 0; j < original.grids.size(); j++) {
+                                Stuff.damage(Stuff.STUFFS_B, original.grids.get(j), DAMAGED);
+                            }
+                        }
                         for (int i = 0; i < 4; i++) {
                             frames[0] = original.copy();
                             for (int f = 0; f < frames.length; f++) {
                                 if (f > 0) frames[f] = frames[f - 1].copy();
                                 for (int j = 0; j < frames[f].grids.size(); j++) {
-                                    if(DAMAGED > 0f)
-                                        Stuff.damage(Stuff.STUFFS_B, frames[f].grids.get(j), f, DAMAGED);
                                     Stuff.evolve(Stuff.STUFFS_B, frames[f].grids.get(j), f);
                                 }
                             }
@@ -380,12 +384,16 @@ public class ColorGuardAssets extends ApplicationAdapter {
                 Array<Pixmap> pm = new Array<>(32 * armies.length);
                 pm.setSize((4 * 4 * 2) * armies.length);
                 VoxModel original = voxels.copy();
+                if(DAMAGED > 0f) {
+                    for (int j = 0; j < original.grids.size(); j++) {
+                        Stuff.damage(Stuff.STUFFS_B, original.grids.get(j), DAMAGED);
+                    }
+                }
+
                 for (int i = 0; i < 4; i++) {
                     voxels = original.copy();
                     for (int f = 0; f < 4; f++) {
                         for (int j = 0; j < voxels.grids.size(); j++) {
-                            if(DAMAGED > 0f)
-                                Stuff.damage(Stuff.STUFFS_B, voxels.grids.get(j), f, DAMAGED);
                             Stuff.evolve(Stuff.STUFFS_B, voxels.grids.get(j), f);
                         }
                         renderer.drawModelSimple(voxels, i * 0.25f, 0f, 0f, f, 0.00f, 0.00f, 0.00f);
@@ -440,13 +448,16 @@ public class ColorGuardAssets extends ApplicationAdapter {
                         name = unit.name;
                         original = voxels.copy();
                         EffectGenerator.r.setSeed(unit.name.hashCode() ^ which);
+                        if(DAMAGED > 0f) {
+                            for (int j = 0; j < original.grids.size(); j++) {
+                                Stuff.damage(Stuff.STUFFS_B, original.grids.get(j), DAMAGED);
+                            }
+                        }
                         for (int i = 0; i < 4; i++) {
                             frames[0] = original.copy();
                             for (int f = 0; f < frames.length; f++) {
                                 if (f > 0) frames[f] = frames[f - 1].copy();
                                 for (int j = 0; j < frames[f].grids.size(); j++) {
-                                    if(DAMAGED > 0f)
-                                        Stuff.damage(Stuff.STUFFS_B, frames[f].grids.get(j), f, DAMAGED);
                                     Stuff.evolve(Stuff.STUFFS_B, frames[f].grids.get(j), f);
                                 }
                             }
