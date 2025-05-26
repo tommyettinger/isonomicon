@@ -36,6 +36,8 @@ public class ColorGuardAssets extends ApplicationAdapter {
     public static boolean DEATHS = false;
     public static boolean EXPLOSION = true;
     public static boolean TERRAIN = true;
+    public static final String SPECIES = "human";
+    public static final float DAMAGED = 0.4f;
 
     public static boolean PNG = true;
     public static boolean APNG = false;
@@ -44,7 +46,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //    public static final String outDir = "out/color_guard";
 //    public static final String outDir = "out/cg";
 //    public static final String outDir = "out/cg_July_23_2024";
-    public static final String outDir = "out/cg_small_Marten_0_6";
+    public static final String outDir = "out/cg_small_" + SPECIES + (DAMAGED > 0f ? "_damaged" : "");
 //    public static final String outDir = "out/cg_small_Gourd_0_3";
 //    public static final String outDir = "out/cg_Gourd_0_3";
 //    public static final String outDir = "out/cg_Banter_0_7";
@@ -95,9 +97,9 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //        ColorGuardData.units = ColorGuardData.units.subList(6, 9);
         try {
             if(SpecialRenderer.shrink == 3)
-                head = VoxIOExtended.readVox(new LittleEndianDataInputStream(new FileInputStream("specialized/b/vox/color_guard/human/Head_Shrink_3.vox")));
+                head = VoxIOExtended.readVox(new LittleEndianDataInputStream(new FileInputStream("specialized/b/vox/color_guard/"+SPECIES+"/Head_Shrink_3.vox")));
             else
-                head = VoxIOExtended.readVox(new LittleEndianDataInputStream(new FileInputStream("specialized/b/vox/color_guard/human/Head.vox")));
+                head = VoxIOExtended.readVox(new LittleEndianDataInputStream(new FileInputStream("specialized/b/vox/color_guard/"+SPECIES+"/Head.vox")));
         }
         catch (FileNotFoundException ignored){
             System.out.println("Head model not found; this was run from the wrong path. Exiting.");
@@ -142,29 +144,16 @@ public class ColorGuardAssets extends ApplicationAdapter {
             apng = new AnimatedPNG();
             apng.setCompression(2);
         }
-        //// Using Neue on a null palette takes 146.797 seconds with just the five units with an arc missile.
-        //// (with fastAnalysis=false.)
-        //// Now with fastAnalysis=true, 34.407 seconds.
-//        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.NEUE);
-        //// Using Scatter with the below YAM3 preloaded palette, dither strength 0.75f, takes 25.596 seconds.
-//        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.SCATTER);
-        //// Neue with the preloaded YAM3 palette, dither strength 0.5f, looks a little better, and takes similar time.
-
-        //// The latest BLUE_NOISE dither is a huge improvement, and looks much better in animations.
-//        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.BLUE_NOISE);
-        //// The recent changes to GRADIENT_NOISE dither finally make it usable, and it's an ordered dither, too
-//        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.GRADIENT_NOISE);
-        // can be pretty good, but this might be too strong by default. Ordered dither, again.
-//        gif.setDitherAlgorithm(Dithered.DitherAlgorithm.ROBERTS);
-        //// BLUE_NOISE doesn't need this, but NEUE, GRADIENT_NOISE, and ROBERTS do.
-//        gif.setDitherStrength(0.5_0f);
-        //// LOAF can be higher.
         FrameBuffer fb = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), false);
         ObjectIntMap<String> doneReceive = new ObjectIntMap<>(16);
         doneReceive.setDefaultValue(-1);
         for(String s : EffectGenerator.KNOWN_RECEIVE_EFFECTS.keySet())
             doneReceive.put(s, 0);
-        int[] canonicalLooks ={0, 7, 15, 3, 18, 17, 1, 12};
+        int[] canonicalLooks;
+        if("human".equals(SPECIES))
+            canonicalLooks = new int[]{0, 7, 15, 3, 18, 17, 1, 12};
+        else // zombie for now
+            canonicalLooks = new int[]{20, 20, 20, 20, 20, 20, 20, 20};
         // many skin and hair colors
         if(DIVERSE)
         {
@@ -191,11 +180,13 @@ public class ColorGuardAssets extends ApplicationAdapter {
                     voxels = original.copy();
                     for (int f = 0; f < 4; f++) {
                         for (int j = 0; j < voxels.grids.size(); j++) {
+                            if(DAMAGED > 0f)
+                                Stuff.damage(Stuff.STUFFS_B, voxels.grids.get(j), f, DAMAGED);
                             Stuff.evolve(Stuff.STUFFS_B, voxels.grids.get(j), f);
                         }
                         renderer.drawModelSimple(voxels, i * 0.25f, 0f, 0f, f, 0.00f, 0.00f, 0.00f);
                         t.draw(renderer.palettePixmap, 0, 0);
-                        for (int look = 0, lk = 0; look < 153; look+=8, lk++) {
+                        for (int look = 0, lk = 0; look < 160; look+=8, lk++) {
 //                            if(lk == 3 || lk == 8 || lk == 11 || lk == 18 || lk == 21 || lk == 25)
 //                                continue;
                             for (int j = 0; j < armies.length; j++) {
@@ -260,6 +251,8 @@ public class ColorGuardAssets extends ApplicationAdapter {
                             for (int f = 0; f < frames.length; f++) {
                                 if (f > 0) frames[f] = frames[f - 1].copy();
                                 for (int j = 0; j < frames[f].grids.size(); j++) {
+                                    if(DAMAGED > 0f)
+                                        Stuff.damage(Stuff.STUFFS_B, frames[f].grids.get(j), f, DAMAGED);
                                     Stuff.evolve(Stuff.STUFFS_B, frames[f].grids.get(j), f);
                                 }
                             }
@@ -391,6 +384,8 @@ public class ColorGuardAssets extends ApplicationAdapter {
                     voxels = original.copy();
                     for (int f = 0; f < 4; f++) {
                         for (int j = 0; j < voxels.grids.size(); j++) {
+                            if(DAMAGED > 0f)
+                                Stuff.damage(Stuff.STUFFS_B, voxels.grids.get(j), f, DAMAGED);
                             Stuff.evolve(Stuff.STUFFS_B, voxels.grids.get(j), f);
                         }
                         renderer.drawModelSimple(voxels, i * 0.25f, 0f, 0f, f, 0.00f, 0.00f, 0.00f);
@@ -450,6 +445,8 @@ public class ColorGuardAssets extends ApplicationAdapter {
                             for (int f = 0; f < frames.length; f++) {
                                 if (f > 0) frames[f] = frames[f - 1].copy();
                                 for (int j = 0; j < frames[f].grids.size(); j++) {
+                                    if(DAMAGED > 0f)
+                                        Stuff.damage(Stuff.STUFFS_B, frames[f].grids.get(j), f, DAMAGED);
                                     Stuff.evolve(Stuff.STUFFS_B, frames[f].grids.get(j), f);
                                 }
                             }

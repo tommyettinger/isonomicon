@@ -13,7 +13,6 @@ import com.github.tommyettinger.ds.IntObjectMap;
 import com.github.yellowstonegames.grid.BlueNoise;
 import com.github.yellowstonegames.grid.CyclicNoise;
 import com.github.yellowstonegames.grid.IntPointHash;
-import com.github.yellowstonegames.grid.Noise;
 import isonomicon.app.AppConfig;
 import isonomicon.io.extended.GroupChunk;
 import isonomicon.io.extended.ShapeModel;
@@ -62,7 +61,6 @@ public class SpecialRenderer {
     public static final byte DARKEN = (byte) 128;
     public static final byte LIGHTEN = (byte) 135;
 
-    public static final Noise noise = new Noise(0x1337BEEF, 0.0125f, Noise.SIMPLEX_FRACTAL, 2);
     public static final CyclicNoise swirlNoise = new CyclicNoise(0xDEADBEEFBA77L, 6, 0.03f);
 
     public Pixmap normalMap;
@@ -252,7 +250,7 @@ public class SpecialRenderer {
 //            highX = highY = 3;
 //        } else
             if(flow != 0f) {
-                float ns = noise.getConfiguredNoise(xPos, yPos, zPos, frame * flow);
+                float ns = Stuff.noise.getConfiguredNoise(xPos, yPos, zPos, frame * flow);
                 if (ns > 0) highX = (int) (4.5 + ns * (3 << shrink));
                 else if (ns < 0) lowX = Math.round(lowX + ns * (3 << shrink));
             }

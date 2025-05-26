@@ -3,11 +3,13 @@ package isonomicon.physical;
 import com.github.tommyettinger.ds.IntObjectMap;
 import com.github.yellowstonegames.core.WeightedTable;
 import com.github.yellowstonegames.grid.LongPointHash;
+import com.github.yellowstonegames.grid.Noise;
 
 /**
  * Created by Tommy Ettinger on 5/2/2020.
  */
 public class Stuff {
+    public static final Noise noise = new Noise(0x1337BEEF, 0.0125f, Noise.SIMPLEX_FRACTAL, 2);
     public final String name;
     /**
      * The Material's index in the static array of Materials (if positive); this also carries some semantic information.
@@ -209,9 +211,9 @@ public class Stuff {
             new Stuff("glossy leather", 1, "Reflection 0.7, Roughness 0.05"), /*black*/
             new Stuff("matte leather", 2, "Reflection 0.05 Roughness 0.6"),
             new Stuff("rusted metal", 3, "Metal", "Reflection 0.04 Roughness 0.4 Vary -0.4"),
-            new Stuff("dull metal", 4, "Metal", "Reflection 0.15 Roughness 0.8"),
+            new Stuff("dull metal", 4, "Metal", "Reflection 0.15 Roughness 0.8 Damage 3"),
             new Stuff("scratched metal", 5, "Metal", "Reflection 0.5 Roughness 0.65"),
-            new Stuff("polished metal", 6, "Metal", "Reflection 0.8 Roughness 0.2 Destroy 5"),
+            new Stuff("polished metal", 6, "Metal", "Reflection 0.8 Roughness 0.2 Damage 5"),
             new Stuff("snow", 7, "Roughness 0.9 Reflection 0.4"), /*white*/
             new Stuff("sickly leaf", 8, "Roughness 0.2 Reflection 0.25 Vary -0.35"), /*light lime*/
             new Stuff("unripe fruit or bud", 9, "Roughness 0.6 Reflection 0.3 Dapple -0.1"),
@@ -242,7 +244,7 @@ public class Stuff {
             new Stuff("chipped stone", 34, "Roughness 0.8 Reflection 0.05"), /*light violet*/
             new Stuff("magic crystal", 35, "Roughness 0.05 Reflection 0.85 Emission 0.35 Damage 108", 35, 7, 98, 1), /*light purple*/
             new Stuff("ectoplasm", 36, "Roughness 0.2 Reflection 0.4 Flow 0.7 Emission 0.1"),
-            new Stuff("tentacle", 37, "Roughness 0.5 Reflection 0.02 Dapple 0.2 Damage 121"),
+            new Stuff("tentacle", 37, "Roughness 0.5 Reflection 0.02 Dapple 0.2 Damage 37"),
             new Stuff("apparition", 38, "Roughness 0.6 Reflection 0.0 Flow 0.1 Emission -0.2"), /*dark purple*/
             new Stuff("drink", 39, "Roughness 0.3 Reflection 0.5"), /*burgundy*/
             new Stuff("marked cloth", 40, "Roughness 0.1 Reflection 0.04 Damage 124"), /*medium magenta*/
@@ -256,13 +258,13 @@ public class Stuff {
             new Stuff("marked fluff", 48, "Roughness 0.6 Reflection 0.15 Dapple -0.16"), /*dark orange*/
             new Stuff("base fluff", 49, "Roughness 0.5 Reflection 0.4"),                        // Dapple -0.08
             new Stuff("highlight fluff", 50, "Roughness 0.4 Reflection 0.75"), /*hot orange*/   // Dapple -0.04
-            new Stuff("scar", 51, "Roughness 0.7 Reflection 0.05 Damage 121 Priority 1"), /*light skin*/
-            new Stuff("base skin", 52, "Roughness 0.6 Reflection 0.2 Damage 121"),
-            new Stuff("nose", 53, "Roughness 0.6 Reflection 0.3 Damage 121"),
-            new Stuff("freckle", 54, "Roughness 0.6 Reflection 0.2 Vary -0.1 Damage 121 Priority 1"),
-            new Stuff("ears", 55, "Roughness 0.5 Reflection 0.1 Damage 121 Priority 1"),
+            new Stuff("scar", 51, "Roughness 0.7 Reflection 0.05 Damage 51 Priority 1"), /*light skin*/
+            new Stuff("base skin", 52, "Roughness 0.6 Reflection 0.2 Damage 52"),
+            new Stuff("nose", 53, "Roughness 0.6 Reflection 0.3 Damage 53"),
+            new Stuff("freckle", 54, "Roughness 0.6 Reflection 0.2 Vary -0.1 Damage 54 Priority 1"),
+            new Stuff("ears", 55, "Roughness 0.5 Reflection 0.1 Damage 55 Priority 1"),
             new Stuff("overripe fruit or rot", 56, "Roughness 0.2 Reflection 0.02 Dapple -0.15 Vary -0.1"), /*dark skin*/
-            new Stuff("lips blood gore", 57, "Roughness 0.04 Reflection 0.4 Priority 2"), /*gore*/
+            new Stuff("lips blood gore", 57, "Roughness 0.04 Reflection 0.4 Priority 2 Damage 57"), /*gore*/
             new Stuff("knotted wood", 58, "Roughness 0.5 Reflection 0.1 Dapple -0.1 Damage 122"), /*dark brown*/
             new Stuff("old wood", 59, "Roughness 0.6 Reflection 0.0 Dapple -0.25 Vary -0.35 Damage 122"),
             new Stuff("fresh wood", 60, "Roughness 0.4 Reflection 0.0 Dapple -0.15 Vary -0.1 Damage 122"), /*medium brown*/
@@ -271,13 +273,13 @@ public class Stuff {
             new Stuff("bone beak claw", 63, "Roughness 0.4 Reflection 0.4"), /*light yellow*/
 
             new Stuff("dark glass", 64, "Transparency 0.3 Roughness 0.0 Reflection 0.4 Damage 153"),
-            new Stuff("dark eye", 65, "Roughness 0.0 Reflection 0.1 Damage 121 Priority 10"), /*black*/
+            new Stuff("dark eye", 65, "Roughness 0.0 Reflection 0.1 Damage 65 Priority 10"), /*black*/
             new Stuff("shadow", 66, "Roughness 0.0 Reflection 0.0 Emission -0.25"),
             new Stuff("smoke", 67, "Roughness 0.5 Reflection 0.0 Missing 0.05 Rise 0.4 Dapple -0.15 Disperse 0.3 Emission -0.04", 0, 2, 67, 7),
             new Stuff("gray glass", 68, "Transparency 0.5 Roughness 0.0 Reflection 0.65 Damage 153"),
-            new Stuff("dead eye", 69, "Roughness 0.5 Reflection 0.0 Priority 10"),
+            new Stuff("dead eye", 69, "Roughness 0.5 Reflection 0.0 Priority 10 Damage 69"),
             new Stuff("steam", 70, "Transparency 0.5 Roughness 0.3 Missing 0.2 Flow 0.3 Rise 0.7 Disperse 0.1", 0, 3, 70, 5),
-            new Stuff("light eye", 71, "Roughness 1.0 Reflection 1.0 Damage 121 Priority 50"), /*white*/
+            new Stuff("light eye", 71, "Roughness 1.0 Reflection 1.0 Damage 71 Priority 50"), /*white*/
             new Stuff("radioactive glow", 72, "Roughness 0.0 Reflection 0.0 Emission 0.6 Transparency 1.0"), /*light lime*/
             new Stuff("miasma", 73, "Roughness 0.3 Reflection 0.0 Flow 0.5 Rise -0.1 Missing 0.05 Disperse 0.05", 75, 2, 73, 5),
             new Stuff("rustling leaf", 74, "Roughness 0.4 Reflection 0.05 Dapple -0.35 Missing 0.2 Disperse -0.05"),
@@ -309,7 +311,7 @@ public class Stuff {
             new Stuff("purple glass", 100, "Transparency 0.5 Roughness 0.0 Reflection 0.65 Damage 153"),
             new Stuff("toxic sludge", 101, "Roughness 0.6 Reflection 0.2 Flow 0.15 Vary -0.3 Dapple 0.15", 101, 6, 99, 1),
             new Stuff("void", 102, "Roughness 0.0 Reflection 0.0 Emission -0.9 Transparency 1.0"), /*dark purple*/
-            new Stuff("evil eye", 103, "Roughness 0.75 Reflection 0.5 Emission 0.15 Damage 121 Priority 50"), /*burgundy*/
+            new Stuff("evil eye", 103, "Roughness 0.75 Reflection 0.5 Emission 0.15 Damage 103 Priority 50"), /*burgundy*/
             new Stuff("red glass", 104, "Transparency 0.5 Roughness 0.0 Reflection 0.65 Damage 153"), /*medium magenta*/
             new Stuff("love spawner", 105, "Transparency 1.0", 106, 1, 105, 5),
             new Stuff("love particle", 106, "Emission 0.1 Roughness 0.5 Reflection 0.4 Rise 0.3", 106, 2, 105, 1),
@@ -401,7 +403,7 @@ public class Stuff {
             new Stuff("unused 191", 191, "Transparency 1.0"), /*light yellow*/
             
             new Stuff("unused 192", 192, "Transparency 1.0"),
-            new Stuff("head to neck", 193, "Transparency 1.0"),
+            new Stuff("head to neck", 193, "Transparency 1.0 Damage 193"),
             new Stuff("unused 194", 194, "Transparency 1.0"),
             new Stuff("unused 195", 195, "Transparency 1.0"),
             new Stuff("unused 196", 196, "Transparency 1.0"),
@@ -409,16 +411,16 @@ public class Stuff {
             new Stuff("unused 198", 198, "Transparency 1.0"),
             new Stuff("unused 199", 199, "Transparency 1.0"),
             new Stuff("unused 200", 200, "Transparency 1.0"),
-            new Stuff("primary weapon front", 201, "Transparency 1.0"),
-            new Stuff("primary weapon rear", 202, "Transparency 1.0"),
+            new Stuff("primary weapon front", 201, "Transparency 1.0 Damage 201"),
+            new Stuff("primary weapon rear", 202, "Transparency 1.0 Damage 202"),
             new Stuff("unused 203", 203, "Transparency 1.0"),
             new Stuff("unused 204", 204, "Transparency 1.0"),
             new Stuff("unused 205", 205, "Transparency 1.0"),
             new Stuff("unused 206", 206, "Transparency 1.0"),
             new Stuff("unused 207", 207, "Transparency 1.0"),
             new Stuff("unused 208", 208, "Transparency 1.0"),
-            new Stuff("secondary weapon front", 209, "Transparency 1.0"),
-            new Stuff("secondary weapon rear", 210, "Transparency 1.0"),
+            new Stuff("secondary weapon front", 209, "Transparency 1.0 Damage 209"),
+            new Stuff("secondary weapon rear", 210, "Transparency 1.0 Damage 210"),
             new Stuff("unused 211", 211, "Transparency 1.0"),
             new Stuff("unused 212", 212, "Transparency 1.0"),
             new Stuff("unused 213", 213, "Transparency 1.0"),
@@ -448,7 +450,7 @@ public class Stuff {
             new Stuff("unused 237", 237, "Transparency 1.0"),
             new Stuff("unused 238", 238, "Transparency 1.0"),
             new Stuff("unused 239", 239, "Transparency 1.0"),
-            new Stuff("floor reserved", 240, 0, "Roughness 0.25 Reflection 0.2"),
+            new Stuff("floor reserved", 240, 0, "Transparency 1.0 Damage 240"),
             new Stuff("unused 241", 241, "Transparency 1.0"),
             new Stuff("unused 242", 242, "Transparency 1.0"),
             new Stuff("unused 243", 243, "Transparency 1.0"),
@@ -463,7 +465,7 @@ public class Stuff {
             new Stuff("unused 252", 252, "Transparency 1.0"),
             new Stuff("unused 253", 253, "Transparency 1.0"),
             new Stuff("unused 254", 254, "Transparency 1.0"),
-            new Stuff("connector sentinel", 255, "Transparency 1.0"),
+            new Stuff("connector sentinel", 255, "Transparency 1.0 Damage 255"),
 //            new Stuff("matte leaf", 14, 14, 0L, "Roughness 0.4 Reflection 0.05 Dapple -0.35"),
 //            new Stuff("glossy leaf", 15, 15, 512L, "Roughness 0.1 Reflection 0.85 Dapple -0.1"),
 //            new Stuff("succulent plant", 16, 16, 512L, "Roughness 0.8 Reflection 0.04"),
@@ -543,5 +545,28 @@ public class Stuff {
                 }
             }
         }
+    }
+
+    public static void damage(Stuff[] stuffs, byte[][][] model, int frame, final float amount){
+        int damageCounter = 0, checkCounter = 0;
+        for (int x = 0; x < model.length; x++) {
+            for (int y = 0; y < model[x].length; y++) {
+                for (int z = 0; z < model[x][y].length; z++) {
+                    int v = model[x][y][z] & 255;
+                    if(v == 0) continue;
+                    float rate = stuffs[v].material.traits.getOrDefault(VoxMaterial.MaterialTrait._rate.ordinal(), 1f);
+                    int rf = (int)(rate * frame);
+                    if(rf != (int)(rate * (frame + 1))) {
+                        checkCounter++;
+                        if((noise.getNoiseWithSeed(x, y, z, v) + 1f) < (amount + amount)) {
+                            if (0 == (model[x][y][z] = (byte) stuffs[v].material.traits.getOrDefault(VoxMaterial.MaterialTrait._damage.ordinal(), 0)))
+                                damageCounter++;
+                            else System.out.print(model[x][y][z] + " ");
+                        }
+                    }
+                }
+            }
+        }
+        System.out.println("\nFrame " + frame + " had " + damageCounter + " removed voxels out of " + checkCounter + " checked.");
     }
 }
