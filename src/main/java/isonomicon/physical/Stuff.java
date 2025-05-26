@@ -548,14 +548,15 @@ public class Stuff {
     }
 
     public static void damage(Stuff[] stuffs, byte[][][] model, float amount){
+        noise.setFrequency(0.75f);
         long seed = noise.getSeed();
-        amount *= 32f;
+        amount += amount;
         for (int x = 0; x < model.length; x++) {
             for (int y = 0; y < model[x].length; y++) {
                 for (int z = 0; z < model[x][y].length; z++) {
                     int v = model[x][y][z] & 255;
                     if (v == 0) continue;
-                    if ((LongPointHash.hash32(x, y, z, seed)) < amount) {
+                    if ((noise.getNoise(x, y, z) + (LongPointHash.hash32(x, y, z, seed) & 2)) < amount) {
                         model[x][y][z] = (byte) stuffs[v].material.traits.getOrDefault(VoxMaterial.MaterialTrait._damage.ordinal(), 0);
 //                            if (0 == (model[x][y][z] = (byte) stuffs[v].material.traits.getOrDefault(VoxMaterial.MaterialTrait._damage.ordinal(), 0)))
 //                                damageCounter++;
@@ -565,5 +566,6 @@ public class Stuff {
             }
         }
 //        System.out.println("\nFrame " + frame + " had " + damageCounter + " removed voxels out of " + checkCounter + " checked.");
+        noise.setFrequency(0.125f);
     }
 }
