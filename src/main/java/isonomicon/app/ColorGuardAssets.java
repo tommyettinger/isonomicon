@@ -35,8 +35,11 @@ public class ColorGuardAssets extends ApplicationAdapter {
     public static boolean ATTACKS = true;
     public static boolean DEATHS = false;
     public static boolean EXPLOSION = true;
-    public static boolean TERRAIN = true;
+    public static boolean TERRAIN = false;
+    //    public static final String SPECIES = "human";
+//    public static final String SPECIES_PREFIX = "";
     public static final String SPECIES = "zombie";
+    public static final String SPECIES_PREFIX = "Zombie_";
     public static final float DAMAGED = 0.65f;
 
     public static boolean PNG = true;
@@ -169,7 +172,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                     renderer.shadows = true;
                     renderer.outline = 4;
                 }
-                Gdx.files.local(outDir + "/animated_diverse/" + ("zombie".equals(SPECIES) ? "Zombie_" : "") + name + '/').mkdirs();
+                Gdx.files.local(outDir + "/animated_diverse/" + SPECIES_PREFIX + name + '/').mkdirs();
                 load("specialized/b/vox/color_guard/" + name, ".vox");
                 Texture t = new Texture(renderer.palettePixmap.getWidth(), renderer.palettePixmap.getHeight(), Pixmap.Format.RGBA8888);
                 Pixmap pixmap;
@@ -206,9 +209,9 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                 batch.end();
                                 pixmap = Pixmap.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
                                 fb.end();
-                                if(png != null) png.write(Gdx.files.local(outDir + "/" + armies[j] + "/" + name + '/' + ("zombie".equals(SPECIES) ? "Zombie_" : "") + armies[j] + "_look" + lk + '_' + name + "_angle" + i + "_" + f + ".png"), pixmap);
+                                if(png != null) png.write(Gdx.files.local(outDir + "/" + armies[j] + "/" + name + '/' + SPECIES_PREFIX + armies[j] + "_look" + lk + '_' + name + "_angle" + i + "_" + f + ".png"), pixmap);
                                 if(look + j == 0)
-                                    if(png != null) png.write(Gdx.files.local(outDir + "/lab/" + name + '/' + ("zombie".equals(SPECIES) ? "Zombie_" : "") + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
+                                    if(png != null) png.write(Gdx.files.local(outDir + "/lab/" + name + '/' + SPECIES_PREFIX + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                                 if(lk == canonicalLooks[j]) {
                                     pm.set(j * 32 + i * 8 + f, pixmap);
                                     pm.set(j * 32 + i * 8 + f + 4, pixmap);
@@ -220,9 +223,9 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //                png8.write(Gdx.files.local("out/" + name + '/' + name + "_angle" + i + ".png"), p, false, true);
                     }
                 }
-                if(apng != null) apng.write(Gdx.files.local(outDir + "/animated_diverse/" + name + '/' + ("zombie".equals(SPECIES) ? "Zombie_" : "") + name + ".png"), pm, 8);
+                if(apng != null) apng.write(Gdx.files.local(outDir + "/animated_diverse/" + name + '/' + SPECIES_PREFIX + name + ".png"), pm, 8);
                 if(gif != null) SpecialRenderer.monoAlpha(pm);
-                if(gif != null) gif.write(Gdx.files.local(outDir + "/animated_diverse/" + name + '/' + ("zombie".equals(SPECIES) ? "Zombie_" : "") + name + ".gif"), pm, 8);
+                if(gif != null) gif.write(Gdx.files.local(outDir + "/animated_diverse/" + name + '/' + SPECIES_PREFIX + name + ".gif"), pm, 8);
 //                if(apng != null) apng.write(Gdx.files.local(outDir + "/animated_diverse_flat/" + name + ".png"), pm, 8);
                 for (Pixmap pix : pm) {
                     if (!pix.isDisposed())
@@ -284,9 +287,9 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                         batch.end();
                                         pixmap = Pixmap.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
                                         fb.end();
-                                        if(png != null) png.write(Gdx.files.local(outDir + "/" + armies[j] + "/" + name + '/' + ("zombie".equals(SPECIES) ? "Zombie_" : "") + armies[j] + "_look" + lk + "_" + name + ps + "_angle" + i + "_" + f + ".png"), pixmap);
+                                        if(png != null) png.write(Gdx.files.local(outDir + "/" + armies[j] + "/" + name + '/' + SPECIES_PREFIX + armies[j] + "_look" + lk + "_" + name + ps + "_angle" + i + "_" + f + ".png"), pixmap);
                                         if (look + j == 0)
-                                            if(png != null) png.write(Gdx.files.local(outDir + "/lab/" + name + '/' + ("zombie".equals(SPECIES) ? "Zombie_" : "") + name + ps + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
+                                            if(png != null) png.write(Gdx.files.local(outDir + "/lab/" + name + '/' + SPECIES_PREFIX + name + ps + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                                         if(lk == canonicalLooks[j]) {
                                             pm.set(j * 32 + i * 8 + f, pixmap);
                                         } else {
@@ -302,9 +305,9 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //                png8.write(Gdx.files.local("out/" + name + '/' + name + "_angle" + i + ".png"), p, false, true);
                             }
                         }
-                        if(apng != null) apng.write(Gdx.files.local(outDir + "/animated_diverse/" + name + '/' + ("zombie".equals(SPECIES) ? "Zombie_" : "") + name + ps + ".png"), pm, 8);
+                        if(apng != null) apng.write(Gdx.files.local(outDir + "/animated_diverse/" + name + '/' + SPECIES_PREFIX + name + ps + ".png"), pm, 8);
                         if(gif != null) SpecialRenderer.monoAlpha(pm);
-                        if(gif != null) gif.write(Gdx.files.local(outDir + "/animated_diverse/" + name + '/' + ("zombie".equals(SPECIES) ? "Zombie_" : "") + name + ps + ".gif"), pm, 8);
+                        if(gif != null) gif.write(Gdx.files.local(outDir + "/animated_diverse/" + name + '/' + SPECIES_PREFIX + name + ps + ".gif"), pm, 8);
 //                        if(apng != null) apng.write(Gdx.files.local(outDir + "/animated_diverse_flat/" + name + ps + ".png"), pm, 8);
                         for (Pixmap pix : pm) {
                             if (!pix.isDisposed())
@@ -415,16 +418,16 @@ public class ColorGuardAssets extends ApplicationAdapter {
                             fb.end();
                             pm.set(j * 32 + i * 8 + f, pixmap);
                             pm.set(j * 32 + i * 8 + f + 4, pixmap);
-                            if(png != null) png.write(Gdx.files.local(outDir + "/" + armies[j] + "/" + name + '/' + ("zombie".equals(SPECIES) ? "Zombie_" : "") + armies[j] + "_look"+look+"_" + name + "_angle" + i + "_" + f + ".png"), pixmap);
+                            if(png != null) png.write(Gdx.files.local(outDir + "/" + armies[j] + "/" + name + '/' + SPECIES_PREFIX + armies[j] + "_look"+look+"_" + name + "_angle" + i + "_" + f + ".png"), pixmap);
                             if (look + j == 0)
-                                if(png != null) png.write(Gdx.files.local(outDir + "/lab/" + name + '/' + ("zombie".equals(SPECIES) ? "Zombie_" : "") + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
+                                if(png != null) png.write(Gdx.files.local(outDir + "/lab/" + name + '/' + SPECIES_PREFIX + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                         }
 //                png8.write(Gdx.files.local("out/" + name + '/' + name + "_angle" + i + ".png"), p, false, true);
                     }
                 }
-                if(apng != null) apng.write(Gdx.files.local(outDir + "/animated/" + name + '/' + ("zombie".equals(SPECIES) ? "Zombie_" : "") + name + ".png"), pm, 8);
+                if(apng != null) apng.write(Gdx.files.local(outDir + "/animated/" + name + '/' + SPECIES_PREFIX + name + ".png"), pm, 8);
                 if(gif != null) SpecialRenderer.monoAlpha(pm);
-                if(gif != null) gif.write(Gdx.files.local(outDir + "/animated/" + name + '/' + ("zombie".equals(SPECIES) ? "Zombie_" : "") + name + ".gif"), pm, 8);
+                if(gif != null) gif.write(Gdx.files.local(outDir + "/animated/" + name + '/' + SPECIES_PREFIX + name + ".gif"), pm, 8);
                 for (Pixmap pix : pm) {
                     if (!pix.isDisposed())
                         pix.dispose();
@@ -486,9 +489,9 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                     pixmap = Pixmap.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
                                     fb.end();
                                     pm.set(j * 32 + i * 8 + f, pixmap);
-                                    if(png != null) png.write(Gdx.files.local(outDir + "/" + armies[j] + "/" + name + '/' + ("zombie".equals(SPECIES) ? "Zombie_" : "") + armies[j] + "_look" + look + "_" + name + ps + "_angle" + i + "_" + f + ".png"), pixmap);
+                                    if(png != null) png.write(Gdx.files.local(outDir + "/" + armies[j] + "/" + name + '/' + SPECIES_PREFIX + armies[j] + "_look" + look + "_" + name + ps + "_angle" + i + "_" + f + ".png"), pixmap);
                                     if (look + j == 0) {
-                                        if(png != null) png.write(Gdx.files.local(outDir + "/lab/" + name + '/' + ("zombie".equals(SPECIES) ? "Zombie_" : "") + name + ps + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
+                                        if(png != null) png.write(Gdx.files.local(outDir + "/lab/" + name + '/' + SPECIES_PREFIX + name + ps + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
 //                                            VoxIOExtended.writeVOX(outDir + "/vox/" + name + "/" + ps + "_angle" + i + "_" + f + ".vox", frames[f].grids.get(0), VoxIO.lastPalette, VoxIO.lastMaterials);
                                     }
                                 }
@@ -498,9 +501,9 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                 }
                             }
                         }
-                        if(apng != null) apng.write(Gdx.files.local(outDir + "/animated/" + name + '/' + ("zombie".equals(SPECIES) ? "Zombie_" : "") + name + ps + ".png"), pm, 8);
+                        if(apng != null) apng.write(Gdx.files.local(outDir + "/animated/" + name + '/' + SPECIES_PREFIX + name + ps + ".png"), pm, 8);
                         if(gif != null) SpecialRenderer.monoAlpha(pm);
-                        if(gif != null) gif.write(Gdx.files.local(outDir + "/animated/" + name + '/' + ("zombie".equals(SPECIES) ? "Zombie_" : "") + name + ps + ".gif"), pm, 8);
+                        if(gif != null) gif.write(Gdx.files.local(outDir + "/animated/" + name + '/' + SPECIES_PREFIX + name + ps + ".gif"), pm, 8);
                         for (Pixmap pix : pm) {
                             if (!pix.isDisposed())
                                 pix.dispose();
