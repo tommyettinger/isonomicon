@@ -218,7 +218,7 @@ public class Stuff {
             new Stuff("sickly leaf", 8, "Roughness 0.2 Reflection 0.25 Vary -0.35"), /*light lime*/
             new Stuff("unripe fruit or bud", 9, "Roughness 0.6 Reflection 0.3 Dapple -0.1"),
             new Stuff("acid", 10, "Roughness 0.5 Reflection 0.7 Flow 0.6"),
-            new Stuff("mold", 11, "Roughness 0.9 Reflection 0.0 Vary -0.5 Damage 17"), /*dark lime*/
+            new Stuff("mold", 11, "Roughness 0.9 Reflection 0.0 Vary -0.5"), /*dark lime*/
             new Stuff("moss", 12, "Roughness 0.9 Reflection 0.03"), /*dark green*/
             new Stuff("cactus plant", 13, "Roughness 0.4 Reflection 0.2"),
             new Stuff("matte leaf", 14, "Roughness 0.4 Reflection 0.05 Dapple -0.35"),
@@ -242,15 +242,15 @@ public class Stuff {
             new Stuff("raw stone", 32, "Roughness 0.55 Reflection 0.15 Vary -0.1"),
             new Stuff("worked stone", 33, "Roughness 0.25 Reflection 0.2"),
             new Stuff("chipped stone", 34, "Roughness 0.8 Reflection 0.05"), /*light violet*/
-            new Stuff("magic crystal", 35, "Roughness 0.05 Reflection 0.85 Emission 0.35 Damage 108", 35, 7, 98, 1), /*light purple*/
+            new Stuff("magic crystal", 35, "Roughness 0.05 Reflection 0.85 Emission 0.35 Damage 153", 35, 7, 98, 1), /*light purple*/
             new Stuff("ectoplasm", 36, "Roughness 0.2 Reflection 0.4 Flow 0.7 Emission 0.1"),
             new Stuff("tentacle", 37, "Roughness 0.5 Reflection 0.02 Dapple 0.2 Damage 37"),
             new Stuff("apparition", 38, "Roughness 0.6 Reflection 0.0 Flow 0.1 Emission -0.2"), /*dark purple*/
             new Stuff("drink", 39, "Roughness 0.3 Reflection 0.5"), /*burgundy*/
-            new Stuff("marked cloth", 40, "Roughness 0.1 Reflection 0.04 Damage 124"), /*medium magenta*/
-            new Stuff("base cloth", 41, "Roughness 0.25 Reflection 0.06 Damage 124"),
-            new Stuff("highlight cloth", 42, "Roughness 0.15 Reflection 0.1 Damage 124"),
-            new Stuff("shiny cloth", 43, "Roughness 0.4 Reflection 0.75 Damage 124"), /*light pink*/
+            new Stuff("marked cloth", 40, "Roughness 0.1 Reflection 0.04"), /*medium magenta*/
+            new Stuff("base cloth", 41, "Roughness 0.25 Reflection 0.06"),
+            new Stuff("highlight cloth", 42, "Roughness 0.15 Reflection 0.1"),
+            new Stuff("shiny cloth", 43, "Roughness 0.4 Reflection 0.75"), /*light pink*/
             new Stuff("sand", 44, "Roughness 0.7 Reflection 0.0"), /*light tan*/
             new Stuff("rubble", 45, "Roughness 0.55 Reflection 0.0 Dapple -0.4 Vary -0.3"),
             new Stuff("dry dirt", 46, "Roughness 0.85 Reflection 0.0 Dapple -0.05"),
@@ -265,9 +265,9 @@ public class Stuff {
             new Stuff("ears", 55, "Roughness 0.5 Reflection 0.1 Damage 55 Priority 1"),
             new Stuff("overripe fruit or rot", 56, "Roughness 0.2 Reflection 0.02 Dapple -0.15 Vary -0.1"), /*dark skin*/
             new Stuff("lips blood gore", 57, "Roughness 0.04 Reflection 0.4 Priority 2 Damage 57"), /*gore*/
-            new Stuff("knotted wood", 58, "Roughness 0.5 Reflection 0.1 Dapple -0.1 Damage 122"), /*dark brown*/
-            new Stuff("old wood", 59, "Roughness 0.6 Reflection 0.0 Dapple -0.25 Vary -0.35 Damage 122"),
-            new Stuff("fresh wood", 60, "Roughness 0.4 Reflection 0.0 Dapple -0.15 Vary -0.1 Damage 122"), /*medium brown*/
+            new Stuff("knotted wood", 58, "Roughness 0.5 Reflection 0.1 Dapple -0.1"), /*dark brown*/
+            new Stuff("old wood", 59, "Roughness 0.6 Reflection 0.0 Dapple -0.25 Vary -0.35"),
+            new Stuff("fresh wood", 60, "Roughness 0.4 Reflection 0.0 Dapple -0.15 Vary -0.1"), /*medium brown*/
             new Stuff("gold", 61, "Roughness 0.5 Reflection 0.85 Rate 0.5", 126, 1, 61, 12), /*dark yellow*/
             new Stuff("ripe fruit or flower", 62, "Roughness 0.2 Reflection 0.55 Dapple -0.2"),
             new Stuff("bone beak claw", 63, "Roughness 0.4 Reflection 0.4"), /*light yellow*/
@@ -362,7 +362,7 @@ public class Stuff {
             new Stuff("unused 150", 150, "Transparency 1.0"),
             new Stuff("unused 151", 151, "Transparency 1.0"),
             new Stuff("unused 152", 152, "Transparency 1.0"),
-            new Stuff("broken glass", 153, 82, "Roughness 0.7 Reflection 0.45 Disperse -0.25", 0, 2, 153, 3), /*light azure*/
+            new Stuff("broken glass", 153, 82, "Roughness 0.7 Reflection 0.45 Disperse -0.25"), /*light azure*/
             new Stuff("unused 154", 154, "Transparency 1.0"), /*light blue*/
             new Stuff("unused 155", 155, "Transparency 1.0"),
             new Stuff("unused 156", 156, "Transparency 1.0"),
