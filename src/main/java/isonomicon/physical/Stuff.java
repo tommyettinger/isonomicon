@@ -52,7 +52,7 @@ public class Stuff {
         this.name = name;
         this.id = (byte)id;
         this.material = new VoxMaterial(type, traits);
-        this.material.traits.putIfAbsent(VoxMaterial.MaterialTrait._damage.ordinal(), id);
+//        this.material.traits.putIfAbsent(VoxMaterial.MaterialTrait._damage.ordinal(), id);
         this.appearsAs = appearsAs;
         if(transitions != null && transitions.length >= 2){
             float[] weights = new float[transitions.length >>> 1];
@@ -547,8 +547,10 @@ public class Stuff {
         }
     }
 
-    public static void damage(Stuff[] stuffs, byte[][][] model, int frame, final float amount){
+    public static void damage(Stuff[] stuffs, byte[][][] model, int frame, float amount){
         int damageCounter = 0, checkCounter = 0;
+
+        amount *= 32f;
         for (int x = 0; x < model.length; x++) {
             for (int y = 0; y < model[x].length; y++) {
                 for (int z = 0; z < model[x][y].length; z++) {
@@ -558,10 +560,10 @@ public class Stuff {
                     int rf = (int)(rate * frame);
                     if(rf != (int)(rate * (frame + 1))) {
                         checkCounter++;
-                        if((noise.getNoiseWithSeed(x, y, z, v) + 1f) < (amount + amount)) {
+                        if((LongPointHash.hash32(x, y, z, v)) < amount) {
                             if (0 == (model[x][y][z] = (byte) stuffs[v].material.traits.getOrDefault(VoxMaterial.MaterialTrait._damage.ordinal(), 0)))
                                 damageCounter++;
-                            else System.out.print(model[x][y][z] + " ");
+//                            else System.out.print(model[x][y][z] + " ");
                         }
                     }
                 }
