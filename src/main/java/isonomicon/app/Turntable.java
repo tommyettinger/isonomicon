@@ -40,7 +40,7 @@ public class Turntable extends ApplicationAdapter {
         {
             System.out.println("INVALID ARGUMENTS. Please supply space-separated absolute paths to .vox models, or use the .bat file.");
 //            inputs = new String[]{"vox/Eye_Tyrant_Floor.vox", "vox/Eye_Tyrant.vox", "vox/Damned.vox", "vox/Bear.vox", "vox/Infantry.vox", "vox/Infantry_Firing.vox", "vox/Lomuk.vox", "vox/Tree.vox", "vox/Box.vox", "vox/Direction_Cube.vox", "vox/teapot.vox"};
-//            inputs = new String[]{"vox/Eye_Tyrant_Floor.vox", "vox/Infantry_Firing.vox", "vox/Husk.vox", "vox/Lomuk.vox", "vox/Bear.vox"};
+            inputs = new String[]{"vox/Eye_Tyrant_Floor.vox", "vox/Infantry_Firing.vox", "vox/Husk.vox", "vox/Lomuk.vox", "vox/Bear.vox"};
 //            inputs = new String[]{"vox/Eye_Tyrant_Floor.vox", "vox/Eye_Tyrant.vox", "vox/Bear.vox", "vox/Infantry_Firing.vox", "vox/Lomuk.vox", "vox/Tree.vox"};
 //            inputs = new String[]{"vox/Eye_Tyrant_Floor.vox", "vox/Bear.vox", "vox/Infantry_Firing.vox", "vox/Tree.vox"};
 //            inputs = new String[]{"vox/Tree.vox"};
@@ -60,7 +60,7 @@ public class Turntable extends ApplicationAdapter {
 //            inputs = new String[]{"vox/Eye_Tyrant.vox"};
 //            inputs = new String[]{"vox/Floor.vox"};
 //            inputs = new String[]{"vox/Bear.vox"};
-            inputs = new String[]{"vox/Lomuk.vox"};
+//            inputs = new String[]{"vox/Lomuk.vox"};
 //            inputs = new String[]{"vox/Predator.vox"};
 //            inputs = new String[]{"vox/FigureSplit.vox"};
 //            inputs = new String[]{"vox/Lomuk.vox", "vox/Damned.vox"};

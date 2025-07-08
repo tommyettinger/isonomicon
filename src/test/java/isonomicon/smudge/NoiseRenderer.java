@@ -28,7 +28,7 @@ public class NoiseRenderer extends ApplicationAdapter {
     private SmudgeRenderer renderer;
     private Noise noise;
 
-    private static final int SMALL_SIZE = 32, MID_SIZE = SMALL_SIZE << 1, LARGE_SIZE = SMALL_SIZE << 2;
+    private static final int SMALL_SIZE = 64, MID_SIZE = SMALL_SIZE << 1, LARGE_SIZE = SMALL_SIZE << 2;
     private byte[][][] tempVoxels = new byte[SMALL_SIZE][SMALL_SIZE][SMALL_SIZE];
     private byte[][][] midVoxels = new byte[MID_SIZE][MID_SIZE][MID_SIZE];
     private byte[][][] voxels = new byte[LARGE_SIZE][LARGE_SIZE][LARGE_SIZE];
@@ -36,7 +36,7 @@ public class NoiseRenderer extends ApplicationAdapter {
     private AnimatedGif gif;
 //    PixmapIO.PNG png;
 //    private PNG8 png8;
-    private AnimatedPNG apng;
+//    private AnimatedPNG apng;
     public NoiseRenderer(String[] args){
     }
     @Override
@@ -59,7 +59,7 @@ public class NoiseRenderer extends ApplicationAdapter {
 //        png = new PixmapIO.PNG();
 //        png.setFlipY(true);
 //        png.setCompression(2);
-        apng = new AnimatedPNG();
+//        apng = new AnimatedPNG();
         gif.setDitherAlgorithm(AppConfig.DITHER);
         gif.setDitherStrength(AppConfig.STRENGTH);
         Gdx.files.local("out/vox").mkdirs();
@@ -69,12 +69,13 @@ public class NoiseRenderer extends ApplicationAdapter {
 //            VoxIO.writeVOX("out/" + s, voxels, renderer.palette, VoxIO.lastMaterials);
 //            load("out/"+s);
         Pixmap pixmap;
-        Array<Pixmap> pm = new Array<>(MID_SIZE);
-        final float fraction = 1f / MID_SIZE;
-        for (int i = 0; i < MID_SIZE; i++) {
+        Array<Pixmap> pm = new Array<>(MID_SIZE << 2);
+        final float fraction = 1f / (MID_SIZE << 2);
+        for (int i = 0; i < MID_SIZE << 2; i++) {
             for (int f = 0; f < 1; f++) {
                 System.out.print(i + ": ");
-                load(i);
+                if((i & 3) == 0)
+                    load(i >>> 2);
                 pixmap = renderer.drawSplats(voxels, i * fraction, f, VoxIO.lastMaterials);
                 Pixmap p = new Pixmap(pixmap.getWidth(), pixmap.getHeight(), pixmap.getFormat());
                 p.drawPixmap(pixmap, 0, 0);
@@ -90,14 +91,15 @@ public class NoiseRenderer extends ApplicationAdapter {
         }
         System.out.println("Mostly done, animation stuff in progress...");
         gif.palette = new com.github.tommyettinger.anim8.QualityPalette(pm);
-        gif.write(Gdx.files.local("out/" + name + '/' + name + ".gif"), pm, 8);
+        gif.write(Gdx.files.local("out/" + name + '/' + name + ".gif"), pm, 30);
 //                gif.palette.exact(Coloring.HALTONITE240, PRELOAD);
 //                gif.write(Gdx.files.local("out/" + name + '/' + name + "-256-color.gif"), pm, 1);
-        apng.write(Gdx.files.local("out/" + name + '/' + name + ".png"), pm, 8);
+//        apng.write(Gdx.files.local("out/" + name + '/' + name + ".png"), pm, 30);
         for (Pixmap pix : pm) {
             if (!pix.isDisposed())
                 pix.dispose();
         }
+        System.out.println("Wrote to " + "out/" + name + '/' + name + ".gif");
         System.out.println("Finished in " + TimeUtils.timeSinceMillis(startTime) * 0.001 + " seconds.");
         Gdx.app.exit();
     }

@@ -56,10 +56,10 @@ public class ModelRotationVisualizerNew extends ApplicationAdapter {
 //        load("vox/libGDX_BadLogic_Logo.vox");
 //        load("vox/Infantry_Firing.vox");
 //        load("vox/CrazyBox.vox");
-//        load("vox/Lomuk.vox");
+        load("vox/Lomuk.vox");
 //        load("vox/Tree.vox");
 //        load("vox/Oklab.vox");
-        load("vox/FigureSplit.vox");
+//        load("vox/FigureSplit.vox");
 //        renderer.dither = true;
         Gdx.input.setInputProcessor(inputProcessor());
     }
