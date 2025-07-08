@@ -48,7 +48,7 @@ public class NoiseRenderer extends ApplicationAdapter {
 //        noise2 = new FastNoise(-4321, 0x1p-4f, FastNoise.PERLIN_FRACTAL, 2);
         noise.setFractalType(Noise.RIDGED_MULTI);
 //        noise.setFractalType(Noise.FBM);
-        noise.setPointHash(new CubeHash(~noise.getSeed(), 7));
+        noise.setPointHash(new CubeHash(~noise.getSeed(), 8));
         this.name = "Noise_"+Base.BASE36.unsigned(noise.getSeed());
 
         long startTime = TimeUtils.millis();
@@ -151,7 +151,7 @@ public class NoiseRenderer extends ApplicationAdapter {
             renderer.saturation(0f);
         }
     }
-    public class CubeHash extends IPointHash.LongImpl implements FlawedPointHash {
+    public static class CubeHash extends IPointHash.LongImpl implements FlawedPointHash {
         private int size = 6;
         private long mask = (1L << size) - 1L;
         public CubeHash() {

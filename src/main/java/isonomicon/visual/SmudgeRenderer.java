@@ -30,7 +30,7 @@ public class SmudgeRenderer {
     public float[] paletteL, paletteA, paletteB;
     public boolean dither = false, outline = true;
     public int size;
-    public int shrink = 2;
+    public int shrink = 0;
     public float neutral = 1f;
     public IntObjectMap<VoxMaterial> materialMap;
 //    public long seed;

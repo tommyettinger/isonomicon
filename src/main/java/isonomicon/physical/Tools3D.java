@@ -380,16 +380,43 @@ public class Tools3D {
         return result;
     }
 
+    public static byte[][][] basicScale(byte[][][] voxels, byte[][][] result){
+        int xs = voxels.length, ys = voxels[0].length, zs = voxels[0][0].length;
+        for (int x = 0; x < xs; x++) {
+            for (int y = 0; y < ys; y++) {
+                for (int z = 0; z < zs; z++) {
+                    byte v = voxels[x][y][z];
+                    result[x << 1    ][y << 1    ][z << 1    ] = v;
+                    result[x << 1 | 1][y << 1    ][z << 1    ] = v;
+                    result[x << 1    ][y << 1 | 1][z << 1    ] = v;
+                    result[x << 1 | 1][y << 1 | 1][z << 1    ] = v;
+                    result[x << 1    ][y << 1    ][z << 1 | 1] = v;
+                    result[x << 1 | 1][y << 1    ][z << 1 | 1] = v;
+                    result[x << 1    ][y << 1 | 1][z << 1 | 1] = v;
+                    result[x << 1 | 1][y << 1 | 1][z << 1 | 1] = v;
+                }
+            }
+        }
+        return result;
+    }
+
 
     public static byte[][][] simpleScale(byte[][][] voxels) {
         return simpleScale(voxels, new byte[voxels.length << 1][voxels[0].length << 1][voxels[0][0].length << 1]);
     }
-    public static byte[][][] simpleScale(byte[][][] voxels, byte[][][] result) {
+
+    public static byte[][][] simpleScale(byte[][][] voxels, byte[][][] result){
+        return simpleScale(voxels, result,
+                new byte[voxels.length][voxels[0].length][voxels[0][0].length],
+                new byte[voxels.length][voxels[0].length][voxels[0][0].length]);
+    }
+
+    public static byte[][][] simpleScale(byte[][][] voxels, byte[][][] result, byte[][][] voxelsBufferA, byte[][][] voxelsBufferB) {
         final int limitX = voxels.length - 1;
         final int limitY = voxels[0].length - 1;
         final int limitZ = voxels[0][0].length - 1;
-        byte[][][] nextColors = new byte[limitX+1][limitY+1][limitZ+1];
-        byte[][][] nextSlopes = new byte[limitX+1][limitY+1][limitZ+1];
+        byte[][][] nextColors = voxelsBufferA;
+        byte[][][] nextSlopes = voxelsBufferB;
         final int[] neighbors = new int[6];
         for (int x = 0; x <= limitX; x++) {
             for (int y = 0; y <= limitY; y++) {
