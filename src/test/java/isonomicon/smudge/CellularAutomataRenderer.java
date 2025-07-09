@@ -27,13 +27,14 @@ public class CellularAutomataRenderer extends ApplicationAdapter {
     private SmudgeRenderer renderer;
     private int seed = 7;
 
-    private static final int SMALL_SIZE = 32, MID_SIZE = SMALL_SIZE << 1, LARGE_SIZE = SMALL_SIZE << 2;
+    private static final int SMALL_SIZE = 64, MID_SIZE = SMALL_SIZE << 1, LARGE_SIZE = SMALL_SIZE << 2;
     private byte[][][][] pingPong = new byte[2][SMALL_SIZE][SMALL_SIZE][SMALL_SIZE];
     private byte[][][] tempVoxels = new byte[SMALL_SIZE][SMALL_SIZE][SMALL_SIZE];
     private byte[][][] tempVoxelsA = new byte[SMALL_SIZE][SMALL_SIZE][SMALL_SIZE];
     private byte[][][] tempVoxelsB = new byte[SMALL_SIZE][SMALL_SIZE][SMALL_SIZE];
     private byte[][][] midVoxels = new byte[MID_SIZE][MID_SIZE][MID_SIZE];
-    private byte[][][] voxels = new byte[LARGE_SIZE][LARGE_SIZE][LARGE_SIZE];
+    private byte[][][] voxels = new byte[MID_SIZE][MID_SIZE][MID_SIZE];
+//    private byte[][][] voxels = new byte[LARGE_SIZE][LARGE_SIZE][LARGE_SIZE];
     private String name;
     private AnimatedGif gif;
 //    PixmapIO.PNG png;
@@ -139,18 +140,22 @@ public class CellularAutomataRenderer extends ApplicationAdapter {
 //                    sum += prior[x & SMALL_MASK][y & SMALL_MASK][z - 1 & SMALL_MASK];
 //                    sum += prior[x & SMALL_MASK][y & SMALL_MASK][z + 1 & SMALL_MASK];
 
-                    total += (current[x][y][z] = (byte) (sum < seed || sum > 39 ? 0 : (((sum ^ sum >>> 1) * 23 >>> 2 & 3) % 3)));
+                    total += (current[x][y][z] = (byte) (sum < seed || sum > 32 ? 0 : (((sum ^ sum >>> 1) * 23 >>> 2) % 6 - 1) / 2));
 //                    total += (current[x][y][z] = (byte) (((((sum = ((sum *= seed) ^ sum >>> 3) * 0x9E377) ^ sum >>> 11)) & 3) % 3));
                 }
             }
         }
         System.out.println(total);
-        Tools3D.basicScale(current, midVoxels);
+
+//        Tools3D.translateCopyInto(current, midVoxels, 16, 16, 16);
+
+//        Tools3D.basicScale(current, midVoxels);
+
 //        Tools3D.fill(tempVoxelsA, 0);
 //        Tools3D.fill(tempVoxelsB, 0);
 //        Tools3D.simpleScale(current, midVoxels, tempVoxelsA, tempVoxelsB);
 //        Tools3D.soakInPlace(midVoxels);
-        voxels = midVoxels;
+        voxels = current;
         if(renderer == null) {
             for (int i = 1; i < 256; i++) {
                 VoxIO.lastMaterials.put(i, new VoxMaterial("Metal", "Roughness 0.6 Reflection 0.4 Dapple -0.04"));
