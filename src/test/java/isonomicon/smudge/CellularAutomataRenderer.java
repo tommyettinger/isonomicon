@@ -140,7 +140,7 @@ public class CellularAutomataRenderer extends ApplicationAdapter {
 //                    sum += prior[x & SMALL_MASK][y & SMALL_MASK][z - 1 & SMALL_MASK];
 //                    sum += prior[x & SMALL_MASK][y & SMALL_MASK][z + 1 & SMALL_MASK];
 
-                    total += (current[x][y][z] = (byte) (sum < seed || sum > 32 ? 0 : (((sum ^ sum >>> 1) * 23 >>> 2) % 6 - 1) / 2));
+                    total += (current[x][y][z] = (byte) (sum < seed || sum > 25 ? 0 : (((sum ^ sum >>> 1) * 23 >>> 2) % 6 - 1) / 2));
 //                    total += (current[x][y][z] = (byte) (((((sum = ((sum *= seed) ^ sum >>> 3) * 0x9E377) ^ sum >>> 11)) & 3) % 3));
                 }
             }
@@ -161,7 +161,13 @@ public class CellularAutomataRenderer extends ApplicationAdapter {
                 VoxIO.lastMaterials.put(i, new VoxMaterial("Metal", "Roughness 0.6 Reflection 0.4 Dapple -0.04"));
             }
             renderer = new SmudgeRenderer(voxels.length);
-            renderer.palette(new int[]{0, (Coloring.BETSY256[175] >>> 1 & 0x7F7F7F00) | 0xFF, Coloring.BETSY256[175]}, 3);
+            // powder blue
+//            renderer.palette(new int[]{0, (Coloring.BETSY256[175] >>> 1 & 0x7F7F7F00) | 0xFF, Coloring.BETSY256[175]}, 3);
+            // ghostly green
+//            renderer.palette(new int[]{0, 0x00FF6AFF, 0xA3FFC1FF}, 3);
+            // fireball
+            renderer.palette(new int[]{0, 0xFF6B00FF, 0xFBCB58FF}, 3);
+            
             renderer.saturation(0f);
         }
     }
