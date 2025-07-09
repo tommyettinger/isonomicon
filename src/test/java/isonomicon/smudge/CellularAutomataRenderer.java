@@ -25,7 +25,7 @@ public class CellularAutomataRenderer extends ApplicationAdapter {
     public static final int SCREEN_WIDTH = 512;//640;
     public static final int SCREEN_HEIGHT = 512;//720;
     private SmudgeRenderer renderer;
-    private int seed = 12;
+    private int seed = 7;
 
     private static final int SMALL_SIZE = 32, MID_SIZE = SMALL_SIZE << 1, LARGE_SIZE = SMALL_SIZE << 2;
     private byte[][][][] pingPong = new byte[2][SMALL_SIZE][SMALL_SIZE][SMALL_SIZE];
@@ -139,17 +139,17 @@ public class CellularAutomataRenderer extends ApplicationAdapter {
 //                    sum += prior[x & SMALL_MASK][y & SMALL_MASK][z - 1 & SMALL_MASK];
 //                    sum += prior[x & SMALL_MASK][y & SMALL_MASK][z + 1 & SMALL_MASK];
 
-                    total += (current[x][y][z] = (byte) (sum < seed || sum > 32 ? 0 : 1 + ((sum ^ sum >>> 2) & 1)));
+                    total += (current[x][y][z] = (byte) (sum < seed || sum > 39 ? 0 : (((sum ^ sum >>> 1) * 23 >>> 2 & 3) % 3)));
 //                    total += (current[x][y][z] = (byte) (((((sum = ((sum *= seed) ^ sum >>> 3) * 0x9E377) ^ sum >>> 11)) & 3) % 3));
                 }
             }
         }
         System.out.println(total);
-//        Tools3D.basicScale(current, midVoxels);
-        Tools3D.fill(tempVoxelsA, 0);
-        Tools3D.fill(tempVoxelsB, 0);
-        Tools3D.simpleScale(current, midVoxels, tempVoxelsA, tempVoxelsB);
-        Tools3D.soakInPlace(midVoxels);
+        Tools3D.basicScale(current, midVoxels);
+//        Tools3D.fill(tempVoxelsA, 0);
+//        Tools3D.fill(tempVoxelsB, 0);
+//        Tools3D.simpleScale(current, midVoxels, tempVoxelsA, tempVoxelsB);
+//        Tools3D.soakInPlace(midVoxels);
         voxels = midVoxels;
         if(renderer == null) {
             for (int i = 1; i < 256; i++) {
