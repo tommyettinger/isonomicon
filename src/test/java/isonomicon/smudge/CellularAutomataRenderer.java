@@ -154,7 +154,7 @@ public class CellularAutomataRenderer extends ApplicationAdapter {
 //                    sum += prior[x & SMALL_MASK][y & SMALL_MASK][z - 1 & SMALL_MASK];
 //                    sum += prior[x & SMALL_MASK][y & SMALL_MASK][z + 1 & SMALL_MASK];
 
-                    total += (current[x][y][z] = (byte) (sum < 7 || sum > 15 ? 0 : (((sum ^ sum >>> 1) * 23 >>> 2) % 6 - 1) / 2));
+                    total += (current[x][y][z] = (byte) (sum < 7 || sum > 11 ? 0 : (((sum ^ sum >>> 1) * 23 >>> 2) % 6 - 1) / 2));
 //                    total += (current[x][y][z] = (byte) (((((sum = ((sum *= seed) ^ sum >>> 3) * 0x9E377) ^ sum >>> 11)) & 3) % 3));
                 }
             }
