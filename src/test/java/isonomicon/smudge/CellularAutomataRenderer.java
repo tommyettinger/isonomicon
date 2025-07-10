@@ -11,6 +11,7 @@ import com.github.tommyettinger.anim8.AnimatedGif;
 import com.github.tommyettinger.digital.Base;
 import com.github.tommyettinger.digital.MathTools;
 import com.github.tommyettinger.random.AceRandom;
+import com.github.tommyettinger.random.distribution.NormalDistribution;
 import com.github.yellowstonegames.grid.FlawedPointHash;
 import com.github.yellowstonegames.grid.IPointHash;
 import com.github.yellowstonegames.grid.Noise;
@@ -66,14 +67,23 @@ public class CellularAutomataRenderer extends ApplicationAdapter {
 //        tempVoxels = VoxIO.readVox(Gdx.files.local("specialized/b/vox/ca/ca1.vox").read());
 
         AceRandom random = new AceRandom(seed);
-        int start = 16, end = 47;
-        for (int x = start; x < end; x++) {
-            for (int y = start; y < end; y++) {
-                for (int z = start; z < end; z++) {
-                    long r = random.nextLong();
-                    tempVoxels[x][y][z] = (byte)(MathTools.boundedInt(r, 3) & (r >>> 62) % 3);
-                }
-            }
+//        int start = 16, end = 47;
+//        for (int x = start; x < end; x++) {
+//            for (int y = start; y < end; y++) {
+//                for (int z = start; z < end; z++) {
+//                    long r = random.nextLong();
+//                    tempVoxels[x][y][z] = (byte)(MathTools.boundedInt(r, 3) & (r >>> 62) % 3);
+//                }
+//            }
+//        }
+
+        int MASK = SMALL_SIZE - 1;
+        NormalDistribution norm = new NormalDistribution(random, SMALL_SIZE * 0.15, MASK * 0.5);
+        for (int i = 0; i < 6000; i++) {
+//            long r = random.nextLong();
+            tempVoxels[(int)norm.nextDouble() & MASK][(int)norm.nextDouble() & MASK][(int)norm.nextDouble() & MASK] =
+                    (byte) (random.next(1) + 1);
+//                    (byte)(MathTools.boundedInt(r, 3) & (r >>> 62) % 3);
         }
 
         Tools3D.deepCopyInto(tempVoxels, pingPong[0]);
@@ -154,7 +164,8 @@ public class CellularAutomataRenderer extends ApplicationAdapter {
 //                    sum += prior[x & SMALL_MASK][y & SMALL_MASK][z - 1 & SMALL_MASK];
 //                    sum += prior[x & SMALL_MASK][y & SMALL_MASK][z + 1 & SMALL_MASK];
 
-                    total += (current[x][y][z] = (byte) (sum < 7 || sum > 11 ? 0 : (((sum ^ sum >>> 1) * 23 >>> 2) % 6 - 1) / 2));
+                    total += (current[x][y][z] = (byte) (sum < 7 || sum > 10 ? 0 : sum % 3));
+//                    total += (current[x][y][z] = (byte) (sum < 7 || sum > 10 ? 0 : (((sum ^ sum >>> 1) * 23 >>> 2) % 6 - 1) / 2));
 //                    total += (current[x][y][z] = (byte) (((((sum = ((sum *= seed) ^ sum >>> 3) * 0x9E377) ^ sum >>> 11)) & 3) % 3));
                 }
             }
