@@ -77,14 +77,29 @@ public class CellularAutomataRenderer extends ApplicationAdapter {
 //            }
 //        }
 
-        int MASK = SMALL_SIZE - 1;
-        NormalDistribution norm = new NormalDistribution(random, MASK * 0.5, SMALL_SIZE * 0.2);
-        for (int i = 0; i < 2000; i++) {
-//            long r = random.nextLong();
-            tempVoxels[(int)norm.nextDouble() & MASK][(int)norm.nextDouble() & MASK][(int)norm.nextDouble() & MASK] =
-                    (byte) (random.next(1) + 1);
-//                    (byte)(MathTools.boundedInt(r, 3) & (r >>> 62) % 3);
+        int MASK = SMALL_SIZE - 1, HALF_MASK = (SMALL_SIZE >>> 1) - 1;
+//        NormalDistribution norm = new NormalDistribution(random, MASK * 0.5, SMALL_SIZE * 0.2);
+//        for (int i = 0; i < 2000; i++) {
+//            tempVoxels[(int)norm.nextDouble() & MASK][(int)norm.nextDouble() & MASK][(int)norm.nextDouble() & MASK] =
+//                    (byte) (random.next(1) + 1);
+//        }
+
+        NormalDistribution norm = new NormalDistribution(random, HALF_MASK * 0.5, SMALL_SIZE * 0.09);
+        for (int i = 0; i < 240; i++) {
+            int x = (int)norm.nextDouble() & HALF_MASK;
+            int y = (int)norm.nextDouble() & HALF_MASK;
+            int z = (int)norm.nextDouble() & HALF_MASK;
+            byte v = (byte) (random.next(1) + 1);
+            tempVoxels[x][y][z] = v;
+            tempVoxels[MASK-x][y][z] = v;
+            tempVoxels[x][MASK-y][z] = v;
+            tempVoxels[MASK-x][MASK-y][z] = v;
+            tempVoxels[x][y][MASK-z] = v;
+            tempVoxels[MASK-x][y][MASK-z] = v;
+            tempVoxels[x][MASK-y][MASK-z] = v;
+            tempVoxels[MASK-x][MASK-y][MASK-z] = v;
         }
+
 
         Tools3D.deepCopyInto(tempVoxels, pingPong[0]);
 
@@ -188,9 +203,9 @@ public class CellularAutomataRenderer extends ApplicationAdapter {
             }
             renderer = new SmudgeRenderer(voxels.length);
             // powder blue
-//            renderer.palette(new int[]{0, (Coloring.BETSY256[175] >>> 1 & 0x7F7F7F00) | 0xFF, Coloring.BETSY256[175]}, 3);
+            renderer.palette(new int[]{0, (Coloring.BETSY256[175] >>> 1 & 0x7F7F7F00) | 0xFF, Coloring.BETSY256[175]}, 3);
             // ghostly green
-            renderer.palette(new int[]{0, 0x00FF6AFF, 0xA3FFC1FF}, 3);
+//            renderer.palette(new int[]{0, 0x00FF6AFF, 0xA3FFC1FF}, 3);
             // fireball
 //            renderer.palette(new int[]{0, 0xFF6B00FF, 0xFBCB58FF}, 3);
 
