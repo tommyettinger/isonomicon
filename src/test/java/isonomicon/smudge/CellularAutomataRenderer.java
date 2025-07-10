@@ -9,6 +9,8 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.github.tommyettinger.anim8.AnimatedGif;
 import com.github.tommyettinger.digital.Base;
+import com.github.tommyettinger.digital.MathTools;
+import com.github.tommyettinger.random.AceRandom;
 import com.github.yellowstonegames.grid.FlawedPointHash;
 import com.github.yellowstonegames.grid.IPointHash;
 import com.github.yellowstonegames.grid.Noise;
@@ -25,7 +27,7 @@ public class CellularAutomataRenderer extends ApplicationAdapter {
     public static final int SCREEN_WIDTH = 512;//640;
     public static final int SCREEN_HEIGHT = 512;//720;
     private SmudgeRenderer renderer;
-    private int seed = 7;
+    private int seed = (int) System.currentTimeMillis();
 
     private static final int SMALL_SIZE = 64, MID_SIZE = SMALL_SIZE << 1, LARGE_SIZE = SMALL_SIZE << 2;
     private byte[][][][] pingPong = new byte[2][SMALL_SIZE][SMALL_SIZE][SMALL_SIZE];
@@ -61,7 +63,19 @@ public class CellularAutomataRenderer extends ApplicationAdapter {
 
         System.out.println("Loading...");
 
-        tempVoxels = VoxIO.readVox(Gdx.files.local("specialized/b/vox/ca/ca1.vox").read());
+//        tempVoxels = VoxIO.readVox(Gdx.files.local("specialized/b/vox/ca/ca1.vox").read());
+
+        AceRandom random = new AceRandom(seed);
+        int start = 16, end = 47;
+        for (int x = start; x < end; x++) {
+            for (int y = start; y < end; y++) {
+                for (int z = start; z < end; z++) {
+                    long r = random.nextLong();
+                    tempVoxels[x][y][z] = (byte)(MathTools.boundedInt(r, 3) & (r >>> 62) % 3);
+                }
+            }
+        }
+
         Tools3D.deepCopyInto(tempVoxels, pingPong[0]);
 
         Pixmap pixmap;
@@ -140,7 +154,7 @@ public class CellularAutomataRenderer extends ApplicationAdapter {
 //                    sum += prior[x & SMALL_MASK][y & SMALL_MASK][z - 1 & SMALL_MASK];
 //                    sum += prior[x & SMALL_MASK][y & SMALL_MASK][z + 1 & SMALL_MASK];
 
-                    total += (current[x][y][z] = (byte) (sum < seed || sum > 25 ? 0 : (((sum ^ sum >>> 1) * 23 >>> 2) % 6 - 1) / 2));
+                    total += (current[x][y][z] = (byte) (sum < 7 || sum > 15 ? 0 : (((sum ^ sum >>> 1) * 23 >>> 2) % 6 - 1) / 2));
 //                    total += (current[x][y][z] = (byte) (((((sum = ((sum *= seed) ^ sum >>> 3) * 0x9E377) ^ sum >>> 11)) & 3) % 3));
                 }
             }
@@ -167,7 +181,7 @@ public class CellularAutomataRenderer extends ApplicationAdapter {
 //            renderer.palette(new int[]{0, 0x00FF6AFF, 0xA3FFC1FF}, 3);
             // fireball
             renderer.palette(new int[]{0, 0xFF6B00FF, 0xFBCB58FF}, 3);
-            
+
             renderer.saturation(0f);
         }
     }
