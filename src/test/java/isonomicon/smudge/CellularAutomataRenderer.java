@@ -78,8 +78,8 @@ public class CellularAutomataRenderer extends ApplicationAdapter {
 //        }
 
         int MASK = SMALL_SIZE - 1;
-        NormalDistribution norm = new NormalDistribution(random, SMALL_SIZE * 0.15, MASK * 0.5);
-        for (int i = 0; i < 6000; i++) {
+        NormalDistribution norm = new NormalDistribution(random, MASK * 0.5, SMALL_SIZE * 0.2);
+        for (int i = 0; i < 2000; i++) {
 //            long r = random.nextLong();
             tempVoxels[(int)norm.nextDouble() & MASK][(int)norm.nextDouble() & MASK][(int)norm.nextDouble() & MASK] =
                     (byte) (random.next(1) + 1);
@@ -183,15 +183,16 @@ public class CellularAutomataRenderer extends ApplicationAdapter {
         voxels = current;
         if(renderer == null) {
             for (int i = 1; i < 256; i++) {
-                VoxIO.lastMaterials.put(i, new VoxMaterial("Metal", "Roughness 0.6 Reflection 0.4 Dapple -0.04"));
+                VoxIO.lastMaterials.put(i, new VoxMaterial("Metal", "Roughness 0.4 Reflection 0.4"));
+//                VoxIO.lastMaterials.put(i, new VoxMaterial("Metal", "Roughness 0.6 Reflection 0.4 Dapple -0.04"));
             }
             renderer = new SmudgeRenderer(voxels.length);
             // powder blue
 //            renderer.palette(new int[]{0, (Coloring.BETSY256[175] >>> 1 & 0x7F7F7F00) | 0xFF, Coloring.BETSY256[175]}, 3);
             // ghostly green
-//            renderer.palette(new int[]{0, 0x00FF6AFF, 0xA3FFC1FF}, 3);
+            renderer.palette(new int[]{0, 0x00FF6AFF, 0xA3FFC1FF}, 3);
             // fireball
-            renderer.palette(new int[]{0, 0xFF6B00FF, 0xFBCB58FF}, 3);
+//            renderer.palette(new int[]{0, 0xFF6B00FF, 0xFBCB58FF}, 3);
 
             renderer.saturation(0f);
         }
