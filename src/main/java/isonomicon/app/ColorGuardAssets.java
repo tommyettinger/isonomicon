@@ -32,19 +32,21 @@ import java.io.FileNotFoundException;
 
 public class ColorGuardAssets extends ApplicationAdapter {
     public static boolean DIVERSE = false;
-    public static boolean ATTACKS = true;
+    public static boolean ATTACKS = false;
     public static boolean DEATHS = false;
     public static boolean EXPLOSION = true;
     public static boolean TERRAIN = false;
-    //    public static final String SPECIES = "human";
-//    public static final String SPECIES_PREFIX = "";
-    public static final String SPECIES = "zombie";
-    public static final String SPECIES_PREFIX = "Zombie_";
-    public static final float DAMAGED = 0.65f;
+    public static final String SPECIES = "human";
+    public static final String SPECIES_PREFIX = "";
+    public static final float DAMAGED = 0f;
+//    public static final String SPECIES = "zombie";
+//    public static final String SPECIES_PREFIX = "Zombie_";
+//    public static final float DAMAGED = 0.65f;
 
     public static boolean PNG = true;
     public static boolean APNG = false;
-    public static boolean GIF = true;
+    public static boolean GIF = false;
+    public static boolean VOX = true;
 
 //    public static final String outDir = "out/color_guard";
 //    public static final String outDir = "out/cg";
@@ -69,6 +71,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
     private AnimatedPNG apng;
     private SpriteBatch batch;
     private Texture palette;
+    private int[] palette0 = new int[256];
 
     public ColorGuardAssets() {
         armies = new String[]{
@@ -100,7 +103,9 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //        ColorGuardData.units = ColorGuardData.units.subList(2, 3);
 //        ColorGuardData.units = ColorGuardData.units.subList(6, 9);
         try {
-            if(SpecialRenderer.shrink == 3)
+            if(SpecialRenderer.shrink == 0)
+                head = VoxIOExtended.readVox(new LittleEndianDataInputStream(new FileInputStream("specialized/b/vox/color_guard/"+SPECIES+"/Head_Shrink_0.vox")));
+            else if(SpecialRenderer.shrink == 3)
                 head = VoxIOExtended.readVox(new LittleEndianDataInputStream(new FileInputStream("specialized/b/vox/color_guard/"+SPECIES+"/Head_Shrink_3.vox")));
             else
                 head = VoxIOExtended.readVox(new LittleEndianDataInputStream(new FileInputStream("specialized/b/vox/color_guard/"+SPECIES+"/Head.vox")));
@@ -114,6 +119,10 @@ public class ColorGuardAssets extends ApplicationAdapter {
     public void create() {
 //        if (inputs == null) Gdx.app.exit();
         palette = new Texture(Gdx.files.local("assets/palettes/b/ColorGuardMasterPalette.png"));
+        Pixmap p0 = new Pixmap(Gdx.files.local("assets/palettes/b/ColorGuardBaseDark.png"));
+        for (int i = 0; i < 255; i++) {
+            palette0[i+1] = p0.getPixel(i, 0);
+        }
 //        palettes = new Texture[]{
 //                new Texture(Gdx.files.local("assets/palettes/b/ColorGuardBaseDark.png")),
 //                new Texture(Gdx.files.local("assets/palettes/b/ColorGuardBaseWhite.png")),
@@ -419,9 +428,15 @@ public class ColorGuardAssets extends ApplicationAdapter {
                             fb.end();
                             pm.set(j * 32 + i * 8 + f, pixmap);
                             pm.set(j * 32 + i * 8 + f + 4, pixmap);
-                            if(png != null) png.write(Gdx.files.local(outDir + "/" + armies[j] + "/" + name + '/' + SPECIES_PREFIX + armies[j] + "_look"+look+"_" + name + "_angle" + i + "_" + f + ".png"), pixmap);
-                            if (look + j == 0)
-                                if(png != null) png.write(Gdx.files.local(outDir + "/lab/" + name + '/' + SPECIES_PREFIX + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
+                            if (png != null)
+                                png.write(Gdx.files.local(outDir + "/" + armies[j] + "/" + name + '/' + SPECIES_PREFIX + armies[j] + "_look" + look + "_" + name + "_angle" + i + "_" + f + ".png"), pixmap);
+                            if (look + j == 0) {
+                                if (png != null)
+                                    png.write(Gdx.files.local(outDir + "/lab/" + name + '/' + SPECIES_PREFIX + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
+                                if(VOX)
+                                    VoxIOExtended.writeVOX(outDir + "/vox/" + name + "/" + SPECIES_PREFIX + name + "_angle" + i + "_" + f + ".vox", voxels.grids.get(0), palette0, Stuff.MATERIALS_B);
+
+                            }
                         }
 //                png8.write(Gdx.files.local("out/" + name + '/' + name + "_angle" + i + ".png"), p, false, true);
                     }
@@ -492,8 +507,12 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                     pm.set(j * 32 + i * 8 + f, pixmap);
                                     if(png != null) png.write(Gdx.files.local(outDir + "/" + armies[j] + "/" + name + '/' + SPECIES_PREFIX + armies[j] + "_look" + look + "_" + name + ps + "_angle" + i + "_" + f + ".png"), pixmap);
                                     if (look + j == 0) {
-                                        if(png != null) png.write(Gdx.files.local(outDir + "/lab/" + name + '/' + SPECIES_PREFIX + name + ps + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
-//                                            VoxIOExtended.writeVOX(outDir + "/vox/" + name + "/" + ps + "_angle" + i + "_" + f + ".vox", frames[f].grids.get(0), VoxIO.lastPalette, VoxIO.lastMaterials);
+                                        if (png != null) {
+                                            png.write(Gdx.files.local(outDir + "/lab/" + name + '/' + SPECIES_PREFIX + name + ps + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
+                                        }
+                                        if (VOX) {
+                                            VoxIOExtended.writeVOX(outDir + "/vox/" + name + "/" + SPECIES_PREFIX + name + ps + "_angle" + i + "_" + f + ".vox", frames[f].grids.get(0), palette0, Stuff.MATERIALS_B);
+                                        }
                                     }
                                 }
                                 byte[][][] g = frames[f].grids.get(0);
