@@ -102,6 +102,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //        ColorGuardData.units = ColorGuardData.units.subList(52, ColorGuardData.units.size());
 //        ColorGuardData.units = ColorGuardData.units.subList(2, 3);
 //        ColorGuardData.units = ColorGuardData.units.subList(6, 9);
+//        ColorGuardData.units = ColorGuardData.units.subList(0, 11);
         try {
             if(SpecialRenderer.shrink == 0)
                 head = VoxIOExtended.readVox(new LittleEndianDataInputStream(new FileInputStream("specialized/b/vox/color_guard/"+SPECIES+"/Head_Shrink_0.vox")));

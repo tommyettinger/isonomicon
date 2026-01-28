@@ -390,7 +390,6 @@ public class VoxIOExtended {
     protected static void subMerge(ArrayList<byte[][][]> grids, ArrayList<IntObjectMap<float[]>> links,
                             byte[][][] g, IntObjectMap<float[]> link, byte[][][] voxels, int frame,
                             int translateX, int translateY, int translateZ){
-        final int size = g.length;
         int ox, oy, oz; // offset x,y,z
         Tools3D.translateCopyInto(g, voxels, translateX, translateY, translateZ);
         for(IntObjectMap.Entry<float[]> ent : link) {
@@ -398,9 +397,9 @@ public class VoxIOExtended {
             for (int j = 0; j < links.size(); j++) {
                 float[] got;
                 if((got = links.get(j).get(ent.key)) != null) {
-                    ox = MathUtils.round(ent.value[0] - got[0]);
-                    oy = MathUtils.round(ent.value[1] - got[1]);
-                    oz = MathUtils.round(ent.value[2] - got[2]);
+                    ox = MathUtils.round((ent.value[0] - got[0]) * 0.5f);
+                    oy = MathUtils.round((ent.value[1] - got[1]) * 0.5f);
+                    oz = MathUtils.round((ent.value[2] - got[2]) * 0.5f);
 
                     subMerge(grids, links, grids.remove(j), links.remove(j), voxels, frame,
                             translateX + ox,
