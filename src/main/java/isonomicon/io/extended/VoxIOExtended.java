@@ -1,5 +1,6 @@
 package isonomicon.io.extended;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.github.tommyettinger.ds.IntObjectMap;
 import com.github.tommyettinger.ds.LongOrderedSet;
@@ -13,7 +14,10 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 
+import static com.github.tommyettinger.digital.TrigTools.cosTurns;
+import static com.github.tommyettinger.digital.TrigTools.sinTurns;
 import static isonomicon.io.VoxIO.lastMaterials;
 import static isonomicon.io.VoxIO.lastPalette;
 
@@ -33,11 +37,11 @@ public class VoxIOExtended {
     /**
      * If this should scale up the voxels by a factor of 2, this should be true.
      */
-    public static boolean SCALE = true;
+    public static boolean SCALE = false;
     /**
      * If this should call {@link Tools3D#soak} or a related method on the voxels, this should be true.
      */
-    public static boolean SOAK = true;
+    public static boolean SOAK = false;
     /**
      * Can be set to false if old or incorrectly-made models need to be loaded.
      */
@@ -330,49 +334,121 @@ public class VoxIOExtended {
     }
 
     public static byte[][][] mergeModel(VoxModel model) {
-        int xChange = 0, yChange = 0, zChange = -VoxIOExtended.minZ;
-        if(VoxIOExtended.minX < 0) {
-            xChange = -VoxIOExtended.minX;
-            VoxIOExtended.maxX += xChange;
-            VoxIOExtended.minX = 0;
-        }
-        if(VoxIOExtended.minY < 0) {
-            yChange = -VoxIOExtended.minY;
-            VoxIOExtended.maxY += yChange;
-            VoxIOExtended.minY = 0;
-        }
+//        int xChange = 0, yChange = 0, zChange = -VoxIOExtended.minZ;
+//        if(VoxIOExtended.minX < 0) {
+//            xChange = -VoxIOExtended.minX;
+//            VoxIOExtended.maxX += xChange;
+//            VoxIOExtended.minX = 0;
+//        }
+//        if(VoxIOExtended.minY < 0) {
+//            yChange = -VoxIOExtended.minY;
+//            VoxIOExtended.maxY += yChange;
+//            VoxIOExtended.minY = 0;
+//        }
+//
+//        int size = 1;
+//        for(GroupChunk gc : model.groupChunks.values()) {
+//            for (int ch : gc.childIds) {
+//                TransformChunk tc = model.transformChunks.get(ch);
+//                if (tc != null) {
+//                    for (ShapeModel sm : model.shapeChunks.get(tc.childId).models) {
+//                        byte[][][] g = model.grids.get(sm.id);
+//                        size = Math.max(size, Math.round(tc.translation.x + g.length + xChange));
+//                        size = Math.max(size, Math.round(tc.translation.y + g[0].length + yChange));
+//                        size = Math.max(size, Math.round(tc.translation.z + g[0][0].length + zChange));
+//                    }
+//                }
+//            }
+//        }
+//
+//        byte[][][] voxels = new byte[size][size][size];
+//        for(GroupChunk gc : model.groupChunks.values()) {
+//            for (int ch : gc.childIds) {
+//                TransformChunk tc = model.transformChunks.get(ch);
+//                if (tc != null) {
+//                    for (ShapeModel sm : model.shapeChunks.get(tc.childId).models) {
+//                        byte[][][] g = model.grids.get(sm.id);
+//                        Tools3D.translateCopyInto(g, voxels, Math.round(tc.translation.x + xChange), Math.round(tc.translation.y + yChange), Math.round(tc.translation.z + zChange));
+//                    }
+//                }
+//            }
+//        }
+//        VoxIOExtended.maxZ += zChange;
+//        VoxIOExtended.minZ = 0;
 
         int size = 1;
-        for(GroupChunk gc : model.groupChunks.values()) {
-            for (int ch : gc.childIds) {
-                TransformChunk tc = model.transformChunks.get(ch);
-                if (tc != null) {
-                    for (ShapeModel sm : model.shapeChunks.get(tc.childId).models) {
-                        byte[][][] g = model.grids.get(sm.id);
-                        size = Math.max(size, Math.round(tc.translation.x + g.length + xChange));
-                        size = Math.max(size, Math.round(tc.translation.y + g[0].length + yChange));
-                        size = Math.max(size, Math.round(tc.translation.z + g[0][0].length + zChange));
-                    }
-                }
-            }
+        for (int i = 0; i < model.grids.size(); i++) {
+            byte[][][] grid = model.grids.get(i);
+            size = Math.max(size, Math.max(grid.length, Math.max(grid[0].length, grid[0][0].length)));
         }
 
         byte[][][] voxels = new byte[size][size][size];
-        for(GroupChunk gc : model.groupChunks.values()) {
-            for (int ch : gc.childIds) {
-                TransformChunk tc = model.transformChunks.get(ch);
-                if (tc != null) {
-                    for (ShapeModel sm : model.shapeChunks.get(tc.childId).models) {
-                        byte[][][] g = model.grids.get(sm.id);
-                        Tools3D.translateCopyInto(g, voxels, Math.round(tc.translation.x + xChange), Math.round(tc.translation.y + yChange), Math.round(tc.translation.z + zChange));
-                    }
+
+        return voxels;
+    }
+
+    protected static void subMerge(ArrayList<byte[][][]> grids, ArrayList<IntObjectMap<float[]>> links,
+                            byte[][][] g, IntObjectMap<float[]> link, byte[][][] voxels, int frame,
+                            int translateX, int translateY, int translateZ){
+        final int size = g.length;
+        int ox, oy, oz; // offset x,y,z
+        Tools3D.translateCopyInto(g, voxels, translateX, translateY, translateZ);
+        for(IntObjectMap.Entry<float[]> ent : link) {
+            if(ent.key == -1) continue;
+            for (int j = 0; j < links.size(); j++) {
+                float[] got;
+                if((got = links.get(j).get(ent.key)) != null) {
+                    ox = MathUtils.round(ent.value[0] - got[0]);
+                    oy = MathUtils.round(ent.value[1] - got[1]);
+                    oz = MathUtils.round(ent.value[2] - got[2]);
+
+                    subMerge(grids, links, grids.remove(j), links.remove(j), voxels, frame,
+                            translateX + ox,
+                            translateY + oy,
+                            translateZ + oz);
                 }
             }
         }
-        VoxIOExtended.maxZ += zChange;
-        VoxIOExtended.minZ = 0;
+
+    }
+
+    public static byte[][][] mergeModelSimple(VoxModel model, int frame,
+                                  float translateX, float translateY, float translateZ){
+        boolean foundAnything = false;
+        ArrayList<byte[][][]> grids = new ArrayList<>(model.grids.size());
+        ArrayList<IntObjectMap<float[]>> links = new ArrayList<>(model.links.size());
+        for (int i = 0; i < model.grids.size(); i++) {
+            grids.add(Tools3D.deepCopy(model.grids.get(i)));
+            if(i < model.links.size())
+                links.add(new IntObjectMap<>(model.links.get(i)));
+        }
+        if(links.isEmpty()) {
+            return Tools3D.translateCopy(grids.get(0), MathUtils.round(translateX), MathUtils.round(translateY), MathUtils.round(translateZ));
+        }
+        int size = model.grids.get(0).length;
+        byte[][][] voxels = new byte[size][size][size];
+        for (int i = 0; i < grids.size(); i++) {
+            IntObjectMap<float[]> link = links.get(i);
+            if(link.containsKey(-1))
+            {
+                //root grid
+                subMerge(grids, links, grids.remove(i), links.remove(i), voxels, frame,
+                        MathUtils.round(translateX),
+                        MathUtils.round(translateY),
+                        MathUtils.round(translateZ));
+                foundAnything = true;
+                break;
+            }
+        }
+        if(!foundAnything){
+            subMerge(grids, links, grids.remove(0), links.remove(0), voxels, frame,
+                    MathUtils.round(translateX),
+                    MathUtils.round(translateY),
+                    MathUtils.round(translateZ));
+        }
         return voxels;
     }
+
 
     private static void writeInt(DataOutputStream bin, int value) throws IOException
     {

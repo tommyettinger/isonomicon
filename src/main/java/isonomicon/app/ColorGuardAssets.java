@@ -433,8 +433,8 @@ public class ColorGuardAssets extends ApplicationAdapter {
                             if (look + j == 0) {
                                 if (png != null)
                                     png.write(Gdx.files.local(outDir + "/lab/" + name + '/' + SPECIES_PREFIX + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
-                                if(VOX)
-                                    VoxIOExtended.writeVOX(outDir + "/vox/" + name + "/" + SPECIES_PREFIX + name + "_angle" + i + "_" + f + ".vox", voxels.grids.get(0), palette0, Stuff.MATERIALS_B);
+                                if(VOX && i == 0)
+                                    VoxIOExtended.writeVOX(outDir + "/vox/" + name + "/" + SPECIES_PREFIX + name + "_" + f + ".vox", VoxIOExtended.mergeModelSimple(voxels, f, 0, 0, 0), palette0, Stuff.MATERIALS_B);
 
                             }
                         }
@@ -507,12 +507,11 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                     pm.set(j * 32 + i * 8 + f, pixmap);
                                     if(png != null) png.write(Gdx.files.local(outDir + "/" + armies[j] + "/" + name + '/' + SPECIES_PREFIX + armies[j] + "_look" + look + "_" + name + ps + "_angle" + i + "_" + f + ".png"), pixmap);
                                     if (look + j == 0) {
-                                        if (png != null) {
+                                        if (png != null)
                                             png.write(Gdx.files.local(outDir + "/lab/" + name + '/' + SPECIES_PREFIX + name + ps + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
-                                        }
-                                        if (VOX) {
-                                            VoxIOExtended.writeVOX(outDir + "/vox/" + name + "/" + SPECIES_PREFIX + name + ps + "_angle" + i + "_" + f + ".vox", frames[f].grids.get(0), palette0, Stuff.MATERIALS_B);
-                                        }
+                                        if(VOX && i == 0)
+                                            VoxIOExtended.writeVOX(outDir + "/vox/" + name + "/" + SPECIES_PREFIX + name + ps + "_" + f + ".vox", VoxIOExtended.mergeModelSimple(frames[f], f, 0, 0, 0), palette0, Stuff.MATERIALS_B);
+
                                     }
                                 }
                                 byte[][][] g = frames[f].grids.get(0);
@@ -746,6 +745,11 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //            voxels = Tools3D.scaleAndSoak(voxels);
 //            voxels = Tools3D.soak(voxels);
             voxels.mergeWith(head);
+
+//            if (VOX) {
+//                VoxIOExtended.writeVOX(outDir + "/vox/" + name + "/" + SPECIES_PREFIX + name + ".vox", VoxIOExtended.mergeModel(voxels), palette0, Stuff.MATERIALS_B);
+//            }
+
             int nameStart = Math.max((name+suffix).lastIndexOf('/'), (name+suffix).lastIndexOf('\\')) + 1;
             this.name = (name+suffix).substring(nameStart, (name+suffix).indexOf('.', nameStart));
 //            renderer = new NextRenderer(voxels.length, QUALITY);
