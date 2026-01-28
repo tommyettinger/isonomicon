@@ -203,11 +203,11 @@ public class CellularAutomataRenderer extends ApplicationAdapter {
             }
             renderer = new SmudgeRenderer(voxels.length);
             // powder blue
-            renderer.palette(new int[]{0, (Coloring.BETSY256[175] >>> 1 & 0x7F7F7F00) | 0xFF, Coloring.BETSY256[175]}, 3);
+//            renderer.palette(new int[]{0, (Coloring.BETSY256[175] >>> 1 & 0x7F7F7F00) | 0xFF, Coloring.BETSY256[175]}, 3);
             // ghostly green
 //            renderer.palette(new int[]{0, 0x00FF6AFF, 0xA3FFC1FF}, 3);
             // fireball
-//            renderer.palette(new int[]{0, 0xFF6B00FF, 0xFBCB58FF}, 3);
+            renderer.palette(new int[]{0, 0xFF6B00FF, 0xFBCB58FF}, 3);
 
             renderer.saturation(0f);
         }
