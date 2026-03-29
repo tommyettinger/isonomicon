@@ -483,7 +483,7 @@ public class Stuff {
             new Stuff("tire rubber", 3, "Reflection 0.1 Roughness 0.8"),
             new Stuff("dark eye", 4, "Roughness 0.0 Reflection 0.1 Damage 65 Priority 10"),
             new Stuff("asphalt", 5, "Reflection 0.02 Roughness 0.9 Dapple -0.07"),
-            new Stuff("dark glass", 6, "Transparency 0.3 Roughness 0.0 Reflection 0.4 Damage 55"),
+            new Stuff("dark glass", 6, "Transparency 0.3 Roughness 0.0 Reflection 0.4 Damage 54"),
             new Stuff("dull metal", 7, "Metal", "Reflection 0.15 Roughness 0.8"),
             new Stuff("dull metal swap 0", 8, 7, "Metal", "Reflection 0.15 Roughness 0.8 Frame 0.0"),
             new Stuff("dull metal swap 1", 9, 7, "Metal", "Reflection 0.15 Roughness 0.8 Frame 1.0"), /* second row*/
@@ -494,8 +494,17 @@ public class Stuff {
             new Stuff("gleaming metal", 14, "Metal", "Reflection 0.9 Roughness 0.05 Damage 10", 15, 1, 14, 16),
             new Stuff("metal glint", 15, "Metal", "Roughness 0.2 Reflection 1.0 Emission 0.5", 15, 1, 14, 14),
             new Stuff("leather", 16, "Reflection 0.05 Roughness 0.6"), /*black red*/
+            new Stuff("wet dirt or mud", 17, "Roughness 0.1 Reflection 0.05"), /*third row*/
+            new Stuff("dry dirt", 18, "Roughness 0.85 Reflection 0.0 Dapple -0.05"),
+            new Stuff("rubble", 19, "Roughness 0.55 Reflection 0.0 Dapple -0.4 Vary -0.3"),
+            new Stuff("sand", 20, "Roughness 0.7 Reflection 0.0"),
+            new Stuff("knotted wood", 21, "Roughness 0.5 Reflection 0.1 Dapple -0.1"), /*black brown*/
+            new Stuff("polished wood", 22, "Roughness 0.5 Reflection 0.5 Dapple -0.1 Vary -0.15"),
+            new Stuff("old wood", 23, "Roughness 0.6 Reflection 0.0 Dapple -0.25 Vary -0.35"),
+            new Stuff("fresh wood", 24, "Roughness 0.4 Reflection 0.0 Dapple -0.15 Vary -0.1"),
+            new Stuff("light eye", 25, "Roughness 1.0 Reflection 1.0 Damage 71 Priority 50"), /*fourth row*/
 
-            new Stuff("broken glass", 55, "Roughness 0.7 Reflection 0.45 Disperse -0.25"), /*white cyan*/
+            new Stuff("broken glass", 54, "Roughness 0.7 Reflection 0.45 Disperse -0.25"), /*silver cyan*/
     };
     public static final IntObjectMap<VoxMaterial> MATERIALS_A = new IntObjectMap<>(256);
     public static final IntObjectMap<VoxMaterial> MATERIALS_B = new IntObjectMap<>(256);
