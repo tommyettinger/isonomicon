@@ -362,7 +362,7 @@ public class Stuff {
             new Stuff("unused 150", 150, "Transparency 1.0"),
             new Stuff("unused 151", 151, "Transparency 1.0"),
             new Stuff("unused 152", 152, "Transparency 1.0"),
-            new Stuff("broken glass", 153, 82, "Roughness 0.7 Reflection 0.45 Disperse -0.25"), /*light azure*/
+            new Stuff("broken glass", 153, 25, "Roughness 0.7 Reflection 0.45 Disperse -0.25"), /*light azure*/
             new Stuff("unused 154", 154, "Transparency 1.0"), /*light blue*/
             new Stuff("unused 155", 155, "Transparency 1.0"),
             new Stuff("unused 156", 156, "Transparency 1.0"),
@@ -478,9 +478,24 @@ public class Stuff {
      */
     public static final Stuff[] STUFFS_C = new Stuff[]{
             new Stuff("transparent", 0, "Glass", "Transparency 1.0"),
-            new Stuff("glossy leather", 1, "Reflection 0.7, Roughness 0.05"), /*black*/
-            new Stuff("tire rubber", 2, "Reflection 0.1 Roughness 0.8"),
-            new Stuff("matte leather", 3, "Reflection 0.05 Roughness 0.6"),
+            new Stuff("oil", 1, "Reflection 0.7, Roughness 0.0"), /* bottom row*/
+            new Stuff("shadow", 2, "Roughness 0.0 Reflection 0.0 Emission -0.25"),
+            new Stuff("tire rubber", 3, "Reflection 0.1 Roughness 0.8"),
+            new Stuff("dark eye", 4, "Roughness 0.0 Reflection 0.1 Damage 65 Priority 10"),
+            new Stuff("asphalt", 5, "Reflection 0.02 Roughness 0.9 Dapple -0.07"),
+            new Stuff("dark glass", 6, "Transparency 0.3 Roughness 0.0 Reflection 0.4 Damage 55"),
+            new Stuff("dull metal", 7, "Metal", "Reflection 0.15 Roughness 0.8"),
+            new Stuff("dull metal swap 0", 8, 7, "Metal", "Reflection 0.15 Roughness 0.8 Frame 0.0"),
+            new Stuff("dull metal swap 1", 9, 7, "Metal", "Reflection 0.15 Roughness 0.8 Frame 1.0"), /* second row*/
+            new Stuff("scratched metal", 10, "Metal", "Reflection 0.5 Roughness 0.65"),
+            new Stuff("scratched metal swap 0", 11, 10, "Metal", "Reflection 0.5 Roughness 0.65 Frame 0.0"),
+            new Stuff("scratched metal swap 1", 12, 10, "Metal", "Reflection 0.5 Roughness 0.65 Frame 1.0"),
+            new Stuff("polished metal", 13, "Metal", "Reflection 0.8 Roughness 0.2 Damage 10"),
+            new Stuff("gleaming metal", 14, "Metal", "Reflection 0.9 Roughness 0.05 Damage 10", 15, 1, 14, 16),
+            new Stuff("metal glint", 15, "Metal", "Roughness 0.2 Reflection 1.0 Emission 0.5", 15, 1, 14, 14),
+            new Stuff("leather", 16, "Reflection 0.05 Roughness 0.6"), /*black red*/
+
+            new Stuff("broken glass", 55, "Roughness 0.7 Reflection 0.45 Disperse -0.25"), /*white cyan*/
     };
     public static final IntObjectMap<VoxMaterial> MATERIALS_A = new IntObjectMap<>(256);
     public static final IntObjectMap<VoxMaterial> MATERIALS_B = new IntObjectMap<>(256);
