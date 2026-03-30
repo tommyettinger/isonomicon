@@ -568,9 +568,9 @@ public class Stuff {
             new Stuff("unused 88", 88, "Transparency 1.0"),
             new Stuff("unused 89", 89, "Transparency 1.0"), /*row 12; middle yellow*/
             new Stuff("unused 90", 90, "Transparency 1.0"),
-            new Stuff("unused 91", 91, "Transparency 1.0"),
-            new Stuff("unused 92", 92, "Transparency 1.0"),
-            new Stuff("unused 93", 93, "Transparency 1.0"),
+            new Stuff("camouflage low", 91, "Roughness 0.3 Reflection 0.0 Vary 0.1 Dapple -0.1"),
+            new Stuff("camouflage base", 92, "Roughness 0.4 Reflection 0.0 Vary 0.07 Dapple -0.15"),
+            new Stuff("camouflage high", 93, "Roughness 0.5 Reflection 0.0 Vary 0.05 Dapple -0.2"),
             new Stuff("moss", 94, "Roughness 0.9 Reflection 0.03"),
             new Stuff("glossy leaf", 95, "Roughness 0.1 Reflection 0.85 Dapple -0.1"),
             new Stuff("matte leaf", 96, "Roughness 0.4 Reflection 0.05 Dapple -0.35"),
@@ -592,7 +592,7 @@ public class Stuff {
             new Stuff("blood or gore", 112, "Roughness 0.04 Reflection 0.4 Damage 112"), /*start of higher-saturation sections of three; red*/
             new Stuff("evil eye", 113, "Roughness 0.75 Reflection 0.5 Emission 0.15 Damage 113 Priority 50"), /*row 15; middle red*/
             new Stuff("lips", 114, "Roughness 0.04 Reflection 0.5 Priority 2 Damage 112"),
-            new Stuff("unused 115", 115, "Transparency 1.0"),
+            new Stuff("lava", 115, "Emission 0.2 Roughness 0.6 Reflection 0.0 Flow 0.05 Dapple -0.5"),
             new Stuff("unused 116", 116, "Transparency 1.0"),
             new Stuff("unused 117", 117, "Transparency 1.0"),
             new Stuff("unused 118", 118, "Transparency 1.0"),
@@ -607,9 +607,9 @@ public class Stuff {
             new Stuff("unused 127", 127, "Transparency 1.0"),
             new Stuff("unused 128", 128, "Transparency 1.0"),
             new Stuff("unused 129", 129, "Transparency 1.0"), /*row 17; light orange*/
-            new Stuff("unused 130", 130, "Transparency 1.0"),
-            new Stuff("unused 131", 131, "Transparency 1.0"),
-            new Stuff("unused 132", 132, "Transparency 1.0"),
+            new Stuff("ember spawner", 130, "Transparency 1.0", 131, 1, 130, 9),
+            new Stuff("ember", 131, "Roughness 0.0 Reflection 0.2 Emission 0.45 Missing 0.3 Rise 0.3 Dapple 0.3 Disperse -0.1", 131, 8, 130, 7, 31, 1),
+            new Stuff("hot fire", 132, "Roughness 0.0 Reflection 0.0 Emission 0.6 Missing 0.15 Dapple 0.15 Flow 0.18 Rise 0.06", 132, 11, 141, 8, 31, 3, 131, 2),
             new Stuff("unused 133", 133, "Transparency 1.0"),
             new Stuff("unused 134", 134, "Transparency 1.0"),
             new Stuff("unused 135", 135, "Transparency 1.0"),
@@ -618,7 +618,7 @@ public class Stuff {
             new Stuff("unused 138", 138, "Transparency 1.0"),
             new Stuff("unused 139", 139, "Transparency 1.0"),
             new Stuff("unused 140", 140, "Transparency 1.0"),
-            new Stuff("unused 141", 141, "Transparency 1.0"),
+            new Stuff("bright fire", 141, "Roughness 0.0 Reflection 0.0 Emission 0.8 Missing 0.1 Flow 0.15 Rise 0.08", 132, 7, 141, 8, 131, 3),
             new Stuff("unused 142", 142, "Transparency 1.0"),
             new Stuff("unused 143", 143, "Transparency 1.0"),
             new Stuff("unused 144", 144, "Transparency 1.0"),
