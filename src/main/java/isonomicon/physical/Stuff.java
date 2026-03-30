@@ -558,7 +558,7 @@ public class Stuff {
             new Stuff("unused 78", 78, "Transparency 1.0"),
             new Stuff("unused 79", 79, "Transparency 1.0"),
             new Stuff("unused 80", 80, "Transparency 1.0"),
-            new Stuff("unused 81", 81, "Transparency 1.0"),
+            new Stuff("unused 81", 81, "Transparency 1.0"), /*row 11; brown*/
             new Stuff("unused 82", 82, "Transparency 1.0"),
             new Stuff("unused 83", 83, "Transparency 1.0"),
             new Stuff("unused 84", 84, "Transparency 1.0"),
@@ -566,7 +566,7 @@ public class Stuff {
             new Stuff("unused 86", 86, "Transparency 1.0"),
             new Stuff("unused 87", 87, "Transparency 1.0"),
             new Stuff("unused 88", 88, "Transparency 1.0"),
-            new Stuff("unused 89", 89, "Transparency 1.0"),
+            new Stuff("unused 89", 89, "Transparency 1.0"), /*row 12; yellow*/
             new Stuff("unused 90", 90, "Transparency 1.0"),
             new Stuff("unused 91", 91, "Transparency 1.0"),
             new Stuff("unused 92", 92, "Transparency 1.0"),
@@ -574,7 +574,7 @@ public class Stuff {
             new Stuff("unused 94", 94, "Transparency 1.0"),
             new Stuff("unused 95", 95, "Transparency 1.0"),
             new Stuff("unused 96", 96, "Transparency 1.0"),
-            new Stuff("unused 97", 97, "Transparency 1.0"),
+            new Stuff("unused 97", 97, "Transparency 1.0"), /*row 13; cyan*/
             new Stuff("unused 98", 98, "Transparency 1.0"),
             new Stuff("unused 99", 99, "Transparency 1.0"),
             new Stuff("unused 100", 100, "Transparency 1.0"),
@@ -582,15 +582,15 @@ public class Stuff {
             new Stuff("unused 102", 102, "Transparency 1.0"),
             new Stuff("unused 103", 103, "Transparency 1.0"),
             new Stuff("unused 104", 104, "Transparency 1.0"),
-            new Stuff("unused 105", 105, "Transparency 1.0"),
+            new Stuff("unused 105", 105, "Transparency 1.0"), /*row 14; violet*/
             new Stuff("unused 106", 106, "Transparency 1.0"),
             new Stuff("unused 107", 107, "Transparency 1.0"),
             new Stuff("unused 108", 108, "Transparency 1.0"),
             new Stuff("unused 109", 109, "Transparency 1.0"),
             new Stuff("unused 110", 110, "Transparency 1.0"),
             new Stuff("unused 111", 111, "Transparency 1.0"),
-            new Stuff("unused 112", 112, "Transparency 1.0"),
-            new Stuff("unused 113", 113, "Transparency 1.0"),
+            new Stuff("unused 112", 112, "Transparency 1.0"), /*start of higher-saturation sections of three; red*/
+            new Stuff("unused 113", 113, "Transparency 1.0"), /*row 15; red*/
             new Stuff("unused 114", 114, "Transparency 1.0"),
             new Stuff("unused 115", 115, "Transparency 1.0"),
             new Stuff("unused 116", 116, "Transparency 1.0"),
@@ -598,7 +598,7 @@ public class Stuff {
             new Stuff("unused 118", 118, "Transparency 1.0"),
             new Stuff("unused 119", 119, "Transparency 1.0"),
             new Stuff("unused 120", 120, "Transparency 1.0"),
-            new Stuff("unused 121", 121, "Transparency 1.0"),
+            new Stuff("unused 121", 121, "Transparency 1.0"), /*row 16; dark brown*/
             new Stuff("unused 122", 122, "Transparency 1.0"),
             new Stuff("unused 123", 123, "Transparency 1.0"),
             new Stuff("unused 124", 124, "Transparency 1.0"),
@@ -606,7 +606,7 @@ public class Stuff {
             new Stuff("unused 126", 126, "Transparency 1.0"),
             new Stuff("unused 127", 127, "Transparency 1.0"),
             new Stuff("unused 128", 128, "Transparency 1.0"),
-            new Stuff("unused 129", 129, "Transparency 1.0"),
+            new Stuff("unused 129", 129, "Transparency 1.0"), /*row 17; light orange*/
             new Stuff("unused 130", 130, "Transparency 1.0"),
             new Stuff("unused 131", 131, "Transparency 1.0"),
             new Stuff("unused 132", 132, "Transparency 1.0"),
@@ -614,7 +614,7 @@ public class Stuff {
             new Stuff("unused 134", 134, "Transparency 1.0"),
             new Stuff("unused 135", 135, "Transparency 1.0"),
             new Stuff("unused 136", 136, "Transparency 1.0"),
-            new Stuff("unused 137", 137, "Transparency 1.0"),
+            new Stuff("unused 137", 137, "Transparency 1.0"), /*row 18; middle saffron*/
             new Stuff("unused 138", 138, "Transparency 1.0"),
             new Stuff("unused 139", 139, "Transparency 1.0"),
             new Stuff("unused 140", 140, "Transparency 1.0"),
@@ -622,7 +622,7 @@ public class Stuff {
             new Stuff("unused 142", 142, "Transparency 1.0"),
             new Stuff("unused 143", 143, "Transparency 1.0"),
             new Stuff("unused 144", 144, "Transparency 1.0"),
-            new Stuff("unused 145", 145, "Transparency 1.0"),
+            new Stuff("unused 145", 145, "Transparency 1.0"), /*row 19; dark yellow*/
             new Stuff("unused 146", 146, "Transparency 1.0"),
             new Stuff("unused 147", 147, "Transparency 1.0"),
             new Stuff("unused 148", 148, "Transparency 1.0"),
@@ -630,7 +630,7 @@ public class Stuff {
             new Stuff("unused 150", 150, "Transparency 1.0"),
             new Stuff("unused 151", 151, "Transparency 1.0"),
             new Stuff("unused 152", 152, "Transparency 1.0"),
-            new Stuff("unused 153", 153, "Transparency 1.0"),
+            new Stuff("unused 153", 153, "Transparency 1.0"), /*row 20; whitish lime*/
             new Stuff("unused 154", 154, "Transparency 1.0"),
             new Stuff("unused 155", 155, "Transparency 1.0"),
             new Stuff("unused 156", 156, "Transparency 1.0"),
@@ -638,7 +638,7 @@ public class Stuff {
             new Stuff("unused 158", 158, "Transparency 1.0"),
             new Stuff("unused 159", 159, "Transparency 1.0"),
             new Stuff("unused 160", 160, "Transparency 1.0"),
-            new Stuff("unused 161", 161, "Transparency 1.0"),
+            new Stuff("unused 161", 161, "Transparency 1.0"), /*row 21; middle lime green*/
             new Stuff("unused 162", 162, "Transparency 1.0"),
             new Stuff("unused 163", 163, "Transparency 1.0"),
             new Stuff("unused 164", 164, "Transparency 1.0"),
@@ -646,7 +646,7 @@ public class Stuff {
             new Stuff("unused 166", 166, "Transparency 1.0"),
             new Stuff("unused 167", 167, "Transparency 1.0"),
             new Stuff("unused 168", 168, "Transparency 1.0"),
-            new Stuff("unused 169", 169, "Transparency 1.0"),
+            new Stuff("unused 169", 169, "Transparency 1.0"), /*row 22; dark green cyan*/
             new Stuff("unused 170", 170, "Transparency 1.0"),
             new Stuff("unused 171", 171, "Transparency 1.0"),
             new Stuff("unused 172", 172, "Transparency 1.0"),
@@ -654,7 +654,7 @@ public class Stuff {
             new Stuff("unused 174", 174, "Transparency 1.0"),
             new Stuff("unused 175", 175, "Transparency 1.0"),
             new Stuff("unused 176", 176, "Transparency 1.0"),
-            new Stuff("unused 177", 177, "Transparency 1.0"),
+            new Stuff("unused 177", 177, "Transparency 1.0"), /*row 23; light cyan*/
             new Stuff("unused 178", 178, "Transparency 1.0"),
             new Stuff("unused 179", 179, "Transparency 1.0"),
             new Stuff("unused 180", 180, "Transparency 1.0"),
@@ -662,7 +662,7 @@ public class Stuff {
             new Stuff("unused 182", 182, "Transparency 1.0"),
             new Stuff("unused 183", 183, "Transparency 1.0"),
             new Stuff("unused 184", 184, "Transparency 1.0"),
-            new Stuff("unused 185", 185, "Transparency 1.0"),
+            new Stuff("unused 185", 185, "Transparency 1.0"), /*row 24; middle blue*/
             new Stuff("unused 186", 186, "Transparency 1.0"),
             new Stuff("unused 187", 187, "Transparency 1.0"),
             new Stuff("unused 188", 188, "Transparency 1.0"),
@@ -670,7 +670,7 @@ public class Stuff {
             new Stuff("unused 190", 190, "Transparency 1.0"),
             new Stuff("unused 191", 191, "Transparency 1.0"),
             new Stuff("unused 192", 192, "Transparency 1.0"),
-            new Stuff("unused 193", 193, "Transparency 1.0"),
+            new Stuff("unused 193", 193, "Transparency 1.0"), /*row 25; dark violet*/
             new Stuff("unused 194", 194, "Transparency 1.0"),
             new Stuff("unused 195", 195, "Transparency 1.0"),
             new Stuff("unused 196", 196, "Transparency 1.0"),
@@ -678,7 +678,7 @@ public class Stuff {
             new Stuff("unused 198", 198, "Transparency 1.0"),
             new Stuff("unused 199", 199, "Transparency 1.0"),
             new Stuff("unused 200", 200, "Transparency 1.0"),
-            new Stuff("unused 201", 201, "Transparency 1.0"),
+            new Stuff("unused 201", 201, "Transparency 1.0"), /*row 26; light purple*/
             new Stuff("unused 202", 202, "Transparency 1.0"),
             new Stuff("unused 203", 203, "Transparency 1.0"),
             new Stuff("unused 204", 204, "Transparency 1.0"),
@@ -686,7 +686,7 @@ public class Stuff {
             new Stuff("unused 206", 206, "Transparency 1.0"),
             new Stuff("unused 207", 207, "Transparency 1.0"),
             new Stuff("unused 208", 208, "Transparency 1.0"),
-            new Stuff("unused 209", 209, "Transparency 1.0"),
+            new Stuff("unused 209", 209, "Transparency 1.0"), /*row 27; middle magenta*/
             new Stuff("unused 210", 210, "Transparency 1.0"),
             new Stuff("unused 211", 211, "Transparency 1.0"),
             new Stuff("unused 212", 212, "Transparency 1.0"),
@@ -694,31 +694,31 @@ public class Stuff {
             new Stuff("unused 214", 214, "Transparency 1.0"),
             new Stuff("unused 215", 215, "Transparency 1.0"),
             new Stuff("unused 216", 216, "Transparency 1.0"),
-            new Stuff("unused 217", 217, "Transparency 1.0"),
+            new Stuff("unused 217", 217, "Transparency 1.0"), /*row 28; dark brick red*/
             new Stuff("unused 218", 218, "Transparency 1.0"),
             new Stuff("unused 219", 219, "Transparency 1.0"),
-            new Stuff("unused 220", 220, "Transparency 1.0"),
+            new Stuff("head to neck", 220, "Transparency 1.0 Damage 220"), /*start of bold saturation, ungrouped; red*/
             new Stuff("unused 221", 221, "Transparency 1.0"),
             new Stuff("unused 222", 222, "Transparency 1.0"),
             new Stuff("unused 223", 223, "Transparency 1.0"),
             new Stuff("unused 224", 224, "Transparency 1.0"),
-            new Stuff("unused 225", 225, "Transparency 1.0"),
+            new Stuff("unused 225", 225, "Transparency 1.0"), /*row 29; orange*/
             new Stuff("unused 226", 226, "Transparency 1.0"),
             new Stuff("unused 227", 227, "Transparency 1.0"),
             new Stuff("unused 228", 228, "Transparency 1.0"),
             new Stuff("unused 229", 229, "Transparency 1.0"),
             new Stuff("unused 230", 230, "Transparency 1.0"),
             new Stuff("unused 231", 231, "Transparency 1.0"),
-            new Stuff("unused 232", 232, "Transparency 1.0"),
-            new Stuff("unused 233", 233, "Transparency 1.0"),
+            new Stuff("primary weapon front", 232, "Transparency 1.0 Damage 232"),
+            new Stuff("primary weapon rear", 233, "Transparency 1.0 Damage 233"), /*row 30; lime yellow*/
             new Stuff("unused 234", 234, "Transparency 1.0"),
             new Stuff("unused 235", 235, "Transparency 1.0"),
-            new Stuff("unused 236", 236, "Transparency 1.0"),
-            new Stuff("unused 237", 237, "Transparency 1.0"),
+            new Stuff("secondary weapon front", 236, "Transparency 1.0 Damage 236"),
+            new Stuff("secondary weapon rear", 237, "Transparency 1.0 Damage 237"),
             new Stuff("unused 238", 238, "Transparency 1.0"),
             new Stuff("unused 239", 239, "Transparency 1.0"),
-            new Stuff("unused 240", 240, "Transparency 1.0"),
-            new Stuff("unused 241", 241, "Transparency 1.0"),
+            new Stuff("floor reserved", 240, 0, "Transparency 1.0 Damage 240"),
+            new Stuff("unused 241", 241, "Transparency 1.0"), /*row 31; cyan*/
             new Stuff("unused 242", 242, "Transparency 1.0"),
             new Stuff("unused 243", 243, "Transparency 1.0"),
             new Stuff("unused 244", 244, "Transparency 1.0"),
@@ -726,7 +726,7 @@ public class Stuff {
             new Stuff("unused 246", 246, "Transparency 1.0"),
             new Stuff("unused 247", 247, "Transparency 1.0"),
             new Stuff("unused 248", 248, "Transparency 1.0"),
-            new Stuff("unused 249", 249, "Transparency 1.0"),
+            new Stuff("unused 249", 249, "Transparency 1.0"), /*row 32; violet purple*/
             new Stuff("unused 250", 250, "Transparency 1.0"),
             new Stuff("unused 251", 251, "Transparency 1.0"),
             new Stuff("unused 252", 252, "Transparency 1.0"),
