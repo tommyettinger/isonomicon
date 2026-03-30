@@ -482,7 +482,7 @@ public class Stuff {
             new Stuff("shadow", 2, "Roughness 0.0 Reflection 0.0 Emission -0.25"),
             new Stuff("tire rubber", 3, "Reflection 0.1 Roughness 0.8"),
             new Stuff("dark eye", 4, "Roughness 0.0 Reflection 0.1 Damage 65 Priority 10"),
-            new Stuff("asphalt", 5, "Reflection 0.02 Roughness 0.9 Dapple -0.07"),
+            new Stuff("coal or asphalt", 5, "Roughness 0.1 Reflection 0.0 Dapple -0.07"),
             new Stuff("dark glass", 6, "Transparency 0.3 Roughness 0.0 Reflection 0.4 Damage 54"),
             new Stuff("dull metal", 7, "Metal", "Reflection 0.15 Roughness 0.8"),
             new Stuff("dull metal swap 0", 8, 7, "Metal", "Reflection 0.15 Roughness 0.8 Frame 0.0"),
@@ -508,17 +508,17 @@ public class Stuff {
             new Stuff("unused 28", 28, "Transparency 1.0"),
             new Stuff("unused 29", 29, "Transparency 1.0"),
             new Stuff("unused 30", 30, "Transparency 1.0"),
-            new Stuff("unused 31", 31, "Transparency 1.0"),
-            new Stuff("unused 32", 32, "Transparency 1.0"),
-            new Stuff("unused 33", 33, "Transparency 1.0"), /*fifth row; gray saffron*/
-            new Stuff("unused 34", 34, "Transparency 1.0"),
-            new Stuff("unused 35", 35, "Transparency 1.0"),
+            new Stuff("smoke", 31, "Roughness 0.5 Reflection 0.0 Missing 0.05 Rise 0.4 Dapple -0.15 Disperse 0.3 Emission -0.04", 0, 2, 31, 7),
+            new Stuff("raw stone", 32, "Roughness 0.55 Reflection 0.15 Vary -0.1"),
+            new Stuff("worked stone", 33, "Roughness 0.25 Reflection 0.2"), /*fifth row; gray saffron*/
+            new Stuff("ore", 34, "Roughness 0.7 Reflection 0.1 Vary -0.3 Dapple 0.1"),
+            new Stuff("chipped stone", 35, "Roughness 0.8 Reflection 0.05"),
             new Stuff("cycling light 0", 36, 153, "Roughness 0.03 Reflection 0.5 Damage 54", 37, 1),
             new Stuff("cycling light 1", 37, 160, "Roughness 0.03 Reflection 0.5 Damage 54", 38, 1),
             new Stuff("cycling light 2", 38, 160, "Roughness 0.03 Reflection 0.5 Damage 54", 39, 1),
             new Stuff("cycling light 3", 39, 160, "Roughness 0.03 Reflection 0.5 Damage 54", 36, 1),
-            new Stuff("unused 40", 40, "Transparency 1.0"),
-            new Stuff("unused 41", 41, "Transparency 1.0"), /*sixth row; black lime*/
+            new Stuff("flickering light on", 40, 153, "Roughness 0.0 Reflection 0.0 Emission 0.5 Damage 54", 40, 11, 41, 1),
+            new Stuff("flickering light off", 41, 160, "Roughness 0.03 Reflection 0.5 Damage 54", 41, 14, 40, 1), /*sixth row; black lime*/
             new Stuff("radiation pulse 0", 42, 161, "Roughness 0.0 Reflection 0.0 Emission 0.2 Transparency 0.9", 43, 1),
             new Stuff("radiation pulse 1", 43, 161, "Roughness 0.0 Reflection 0.0 Emission 0.4 Transparency 0.9", 44, 1),
             new Stuff("radiation pulse 2", 44, 161, "Roughness 0.0 Reflection 0.0 Emission 0.6 Transparency 0.9", 45, 1),
