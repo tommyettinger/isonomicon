@@ -589,9 +589,8 @@ public class Stuff {
             new Stuff("unused 109", 109, "Transparency 1.0"),
             new Stuff("unused 110", 110, "Transparency 1.0"),
             new Stuff("unused 111", 111, "Transparency 1.0"),
-            new Stuff("unused 112", 112, "Transparency 1.0"), /*start of higher-saturation sections of three; red*/
-            new Stuff("unused 113", 113, "Transparency 1.0"), /*row 15; middle red*/
-            new Stuff("unused 114", 114, "Transparency 1.0"),
+            new Stuff("evil eye", 113, "Roughness 0.75 Reflection 0.5 Emission 0.15 Damage 113 Priority 50"), /*row 15; middle red*/
+            new Stuff("lips", 114, "Roughness 0.04 Reflection 0.5 Priority 2 Damage 112"),
             new Stuff("unused 115", 115, "Transparency 1.0"),
             new Stuff("unused 116", 116, "Transparency 1.0"),
             new Stuff("unused 117", 117, "Transparency 1.0"),
@@ -697,36 +696,36 @@ public class Stuff {
             new Stuff("unused 217", 217, "Transparency 1.0"), /*row 28; dark brick red*/
             new Stuff("unused 218", 218, "Transparency 1.0"),
             new Stuff("unused 219", 219, "Transparency 1.0"),
-            new Stuff("head to neck", 220, "Transparency 1.0 Damage 220"), /*start of bold saturation, ungrouped; red*/
-            new Stuff("unused 221", 221, "Transparency 1.0"),
+            new Stuff("constant red", 220, "Damage 220"), /*start of bold saturation, ungrouped; red*/
+            new Stuff("head to neck", 221, "Transparency 1.0 Damage 221"),
             new Stuff("unused 222", 222, "Transparency 1.0"),
             new Stuff("unused 223", 223, "Transparency 1.0"),
             new Stuff("unused 224", 224, "Transparency 1.0"),
             new Stuff("unused 225", 225, "Transparency 1.0"), /*row 29; orange*/
-            new Stuff("unused 226", 226, "Transparency 1.0"),
+            new Stuff("constant orange", 226, "Damage 226"),
             new Stuff("unused 227", 227, "Transparency 1.0"),
             new Stuff("unused 228", 228, "Transparency 1.0"),
             new Stuff("unused 229", 229, "Transparency 1.0"),
             new Stuff("unused 230", 230, "Transparency 1.0"),
             new Stuff("unused 231", 231, "Transparency 1.0"),
-            new Stuff("primary weapon front", 232, "Transparency 1.0 Damage 232"),
-            new Stuff("primary weapon rear", 233, "Transparency 1.0 Damage 233"), /*row 30; lime yellow*/
-            new Stuff("unused 234", 234, "Transparency 1.0"),
+            new Stuff("constant yellow", 232, "Damage 232"),
+            new Stuff("primary weapon front", 233, "Transparency 1.0 Damage 233"), /*row 30; lime yellow*/
+            new Stuff("primary weapon rear", 234, "Transparency 1.0 Damage 234"),
             new Stuff("unused 235", 235, "Transparency 1.0"),
             new Stuff("secondary weapon front", 236, "Transparency 1.0 Damage 236"),
             new Stuff("secondary weapon rear", 237, "Transparency 1.0 Damage 237"),
-            new Stuff("unused 238", 238, "Transparency 1.0"),
+            new Stuff("constant green", 238, "Damage 238"),
             new Stuff("unused 239", 239, "Transparency 1.0"),
             new Stuff("floor reserved", 240, 0, "Transparency 1.0 Damage 240"),
             new Stuff("unused 241", 241, "Transparency 1.0"), /*row 31; cyan*/
             new Stuff("unused 242", 242, "Transparency 1.0"),
             new Stuff("unused 243", 243, "Transparency 1.0"),
-            new Stuff("unused 244", 244, "Transparency 1.0"),
+            new Stuff("constant blue", 244, "Damage 244"),
             new Stuff("unused 245", 245, "Transparency 1.0"),
             new Stuff("unused 246", 246, "Transparency 1.0"),
             new Stuff("unused 247", 247, "Transparency 1.0"),
             new Stuff("unused 248", 248, "Transparency 1.0"),
-            new Stuff("unused 249", 249, "Transparency 1.0"), /*row 32; violet purple*/
+            new Stuff("constant purple", 249, "Damage 249"), /*row 32; violet purple*/
             new Stuff("unused 250", 250, "Transparency 1.0"),
             new Stuff("unused 251", 251, "Transparency 1.0"),
             new Stuff("unused 252", 252, "Transparency 1.0"),
