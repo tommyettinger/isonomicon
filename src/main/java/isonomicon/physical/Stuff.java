@@ -527,10 +527,10 @@ public class Stuff {
             new Stuff("dull metal swap 1", 47, 7, "Metal", "Reflection 0.15 Roughness 0.8 Frame 1.0"),
             new Stuff("scratched metal swap 0", 48, 10, "Metal", "Reflection 0.5 Roughness 0.65 Frame 0.0"),
             new Stuff("scratched metal swap 1", 49, 10, "Metal", "Reflection 0.5 Roughness 0.65 Frame 1.0"), /*seventh row; silver green*/
-            new Stuff("unused 50", 50, "Transparency 1.0"),
-            new Stuff("unused 51", 51, "Transparency 1.0"),
-            new Stuff("unused 52", 52, "Transparency 1.0"),
-            new Stuff("unused 53", 53, "Transparency 1.0"),
+            new Stuff("snow", 50, 15, "Roughness 0.8 Reflection 0.05"),
+            new Stuff("deep water", 51, "Roughness 0.3 Reflection 0.5 Damage 51"),
+            new Stuff("slow water", 52, "Roughness 0.1 Reflection 0.8 Flow 0.1 Damage 52"),
+            new Stuff("fast water", 53, "Roughness 0.2 Reflection 0.75 Flow 0.7 Damage 53"),
             new Stuff("broken glass", 54, "Roughness 0.7 Reflection 0.45 Disperse -0.25"), /*silver cyan*/
             new Stuff("ice glint", 55, "Roughness 0.4 Reflection 0.95 Emission 0.4", 55, 1, 60, 20),
             new Stuff("splash lowest", 56, "Roughness 0.4 Reflection 0.3 Flow 0.7 Damage 56", 56, 3, 57, 5),
@@ -539,7 +539,7 @@ public class Stuff {
             new Stuff("splash curl", 59, "Roughness 0.5 Reflection 0.5 Flow 0.5 Rise -0.1 Damage 59", 59, 2, 56, 6, 58, 1),
             new Stuff("ice", 60, "Roughness 0.05 Reflection 0.95", 60, 8, 55, 1),
             new Stuff("oil", 61, "Reflection 0.7, Roughness 0.0"),
-            new Stuff("unused 62", 62, "Transparency 1.0"),
+            new Stuff("wet stone", 62, "Roughness 0.5 Reflection 0.2"),
             new Stuff("unused 63", 63, "Transparency 1.0"),
             new Stuff("unused 64", 64, "Transparency 1.0"),
             new Stuff("metal glint", 65, "Metal", "Roughness 0.2 Reflection 1.0 Emission 0.5", 65, 1, 14, 14), /*ninth row; white violet*/
@@ -584,8 +584,8 @@ public class Stuff {
             new Stuff("unused 104", 104, "Transparency 1.0"),
             new Stuff("unused 105", 105, "Transparency 1.0"), /*row 14; light violet*/
             new Stuff("unused 106", 106, "Transparency 1.0"),
-            new Stuff("unused 107", 107, "Transparency 1.0"),
-            new Stuff("unused 108", 108, "Transparency 1.0"),
+            new Stuff("shock spawner", 107, "Transparency 1.0", 108, 1, 107, 14),
+            new Stuff("shock particle", 108, "Emission 0.6 Roughness 0.4 Reflection 0.0 Missing 0.6", 108, 2, 107, 3),
             new Stuff("unused 109", 109, "Transparency 1.0"),
             new Stuff("unused 110", 110, "Transparency 1.0"),
             new Stuff("unused 111", 111, "Transparency 1.0"),
@@ -694,7 +694,7 @@ public class Stuff {
             new Stuff("unused 214", 214, "Transparency 1.0"),
             new Stuff("unused 215", 215, "Transparency 1.0"),
             new Stuff("unused 216", 216, "Transparency 1.0"),
-            new Stuff("unused 217", 217, "Transparency 1.0"), /*row 28; dark brick red*/
+            new Stuff("drink", 217, "Roughness 0.3 Reflection 0.5"), /*row 28; dark brick red*/
             new Stuff("unused 218", 218, "Transparency 1.0"),
             new Stuff("unused 219", 219, "Transparency 1.0"),
             new Stuff("constant red", 220, "Damage 220"), /*start of bold saturation, ungrouped; red*/
