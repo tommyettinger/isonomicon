@@ -485,11 +485,11 @@ public class Stuff {
             new Stuff("coal or asphalt", 5, "Roughness 0.1 Reflection 0.0 Dapple -0.07"),
             new Stuff("dark glass", 6, "Transparency 0.3 Roughness 0.0 Reflection 0.4 Damage 54"),
             new Stuff("dull metal", 7, "Metal", "Reflection 0.15 Roughness 0.8"),
-            new Stuff("dull metal swap 0", 8, 7, "Metal", "Reflection 0.15 Roughness 0.8 Frame 0.0"),
-            new Stuff("dull metal swap 1", 9, 7, "Metal", "Reflection 0.15 Roughness 0.8 Frame 1.0"), /* second row; gray*/
+            new Stuff("grim static", 8, "Reflection 0.0 Roughness 0.6 Dapple -1.0"),
+            new Stuff("constant gray", 9, "Damage 9"), /* second row; gray*/
             new Stuff("scratched metal", 10, "Metal", "Reflection 0.5 Roughness 0.65"),
-            new Stuff("scratched metal swap 0", 11, 10, "Metal", "Reflection 0.5 Roughness 0.65 Frame 0.0"),
-            new Stuff("scratched metal swap 1", 12, 10, "Metal", "Reflection 0.5 Roughness 0.65 Frame 1.0"),
+            new Stuff("dead eye", 11, "Roughness 0.5 Reflection 0.0 Priority 10 Damage 11"),
+            new Stuff("gray glass", 12, "Transparency 0.5 Roughness 0.0 Reflection 0.65 Damage 54"),
             new Stuff("polished metal", 13, "Metal", "Reflection 0.8 Roughness 0.2 Damage 10"),
             new Stuff("gleaming metal", 14, "Metal", "Reflection 0.9 Roughness 0.05 Damage 10", 65, 1, 14, 16),
             new Stuff("constant white", 15, "Damage 15"),
@@ -523,10 +523,10 @@ public class Stuff {
             new Stuff("radiation pulse 1", 43, 161, "Roughness 0.0 Reflection 0.0 Emission 0.4 Transparency 0.9", 44, 1),
             new Stuff("radiation pulse 2", 44, 161, "Roughness 0.0 Reflection 0.0 Emission 0.6 Transparency 0.9", 45, 1),
             new Stuff("radiation pulse 3", 45, 161, "Roughness 0.0 Reflection 0.0 Emission 0.4 Transparency 0.9", 42, 1),
-            new Stuff("unused 46", 46, "Transparency 1.0"),
-            new Stuff("unused 47", 47, "Transparency 1.0"),
-            new Stuff("unused 48", 48, "Transparency 1.0"),
-            new Stuff("unused 49", 49, "Transparency 1.0"), /*seventh row; silver green*/
+            new Stuff("dull metal swap 0", 46, 7, "Metal", "Reflection 0.15 Roughness 0.8 Frame 0.0"),
+            new Stuff("dull metal swap 1", 47, 7, "Metal", "Reflection 0.15 Roughness 0.8 Frame 1.0"),
+            new Stuff("scratched metal swap 0", 48, 10, "Metal", "Reflection 0.5 Roughness 0.65 Frame 0.0"),
+            new Stuff("scratched metal swap 1", 49, 10, "Metal", "Reflection 0.5 Roughness 0.65 Frame 1.0"), /*seventh row; silver green*/
             new Stuff("unused 50", 50, "Transparency 1.0"),
             new Stuff("unused 51", 51, "Transparency 1.0"),
             new Stuff("unused 52", 52, "Transparency 1.0"),
@@ -619,9 +619,9 @@ public class Stuff {
             new Stuff("unused 139", 139, "Transparency 1.0"),
             new Stuff("unused 140", 140, "Transparency 1.0"),
             new Stuff("bright fire", 141, "Roughness 0.0 Reflection 0.0 Emission 0.8 Missing 0.1 Flow 0.15 Rise 0.08", 132, 7, 141, 8, 131, 3),
-            new Stuff("unused 142", 142, "Transparency 1.0"),
-            new Stuff("unused 143", 143, "Transparency 1.0"),
-            new Stuff("unused 144", 144, "Transparency 1.0"),
+            new Stuff("gold", 142, "Roughness 0.5 Reflection 0.85 Rate 0.5", 143, 1, 142, 12),
+            new Stuff("gold glint", 143, "Roughness 0.2 Reflection 1.0 Emission 0.2 Rate 0.5", 143, 1, 142, 20),
+            new Stuff("fiery spark", 144, "Emission 0.9 Roughness 0.4 Reflection 0.0 Missing 0.6", 144, 2, 0, 3),
             new Stuff("unused 145", 145, "Transparency 1.0"), /*row 19; dark yellow*/
             new Stuff("unused 146", 146, "Transparency 1.0"),
             new Stuff("unused 147", 147, "Transparency 1.0"),
