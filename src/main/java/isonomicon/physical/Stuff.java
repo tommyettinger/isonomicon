@@ -532,12 +532,12 @@ public class Stuff {
             new Stuff("unused 52", 52, "Transparency 1.0"),
             new Stuff("unused 53", 53, "Transparency 1.0"),
             new Stuff("broken glass", 54, "Roughness 0.7 Reflection 0.45 Disperse -0.25"), /*silver cyan*/
-            new Stuff("unused 55", 55, "Transparency 1.0"),
-            new Stuff("unused 56", 56, "Transparency 1.0"),
-            new Stuff("unused 57", 57, "Transparency 1.0"), /*eighth row; lead blue*/
-            new Stuff("unused 58", 58, "Transparency 1.0"),
-            new Stuff("unused 59", 59, "Transparency 1.0"),
-            new Stuff("unused 60", 60, "Transparency 1.0"),
+            new Stuff("ice glint", 55, "Roughness 0.4 Reflection 0.95 Emission 0.4", 55, 1, 60, 20),
+            new Stuff("splash lowest", 56, "Roughness 0.4 Reflection 0.3 Flow 0.7 Damage 56", 56, 3, 57, 5),
+            new Stuff("splash rise", 57, "Roughness 0.6 Reflection 0.6 Flow 0.4 Rise 0.1 Damage 57", 57, 2, 58, 6, 56, 1), /*eighth row; lead blue*/
+            new Stuff("splash highest", 58, "Roughness 0.7 Reflection 0.95 Flow 0.6 Damage 58", 58, 2, 59, 6, 57, 1),
+            new Stuff("splash curl", 59, "Roughness 0.5 Reflection 0.5 Flow 0.5 Rise -0.1 Damage 59", 59, 2, 56, 6, 58, 1),
+            new Stuff("ice", 60, "Roughness 0.05 Reflection 0.95", 60, 8, 55, 1),
             new Stuff("oil", 61, "Reflection 0.7, Roughness 0.0"),
             new Stuff("unused 62", 62, "Transparency 1.0"),
             new Stuff("unused 63", 63, "Transparency 1.0"),
@@ -551,8 +551,8 @@ public class Stuff {
             new Stuff("unused 71", 71, "Transparency 1.0"),
             new Stuff("unused 72", 72, "Transparency 1.0"),
             new Stuff("unused 73", 73, "Transparency 1.0"), /*tenth row; gray magenta*/
-            new Stuff("unused 74", 74, "Transparency 1.0"),
-            new Stuff("unused 75", 75, "Transparency 1.0"),
+            new Stuff("magic crystal", 74, "Roughness 0.05 Reflection 0.85 Emission 0.35 Damage 54", 74, 7, 75, 1),
+            new Stuff("crystal glint", 75, "Roughness 0.1 Reflection 1.0 Emission 0.65", 75, 1, 74, 8),
             new Stuff("unused 76", 76, "Transparency 1.0"), /*start of mid-saturation sections of three; red*/
             new Stuff("unused 77", 77, "Transparency 1.0"),
             new Stuff("unused 78", 78, "Transparency 1.0"),
