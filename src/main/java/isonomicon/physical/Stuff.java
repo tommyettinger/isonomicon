@@ -622,9 +622,9 @@ public class Stuff {
             new Stuff("gold", 142, "Roughness 0.5 Reflection 0.85 Rate 0.5", 143, 1, 142, 12),
             new Stuff("gold glint", 143, "Roughness 0.2 Reflection 1.0 Emission 0.2 Rate 0.5", 143, 1, 142, 20),
             new Stuff("fiery spark", 144, "Emission 0.9 Roughness 0.4 Reflection 0.0 Missing 0.6", 144, 2, 0, 3),
-            new Stuff("unused 145", 145, "Transparency 1.0"), /*row 19; dark yellow*/
-            new Stuff("unused 146", 146, "Transparency 1.0"),
-            new Stuff("unused 147", 147, "Transparency 1.0"),
+            new Stuff("dull carapace low", 145, "Roughness 0.5 Reflection 0.1"), /*row 19; dark yellow*/
+            new Stuff("dull carapace base", 146, "Roughness 0.45 Reflection 0.2"),
+            new Stuff("dull carapace high", 147, "Roughness 0.4 Reflection 0.15"),
             new Stuff("unused 148", 148, "Transparency 1.0"),
             new Stuff("unused 149", 149, "Transparency 1.0"),
             new Stuff("unused 150", 150, "Transparency 1.0"),
@@ -640,9 +640,9 @@ public class Stuff {
             new Stuff("strobe off", 160, "Roughness 0.03 Reflection 0.5 Rate 0.5", 162, 1),
             new Stuff("radioactive glow", 161, "Roughness 0.0 Reflection 0.0 Emission 0.6 Transparency 1.0"), /*row 21; middle lime green*/
             new Stuff("strobe on", 162, "Roughness 0.03 Reflection 0.05 Emission 0.75 Rate 0.5", 160, 1),
-            new Stuff("unused 163", 163, "Transparency 1.0"),
-            new Stuff("unused 164", 164, "Transparency 1.0"),
-            new Stuff("unused 165", 165, "Transparency 1.0"),
+            new Stuff("dull scales low", 163, "Roughness 0.15 Reflection 0.4"),
+            new Stuff("dull scales base", 164, "Roughness 0.05 Reflection 0.55"),
+            new Stuff("dull scales high", 165, "Roughness 0.05 Reflection 0.65"),
             new Stuff("unused 166", 166, "Transparency 1.0"),
             new Stuff("unused 167", 167, "Transparency 1.0"),
             new Stuff("unused 168", 168, "Transparency 1.0"),
@@ -652,12 +652,12 @@ public class Stuff {
             new Stuff("unused 172", 172, "Transparency 1.0"),
             new Stuff("unused 173", 173, "Transparency 1.0"),
             new Stuff("unused 174", 174, "Transparency 1.0"),
-            new Stuff("unused 175", 175, "Transparency 1.0"),
-            new Stuff("unused 176", 176, "Transparency 1.0"),
-            new Stuff("unused 177", 177, "Transparency 1.0"), /*row 23; light cyan*/
             new Stuff("unused 178", 178, "Transparency 1.0"),
             new Stuff("unused 179", 179, "Transparency 1.0"),
             new Stuff("unused 180", 180, "Transparency 1.0"),
+            new Stuff("shiny carapace low", 175, "Roughness 0.15 Reflection 0.8"),
+            new Stuff("shiny carapace base", 176, "Roughness 0.1 Reflection 0.85"),
+            new Stuff("shiny carapace high", 177, "Roughness 0.05 Reflection 0.9"), /*row 23; light cyan*/
             new Stuff("unused 181", 181, "Transparency 1.0"),
             new Stuff("unused 182", 182, "Transparency 1.0"),
             new Stuff("unused 183", 183, "Transparency 1.0"),
