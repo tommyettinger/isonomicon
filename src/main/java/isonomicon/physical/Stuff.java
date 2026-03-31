@@ -256,8 +256,8 @@ public class Stuff {
             new Stuff("dry dirt", 46, "Roughness 0.85 Reflection 0.0 Dapple -0.05"),
             new Stuff("wet dirt or mud", 47, "Roughness 0.1 Reflection 0.05"), /*dark tan*/
             new Stuff("marked fluff", 48, "Roughness 0.6 Reflection 0.15 Dapple -0.16"), /*dark orange*/
-            new Stuff("base fluff", 49, "Roughness 0.5 Reflection 0.4"),                        // Dapple -0.08
-            new Stuff("highlight fluff", 50, "Roughness 0.4 Reflection 0.75"), /*hot orange*/   // Dapple -0.04
+            new Stuff("base fluff", 49, "Roughness 0.5 Reflection 0.4"),
+            new Stuff("highlight fluff", 50, "Roughness 0.4 Reflection 0.75"), /*hot orange*/
             new Stuff("scar", 51, "Roughness 0.7 Reflection 0.05 Damage 51 Priority 1"), /*light skin*/
             new Stuff("base skin", 52, "Roughness 0.6 Reflection 0.2 Damage 52"),
             new Stuff("nose", 53, "Roughness 0.6 Reflection 0.3 Damage 53"),
@@ -559,9 +559,9 @@ public class Stuff {
             new Stuff("unused 79", 79, "Transparency 1.0"),
             new Stuff("unused 80", 80, "Transparency 1.0"),
             new Stuff("unused 81", 81, "Transparency 1.0"), /*row 11; light brown*/
-            new Stuff("unused 82", 82, "Transparency 1.0"),
-            new Stuff("unused 83", 83, "Transparency 1.0"),
-            new Stuff("unused 84", 84, "Transparency 1.0"),
+            new Stuff("fluff low", 82, "Roughness 0.4 Reflection 0.1 Dapple -0.16"),
+            new Stuff("fluff base", 83, "Roughness 0.5 Reflection 0.4"),
+            new Stuff("fluff high", 84, "Roughness 0.6 Reflection 0.5 Dapple 0.08"),
             new Stuff("unused 85", 85, "Transparency 1.0"),
             new Stuff("unused 86", 86, "Transparency 1.0"),
             new Stuff("unused 87", 87, "Transparency 1.0"),
@@ -599,11 +599,11 @@ public class Stuff {
             new Stuff("unused 119", 119, "Transparency 1.0"),
             new Stuff("unused 120", 120, "Transparency 1.0"),
             new Stuff("unused 121", 121, "Transparency 1.0"), /*row 16; dark brown*/
-            new Stuff("unused 122", 122, "Transparency 1.0"),
-            new Stuff("unused 123", 123, "Transparency 1.0"),
-            new Stuff("unused 124", 124, "Transparency 1.0"),
-            new Stuff("unused 125", 125, "Transparency 1.0"),
-            new Stuff("unused 126", 126, "Transparency 1.0"),
+            new Stuff("nose", 122, "Roughness 0.6 Reflection 0.3 Damage 122"),
+            new Stuff("base skin", 123, "Roughness 0.6 Reflection 0.2 Damage 123"),
+            new Stuff("freckle", 124, "Roughness 0.6 Reflection 0.2 Vary -0.1 Damage 124 Priority 1"),
+            new Stuff("ears", 125, "Roughness 0.5 Reflection 0.1 Damage 125 Priority 1"),
+            new Stuff("scar", 126, "Roughness 0.7 Reflection 0.05 Damage 126 Priority 1"),
             new Stuff("unused 127", 127, "Transparency 1.0"),
             new Stuff("unused 128", 128, "Transparency 1.0"),
             new Stuff("unused 129", 129, "Transparency 1.0"), /*row 17; light orange*/
