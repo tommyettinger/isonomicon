@@ -553,9 +553,9 @@ public class Stuff {
             new Stuff("unused 73", 73, "Transparency 1.0"), /*tenth row; gray magenta*/
             new Stuff("magic crystal", 74, "Roughness 0.05 Reflection 0.85 Emission 0.35 Damage 54", 74, 7, 75, 1),
             new Stuff("crystal glint", 75, "Roughness 0.1 Reflection 1.0 Emission 0.65", 75, 1, 74, 8),
-            new Stuff("unused 76", 76, "Transparency 1.0"), /*start of mid-saturation sections of three; red*/
-            new Stuff("unused 77", 77, "Transparency 1.0"),
-            new Stuff("unused 78", 78, "Transparency 1.0"),
+            new Stuff("marked fluff low", 76, "Roughness 0.3 Reflection 0.2 Dapple -0.16"), /*start of mid-saturation sections of three; red*/
+            new Stuff("marked fluff base", 77, "Roughness 0.4 Reflection 0.5"),
+            new Stuff("marked fluff high", 78, "Roughness 0.5 Reflection 0.6 Dapple 0.08"),
             new Stuff("unused 79", 79, "Transparency 1.0"),
             new Stuff("unused 80", 80, "Transparency 1.0"),
             new Stuff("unused 81", 81, "Transparency 1.0"), /*row 11; light brown*/
@@ -565,9 +565,9 @@ public class Stuff {
             new Stuff("unused 85", 85, "Transparency 1.0"),
             new Stuff("unused 86", 86, "Transparency 1.0"),
             new Stuff("unused 87", 87, "Transparency 1.0"),
-            new Stuff("unused 88", 88, "Transparency 1.0"),
-            new Stuff("unused 89", 89, "Transparency 1.0"), /*row 12; middle yellow*/
-            new Stuff("unused 90", 90, "Transparency 1.0"),
+            new Stuff("caked mud", 88, "Roughness 0.4 Reflection 0.1 Dapple 0.05"),
+            new Stuff("antler or horn", 89, "Roughness 0.5 Reflection 0.2"), /*row 12; middle yellow*/
+            new Stuff("bone beak claw", 90, "Roughness 0.4 Reflection 0.4"),
             new Stuff("camouflage low", 91, "Roughness 0.3 Reflection 0.0 Vary 0.1 Dapple -0.1"),
             new Stuff("camouflage base", 92, "Roughness 0.4 Reflection 0.0 Vary 0.07 Dapple -0.15"),
             new Stuff("camouflage high", 93, "Roughness 0.5 Reflection 0.0 Vary 0.05 Dapple -0.2"),
@@ -652,12 +652,12 @@ public class Stuff {
             new Stuff("unused 172", 172, "Transparency 1.0"),
             new Stuff("unused 173", 173, "Transparency 1.0"),
             new Stuff("unused 174", 174, "Transparency 1.0"),
-            new Stuff("unused 178", 178, "Transparency 1.0"),
-            new Stuff("unused 179", 179, "Transparency 1.0"),
-            new Stuff("unused 180", 180, "Transparency 1.0"),
             new Stuff("shiny carapace low", 175, "Roughness 0.15 Reflection 0.8"),
             new Stuff("shiny carapace base", 176, "Roughness 0.1 Reflection 0.85"),
             new Stuff("shiny carapace high", 177, "Roughness 0.05 Reflection 0.9"), /*row 23; light cyan*/
+            new Stuff("glossy scales low", 178, "Roughness 0.3 Reflection 0.6"),
+            new Stuff("glossy scales base", 179, "Roughness 0.2 Reflection 0.75"),
+            new Stuff("glossy scales high", 180, "Roughness 0.2 Reflection 0.85"),
             new Stuff("unused 181", 181, "Transparency 1.0"),
             new Stuff("unused 182", 182, "Transparency 1.0"),
             new Stuff("unused 183", 183, "Transparency 1.0"),
