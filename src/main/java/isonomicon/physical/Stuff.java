@@ -491,7 +491,7 @@ public class Stuff {
             new Stuff("dead eye", 11, "Roughness 0.5 Reflection 0.0 Priority 10 Damage 11"),
             new Stuff("gray glass", 12, "Transparency 0.5 Roughness 0.0 Reflection 0.65 Damage 54"),
             new Stuff("polished metal", 13, "Metal", "Reflection 0.8 Roughness 0.2 Damage 10"),
-            new Stuff("gleaming metal", 14, "Metal", "Reflection 0.9 Roughness 0.05 Damage 10", 65, 1, 14, 16),
+            new Stuff("gleaming metal", 14, "Metal", "Reflection 0.9 Roughness 0.05 Damage 10", 70, 1, 14, 16),
             new Stuff("constant white", 15, "Damage 15"),
             new Stuff("leather", 16, "Reflection 0.05 Roughness 0.6"), /*black red*/
             new Stuff("wet dirt or mud", 17, "Roughness 0.1 Reflection 0.05"), /*third row; lead red*/
@@ -540,16 +540,16 @@ public class Stuff {
             new Stuff("ice", 60, "Roughness 0.05 Reflection 0.95", 60, 8, 55, 1),
             new Stuff("oil", 61, "Reflection 0.7, Roughness 0.0"),
             new Stuff("wet stone", 62, "Roughness 0.5 Reflection 0.2"),
-            new Stuff("unused 63", 63, "Transparency 1.0"),
-            new Stuff("unused 64", 64, "Transparency 1.0"),
-            new Stuff("metal glint", 65, "Metal", "Roughness 0.2 Reflection 1.0 Emission 0.5", 65, 1, 14, 14), /*ninth row; white violet*/
+            new Stuff("damaged concrete", 63,  "Roughness 0.95 Reflection 0.02 Dapple -0.2"),
+            new Stuff("dirty concrete", 64, "Roughness 0.8 Reflection 0.02 Dapple -0.05 Vary -0.1"),
+            new Stuff("clean concrete", 65, "Roughness 0.7 Reflection 0.04"), /*ninth row; white violet*/
             new Stuff("terminal space 0", 66, 161, "Roughness 0.0 Reflection 0.0 Emission 0.3 Dapple 0.05", 67, 1),
             new Stuff("terminal space 1", 67, 161, "Roughness 0.0 Reflection 0.0 Emission 0.1 Dapple 0.05", 68, 1),
             new Stuff("terminal space 2", 68, 160, "Roughness 0.0 Reflection 0.0", 69, 1),
             new Stuff("terminal space 3", 69, 160, "Roughness 0.0 Reflection 0.0", 66, 1),
-            new Stuff("unused 70", 70, "Transparency 1.0"),
-            new Stuff("unused 71", 71, "Transparency 1.0"),
-            new Stuff("unused 72", 72, "Transparency 1.0"),
+            new Stuff("metal glint", 70, "Metal", "Roughness 0.2 Reflection 1.0 Emission 0.5", 70, 1, 14, 14),
+            new Stuff("cursed metal wink", 71, "Roughness 0.2 Reflection 0.0 Emission -0.2 Rate 0.5", 71, 1, 72, 20),
+            new Stuff("cursed metal", 72, "Metal", "Roughness 0.5 Reflection 0.55 Rate 0.5", 71, 1, 72, 12),
             new Stuff("unused 73", 73, "Transparency 1.0"), /*tenth row; gray magenta*/
             new Stuff("magic crystal", 74, "Roughness 0.05 Reflection 0.85 Emission 0.35 Damage 54", 74, 7, 75, 1),
             new Stuff("crystal glint", 75, "Roughness 0.1 Reflection 1.0 Emission 0.65", 75, 1, 74, 8),
@@ -593,12 +593,12 @@ public class Stuff {
             new Stuff("evil eye", 113, "Roughness 0.75 Reflection 0.5 Emission 0.15 Damage 113 Priority 50"), /*row 15; middle red*/
             new Stuff("lips", 114, "Roughness 0.04 Reflection 0.5 Priority 2 Damage 112"),
             new Stuff("lava", 115, "Emission 0.2 Roughness 0.6 Reflection 0.0 Flow 0.05 Dapple -0.5"),
-            new Stuff("unused 116", 116, "Transparency 1.0"),
-            new Stuff("unused 117", 117, "Transparency 1.0"),
+            new Stuff("hot metal", 116, "Roughness 1.0 Reflection 0.0 Emission 0.2"),
+            new Stuff("searing metal", 117, "Roughness 1.0 Reflection 0.0 Emission 0.5"),
             new Stuff("unused 118", 118, "Transparency 1.0"),
             new Stuff("unused 119", 119, "Transparency 1.0"),
             new Stuff("unused 120", 120, "Transparency 1.0"),
-            new Stuff("unused 121", 121, "Transparency 1.0"), /*row 16; dark brown*/
+            new Stuff("bruise", 121, "Roughness 0.5 Reflection 0.15 Vary -0.1 Damage 121 Priority 1"), /*row 16; dark brown*/
             new Stuff("nose", 122, "Roughness 0.6 Reflection 0.3 Damage 122"),
             new Stuff("base skin", 123, "Roughness 0.6 Reflection 0.2 Damage 123"),
             new Stuff("freckle", 124, "Roughness 0.6 Reflection 0.2 Vary -0.1 Damage 124 Priority 1"),
