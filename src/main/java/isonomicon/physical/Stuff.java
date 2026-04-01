@@ -631,12 +631,12 @@ public class Stuff {
             new Stuff("unused 151", 151, "Transparency 1.0"),
             new Stuff("unused 152", 152, "Transparency 1.0"),
             new Stuff("constant light", 153, "Roughness 0.0 Reflection 0.0 Emission 0.8 Damage 54"), /*row 20; whitish lime*/
-            new Stuff("unused 154", 154, "Transparency 1.0"),
-            new Stuff("unused 155", 155, "Transparency 1.0"),
-            new Stuff("unused 156", 156, "Transparency 1.0"),
-            new Stuff("unused 157", 157, "Transparency 1.0"),
-            new Stuff("unused 158", 158, "Transparency 1.0"),
-            new Stuff("unused 159", 159, "Transparency 1.0"),
+            new Stuff("pure glow low", 154, 1,  "Roughness 0.0 Reflection 0.0 Transparency 0.4 Emission 0.3"),
+            new Stuff("pure glow base", 155, 1, "Roughness 0.0 Reflection 0.0 Transparency 0.3 Emission 0.6"),
+            new Stuff("pure glow high", 156, 1, "Roughness 0.0 Reflection 0.0 Transparency 0.2 Emission 0.9"),
+            new Stuff("overripe fruit", 157, "Roughness 0.5 Reflection 0.1 Dapple -0.4"),
+            new Stuff("ripe fruit", 158, "Roughness 0.4 Reflection 0.2"),
+            new Stuff("unripe fruit", 159, "Roughness 0.5 Reflection 0.1"),
             new Stuff("strobe off", 160, "Roughness 0.03 Reflection 0.5 Rate 0.5", 162, 1),
             new Stuff("radioactive glow", 161, "Roughness 0.0 Reflection 0.0 Emission 0.6 Transparency 1.0"), /*row 21; middle lime green*/
             new Stuff("strobe on", 162, "Roughness 0.03 Reflection 0.05 Emission 0.75 Rate 0.5", 160, 1),
@@ -685,9 +685,9 @@ public class Stuff {
             new Stuff("hard light low", 205,  "Roughness 0.0 Reflection 0.0 Transparency 0.7 Emission 0.5"),
             new Stuff("hard light base", 206, "Roughness 0.0 Reflection 0.0 Transparency 0.5 Emission 0.7"),
             new Stuff("hard light high", 207, "Roughness 0.0 Reflection 0.0 Transparency 0.3 Emission 0.9"),
-            new Stuff("unused 208", 208, "Transparency 1.0"),
-            new Stuff("unused 209", 209, "Transparency 1.0"), /*row 27; middle magenta*/
-            new Stuff("unused 210", 210, "Transparency 1.0"),
+            new Stuff("flower low", 208,  "Roughness 0.5 Reflection 0.1"),
+            new Stuff("flower base", 209, "Roughness 0.6 Reflection 0.1"), /*row 27; middle magenta*/
+            new Stuff("flower high", 210, "Roughness 0.7 Reflection 0.1"),
             new Stuff("unused 211", 211, "Transparency 1.0"),
             new Stuff("unused 212", 212, "Transparency 1.0"),
             new Stuff("unused 213", 213, "Transparency 1.0"),
