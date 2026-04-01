@@ -646,12 +646,12 @@ public class Stuff {
             new Stuff("unused 166", 166, "Transparency 1.0"),
             new Stuff("unused 167", 167, "Transparency 1.0"),
             new Stuff("unused 168", 168, "Transparency 1.0"),
-            new Stuff("unused 169", 169, "Transparency 1.0"), /*row 22; dark green cyan*/
+            new Stuff("tinted glass", 169, "Transparency 0.15 Roughness 0.0 Reflection 0.8 Damage 54"), /*row 22; dark green cyan*/
             new Stuff("unused 170", 170, "Transparency 1.0"),
-            new Stuff("unused 171", 171, "Transparency 1.0"),
+            new Stuff("clear glass", 171, "Transparency 0.25 Roughness 0.0 Reflection 0.65 Damage 54"),
             new Stuff("unused 172", 172, "Transparency 1.0"),
-            new Stuff("unused 173", 173, "Transparency 1.0"),
-            new Stuff("unused 174", 174, "Transparency 1.0"),
+            new Stuff("chill spawner", 173, "Transparency 1.0", 173, 5, 174, 2),
+            new Stuff("chill particle", 174, "Roughness 0.8 Reflection 0.0 Missing 0.2 Transparency 0.5 Rise -0.1", 174, 7, 173, 1),
             new Stuff("shiny carapace low", 175, "Roughness 0.15 Reflection 0.8"),
             new Stuff("shiny carapace base", 176, "Roughness 0.1 Reflection 0.85"),
             new Stuff("shiny carapace high", 177, "Roughness 0.05 Reflection 0.9"), /*row 23; light cyan*/
@@ -676,11 +676,11 @@ public class Stuff {
             new Stuff("unused 196", 196, "Transparency 1.0"),
             new Stuff("unused 197", 197, "Transparency 1.0"),
             new Stuff("unused 198", 198, "Transparency 1.0"),
-            new Stuff("unused 199", 199, "Transparency 1.0"),
-            new Stuff("unused 200", 200, "Transparency 1.0"),
+            new Stuff("dread particle", 199, "Emission -0.4 Roughness 0.0 Reflection 0.0 Swirl 0.45"),
+            new Stuff("dread spawner", 200, "Transparency 1.0", 199, 1, 200, 11),
             new Stuff("unused 201", 201, "Transparency 1.0"), /*row 26; light purple*/
-            new Stuff("unused 202", 202, "Transparency 1.0"),
-            new Stuff("unused 203", 203, "Transparency 1.0"),
+            new Stuff("toxic sludge", 202, "Roughness 0.6 Reflection 0.2 Flow 0.15 Vary -0.3 Dapple 0.15", 202, 6, 203, 1),
+            new Stuff("sludge bubble", 203, "Roughness 0.6 Reflection 0.2 Vary -0.3 Dapple 0.15", 202, 1),
             new Stuff("unused 204", 204, "Transparency 1.0"),
             new Stuff("unused 205", 205, "Transparency 1.0"),
             new Stuff("unused 206", 206, "Transparency 1.0"),
