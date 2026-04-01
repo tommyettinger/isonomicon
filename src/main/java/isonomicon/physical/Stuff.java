@@ -643,9 +643,9 @@ public class Stuff {
             new Stuff("dull scales low", 163, "Roughness 0.15 Reflection 0.4"),
             new Stuff("dull scales base", 164, "Roughness 0.05 Reflection 0.55"),
             new Stuff("dull scales high", 165, "Roughness 0.05 Reflection 0.65"),
-            new Stuff("helpful glow low", 166,  "Roughness 0.0 Reflection 0.0 Transparency 0.8 Emission 0.6"),
-            new Stuff("helpful glow base", 167, "Roughness 0.0 Reflection 0.0 Transparency 0.7 Emission 0.8"),
-            new Stuff("helpful glow high", 168, "Roughness 0.0 Reflection 0.0 Transparency 0.6 Emission 0.9"),
+            new Stuff("helpful glow low", 166,  "Roughness 0.0 Reflection 0.0 Transparency 0.6 Emission 0.6"),
+            new Stuff("helpful glow base", 167, "Roughness 0.0 Reflection 0.0 Transparency 0.5 Emission 0.8"),
+            new Stuff("helpful glow high", 168, "Roughness 0.0 Reflection 0.0 Transparency 0.4 Emission 0.9"),
             new Stuff("tinted glass", 169, "Transparency 0.15 Roughness 0.0 Reflection 0.8 Damage 54"), /*row 22; dark green cyan*/
             new Stuff("unused 170", 170, "Transparency 1.0"),
             new Stuff("clear glass", 171, "Transparency 0.25 Roughness 0.0 Reflection 0.65 Damage 54"),
@@ -673,9 +673,9 @@ public class Stuff {
             new Stuff("unused 193", 193, "Transparency 1.0"), /*row 25; dark violet*/
             new Stuff("unused 194", 194, "Transparency 1.0"),
             new Stuff("unused 195", 195, "Transparency 1.0"),
-            new Stuff("unused 196", 196, "Transparency 1.0"),
-            new Stuff("unused 197", 197, "Transparency 1.0"),
-            new Stuff("unused 198", 198, "Transparency 1.0"),
+            new Stuff("dark matter low", 196,  1, "Roughness 0.0 Reflection 0.0 Transparency 0.5 Emission -0.2"),
+            new Stuff("dark matter base", 197, 1, "Roughness 0.0 Reflection 0.0 Transparency 0.3 Emission -0.4"),
+            new Stuff("dark matter high", 198, 1, "Roughness 0.0 Reflection 0.0 Transparency 0.1 Emission -0.6"),
             new Stuff("dread particle", 199, "Emission -0.4 Roughness 0.0 Reflection 0.0 Swirl 0.45"),
             new Stuff("dread spawner", 200, "Transparency 1.0", 199, 1, 200, 11),
             new Stuff("unused 201", 201, "Transparency 1.0"), /*row 26; light purple*/
@@ -691,9 +691,9 @@ public class Stuff {
             new Stuff("unused 211", 211, "Transparency 1.0"),
             new Stuff("unused 212", 212, "Transparency 1.0"),
             new Stuff("unused 213", 213, "Transparency 1.0"),
-            new Stuff("unused 214", 214, "Transparency 1.0"),
-            new Stuff("unused 215", 215, "Transparency 1.0"),
-            new Stuff("unused 216", 216, "Transparency 1.0"),
+            new Stuff("harmful glow low", 214,  "Roughness 0.0 Reflection 0.0 Transparency 0.1 Emission 0.4"),
+            new Stuff("harmful glow base", 215, "Roughness 0.0 Reflection 0.0 Transparency 0.1 Emission 0.5"),
+            new Stuff("harmful glow high", 216, "Roughness 0.0 Reflection 0.0 Transparency 0.1 Emission 0.6"),
             new Stuff("drink", 217, "Roughness 0.3 Reflection 0.5"), /*row 28; dark brick red*/
             new Stuff("unused 218", 218, "Transparency 1.0"),
             new Stuff("unused 219", 219, "Transparency 1.0"),
