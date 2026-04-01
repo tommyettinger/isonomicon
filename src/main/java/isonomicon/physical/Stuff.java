@@ -643,9 +643,9 @@ public class Stuff {
             new Stuff("dull scales low", 163, "Roughness 0.15 Reflection 0.4"),
             new Stuff("dull scales base", 164, "Roughness 0.05 Reflection 0.55"),
             new Stuff("dull scales high", 165, "Roughness 0.05 Reflection 0.65"),
-            new Stuff("unused 166", 166, "Transparency 1.0"),
-            new Stuff("unused 167", 167, "Transparency 1.0"),
-            new Stuff("unused 168", 168, "Transparency 1.0"),
+            new Stuff("helpful glow low", 166,  "Roughness 0.0 Reflection 0.0 Transparency 0.8 Emission 0.6"),
+            new Stuff("helpful glow base", 167, "Roughness 0.0 Reflection 0.0 Transparency 0.7 Emission 0.8"),
+            new Stuff("helpful glow high", 168, "Roughness 0.0 Reflection 0.0 Transparency 0.6 Emission 0.9"),
             new Stuff("tinted glass", 169, "Transparency 0.15 Roughness 0.0 Reflection 0.8 Damage 54"), /*row 22; dark green cyan*/
             new Stuff("unused 170", 170, "Transparency 1.0"),
             new Stuff("clear glass", 171, "Transparency 0.25 Roughness 0.0 Reflection 0.65 Damage 54"),
