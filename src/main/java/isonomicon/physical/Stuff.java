@@ -550,21 +550,21 @@ public class Stuff {
             new Stuff("metal glint", 70, "Metal", "Roughness 0.2 Reflection 1.0 Emission 0.5", 70, 1, 14, 14),
             new Stuff("cursed metal wink", 71, "Roughness 0.2 Reflection 0.0 Emission -0.2 Rate 0.5", 71, 1, 72, 20),
             new Stuff("cursed metal", 72, "Metal", "Roughness 0.5 Reflection 0.55 Rate 0.5", 71, 1, 72, 12),
-            new Stuff("unused 73", 73, "Transparency 1.0"), /*tenth row; gray magenta*/
+            new Stuff("rock salt", 73, "Roughness 0.9 Reflection 0.5"), /*tenth row; gray magenta*/
             new Stuff("magic crystal", 74, "Roughness 0.05 Reflection 0.85 Emission 0.35 Damage 54", 74, 7, 75, 1),
             new Stuff("crystal glint", 75, "Roughness 0.1 Reflection 1.0 Emission 0.65", 75, 1, 74, 8),
             new Stuff("marked fluff low", 76, "Roughness 0.3 Reflection 0.2 Dapple -0.16"), /*start of mid-saturation sections of three; red*/
             new Stuff("marked fluff base", 77, "Roughness 0.4 Reflection 0.5"),
             new Stuff("marked fluff high", 78, "Roughness 0.5 Reflection 0.6 Dapple 0.08"),
-            new Stuff("unused 79", 79, "Transparency 1.0"),
-            new Stuff("unused 80", 80, "Transparency 1.0"),
-            new Stuff("unused 81", 81, "Transparency 1.0"), /*row 11; light brown*/
+            new Stuff("scuff marks low", 79,  "Roughness 0.4 Reflection 0.02"),
+            new Stuff("scuff marks base", 80, "Roughness 0.5 Reflection 0.03"),
+            new Stuff("scuff marks high", 81, "Roughness 0.6 Reflection 0.04"), /*row 11; light brown*/
             new Stuff("fluff low", 82, "Roughness 0.4 Reflection 0.1 Dapple -0.16"),
             new Stuff("fluff base", 83, "Roughness 0.5 Reflection 0.4"),
             new Stuff("fluff high", 84, "Roughness 0.6 Reflection 0.5 Dapple 0.08"),
-            new Stuff("unused 85", 85, "Transparency 1.0"),
-            new Stuff("unused 86", 86, "Transparency 1.0"),
-            new Stuff("unused 87", 87, "Transparency 1.0"),
+            new Stuff("shell low", 85,  "Roughness 0.1 Reflection 0.3"),
+            new Stuff("shell base", 86, "Roughness 0.1 Reflection 0.5"),
+            new Stuff("shell high", 87, "Roughness 0.1 Reflection 0.7"),
             new Stuff("caked mud", 88, "Roughness 0.4 Reflection 0.1 Dapple 0.05"),
             new Stuff("antler or horn", 89, "Roughness 0.5 Reflection 0.2"), /*row 12; middle yellow*/
             new Stuff("bone beak claw", 90, "Roughness 0.4 Reflection 0.4"),
@@ -580,9 +580,9 @@ public class Stuff {
             new Stuff("painted metal low", 100, "Roughness 0.2 Reflection 0.4 Damage 7"),
             new Stuff("painted metal base", 101, "Roughness 0.2 Reflection 0.4 Damage 7"),
             new Stuff("painted metal high", 102, "Roughness 0.2 Reflection 0.4 Damage 7"),
-            new Stuff("unused 103", 103, "Transparency 1.0"),
-            new Stuff("unused 104", 104, "Transparency 1.0"),
-            new Stuff("unused 105", 105, "Transparency 1.0"), /*row 14; light violet*/
+            new Stuff("mollusk body low", 103,  "Roughness 0.5 Reflection 0.6 Dapple -0.1 Vary 0.15"),
+            new Stuff("mollusk body base", 104, "Roughness 0.4 Reflection 0.7 Dapple -0.1 Vary 0.15"),
+            new Stuff("mollusk body high", 105, "Roughness 0.3 Reflection 0.8 Dapple -0.1 Vary 0.15"), /*row 14; light violet*/
             new Stuff("unused 106", 106, "Transparency 1.0"),
             new Stuff("shock spawner", 107, "Transparency 1.0", 108, 1, 107, 14),
             new Stuff("shock particle", 108, "Emission 0.6 Roughness 0.4 Reflection 0.0 Missing 0.6", 108, 2, 107, 3),
