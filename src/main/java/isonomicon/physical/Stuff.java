@@ -613,9 +613,9 @@ public class Stuff {
             new Stuff("unused 133", 133, "Transparency 1.0"),
             new Stuff("unused 134", 134, "Transparency 1.0"),
             new Stuff("unused 135", 135, "Transparency 1.0"),
-            new Stuff("unused 136", 136, "Transparency 1.0"),
-            new Stuff("unused 137", 137, "Transparency 1.0"), /*row 18; middle saffron*/
-            new Stuff("unused 138", 138, "Transparency 1.0"),
+            new Stuff("soft plastic low", 136,  "Roughness 0.7 Reflection 0.1"),
+            new Stuff("soft plastic base", 137, "Roughness 0.6 Reflection 0.2"), /*row 18; middle saffron*/
+            new Stuff("soft plastic high", 138, "Roughness 0.5 Reflection 0.3"),
             new Stuff("unused 139", 139, "Transparency 1.0"),
             new Stuff("unused 140", 140, "Transparency 1.0"),
             new Stuff("bright fire", 141, "Roughness 0.0 Reflection 0.0 Emission 0.8 Missing 0.1 Flow 0.15 Rise 0.08", 132, 7, 141, 8, 131, 3),
@@ -661,9 +661,9 @@ public class Stuff {
             new Stuff("durable fabric low", 181, "Roughness 0.15 Reflection 0.04"),
             new Stuff("durable fabric base", 182, "Roughness 0.2 Reflection 0.03"),
             new Stuff("durable fabric high", 183, "Roughness 0.3 Reflection 0.02"),
-            new Stuff("unused 184", 184, "Transparency 1.0"),
-            new Stuff("unused 185", 185, "Transparency 1.0"), /*row 24; middle blue*/
-            new Stuff("unused 186", 186, "Transparency 1.0"),
+            new Stuff("glossy plastic low", 184,  "Roughness 0.3 Reflection 0.6"),
+            new Stuff("glossy plastic base", 185, "Roughness 0.2 Reflection 0.7"), /*row 24; middle blue*/
+            new Stuff("glossy plastic high", 186, "Roughness 0.1 Reflection 0.8"),
             new Stuff("dyed fabric low", 187,  "Roughness 0.2 Reflection 0.03"),
             new Stuff("dyed fabric base", 188, "Roughness 0.15 Reflection 0.04"),
             new Stuff("dyed fabric high", 189, "Roughness 0.1 Reflection 0.05"),
@@ -678,10 +678,10 @@ public class Stuff {
             new Stuff("dark matter high", 198, 1, "Roughness 0.0 Reflection 0.0 Transparency 0.1 Emission -0.6"),
             new Stuff("dread particle", 199, "Emission -0.4 Roughness 0.0 Reflection 0.0 Swirl 0.45"),
             new Stuff("dread spawner", 200, "Transparency 1.0", 199, 1, 200, 11),
-            new Stuff("unused 201", 201, "Transparency 1.0"), /*row 26; light purple*/
+            new Stuff("translucent plastic", 201, "Roughness 0.1 Reflection 0.6 Transparency 0.5"), /*row 26; light purple*/
             new Stuff("toxic sludge", 202, "Roughness 0.6 Reflection 0.2 Flow 0.15 Vary -0.3 Dapple 0.15", 202, 6, 203, 1),
             new Stuff("sludge bubble", 203, "Roughness 0.6 Reflection 0.2 Vary -0.3 Dapple 0.15", 202, 1),
-            new Stuff("unused 204", 204, "Transparency 1.0"),
+            new Stuff("poison dust", 204, "Roughness 0.9 Reflection 0.01 Vary -0.1"),
             new Stuff("hard light low", 205,  "Roughness 0.0 Reflection 0.0 Transparency 0.7 Emission 0.5"),
             new Stuff("hard light base", 206, "Roughness 0.0 Reflection 0.0 Transparency 0.5 Emission 0.7"),
             new Stuff("hard light high", 207, "Roughness 0.0 Reflection 0.0 Transparency 0.3 Emission 0.9"),
