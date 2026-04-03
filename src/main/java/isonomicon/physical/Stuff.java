@@ -625,9 +625,9 @@ public class Stuff {
             new Stuff("dull carapace low", 145, "Roughness 0.5 Reflection 0.1"), /*row 19; dark yellow*/
             new Stuff("dull carapace base", 146, "Roughness 0.45 Reflection 0.2"),
             new Stuff("dull carapace high", 147, "Roughness 0.4 Reflection 0.15"),
-            new Stuff("unused 148", 148, "Transparency 1.0"),
-            new Stuff("unused 149", 149, "Transparency 1.0"),
-            new Stuff("unused 150", 150, "Transparency 1.0"),
+            new Stuff("dried plant low", 148,  "Roughness 0.7 Reflection 0.01 Dapple 0.1 Vary -0.2"),
+            new Stuff("dried plant base", 149, "Roughness 0.7 Reflection 0.01 Dapple 0.2 Vary -0.3"),
+            new Stuff("dried plant high", 150, "Roughness 0.7 Reflection 0.01 Dapple 0.3 Vary -0.4"),
             new Stuff("fungus gills", 151, "Roughness 0.4 Reflection 0.0"),
             new Stuff("fungus cap", 152, "Roughness 0.8 Reflection 0.02"),
             new Stuff("constant light", 153, "Roughness 0.0 Reflection 0.0 Emission 0.8 Damage 54"), /*row 20; whitish lime*/
@@ -688,15 +688,15 @@ public class Stuff {
             new Stuff("flower low", 208,  "Roughness 0.5 Reflection 0.1"),
             new Stuff("flower base", 209, "Roughness 0.6 Reflection 0.1"), /*row 27; middle magenta*/
             new Stuff("flower high", 210, "Roughness 0.7 Reflection 0.1"),
-            new Stuff("unused 211", 211, "Transparency 1.0"),
-            new Stuff("unused 212", 212, "Transparency 1.0"),
-            new Stuff("unused 213", 213, "Transparency 1.0"),
+            new Stuff("magic hot fire", 211, "Roughness 0.0 Reflection 0.0 Emission 0.6 Missing 0.15 Dapple 0.15 Flow 0.18 Rise 0.06 Vary 0.4", 211, 11, 212, 8, 31, 3, 219, 2),
+            new Stuff("magic bright fire", 212, "Roughness 0.0 Reflection 0.0 Emission 0.8 Missing 0.1 Flow 0.15 Rise 0.08 Vary 0.5", 211, 7, 212, 8, 219, 3),
+            new Stuff("magic spark", 213, "Emission 0.9 Roughness 0.4 Reflection 0.0 Missing 0.6 Vary 0.3", 213, 2, 0, 3),
             new Stuff("harmful glow low", 214,  "Roughness 0.0 Reflection 0.0 Transparency 0.1 Emission 0.4"),
             new Stuff("harmful glow base", 215, "Roughness 0.0 Reflection 0.0 Transparency 0.1 Emission 0.5"),
             new Stuff("harmful glow high", 216, "Roughness 0.0 Reflection 0.0 Transparency 0.1 Emission 0.6"),
             new Stuff("drink", 217, "Roughness 0.3 Reflection 0.5"), /*row 28; dark brick red*/
-            new Stuff("unused 218", 218, "Transparency 1.0"),
-            new Stuff("unused 219", 219, "Transparency 1.0"),
+            new Stuff("magic ember spawner", 218, "Transparency 1.0", 219, 1, 218, 9),
+            new Stuff("magic ember", 219, "Roughness 0.0 Reflection 0.2 Emission 0.45 Missing 0.3 Rise 0.3 Dapple 0.3 Vary 0.4 Disperse -0.1", 219, 8, 218, 7, 31, 1),
             new Stuff("constant red", 220, "Damage 220"), /*start of bold saturation, ungrouped; red*/
             new Stuff("head to neck", 221, "Transparency 1.0 Damage 221"),
             new Stuff("unused 222", 222, "Transparency 1.0"),
