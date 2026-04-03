@@ -583,12 +583,12 @@ public class Stuff {
             new Stuff("mollusk body low", 103,  "Roughness 0.5 Reflection 0.6 Dapple -0.1 Vary 0.15"),
             new Stuff("mollusk body base", 104, "Roughness 0.4 Reflection 0.7 Dapple -0.1 Vary 0.15"),
             new Stuff("mollusk body high", 105, "Roughness 0.3 Reflection 0.8 Dapple -0.1 Vary 0.15"), /*row 14; light violet*/
-            new Stuff("unused 106", 106, "Transparency 1.0"),
+            new Stuff("fungus warning", 106, "Roughness 0.7 Reflection 0.5"),
             new Stuff("shock spawner", 107, "Transparency 1.0", 108, 1, 107, 14),
             new Stuff("shock particle", 108, "Emission 0.6 Roughness 0.4 Reflection 0.0 Missing 0.6", 108, 2, 107, 3),
-            new Stuff("unused 109", 109, "Transparency 1.0"),
-            new Stuff("unused 110", 110, "Transparency 1.0"),
-            new Stuff("unused 111", 111, "Transparency 1.0"),
+            new Stuff("rot low", 109,  "Roughness 0.5 Reflection 0.01 Dapple -0.1 Vary -0.4"),
+            new Stuff("rot base", 110, "Roughness 0.5 Reflection 0.01 Dapple -0.2 Vary -0.4"),
+            new Stuff("rot high", 111, "Roughness 0.5 Reflection 0.01 Dapple -0.3 Vary -0.4"),
             new Stuff("blood or gore", 112, "Roughness 0.04 Reflection 0.4 Damage 112"), /*start of higher-saturation sections of three; red*/
             new Stuff("evil eye", 113, "Roughness 0.75 Reflection 0.5 Emission 0.15 Damage 113 Priority 50"), /*row 15; middle red*/
             new Stuff("lips", 114, "Roughness 0.04 Reflection 0.5 Priority 2 Damage 112"),
@@ -628,8 +628,8 @@ public class Stuff {
             new Stuff("unused 148", 148, "Transparency 1.0"),
             new Stuff("unused 149", 149, "Transparency 1.0"),
             new Stuff("unused 150", 150, "Transparency 1.0"),
-            new Stuff("unused 151", 151, "Transparency 1.0"),
-            new Stuff("unused 152", 152, "Transparency 1.0"),
+            new Stuff("fungus gills", 151, "Roughness 0.4 Reflection 0.0"),
+            new Stuff("fungus cap", 152, "Roughness 0.8 Reflection 0.02"),
             new Stuff("constant light", 153, "Roughness 0.0 Reflection 0.0 Emission 0.8 Damage 54"), /*row 20; whitish lime*/
             new Stuff("pure glow low", 154, 1,  "Roughness 0.0 Reflection 0.0 Transparency 0.4 Emission 0.3"),
             new Stuff("pure glow base", 155, 1, "Roughness 0.0 Reflection 0.0 Transparency 0.3 Emission 0.6"),
@@ -670,9 +670,9 @@ public class Stuff {
             new Stuff("unused 190", 190, "Transparency 1.0"),
             new Stuff("unused 191", 191, "Transparency 1.0"),
             new Stuff("unused 192", 192, "Transparency 1.0"),
-            new Stuff("unused 193", 193, "Transparency 1.0"), /*row 25; dark violet*/
-            new Stuff("unused 194", 194, "Transparency 1.0"),
-            new Stuff("unused 195", 195, "Transparency 1.0"),
+            new Stuff("contrast metal low", 193,  "Roughness 0.15 Reflection 0.5 Damage 7"), /*row 25; dark violet*/
+            new Stuff("contrast metal base", 194, "Roughness 0.15 Reflection 0.6 Damage 7"),
+            new Stuff("contrast metal high", 195, "Roughness 0.15 Reflection 0.7 Damage 7"),
             new Stuff("dark matter low", 196,  1, "Roughness 0.0 Reflection 0.0 Transparency 0.5 Emission -0.2"),
             new Stuff("dark matter base", 197, 1, "Roughness 0.0 Reflection 0.0 Transparency 0.3 Emission -0.4"),
             new Stuff("dark matter high", 198, 1, "Roughness 0.0 Reflection 0.0 Transparency 0.1 Emission -0.6"),
