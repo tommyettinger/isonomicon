@@ -595,18 +595,18 @@ public class Stuff {
             new Stuff("lava", 115, "Emission 0.2 Roughness 0.6 Reflection 0.0 Flow 0.05 Dapple -0.5"),
             new Stuff("hot metal", 116, "Roughness 1.0 Reflection 0.0 Emission 0.2"),
             new Stuff("searing metal", 117, "Roughness 1.0 Reflection 0.0 Emission 0.5"),
-            new Stuff("unused 118", 118, "Transparency 1.0"),
-            new Stuff("unused 119", 119, "Transparency 1.0"),
-            new Stuff("unused 120", 120, "Transparency 1.0"),
+            new Stuff("cooked meat", 118, "Roughness 0.3 Reflection 0.05 Dapple -0.15"),
+            new Stuff("raw meat", 119,    "Roughness 0.3 Reflection 0.25 Dapple -0.1"),
+            new Stuff("burlap", 120, "Roughness 0.8 Reflection 0.0 Dapple -0.4"),
             new Stuff("bruise", 121, "Roughness 0.5 Reflection 0.15 Vary -0.1 Damage 121 Priority 1"), /*row 16; dark brown*/
             new Stuff("nose", 122, "Roughness 0.6 Reflection 0.3 Damage 122"),
             new Stuff("base skin", 123, "Roughness 0.6 Reflection 0.2 Damage 123"),
             new Stuff("freckle", 124, "Roughness 0.6 Reflection 0.2 Vary -0.1 Damage 124 Priority 1"),
             new Stuff("ears", 125, "Roughness 0.5 Reflection 0.1 Damage 125 Priority 1"),
             new Stuff("scar", 126, "Roughness 0.7 Reflection 0.05 Damage 126 Priority 1"),
-            new Stuff("unused 127", 127, "Transparency 1.0"),
-            new Stuff("unused 128", 128, "Transparency 1.0"),
-            new Stuff("unused 129", 129, "Transparency 1.0"), /*row 17; light orange*/
+            new Stuff("marked cardboard", 127, "Roughness 0.7 Reflection 0.1"),
+            new Stuff("dirty cardboard", 128,  "Roughness 0.7 Reflection 0.01 Dapple -0.2"),
+            new Stuff("bare cardboard", 129,   "Roughness 0.7 Reflection 0.01"), /*row 17; light orange*/
             new Stuff("ember spawner", 130, "Transparency 1.0", 131, 1, 130, 9),
             new Stuff("ember", 131, "Roughness 0.0 Reflection 0.2 Emission 0.45 Missing 0.3 Rise 0.3 Dapple 0.3 Disperse -0.1", 131, 8, 130, 7, 31, 1),
             new Stuff("hot fire", 132, "Roughness 0.0 Reflection 0.0 Emission 0.6 Missing 0.15 Dapple 0.15 Flow 0.18 Rise 0.06", 132, 11, 141, 8, 31, 3, 131, 2),
@@ -616,8 +616,8 @@ public class Stuff {
             new Stuff("soft plastic low", 136,  "Roughness 0.7 Reflection 0.1"),
             new Stuff("soft plastic base", 137, "Roughness 0.6 Reflection 0.2"), /*row 18; middle saffron*/
             new Stuff("soft plastic high", 138, "Roughness 0.5 Reflection 0.3"),
-            new Stuff("unused 139", 139, "Transparency 1.0"),
-            new Stuff("unused 140", 140, "Transparency 1.0"),
+            new Stuff("foamy drink", 139, "Roughness 0.0 Reflection 0.4 Damage 140", 139, 8, 140, 1),
+            new Stuff("drink froth", 140, "Roughness 0.0 Reflection 0.4 Damage 140 Rate 0.5", 139, 1),
             new Stuff("bright fire", 141, "Roughness 0.0 Reflection 0.0 Emission 0.8 Missing 0.1 Flow 0.15 Rise 0.08", 132, 7, 141, 8, 131, 3),
             new Stuff("gold", 142, "Roughness 0.5 Reflection 0.85 Rate 0.5", 143, 1, 142, 12),
             new Stuff("gold glint", 143, "Roughness 0.2 Reflection 1.0 Emission 0.2 Rate 0.5", 143, 1, 142, 20),
@@ -694,7 +694,7 @@ public class Stuff {
             new Stuff("harmful glow low", 214,  "Roughness 0.0 Reflection 0.0 Transparency 0.1 Emission 0.4"),
             new Stuff("harmful glow base", 215, "Roughness 0.0 Reflection 0.0 Transparency 0.1 Emission 0.5"),
             new Stuff("harmful glow high", 216, "Roughness 0.0 Reflection 0.0 Transparency 0.1 Emission 0.6"),
-            new Stuff("drink", 217, "Roughness 0.3 Reflection 0.5"), /*row 28; dark brick red*/
+            new Stuff("wine", 217, "Roughness 0.0 Reflection 0.5"), /*row 28; dark brick red*/
             new Stuff("magic ember spawner", 218, "Transparency 1.0", 219, 1, 218, 9),
             new Stuff("magic ember", 219, "Roughness 0.0 Reflection 0.2 Emission 0.45 Missing 0.3 Rise 0.3 Dapple 0.3 Vary 0.4 Disperse -0.1", 219, 8, 218, 7, 31, 1),
             new Stuff("constant red", 220, "Damage 220"), /*start of bold saturation, ungrouped; red*/
