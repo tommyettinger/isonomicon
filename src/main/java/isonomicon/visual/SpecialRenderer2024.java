@@ -13,7 +13,7 @@ import com.github.tommyettinger.ds.IntObjectMap;
 import com.github.yellowstonegames.grid.BlueNoise;
 import com.github.yellowstonegames.grid.CyclicNoise;
 import com.github.yellowstonegames.grid.IntPointHash;
-import isonomicon.app.AppConfig;
+import com.github.yellowstonegames.grid.Noise;
 import isonomicon.io.extended.GroupChunk;
 import isonomicon.io.extended.ShapeModel;
 import isonomicon.io.extended.TransformChunk;
@@ -34,10 +34,10 @@ import static com.github.tommyettinger.digital.TrigTools.sinTurns;
  * Renders {@code byte[][][]} voxel models to pairs of {@link Pixmap}s, one using normal RGBA colors and one using an
  * unusual technique that stores a palette index in the R channel and a lightness adjustment in the G channel.
  */
-public class SpecialRenderer {
-    public static int shrink = 1;
-        public static float distortHXY = 2, distortVXY = 1, distortVZ = 3; // ground truth for isometric
-//    public static float distortHXY = 2, distortVXY = 0, distortVZ = 3; // side view
+public class SpecialRenderer2024 {
+    public static int shrink = 2;
+    public static float distortHXY = 2, distortVXY = 1, distortVZ = 3; // ground truth for isometric
+    //    public static float distortHXY = 2, distortVXY = 0, distortVZ = 3; // side view
 //    public static float distortHXY = 2, distortVXY = 0.5f, distortVZ = 3; // partially elevated side view ("shallow")
     public static final float fidget = 0.5f;
 
@@ -60,9 +60,8 @@ public class SpecialRenderer {
 
     public static final byte DARKEN = (byte) 128;
     public static final byte LIGHTEN = (byte) 135;
-    public static final byte FLOOR_INDEX = (byte) -16;
-    public static final byte SHADOW_INDEX = (byte) 67;
 
+    public static final Noise noise = new Noise(0x1337BEEF, 0.0125f, Noise.SIMPLEX_FRACTAL, 2);
     public static final CyclicNoise swirlNoise = new CyclicNoise(0xDEADBEEFBA77L, 6, 0.03f);
 
     public Pixmap normalMap;
@@ -72,15 +71,15 @@ public class SpecialRenderer {
     public float[][] normals;
     private final Vector3 out = new Vector3();
 
-    protected SpecialRenderer() {
+    protected SpecialRenderer2024() {
         this(64);
     }
 
-    public SpecialRenderer(final int size) {
+    public SpecialRenderer2024(final int size) {
         this(size, Stuff.STUFFS);
     }
 
-    public SpecialRenderer(final int size, Stuff[] stuffs) {
+    public SpecialRenderer2024(final int size, Stuff[] stuffs) {
         this.size = size;
         final int w = MathUtils.ceil(size * distortHXY * 2 + 4), h = MathUtils.ceil(size * (distortVZ + distortVXY * 2) + 4);
         palettePixmap = new Pixmap(w>>>shrink, h>>>shrink, Pixmap.Format.RGBA8888);
@@ -117,7 +116,7 @@ public class SpecialRenderer {
      * @return
      */
     public static float logisticky(float x) { return 1f / (1f + RoughMath.expRough(-x)) - 0.5f; }
-    
+
     protected float bn(int x, int y, int seed) {
         return (BlueNoise.getSeededTriangular(x, y, seed) + 128) * 0x1p-8f;
     }
@@ -134,7 +133,7 @@ public class SpecialRenderer {
      * @param saturationModifier a float between -0.5f and 0.2f; negative decreases saturation, positive increases
      * @return this, for chaining
      */
-    public SpecialRenderer saturation(float saturationModifier) {
+    public SpecialRenderer2024 saturation(float saturationModifier) {
         neutral = 1f + Math.min(Math.max(saturationModifier,  -1f),  0.5f);
         return this;
     }
@@ -143,14 +142,14 @@ public class SpecialRenderer {
         return palette;
     }
 
-    public SpecialRenderer palette(PaletteReducer color) {
+    public SpecialRenderer2024 palette(PaletteReducer color) {
         return palette(color.paletteArray, color.colorCount);
     }
 
-    public SpecialRenderer palette(int[] color) {
+    public SpecialRenderer2024 palette(int[] color) {
         return palette(color, 256);
     }
-    public SpecialRenderer palette(int[] color, int count) {
+    public SpecialRenderer2024 palette(int[] color, int count) {
         this.palette = color;
         count = Math.min(256, count);
         if(paletteL == null) paletteL = new float[256];
@@ -245,17 +244,15 @@ public class SpecialRenderer {
         }
         final float emit = m.getTrait(VoxMaterial.MaterialTrait._emit) * 0.75f;
         int lowX = 0, highX = 4, lowY = 0, highY = 4;
-//        int lowX = 0, highX = 1 << shrink, lowY = 0, highY = 1 << shrink;
-
 //        if(emit != 0f) {
 //            lowX = lowY = 1;
 //            highX = highY = 3;
 //        } else
-            if(flow != 0f) {
-                float ns = Stuff.noise.getConfiguredNoise(xPos, yPos, zPos, frame * flow);
-                if (ns > 0) highX = (int) (4.5 + ns * (3 << shrink));
-                else if (ns < 0) lowX = Math.round(lowX + ns * (3 << shrink));
-            }
+        if(flow != 0f) {
+            float ns = noise.getConfiguredNoise(xPos, yPos, zPos, frame * flow);
+            if (ns > 0) highX = (int) (4.5 + ns * (3 << shrink));
+            else if (ns < 0) lowX = Math.round(lowX + ns * (3 << shrink));
+        }
         xPos += fidget;
         yPos += fidget;
         final int
@@ -267,9 +264,7 @@ public class SpecialRenderer {
         for (int x = lowX, ax = xx; x < highX && ax < render.length; x++, ax++) {
             if (ax < 0) continue;
             for (int y = lowY, ay = yy; y < highY && ay < render[0].length; y++, ay++) {
-                if ((depth > depths[ax][ay] || (depth == depths[ax][ay] &&
-                        (indices[ax][ay] == 0 || stuffs[Math.min((indices[ax][ay] & 255), stuffs.length - 1)].material.getTrait(VoxMaterial.MaterialTrait._priority)
-                                <= stuffs[Math.min((voxel & 255), stuffs.length - 1)].material.getTrait(VoxMaterial.MaterialTrait._priority))))) {
+                if ((depth > depths[ax][ay] || (depth == depths[ax][ay] && (indices[ax][ay] & 255) > (voxel & 255)))) {
                     drawn = true;
                     depths[ax][ay] = depth;
                     materials[ax][ay] = m;
@@ -287,7 +282,7 @@ public class SpecialRenderer {
                         }
                     }
                     else {
-                        indices[ax][ay] = FLOOR_INDEX;
+                        indices[ax][ay] = -16;
                     }
 //                                Coloring.darken(palette[voxel & 255], 0.375f - emit);
 //                                Coloring.adjust(palette[voxel & 255], 0.625f + emit, neutral);
@@ -311,8 +306,8 @@ public class SpecialRenderer {
             shadeX[(int) (hs + yPos)][(int) (hs + zPos)] = Math.max(shadeX[(int) (hs + yPos)][(int) (hs + zPos)], (hs + xPos));
         }
     }
-    
-    public SpecialRenderer clear() {
+
+    public SpecialRenderer2024 clear() {
         palettePixmap.setColor(0);
         palettePixmap.fill();
         fill(depths, 0);
@@ -450,7 +445,7 @@ public class SpecialRenderer {
                             }
                         }
                         if(shadows){
-                            if(indices[sx][sy] == FLOOR_INDEX && shadeZ[fx][fy] <= hs + 0.5f)
+                            if(indices[sx][sy] == -16 && shadeZ[fx][fy] <= hs + 0.5f)
 //                            if(indices[sx][sy] == -16 && (vx <= step * 4 || vy <= step * 4 || vx >= xSize - step * 4 || vy >= ySize - step * 4))
                                 shading[sx][sy] = 1024f;
                         }
@@ -473,7 +468,7 @@ public class SpecialRenderer {
 //                            shade << 16 |
 //                            sat << 8 | 255);
                     int idx = (y >>> shrink) * palettePixmap.getWidth() + (x >>> shrink) << 2;
-                    if (shadows && index == FLOOR_INDEX) {
+                    if (shadows && index == -16) {
                         buffer.put(idx, (byte) 67); // shadow stuff
                         buffer.put(idx + 1, (byte) ((shade & 255) >>> 1));
                         buffer.put(idx + 2, (byte) 0);
@@ -628,10 +623,8 @@ public class SpecialRenderer {
     }
 
     public static void monoAlpha(Array<Pixmap> pms) {
-        if(AppConfig.GRAY_BG) {
-            for (Pixmap pm : pms) {
-                monoAlpha(pm);
-            }
+        for(Pixmap pm : pms) {
+            monoAlpha(pm);
         }
     }
 
@@ -704,7 +697,7 @@ public class SpecialRenderer {
                                         oy = ooy + ay;
                                         splat(ox * x_x + oy * y_x + oz * z_x + size + translateX,
                                                 ox * x_y + oy * y_y + oz * z_y + size + translateY,
-                                                0, x + ax, y + ay, 0, FLOOR_INDEX, frame);
+                                                0, x + ax, y + ay, 0, (byte) -16, frame);
                                     }
                                 }
                             }
