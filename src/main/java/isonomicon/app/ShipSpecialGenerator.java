@@ -52,7 +52,7 @@ public class ShipSpecialGenerator extends ApplicationAdapter {
     private Texture palette;
     public ShipSpecialGenerator(String[] args){
         VoxIOExtended.GENERAL = true;
-        VoxIOExtended.USE_MATERIALS = true;
+        VoxIOExtended.USE_MATERIALS = false;
         Tools3D.STUFFS = Stuff.STUFFS_B;
     }
 

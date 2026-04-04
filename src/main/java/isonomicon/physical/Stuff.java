@@ -450,7 +450,7 @@ public class Stuff {
             new Stuff("unused 237", 237, "Transparency 1.0"),
             new Stuff("unused 238", 238, "Transparency 1.0"),
             new Stuff("unused 239", 239, "Transparency 1.0"),
-            new Stuff("floor reserved", 240, 0, "Transparency 1.0 Damage 240"),
+            new Stuff("floor reserved", 240, 0, "Roughness 0.25 Reflection 0.0 Damage 240"),
             new Stuff("unused 241", 241, "Transparency 1.0"),
             new Stuff("unused 242", 242, "Transparency 1.0"),
             new Stuff("unused 243", 243, "Transparency 1.0"),
@@ -717,7 +717,7 @@ public class Stuff {
             new Stuff("secondary weapon rear", 237, "Transparency 1.0 Damage 237"),
             new Stuff("constant green", 238, "Damage 238"),
             new Stuff("unused 239", 239, "Transparency 1.0"),
-            new Stuff("floor reserved", 240, 0, "Transparency 1.0 Damage 240"),
+            new Stuff("floor reserved", 240, 0, "Roughness 0.25 Reflection 0.0 Damage 240"),
             new Stuff("unused 241", 241, "Transparency 1.0"), /*row 31; cyan*/
             new Stuff("unused 242", 242, "Transparency 1.0"),
             new Stuff("unused 243", 243, "Transparency 1.0"),

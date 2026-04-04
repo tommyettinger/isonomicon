@@ -469,7 +469,7 @@ public class SpecialRenderer2024 {
 //                            sat << 8 | 255);
                     int idx = (y >>> shrink) * palettePixmap.getWidth() + (x >>> shrink) << 2;
                     if (shadows && index == -16) {
-                        buffer.put(idx, (byte) 67); // shadow stuff
+                        buffer.put(idx, (byte) 66); // shadow stuff
                         buffer.put(idx + 1, (byte) ((shade & 255) >>> 1));
                         buffer.put(idx + 2, (byte) 0);
 //                        buffer.put(idx + 3, (byte) (255 - shade));
