@@ -488,7 +488,7 @@ public class SpecialRenderer {
                 }
                 else if(midShading[x][y] > 0f) {
 //                    int shade = (int) (logisticky((shading[x][y] + midShading[x][y])) * 255.999f);
-                    int shade = (int) (Math.min(Math.max((shading[x][y] + logisticky(midShading[x][y])) * 0.625f + 0.1328125f, 0f), 1f) * 255.999f);
+                    int shade = (int) (Math.min(Math.max((shading[x][y] + logisticky(midShading[x][y])) * 0.625f + 0.75f, 0f), 1f) * 255.999f);
 //                    int shade = (int) ((1f - Math.min(Math.max((shading[x][y] + midShading[x][y]) * 0.625f + 0.1328125f, 0f), 1f)) * 255.999f);
                     int idx = (y >>> shrink) * palettePixmap.getWidth() + (x >>> shrink) << 2;
                     if ((buffer.get(idx+3) & 255) < shade) {
@@ -504,7 +504,7 @@ public class SpecialRenderer {
                 }
                 else if(midShading[x][y] < 0f) {
 //                    int shade = (int) (logisticky((shading[x][y] + midShading[x][y])) * 255.999f);
-                    int shade = (int) (1f - Math.min(Math.max((shading[x][y] + logisticky(midShading[x][y])) * 0.625f + 0.1328125f, 0f), 1f) * 255.999f);
+                    int shade = (int) (1f - Math.min(Math.max((shading[x][y] + logisticky(midShading[x][y])) * 0.625f + 0.75f, 0f), 1f) * 255.999f);
 //                    int shade = (int) ((1f - Math.min(Math.max((shading[x][y] + midShading[x][y]) * 0.625f + 0.1328125f, 0f), 1f)) * 255.999f);
                     int idx = (y >>> shrink) * palettePixmap.getWidth() + (x >>> shrink) << 2;
                     if ((buffer.get(idx+3) & 255) < shade) {
@@ -616,13 +616,24 @@ public class SpecialRenderer {
     }
 
     public static void monoAlpha(Pixmap pm) {
+//        Pixmap bg = new Pixmap(pm.getWidth(), pm.getHeight(), Pixmap.Format.RGBA8888);
+//        bg.setColor(0xC0C0C0FF);
+//        bg.setBlending(Pixmap.Blending.SourceOver);
+//        bg.drawPixmap(pm, 0, 0);
+//        pm.setBlending(Pixmap.Blending.SourceOver);
+//        pm.drawPixmap(bg, 0, 0);
+//        bg.dispose();
+
         final ByteBuffer buffer = pm.getPixels();
         final int limit = buffer.limit();
-        int alpha, rgba;
+        int alpha, rgba, target;
         for (int i = 3; i < limit; i += 4) {
             if((alpha = buffer.get(i)) != -1) {
                 rgba = buffer.getInt(i - 3);
-                buffer.putInt(i - 3, Coloring.lerp(0xC0C0C0FF, rgba | 255, (alpha & 255) / 255f));
+                target = Coloring.lerp(0xC0C0C0FF, rgba | 255, (alpha & 255) / 255f);
+//                if(rgba != 0)
+//                    System.out.printf("Translucent color 0x%08X is being lerped to 0x%08X\n", rgba, target);
+                buffer.putInt(i - 3, target);
             }
         }
     }
