@@ -101,8 +101,11 @@ public class ShipSpecialGenerator extends ApplicationAdapter {
         for (int n = 0; n < 16; n++) {
             palette = new Texture(Gdx.files.local("assets/" + pals[n & 7]));
             String output = this.name = lang.word(seed = Hasher.randomize3(seed), true);
+            while (Gdx.files.local("out/b/shipSpecialized/" + output).exists()){
+                output = this.name = lang.word(++seed, true);
+            }
             System.out.println("Rendering " + output);
-            mm.rng.setSeed(seed);
+            mm.rng.setSeed(Hasher.botis.hashBulk64(output));
             byte[][][] voxelData = mm.shipLargeSmoothColorized();
             voxels = new VoxModel(voxelData, Coloring.BETTS64, Stuff.MATERIALS_B);
             renderer = new SpecialRenderer(voxels.grids.get(0).length, Stuff.STUFFS_B);
