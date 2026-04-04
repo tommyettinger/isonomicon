@@ -39,7 +39,7 @@ import java.util.ArrayList;
 public class ShipSpecialGenerator extends ApplicationAdapter {
     public static final int SCREEN_WIDTH = 512;//640;
     public static final int SCREEN_HEIGHT = 512;//720;
-    public static final boolean TURNTABLE = true;
+    public static final boolean TURNTABLE = false;
     private SpecialRenderer renderer;
     private VoxModel voxels;
     private String name;
@@ -51,7 +51,7 @@ public class ShipSpecialGenerator extends ApplicationAdapter {
     private Texture palette;
     public ShipSpecialGenerator(String[] args){
         VoxIOExtended.GENERAL = true;
-        VoxIOExtended.USE_MATERIALS = false;
+        VoxIOExtended.USE_MATERIALS = true;
         Tools3D.STUFFS = Stuff.STUFFS_B;
     }
 
@@ -95,7 +95,7 @@ public class ShipSpecialGenerator extends ApplicationAdapter {
         apng.setFlipY(false);
         gif.palette = analyzed = new QualityPalette();
         gif.setDitherStrength(AppConfig.STRENGTH);
-        long startTime = TimeUtils.nanoTime();
+        long startTime = TimeUtils.millis();
         long seed = Hasher.randomize3(startTime);
         ModelMaker mm = new ModelMaker(seed, new PaletteReducer());
 

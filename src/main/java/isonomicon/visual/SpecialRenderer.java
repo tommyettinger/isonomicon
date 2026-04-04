@@ -35,7 +35,7 @@ import static com.github.tommyettinger.digital.TrigTools.sinTurns;
  * unusual technique that stores a palette index in the R channel and a lightness adjustment in the G channel.
  */
 public class SpecialRenderer {
-    public static int shrink = 0;
+    public static int shrink = 1;
         public static float distortHXY = 2, distortVXY = 1, distortVZ = 3; // ground truth for isometric
 //    public static float distortHXY = 2, distortVXY = 0, distortVZ = 3; // side view
 //    public static float distortHXY = 2, distortVXY = 0.5f, distortVZ = 3; // partially elevated side view ("shallow")
@@ -60,6 +60,7 @@ public class SpecialRenderer {
 
     public static final byte DARKEN = (byte) 128;
     public static final byte LIGHTEN = (byte) 135;
+    public static final byte SHADOW_INDEX = (byte) 66;
 
     public static final CyclicNoise swirlNoise = new CyclicNoise(0xDEADBEEFBA77L, 6, 0.03f);
 
@@ -285,7 +286,7 @@ public class SpecialRenderer {
                         }
                     }
                     else {
-                        indices[ax][ay] = -16;
+                        indices[ax][ay] = SHADOW_INDEX;
                     }
 //                                Coloring.darken(palette[voxel & 255], 0.375f - emit);
 //                                Coloring.adjust(palette[voxel & 255], 0.625f + emit, neutral);
@@ -448,7 +449,7 @@ public class SpecialRenderer {
                             }
                         }
                         if(shadows){
-                            if(indices[sx][sy] == -16 && shadeZ[fx][fy] <= hs + 0.5f)
+                            if(indices[sx][sy] == SHADOW_INDEX && shadeZ[fx][fy] <= hs + 0.5f)
 //                            if(indices[sx][sy] == -16 && (vx <= step * 4 || vy <= step * 4 || vx >= xSize - step * 4 || vy >= ySize - step * 4))
                                 shading[sx][sy] = 1024f;
                         }
@@ -471,7 +472,7 @@ public class SpecialRenderer {
 //                            shade << 16 |
 //                            sat << 8 | 255);
                     int idx = (y >>> shrink) * palettePixmap.getWidth() + (x >>> shrink) << 2;
-                    if (shadows && index == -16) {
+                    if (shadows && index == SHADOW_INDEX) {
                         buffer.put(idx, (byte) 67); // shadow stuff
                         buffer.put(idx + 1, (byte) ((shade & 255) >>> 1));
                         buffer.put(idx + 2, (byte) 0);
@@ -702,7 +703,7 @@ public class SpecialRenderer {
                                         oy = ooy + ay;
                                         splat(ox * x_x + oy * y_x + oz * z_x + size + translateX,
                                                 ox * x_y + oy * y_y + oz * z_y + size + translateY,
-                                                0, x + ax, y + ay, 0, (byte) -16, frame);
+                                                0, x + ax, y + ay, 0, SHADOW_INDEX, frame);
                                     }
                                 }
                             }

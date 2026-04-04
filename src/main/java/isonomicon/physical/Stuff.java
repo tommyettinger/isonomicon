@@ -736,12 +736,16 @@ public class Stuff {
     };
     public static final IntObjectMap<VoxMaterial> MATERIALS_A = new IntObjectMap<>(256);
     public static final IntObjectMap<VoxMaterial> MATERIALS_B = new IntObjectMap<>(256);
+    public static final IntObjectMap<VoxMaterial> MATERIALS_C = new IntObjectMap<>(256);
     static {
         for (int i = 0; i < STUFFS.length; i++) {
             MATERIALS_A.put(i, STUFFS[i].material);
         }
         for (int i = 0; i < STUFFS.length; i++) {
             MATERIALS_B.put(i, STUFFS_B[i].material);
+        }
+        for (int i = 0; i < STUFFS.length; i++) {
+            MATERIALS_C.put(i, STUFFS_C[i].material);
         }
     }
 
