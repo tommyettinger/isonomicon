@@ -21,7 +21,6 @@ import com.github.tommyettinger.anim8.*;
 import com.github.tommyettinger.digital.Hasher;
 import com.github.yellowstonegames.text.Language;
 import isonomicon.io.LittleEndianDataInputStream;
-import isonomicon.io.VoxIO;
 import isonomicon.io.extended.VoxIOExtended;
 import isonomicon.io.extended.VoxModel;
 import isonomicon.physical.ModelMaker;
@@ -30,7 +29,6 @@ import isonomicon.physical.Tools3D;
 import isonomicon.visual.Coloring;
 import isonomicon.visual.ShaderUtils;
 import isonomicon.visual.SpecialRenderer;
-import isonomicon.visual.SpecialRenderer2024;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -41,7 +39,7 @@ public class ShipSpecialGenerator extends ApplicationAdapter {
     public static final int SCREEN_WIDTH = 512;//640;
     public static final int SCREEN_HEIGHT = 512;//720;
     public static final boolean TURNTABLE = false;
-    private SpecialRenderer2024 renderer;
+    private SpecialRenderer renderer;
     private VoxModel voxels;
     private String name;
     private FastPNG png;
@@ -107,7 +105,7 @@ public class ShipSpecialGenerator extends ApplicationAdapter {
             mm.rng.setSeed(seed);
             byte[][][] voxelData = mm.shipLargeSmoothColorized();
             voxels = new VoxModel(voxelData, Coloring.BETTS64, Stuff.MATERIALS_B);
-            renderer = new SpecialRenderer2024(voxels.grids.get(0).length, Stuff.STUFFS_B);
+            renderer = new SpecialRenderer(voxels.grids.get(0).length, Stuff.STUFFS_B);
             renderer.palette(Coloring.BETTS64);
             renderer.saturation(0f);
 
@@ -156,10 +154,13 @@ public class ShipSpecialGenerator extends ApplicationAdapter {
                 }
                 pm.insertRange(pm.size - 4, 4);
             }
-            analyzed.analyze(pm, 75.0, 256);
-            gif.palette = analyzed;
-            gif.write(Gdx.files.local("out/b/shipSpecialized/" + output + '/' + output + ".gif"), pm, 8);
             apng.write(Gdx.files.local("out/b/shipSpecialized/" + output + '/' + output + ".png"), pm, 8);
+            if(gif != null){
+                SpecialRenderer.monoAlpha(pm);
+                analyzed.analyze(pm, 75.0, 256);
+                gif.palette = analyzed;
+                gif.write(Gdx.files.local("out/b/shipSpecialized/" + output + '/' + output + ".gif"), pm, 8);
+            }
             for (Pixmap pix : pm) {
                 if (!pix.isDisposed())
                     pix.dispose();
@@ -193,10 +194,13 @@ public class ShipSpecialGenerator extends ApplicationAdapter {
                     pm.add(pixmap);
                     fb.dispose();
                 }
-                analyzed.analyze(pm, 75.0, 256);
-                gif.palette = analyzed;
-                gif.write(Gdx.files.local("out/b/shipSpecialized/" + output + '/' + output + "_Turntable.gif"), pm, 24);
                 apng.write(Gdx.files.local("out/b/shipSpecialized/" + output + '/' + output + "_Turntable.png"), pm, 24);
+                if(gif != null) {
+                    SpecialRenderer.monoAlpha(pm);
+                    analyzed.analyze(pm, 75.0, 256);
+                    gif.palette = analyzed;
+                    gif.write(Gdx.files.local("out/b/shipSpecialized/" + output + '/' + output + "_Turntable.gif"), pm, 24);
+                }
 //                gif.palette = aurora;
 //                gif.setDitherStrength(0.5_0f);
 //                gif.write(Gdx.files.local("out/b/specializedAurora/" + name + '/' + name + "_Turntable.gif"), pm, 24);
@@ -241,7 +245,7 @@ public class ShipSpecialGenerator extends ApplicationAdapter {
             }
             int nameStart = Math.max(name.lastIndexOf('/'), name.lastIndexOf('\\')) + 1;
             this.name = name.substring(nameStart, name.indexOf('.', nameStart));
-            renderer = new SpecialRenderer2024(voxels.grids.get(0).length, Stuff.STUFFS_B);
+            renderer = new SpecialRenderer(voxels.grids.get(0).length, Stuff.STUFFS_B);
             renderer.palette(Coloring.BETTS64);
             renderer.saturation(0f);
         } catch (FileNotFoundException e) {

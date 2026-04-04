@@ -8,7 +8,7 @@ public final class AppConfig {
 
     public static final DitherAlgorithm DITHER = DitherAlgorithm.GOURD;
     public static final float STRENGTH = 0.5f;
-    public static final boolean GRAY_BG = false;
+    public static final boolean GRAY_BG = true;
 
 //    public static final DitherAlgorithm DITHER = DitherAlgorithm.BANTER;
 //    public static final float STRENGTH = 0.3f;

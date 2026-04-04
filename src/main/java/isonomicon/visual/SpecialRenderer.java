@@ -61,7 +61,7 @@ public class SpecialRenderer {
     public static final byte DARKEN = (byte) 128;
     public static final byte LIGHTEN = (byte) 135;
     public static final byte FLOOR_INDEX = (byte) -16;
-    public static final byte SHADOW_INDEX = (byte) 67;
+    public static final byte SHADOW_INDEX = (byte) 66;
 
     public static final CyclicNoise swirlNoise = new CyclicNoise(0xDEADBEEFBA77L, 6, 0.03f);
 
@@ -474,7 +474,7 @@ public class SpecialRenderer {
 //                            sat << 8 | 255);
                     int idx = (y >>> shrink) * palettePixmap.getWidth() + (x >>> shrink) << 2;
                     if (shadows && index == FLOOR_INDEX) {
-                        buffer.put(idx, (byte) 67); // shadow stuff
+                        buffer.put(idx, SHADOW_INDEX); // shadow stuff
                         buffer.put(idx + 1, (byte) ((shade & 255) >>> 1));
                         buffer.put(idx + 2, (byte) 0);
 //                        buffer.put(idx + 3, (byte) (255 - shade));
