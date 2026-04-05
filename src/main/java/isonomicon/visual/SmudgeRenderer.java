@@ -33,7 +33,6 @@ public class SmudgeRenderer {
     public int shrink = 1;
     public float neutral = 1f;
     public IntObjectMap<VoxMaterial> materialMap;
-//    public long seed;
 
     public static final float fidget = 0f;
 

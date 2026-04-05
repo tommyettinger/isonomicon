@@ -20,6 +20,7 @@ import com.github.tommyettinger.anim8.*;
 import com.github.tommyettinger.digital.Hasher;
 import com.github.yellowstonegames.text.Language;
 import isonomicon.io.LittleEndianDataInputStream;
+import isonomicon.io.VoxIO;
 import isonomicon.io.extended.VoxIOExtended;
 import isonomicon.io.extended.VoxModel;
 import isonomicon.physical.ModelMaker;
@@ -27,6 +28,7 @@ import isonomicon.physical.Stuff;
 import isonomicon.physical.Tools3D;
 import isonomicon.visual.Coloring;
 import isonomicon.visual.ShaderUtils;
+import isonomicon.visual.SmudgeRenderer;
 import isonomicon.visual.SpecialRenderer;
 
 import java.io.FileInputStream;
@@ -34,11 +36,11 @@ import java.io.FileNotFoundException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
-public class ShipSpecialGenerator extends ApplicationAdapter {
+public class ShipSmudgeGenerator extends ApplicationAdapter {
     public static final int SCREEN_WIDTH = 512;//640;
     public static final int SCREEN_HEIGHT = 512;//720;
-    public static final boolean TURNTABLE = false;
-    private SpecialRenderer renderer;
+    public static final boolean TURNTABLE = true;
+    private SmudgeRenderer renderer;
     private VoxModel voxels;
     private String name;
     private FastPNG png;
@@ -47,7 +49,7 @@ public class ShipSpecialGenerator extends ApplicationAdapter {
     private QualityPalette analyzed;
     private SpriteBatch batch;
     private Texture palette;
-    public ShipSpecialGenerator(String[] args){
+    public ShipSmudgeGenerator(String[] args){
         VoxIOExtended.GENERAL = true;
         VoxIOExtended.USE_MATERIALS = false;
         Tools3D.STUFFS = Stuff.STUFFS_B;
@@ -83,14 +85,14 @@ public class ShipSpecialGenerator extends ApplicationAdapter {
 
         png = new FastPNG();
         png.setCompression(2); // we are likely to compress these with something better, like oxipng.
-        png.setFlipY(false);
+        png.setFlipY(true);
 //        png8 = new PNG8();
         gif = new AnimatedGif();
         gif.setDitherAlgorithm(AppConfig.DITHER);
-        gif.setFlipY(false);
+        gif.setFlipY(true);
         apng = new AnimatedPNG();
         apng.setCompression(2);
-        apng.setFlipY(false);
+        apng.setFlipY(true);
         gif.palette = analyzed = new QualityPalette();
         gif.setDitherStrength(AppConfig.STRENGTH);
         long startTime = TimeUtils.millis();
@@ -100,20 +102,19 @@ public class ShipSpecialGenerator extends ApplicationAdapter {
         for (int n = 0; n < 16; n++) {
             palette = new Texture(Gdx.files.local("assets/" + pals[n & 7]));
             String output = this.name = lang.word(seed = Hasher.randomize3(seed), true);
-            while (Gdx.files.local("out/b/shipSpecialized/" + output).exists()){
+            while (Gdx.files.local("out/b/shipSmudge/" + output).exists()){
                 output = this.name = lang.word(++seed, true);
             }
             System.out.println("Rendering " + output);
             mm.rng.setSeed(Hasher.botis.hashBulk64(output));
             byte[][][] voxelData = mm.shipLargeSmoothColorized();
             voxels = new VoxModel(voxelData, Coloring.BETTS64, Stuff.MATERIALS_B);
-            renderer = new SpecialRenderer(voxels.grids.get(0).length, Stuff.STUFFS_B);
+            renderer = new SmudgeRenderer(voxels.grids.get(0).length);
             renderer.palette(Coloring.BETTS64);
             renderer.saturation(0f);
 
 //            VoxIO.writeVOX("out/" + s, voxels, renderer.palette, VoxIO.lastMaterials);
 //            load("out/"+s);
-            Texture t = new Texture(renderer.palettePixmap.getWidth(), renderer.palettePixmap.getHeight(), Pixmap.Format.RGBA8888);
             Pixmap pixmap;
             Array<Pixmap> pm = new Array<>(128);
             ArrayList<byte[][][]> original = new ArrayList<>(voxels.grids.size());
@@ -129,39 +130,21 @@ public class ShipSpecialGenerator extends ApplicationAdapter {
                     for (int j = 0; j < voxels.grids.size(); j++) {
                         Stuff.evolve(Stuff.STUFFS_B, voxels.grids.get(j), f);
                     }
-                    renderer.drawModelSimple(voxels, i * 0.125f, 0f, 0f, f, 0, 0, 0);
-                    t.draw(renderer.palettePixmap, 0, 0);
-                    FrameBuffer fb = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), false);
-                    fb.begin();
-                    palette.bind(1);
-                    ScreenUtils.clear(Color.CLEAR);
-                    batch.begin();
+                    pixmap = renderer.drawSplats(voxels.grids.get(0), i * 0.125f, f, VoxIO.lastMaterials);
+                    Pixmap p = new Pixmap(pixmap.getWidth(), pixmap.getHeight(), pixmap.getFormat());
+                    p.drawPixmap(pixmap, 0, 0);
+                    pm.add(p);
 
-                    indexShader.setUniformi("u_texPalette", 1);
-                    Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
-                    batch.setColor(0f, 0.5f, 0.5f, 1f);
-
-                    batch.draw(t, 0, 0, t.getWidth(), t.getHeight());
-                    batch.end();
-
-//                    pixmap = Pixmap.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
-                    //// The above is equivalent to the following, but the above also fills the pixmap.
-                    pixmap = createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
-
-                    fb.end();
-                    pm.add(pixmap);
-                    png.write(Gdx.files.local("out/b/shipSpecialized/" + output + '/' + output + "_angle" + i + "_" + f + ".png"), pixmap);
-                    png.write(Gdx.files.local("out/b/shipSpecial_lab/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
-                    fb.dispose();
+                    png.write(Gdx.files.local("out/b/shipSmudge/" + output + '/' + output + "_angle" + i + "_" + f + ".png"), pixmap);
                 }
                 pm.insertRange(pm.size - 4, 4);
             }
-            apng.write(Gdx.files.local("out/b/shipSpecialized/" + output + '/' + output + ".png"), pm, 8);
+            apng.write(Gdx.files.local("out/b/shipSmudge/" + output + '/' + output + ".png"), pm, 8);
             if(gif != null){
                 SpecialRenderer.monoAlpha(pm);
                 analyzed.analyze(pm, 75.0, 256);
                 gif.palette = analyzed;
-                gif.write(Gdx.files.local("out/b/shipSpecialized/" + output + '/' + output + ".gif"), pm, 8);
+                gif.write(Gdx.files.local("out/b/shipSmudge/" + output + '/' + output + ".gif"), pm, 8);
             }
             for (Pixmap pix : pm) {
                 if (!pix.isDisposed())
@@ -174,47 +157,28 @@ public class ShipSpecialGenerator extends ApplicationAdapter {
                     voxels.grids.add(Tools3D.deepCopy(original.get(j)));
                 }
                 for (int i = 0; i < 128; i++) {
-                    for (int j = 0; j < voxels.grids.size(); j++) {
-                        Stuff.evolve(Stuff.STUFFS_B, voxels.grids.get(j), i);
+                    if((i & 7) == 7) {
+                        for (int j = 0; j < voxels.grids.size(); j++) {
+                            Stuff.evolve(Stuff.STUFFS_B, voxels.grids.get(j), i);
+                        }
                     }
-                    renderer.drawModelSimple(voxels, i * 0x1p-7f + 0.125f, 0f, 0f, i, 0, 0, 0);
-                    t.draw(renderer.palettePixmap, 0, 0);
-                    FrameBuffer fb = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), false);
-                    fb.begin();
-                    palette.bind(1);
-                    ScreenUtils.clear(Color.CLEAR);
-                    batch.begin();
-
-                    indexShader.setUniformi("u_texPalette", 1);
-                    Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
-                    batch.setColor(0f, 0.5f, 0.5f, 1f);
-
-                    batch.draw(t, 0, 0, t.getWidth(), t.getHeight());
-                    batch.end();
-                    pixmap = createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
-                    fb.end();
-                    pm.add(pixmap);
-                    fb.dispose();
+                    pixmap = renderer.drawSplats(voxels.grids.get(0), i * 0x1p-7f + 0.125f, i >>> 3, VoxIO.lastMaterials);
+                    Pixmap p = new Pixmap(pixmap.getWidth(), pixmap.getHeight(), pixmap.getFormat());
+                    p.drawPixmap(pixmap, 0, 0);
+                    pm.add(p);
                 }
-                apng.write(Gdx.files.local("out/b/shipSpecialized/" + output + '/' + output + "_Turntable.png"), pm, 24);
+                apng.write(Gdx.files.local("out/b/shipSmudge/" + output + '/' + output + "_Turntable.png"), pm, 24);
                 if(gif != null) {
                     SpecialRenderer.monoAlpha(pm);
                     analyzed.analyze(pm, 75.0, 256);
                     gif.palette = analyzed;
-                    gif.write(Gdx.files.local("out/b/shipSpecialized/" + output + '/' + output + "_Turntable.gif"), pm, 24);
+                    gif.write(Gdx.files.local("out/b/shipSmudge/" + output + '/' + output + "_Turntable.gif"), pm, 24);
                 }
-//                gif.palette = aurora;
-//                gif.setDitherStrength(0.5_0f);
-//                gif.write(Gdx.files.local("out/b/specializedAurora/" + name + '/' + name + "_Turntable.gif"), pm, 24);
-//                gif.palette = low;
-//                gif.setDitherStrength(0.375f);
-//                gif.write(Gdx.files.local("out/b/specializedLow/" + name + '/' + name + "_Turntable.gif"), pm, 24);
                 for (Pixmap pix : pm) {
                     if (!pix.isDisposed())
                         pix.dispose();
                 }
             }
-            t.dispose();
         }
         System.out.println("Finished in " + TimeUtils.timeSinceMillis(startTime) * 0.001 + " seconds.");
         Gdx.app.exit();
@@ -233,7 +197,7 @@ public class ShipSpecialGenerator extends ApplicationAdapter {
         config.useVsync(true);
         config.setResizable(false);
         config.disableAudio(true);
-        final ShipSpecialGenerator app = new ShipSpecialGenerator(arg);
+        final ShipSmudgeGenerator app = new ShipSmudgeGenerator(arg);
         new Lwjgl3Application(app, config);
     }
 
@@ -247,7 +211,7 @@ public class ShipSpecialGenerator extends ApplicationAdapter {
             }
             int nameStart = Math.max(name.lastIndexOf('/'), name.lastIndexOf('\\')) + 1;
             this.name = name.substring(nameStart, name.indexOf('.', nameStart));
-            renderer = new SpecialRenderer(voxels.grids.get(0).length, Stuff.STUFFS_B);
+            renderer = new SmudgeRenderer(voxels.grids.get(0).length);
             renderer.palette(Coloring.BETTS64);
             renderer.saturation(0f);
         } catch (FileNotFoundException e) {

@@ -4,6 +4,7 @@ import com.badlogic.gdx.*;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3WindowAdapter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -100,7 +101,7 @@ public class ModelRotationVisualizerNew extends ApplicationAdapter {
 //        indexShader.setUniformi("u_texPalette", 1);
 //        pmTexture.bind(0);
 //        batch.setColor(0f, 0.5f, 0.5f, 1f);
-        batch.setPackedColor(-0x1.fffffep126f); // white as a packed float, resets any color changes that the renderer made
+        batch.setPackedColor(Color.WHITE_FLOAT_BITS);
         batch.draw(pmTexture, 0, pmTexture.getHeight(), pmTexture.getWidth(), -pmTexture.getHeight());
         batch.end();
 
