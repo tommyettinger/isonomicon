@@ -152,7 +152,7 @@ public class SmudgeRenderer {
 //                        colorL[ax][ay] < paletteL[voxel & 255]
                         (materials[ax][ay] == null || materials[ax][ay].getTrait(VoxMaterial.MaterialTrait._priority)
                                 <= m.getTrait(VoxMaterial.MaterialTrait._priority))
-                )) && (alpha == 0f)) {
+                )) && (alpha < 1f)) {
                     drawn = true;
                     colorL[ax][ay] = paletteL[voxel & 255];
                     colorA[ax][ay] = paletteA[voxel & 255];
