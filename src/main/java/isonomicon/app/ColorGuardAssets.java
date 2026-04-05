@@ -32,10 +32,10 @@ import java.io.FileNotFoundException;
 
 public class ColorGuardAssets extends ApplicationAdapter {
     public static boolean DIVERSE = false;
-    public static boolean ATTACKS = false;
+    public static boolean ATTACKS = true;
     public static boolean DEATHS = false;
     public static boolean EXPLOSION = true;
-    public static boolean TERRAIN = false;
+    public static boolean TERRAIN = true;
     public static final String SPECIES = "human";
     public static final String SPECIES_PREFIX = "";
     public static final float DAMAGED = 0f;
@@ -45,13 +45,14 @@ public class ColorGuardAssets extends ApplicationAdapter {
 
     public static boolean PNG = true;
     public static boolean APNG = false;
-    public static boolean GIF = false;
-    public static boolean VOX = true;
+    public static boolean GIF = true;
+    public static boolean VOX = false;
 
 //    public static final String outDir = "out/color_guard";
 //    public static final String outDir = "out/cg";
 //    public static final String outDir = "out/cg_July_23_2024";
-    public static final String outDir = "out/cg_" + SPECIES + (DAMAGED > 0f ? "_damaged" : "");
+    public static final String outDir = "out/cg_gray_" + SPECIES + (DAMAGED > 0f ? "_damaged" : "");
+//    public static final String outDir = "out/cg_" + SPECIES + (DAMAGED > 0f ? "_damaged" : "");
 //    public static final String outDir = "out/cg_small_" + SPECIES + (DAMAGED > 0f ? "_damaged" : "");
 //    public static final String outDir = "out/cg_small_Gourd_0_3";
 //    public static final String outDir = "out/cg_Gourd_0_3";

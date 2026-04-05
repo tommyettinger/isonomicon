@@ -37,11 +37,11 @@ public class VoxIOExtended {
     /**
      * If this should scale up the voxels by a factor of 2, this should be true.
      */
-    public static boolean SCALE = false;
+    public static boolean SCALE = true;
     /**
      * If this should call {@link Tools3D#soak} or a related method on the voxels, this should be true.
      */
-    public static boolean SOAK = false;
+    public static boolean SOAK = true;
     /**
      * Can be set to false if old or incorrectly-made models need to be loaded.
      */
