@@ -113,8 +113,6 @@ public class ShipSmudgeGenerator extends ApplicationAdapter {
             renderer.palette(Coloring.BETTS64);
             renderer.saturation(0f);
 
-//            VoxIO.writeVOX("out/" + s, voxels, renderer.palette, VoxIO.lastMaterials);
-//            load("out/"+s);
             Pixmap pixmap;
             Array<Pixmap> pm = new Array<>(128);
             ArrayList<byte[][][]> original = new ArrayList<>(voxels.grids.size());
@@ -130,7 +128,7 @@ public class ShipSmudgeGenerator extends ApplicationAdapter {
                     for (int j = 0; j < voxels.grids.size(); j++) {
                         Stuff.evolve(Stuff.STUFFS_B, voxels.grids.get(j), f);
                     }
-                    pixmap = renderer.drawSplats(voxels.grids.get(0), i * 0.125f, f, VoxIO.lastMaterials);
+                    pixmap = renderer.drawSplats(voxels.grids.get(0), i * 0.125f, f, Stuff.MATERIALS_B);
                     Pixmap p = new Pixmap(pixmap.getWidth(), pixmap.getHeight(), pixmap.getFormat());
                     p.drawPixmap(pixmap, 0, 0);
                     pm.add(p);
@@ -162,7 +160,7 @@ public class ShipSmudgeGenerator extends ApplicationAdapter {
                             Stuff.evolve(Stuff.STUFFS_B, voxels.grids.get(j), i);
                         }
                     }
-                    pixmap = renderer.drawSplats(voxels.grids.get(0), i * 0x1p-7f + 0.125f, i >>> 3, VoxIO.lastMaterials);
+                    pixmap = renderer.drawSplats(voxels.grids.get(0), i * 0x1p-7f + 0.125f, i >>> 3, Stuff.MATERIALS_B);
                     Pixmap p = new Pixmap(pixmap.getWidth(), pixmap.getHeight(), pixmap.getFormat());
                     p.drawPixmap(pixmap, 0, 0);
                     pm.add(p);

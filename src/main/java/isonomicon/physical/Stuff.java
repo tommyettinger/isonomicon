@@ -741,10 +741,10 @@ public class Stuff {
         for (int i = 0; i < STUFFS.length; i++) {
             MATERIALS_A.put(i, STUFFS[i].material);
         }
-        for (int i = 0; i < STUFFS.length; i++) {
+        for (int i = 0; i < STUFFS_B.length; i++) {
             MATERIALS_B.put(i, STUFFS_B[i].material);
         }
-        for (int i = 0; i < STUFFS.length; i++) {
+        for (int i = 0; i < STUFFS_C.length; i++) {
             MATERIALS_C.put(i, STUFFS_C[i].material);
         }
     }
