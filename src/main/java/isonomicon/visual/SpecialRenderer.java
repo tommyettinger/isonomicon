@@ -48,6 +48,7 @@ public class SpecialRenderer {
     public byte[][] outlines;
     public VoxMaterial[][] materials;
     public float[][] shadeX, shadeZ, shading, midShading, outlineShading, saturation;
+    public boolean[][] floorShade;
     public byte[][] indices, outlineIndices, lightIndices;
     public int[] palette;
     public float[] paletteL, paletteA, paletteB;
@@ -100,6 +101,7 @@ public class SpecialRenderer {
         voxels = fill(-1, w, h);
         shadeX = fill(-1f, size * 4, size * 4);
         shadeZ = fill(-1f, size * 4, size * 4);
+        floorShade = fill(false, size * 4, size * 4);
         this.stuffs = stuffs;
 
         if(computeNormals)
@@ -262,7 +264,7 @@ public class SpecialRenderer {
                 xx = (int)(0.5f + Math.max(0, (size + yPos - xPos) * distortHXY + 1)),
                 yy = (int)(0.5f + Math.max(0, (zPos * distortVZ + size * ((distortVXY) * 3) - distortVXY * (xPos + yPos)) + 1 + rise * frame)),
                 depth = (int)(0.5f + (xPos + yPos) * distortHXY + zPos * distortVZ);
-        boolean drawn = false;
+        boolean drawn = false, drawnEmit = false;
         final float hs = size * 0.5f;
         for (int x = lowX, ax = xx; x < highX && ax < render.length; x++, ax++) {
             if (ax < 0) continue;
@@ -271,6 +273,7 @@ public class SpecialRenderer {
                         (indices[ax][ay] == 0 || stuffs[Math.min((indices[ax][ay] & 255), stuffs.length - 1)].material.getTrait(VoxMaterial.MaterialTrait._priority)
                                 <= stuffs[Math.min((voxel & 255), stuffs.length - 1)].material.getTrait(VoxMaterial.MaterialTrait._priority))))) {
                     drawn = true;
+                    drawnEmit = emit != 0f;
                     depths[ax][ay] = depth;
                     materials[ax][ay] = m;
                     if(voxel != 0) {
@@ -306,7 +309,8 @@ public class SpecialRenderer {
         }
         if(xPos < -hs || yPos < -hs || zPos < -hs || xPos + hs > shadeZ.length || yPos + hs > shadeZ[0].length || zPos + hs > shadeX[0].length)
             System.out.println(xPos + ", " + yPos + ", " + zPos + " is out of bounds");
-        else if(drawn && emit == 0f) {
+        else if(drawn && (!drawnEmit && voxel != SHADOW_INDEX)) {
+            floorShade[(int) (hs + xPos)][(int) (hs + yPos)] = true;
             shadeZ[(int) (hs + xPos)][(int) (hs + yPos)] = Math.max(shadeZ[(int) (hs + xPos)][(int) (hs + yPos)], (hs + zPos));
             shadeX[(int) (hs + yPos)][(int) (hs + zPos)] = Math.max(shadeX[(int) (hs + yPos)][(int) (hs + zPos)], (hs + xPos));
         }
@@ -324,6 +328,7 @@ public class SpecialRenderer {
         fill(voxels, -1);
         fill(shadeX, -1f);
         fill(shadeZ, -1f);
+        fill(floorShade, false);
         fill(shading, 0f);
         fill(midShading, 0f);
         fill(saturation, 0f);
@@ -450,9 +455,9 @@ public class SpecialRenderer {
                             }
                         }
                         if(shadows){
-                            if(indices[sx][sy] == FLOOR_INDEX && shadeZ[fx][fy] <= hs + 0.5f)
-//                            if(indices[sx][sy] == -16 && (vx <= step * 4 || vy <= step * 4 || vx >= xSize - step * 4 || vy >= ySize - step * 4))
+                            if(indices[sx][sy] == FLOOR_INDEX && !floorShade[fx][fy]) {
                                 shading[sx][sy] = 1024f;
+                            }
                         }
                     }
                 }
@@ -464,8 +469,8 @@ public class SpecialRenderer {
             for (int y = ySize; y >= 0; y--) {
                 if ((index = indices[x][y]) != 0) {
                     sh = shading[x][y];
-                    if(sh >= 1000f)
-                        continue;
+//                    if(sh >= 1000f)
+//                        continue;
                     byte shade = (byte) (Math.min(Math.max((sh + logisticky(midShading[x][y])) * 0.625f + 0.1328125f, 0f), 1f) * 255.999f);
 //                    byte shade = (byte) (Math.min(Math.max((sh + midShading[x][y]) * 0.625f + 0.1328125f, 0f), 1f) * 255.999f);
                     byte sat = (byte) (Math.min(Math.max((saturation[x][y]) * 0.5f + 0.5f, 0f), 1f) * 255.999f);
@@ -609,6 +614,7 @@ public class SpecialRenderer {
         fill(voxels, -1);
         fill(shadeX, -1f);
         fill(shadeZ, -1f);
+        fill(floorShade, false);
         for (int i = 0; i < materials.length; i++) {
             Arrays.fill(materials[i], null);
         }
