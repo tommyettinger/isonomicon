@@ -52,6 +52,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //    public static final String outDir = "out/cg";
 //    public static final String outDir = "out/cg_July_23_2024";
     public static final String outDir = "out/cg_gray_" + SPECIES + (DAMAGED > 0f ? "_damaged" : "");
+//    public static final String outDir = "out/cg_unsoaked_" + SPECIES + (DAMAGED > 0f ? "_damaged" : "");
 //    public static final String outDir = "out/cg_" + SPECIES + (DAMAGED > 0f ? "_damaged" : "");
 //    public static final String outDir = "out/cg_small_" + SPECIES + (DAMAGED > 0f ? "_damaged" : "");
 //    public static final String outDir = "out/cg_small_Gourd_0_3";
@@ -75,6 +76,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
     private int[] palette0 = new int[256];
 
     public ColorGuardAssets() {
+        VoxIOExtended.GENERAL = false;
         armies = new String[]{
                 "Dark",
                 "White",

@@ -35,7 +35,7 @@ import static com.github.tommyettinger.digital.TrigTools.sinTurns;
  * unusual technique that stores a palette index in the R channel and a lightness adjustment in the G channel.
  */
 public class SpecialRenderer {
-    public static int shrink = 1;
+    public static int shrink = 2;
         public static float distortHXY = 2, distortVXY = 1, distortVZ = 3; // ground truth for isometric
 //    public static float distortHXY = 2, distortVXY = 0, distortVZ = 3; // side view
 //    public static float distortHXY = 2, distortVXY = 0.5f, distortVZ = 3; // partially elevated side view ("shallow")
@@ -52,7 +52,7 @@ public class SpecialRenderer {
     public int[] palette;
     public float[] paletteL, paletteA, paletteB;
     public int outline = 4;
-    public boolean variance = true;
+    public boolean variance = false;
     public boolean lighting = true;
     public boolean shadows = Tools3D.SHADOWS;
     public int size;
@@ -394,11 +394,11 @@ public class SpecialRenderer {
                     final float emit = m.getTrait(VoxMaterial.MaterialTrait._emit);
                     if(variance) {
                         final float dapple = m.getTrait(VoxMaterial.MaterialTrait._dapple);
-                        final float vary = m.getTrait(VoxMaterial.MaterialTrait._vary) * 10f;
                         if (dapple != 0f) {
                             final float d = dapple * bnBlocky(vx, vy, vz);
                             shading[sx][sy] += d;
                         }
+                        final float vary = m.getTrait(VoxMaterial.MaterialTrait._vary) * 10f;
                         if (vary != 0f) {
                             saturation[sx][sy] = Math.min(Math.max(vary * bnBlocky(vy, vz, vx), -1f), 1f);
                         }
@@ -450,7 +450,7 @@ public class SpecialRenderer {
                             }
                         }
                         if(shadows){
-                            if(indices[sx][sy] == FLOOR_INDEX && shadeZ[fx][fy] <= hs + 0.5f)
+                            if(indices[sx][sy] != 0 && shadeZ[fx][fy] <= hs + 0.5f)
 //                            if(indices[sx][sy] == -16 && (vx <= step * 4 || vy <= step * 4 || vx >= xSize - step * 4 || vy >= ySize - step * 4))
                                 shading[sx][sy] = 1024f;
                         }
