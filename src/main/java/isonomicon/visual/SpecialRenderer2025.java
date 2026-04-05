@@ -616,11 +616,10 @@ public class SpecialRenderer2025 {
     public static void monoAlpha(Pixmap pm) {
         final ByteBuffer buffer = pm.getPixels();
         final int limit = buffer.limit();
-        int alpha, rgba;
+        int rgba;
         for (int i = 3; i < limit; i += 4) {
-            if((alpha = buffer.get(i)) != -1) {
-                rgba = buffer.getInt(i - 3);
-                buffer.putInt(i - 3, Coloring.lerp(0xC0C0C0FF, rgba | 255, (alpha & 255) / 255f));
+            if(((rgba = buffer.getInt(i - 3)) & 255) != 255) {
+                buffer.putInt(i - 3, Coloring.lerp(0xC0C0C0FF, rgba | 255, (rgba & 255) / 255f));
             }
         }
     }

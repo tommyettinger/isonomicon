@@ -616,24 +616,12 @@ public class SpecialRenderer {
     }
 
     public static void monoAlpha(Pixmap pm) {
-//        Pixmap bg = new Pixmap(pm.getWidth(), pm.getHeight(), Pixmap.Format.RGBA8888);
-//        bg.setColor(0xC0C0C0FF);
-//        bg.setBlending(Pixmap.Blending.SourceOver);
-//        bg.drawPixmap(pm, 0, 0);
-//        pm.setBlending(Pixmap.Blending.SourceOver);
-//        pm.drawPixmap(bg, 0, 0);
-//        bg.dispose();
-
         final ByteBuffer buffer = pm.getPixels();
         final int limit = buffer.limit();
-        int alpha, rgba, target;
+        int rgba;
         for (int i = 3; i < limit; i += 4) {
-            if((alpha = buffer.get(i)) != -1) {
-                rgba = buffer.getInt(i - 3);
-                target = Coloring.lerp(0xC0C0C0FF, rgba | 255, (alpha & 255) / 255f);
-//                if(rgba != 0)
-//                    System.out.printf("Translucent color 0x%08X is being lerped to 0x%08X\n", rgba, target);
-                buffer.putInt(i - 3, target);
+            if(((rgba = buffer.getInt(i - 3)) & 255) != 255) {
+                buffer.putInt(i - 3, Coloring.lerp(0xC0C0C0FF, rgba | 255, (rgba & 255) / 255f));
             }
         }
     }
