@@ -52,7 +52,7 @@ public class SpecialRenderer {
     public int[] palette;
     public float[] paletteL, paletteA, paletteB;
     public int outline = 4;
-    public boolean variance = false;
+    public boolean variance = true;
     public boolean lighting = true;
     public boolean shadows = Tools3D.SHADOWS;
     public int size;
@@ -251,11 +251,11 @@ public class SpecialRenderer {
 //            lowX = lowY = 1;
 //            highX = highY = 3;
 //        } else
-            if(flow != 0f) {
-                float ns = Stuff.noise.getConfiguredNoise(xPos, yPos, zPos, frame * flow);
-                if (ns > 0) highX = (int) (4.5 + ns * (3 << shrink));
-                else if (ns < 0) lowX = Math.round(lowX + ns * (3 << shrink));
-            }
+        if(flow != 0f) {
+            float ns = Stuff.noise.getConfiguredNoise(xPos, yPos, zPos, frame * flow);
+            if (ns > 0) highX = (int) (4.5 + ns * (3 << shrink));
+            else if (ns < 0) lowX = Math.round(lowX + ns * (3 << shrink));
+        }
         xPos += fidget;
         yPos += fidget;
         final int
@@ -450,7 +450,7 @@ public class SpecialRenderer {
                             }
                         }
                         if(shadows){
-                            if(indices[sx][sy] != 0 && shadeZ[fx][fy] <= hs + 0.5f)
+                            if(indices[sx][sy] == FLOOR_INDEX && shadeZ[fx][fy] <= hs + 0.5f)
 //                            if(indices[sx][sy] == -16 && (vx <= step * 4 || vy <= step * 4 || vx >= xSize - step * 4 || vy >= ySize - step * 4))
                                 shading[sx][sy] = 1024f;
                         }

@@ -26,7 +26,6 @@ import isonomicon.physical.Tools3D;
 import isonomicon.visual.Coloring;
 import isonomicon.visual.ShaderUtils;
 import isonomicon.visual.SpecialRenderer;
-import isonomicon.visual.SpecialRenderer2025;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -37,12 +36,12 @@ public class ColorGuardAssets extends ApplicationAdapter {
     public static boolean DEATHS = false;
     public static boolean EXPLOSION = true;
     public static boolean TERRAIN = true;
-//    public static final String SPECIES = "human";
-//    public static final String SPECIES_PREFIX = "";
-//    public static final float DAMAGED = 0f;
-    public static final String SPECIES = "zombie";
-    public static final String SPECIES_PREFIX = "Zombie_";
-    public static final float DAMAGED = 0.65f;
+    public static final String SPECIES = "human";
+    public static final String SPECIES_PREFIX = "";
+    public static final float DAMAGED = 0f;
+//    public static final String SPECIES = "zombie";
+//    public static final String SPECIES_PREFIX = "Zombie_";
+//    public static final float DAMAGED = 0.65f;
 
     public static boolean PNG = true;
     public static boolean APNG = false;
@@ -64,7 +63,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
 
     public static final int SCREEN_WIDTH = 512;//640;
     public static final int SCREEN_HEIGHT = 512;//720;
-    private SpecialRenderer2025 renderer;
+    private SpecialRenderer renderer;
     private VoxModel voxels, head;
     private VoxModel[] frames = new VoxModel[8];
     private String name;
@@ -591,7 +590,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
         {
             voxels = new VoxModel();
 //            SpecialRenderer.shrink = 1;
-            renderer = new SpecialRenderer2025(120, Stuff.STUFFS_B);
+            renderer = new SpecialRenderer(120, Stuff.STUFFS_B);
             renderer.palette(Coloring.BETTS64);
             renderer.saturation(0f);
             voxels.links.clear();
@@ -760,7 +759,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //            renderer = new NextRenderer(voxels.length, QUALITY);
 //            renderer = new AngledRenderer(voxels.length);
 //            SpecialRenderer.shrink = 1;
-            renderer = new SpecialRenderer2025(voxels.grids.get(0).length, Stuff.STUFFS_B);
+            renderer = new SpecialRenderer(voxels.grids.get(0).length, Stuff.STUFFS_B);
             renderer.palette(Coloring.BETTS64);
             renderer.saturation(0f);
             
