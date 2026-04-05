@@ -4,10 +4,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.Gdx2DPixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
@@ -48,7 +45,7 @@ public class ShipSmudgeGenerator extends ApplicationAdapter {
     private AnimatedPNG apng;
     private QualityPalette analyzed;
     private SpriteBatch batch;
-    private Texture palette;
+    private PaletteReducer palette;
     public ShipSmudgeGenerator(String[] args){
         VoxIOExtended.GENERAL = true;
         VoxIOExtended.USE_MATERIALS = false;
@@ -67,14 +64,14 @@ public class ShipSmudgeGenerator extends ApplicationAdapter {
     public void create() {
 
         String[] pals = {
-                "palettes/b/ColorGuardBaseBlue.png",
-                "palettes/b/ColorGuardBaseDark.png",
-                "palettes/b/ColorGuardBaseGreen.png",
-                "palettes/b/ColorGuardBaseOrange.png",
-                "palettes/b/ColorGuardBasePurple.png",
-                "palettes/b/ColorGuardBaseRed.png",
-                "palettes/b/ColorGuardBaseWhite.png",
-                "palettes/b/ColorGuardBaseYellow.png",
+                "assets/palettes/b/ColorGuardBaseBlue.png",
+                "assets/palettes/b/ColorGuardBaseDark.png",
+                "assets/palettes/b/ColorGuardBaseGreen.png",
+                "assets/palettes/b/ColorGuardBaseOrange.png",
+                "assets/palettes/b/ColorGuardBasePurple.png",
+                "assets/palettes/b/ColorGuardBaseRed.png",
+                "assets/palettes/b/ColorGuardBaseWhite.png",
+                "assets/palettes/b/ColorGuardBaseYellow.png",
         };
 
         Language lang = Language.randomLanguage(1234567890L).mix(Language.MALAY, 0.6f).removeAccents();
@@ -100,7 +97,7 @@ public class ShipSmudgeGenerator extends ApplicationAdapter {
         ModelMaker mm = new ModelMaker(seed, new PaletteReducer());
 
         for (int n = 0; n < 16; n++) {
-            palette = new Texture(Gdx.files.local("assets/" + pals[n & 7]));
+            palette = new PaletteReducer(new Pixmap(Gdx.files.local(pals[n & 7])), 0.0);
             String output = this.name = lang.word(seed = Hasher.randomize3(seed), true);
             while (Gdx.files.local("out/b/shipSmudge/" + output).exists()){
                 output = this.name = lang.word(++seed, true);
@@ -110,7 +107,7 @@ public class ShipSmudgeGenerator extends ApplicationAdapter {
             byte[][][] voxelData = mm.shipLargeSmoothColorized();
             voxels = new VoxModel(voxelData, Coloring.BETTS64, Stuff.MATERIALS_B);
             renderer = new SmudgeRenderer(voxels.grids.get(0).length);
-            renderer.palette(Coloring.BETTS64);
+            renderer.palette(palette);
             renderer.saturation(0f);
 
             Pixmap pixmap;
@@ -210,7 +207,7 @@ public class ShipSmudgeGenerator extends ApplicationAdapter {
             int nameStart = Math.max(name.lastIndexOf('/'), name.lastIndexOf('\\')) + 1;
             this.name = name.substring(nameStart, name.indexOf('.', nameStart));
             renderer = new SmudgeRenderer(voxels.grids.get(0).length);
-            renderer.palette(Coloring.BETTS64);
+            renderer.palette(palette);
             renderer.saturation(0f);
         } catch (FileNotFoundException e) {
             voxels = new VoxModel();
