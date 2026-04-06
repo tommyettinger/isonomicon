@@ -270,11 +270,11 @@ public class SpecialRenderer {
                 if ((depth > depths[ax][ay] || (depth == depths[ax][ay] &&
                         (indices[ax][ay] == 0 || stuffs[Math.min((indices[ax][ay] & 255), stuffs.length - 1)].material.getTrait(VoxMaterial.MaterialTrait._priority)
                                 <= stuffs[Math.min((voxel & 255), stuffs.length - 1)].material.getTrait(VoxMaterial.MaterialTrait._priority))))) {
-                    drawn = true;
-                    drawnEmit = emit != 0f;
                     depths[ax][ay] = depth;
                     materials[ax][ay] = m;
                     if(voxel != 0) {
+                        drawn = true;
+                        drawnEmit = emit != 0f;
                         indices[ax][ay] = voxel;
                         if (emit == 0f) {
                             outlines[ax][ay] = 1;
@@ -450,26 +450,14 @@ public class SpecialRenderer {
                                 }
                             }
                         }
-                    }
-                }
-            }
-        }
-        if(lighting && shadows){
-            for (int sx = 0; sx <= xSize; sx++) {
-                for (int sy = ySize; sy >= 0; sy--) {
-                    if ((v = voxels[sx][sy]) != -1) {
-                        vx = v & 0x3FF;
-                        vy = v >>> 10 & 0x3FF;
-                        vz = v >>> 20 & 0x3FF;
-                        ox = vx - hsp;
-                        oy = vy - hsp;
-                        oz = vz - hs;
-                        tx = ox * x_x + oy * y_x + oz * z_x + size + hs;
-                        fx = (int) (tx);
-                        ty = ox * x_y + oy * y_y + oz * z_y + size + hs;
-                        fy = (int) (ty);
-                        if (indices[sx][sy] == FLOOR_INDEX && shadeZ[fx][fy] == -1) {
-                            shading[sx][sy] = 1024f;
+                        if(shadows){
+                            if (shadeZ[fx][fy] <= -1) {
+                                if(indices[sx][sy] == FLOOR_INDEX)
+                                    shading[sx][sy] = 1024f;
+                                else{
+                                    System.out.println("shadeZ is " + shadeZ[fx][fy] + " for stuff " + stuffs[indices[sx][sy] & 0xFF].name + " at pixel " + sx + "," + sy + " and voxel " + fx + "," + fy + "," + fz);
+                                }
+                            }
                         }
                     }
                 }

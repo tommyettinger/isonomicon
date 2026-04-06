@@ -34,8 +34,8 @@ public class ColorGuardAssets extends ApplicationAdapter {
     public static boolean DIVERSE = false;
     public static boolean ATTACKS = true;
     public static boolean DEATHS = false;
-    public static boolean EXPLOSION = true;
-    public static boolean TERRAIN = true;
+    public static boolean EXPLOSION = false;
+    public static boolean TERRAIN = false;
     public static final String SPECIES = "human";
     public static final String SPECIES_PREFIX = "";
     public static final float DAMAGED = 0f;
@@ -103,7 +103,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.name.equals("Light_Tank")).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.name.startsWith("Terrain")).toList();
 //        ColorGuardData.units = ColorGuardData.units.subList(52, ColorGuardData.units.size());
-        ColorGuardData.units = ColorGuardData.units.subList(0, 2);
+        ColorGuardData.units = ColorGuardData.units.subList(0, 1);
 //        ColorGuardData.units = ColorGuardData.units.subList(6, 9);
 //        ColorGuardData.units = ColorGuardData.units.subList(0, 11);
         try {
