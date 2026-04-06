@@ -452,11 +452,8 @@ public class SpecialRenderer {
                         }
                         if(shadows){
                             if (shadeZ[fx][fy] <= -1) {
-                                if(indices[sx][sy] == FLOOR_INDEX)
+//                                if(indices[sx][sy] == FLOOR_INDEX)
                                     shading[sx][sy] = 1024f;
-                                else{
-                                    System.out.println("shadeZ is " + shadeZ[fx][fy] + " for stuff " + stuffs[indices[sx][sy] & 0xFF].name + " at pixel " + sx + "," + sy + " and voxel " + fx + "," + fy + "," + fz);
-                                }
                             }
                         }
                     }
