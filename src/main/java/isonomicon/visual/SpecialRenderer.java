@@ -308,10 +308,6 @@ public class SpecialRenderer {
         else if (drawn && !drawnEmit) {
             shadeZ[(int) (hs + xPos)][(int) (hs + yPos)] = Math.max(shadeZ[(int) (hs + xPos)][(int) (hs + yPos)], (hs + zPos));
             shadeX[(int) (hs + yPos)][(int) (hs + zPos)] = Math.max(shadeX[(int) (hs + yPos)][(int) (hs + zPos)], (hs + xPos));
-        } else if(xx == 270){
-            // The other debug print shows pixel 270 incorrect often, but it never prints here.
-            // We are probably returning before shadeZ is assigned or this print can run.
-            System.out.println("Didn't draw voxel with stuff " + stuff.name + " at pixel " + xx + "," + yy);
         }
     }
     
@@ -452,14 +448,14 @@ public class SpecialRenderer {
                                 }
                             }
                         }
-                        if(shadows) {
-                            if (shadeZ[fx][fy] <= -1) {
-                                if (indices[sx][sy] == FLOOR_INDEX)
-                                    shading[sx][sy] = 1024f;
-                                else if(emit == 0f && frame == 7)
-                                    System.out.println("On frame " + frame + ", shadeZ is " + shadeZ[fx][fy] + " for non-floor stuff " + stuffs[indices[sx][sy] & 0xFF].name + " at pixel " + sx + "," + sy + " and voxel " + fx + "," + fy + "," + fz);
-                            }
-                        }
+//                        if(shadows) {
+//                            if (shadeZ[fx][fy] <= -1) {
+//                                if (indices[sx][sy] == FLOOR_INDEX)
+//                                    shading[sx][sy] = 1024f;
+//                                else if(emit == 0f && frame == 7)
+//                                    System.out.println("On frame " + frame + ", shadeZ is " + shadeZ[fx][fy] + " for non-floor stuff " + stuffs[indices[sx][sy] & 0xFF].name + " at pixel " + sx + "," + sy + " and voxel " + fx + "," + fy + "," + fz);
+//                            }
+//                        }
                     }
                 }
             }
@@ -472,20 +468,21 @@ public class SpecialRenderer {
                     sh = shading[x][y];
 //                    if(sh >= 1000f)
 //                        continue;
-                    byte shade = (byte) (Math.min(Math.max((sh + logisticky(midShading[x][y])) * 0.625f + 0.1328125f, 0f), 1f) * 255.999f);
 //                    byte shade = (byte) (Math.min(Math.max((sh + midShading[x][y]) * 0.625f + 0.1328125f, 0f), 1f) * 255.999f);
                     byte sat = (byte) (Math.min(Math.max((saturation[x][y]) * 0.5f + 0.5f, 0f), 1f) * 255.999f);
 //                    palettePixmap.drawPixel(x >>> shrink, y >>> shrink, (indices[x][y] & 255) << 24 |
 //                            shade << 16 |
 //                            sat << 8 | 255);
                     int idx = (y >>> shrink) * palettePixmap.getWidth() + (x >>> shrink) << 2;
-                    if (shadows && index == FLOOR_INDEX) {
+                    if (shadows && index == SHADOW_INDEX) {
+                        byte shade = (byte) (Math.min(Math.max((sh + logisticky(midShading[x][y])) * 0.625f + 0.1328125f, 0f), 1f) * 255.999f);
                         buffer.put(idx, SHADOW_INDEX); // shadow stuff
-                        buffer.put(idx + 1, (byte) ((shade & 255) >>> 1));
+                        buffer.put(idx + 1, (byte) 128);
                         buffer.put(idx + 2, (byte) 0);
-//                        buffer.put(idx + 3, (byte) (255 - shade));
-                        buffer.put(idx + 3, (byte) Math.min(Math.max(480 - (shade & 255) * 8, 0), 255));
+                        buffer.put(idx + 3, (byte) (255 - shade));
+//                        buffer.put(idx + 3, (byte) Math.min(Math.max(480 - (shade & 255) * 8, 0), 255));
                     } else {
+                        byte shade = (byte) (Math.min(Math.max((sh + logisticky(midShading[x][y])) * 0.625f + 0.1328125f, 0f), 1f) * 255.999f);
                         buffer.put(idx, index);
                         buffer.put(idx + 1, shade);
                         buffer.put(idx + 2, sat);

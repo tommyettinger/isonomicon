@@ -51,8 +51,8 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //    public static final String outDir = "out/color_guard";
 //    public static final String outDir = "out/cg";
 //    public static final String outDir = "out/cg_July_23_2024";
-    public static final String outDir = "out/cg_gray_" + SPECIES + (DAMAGED > 0f ? "_damaged" : "");
-//    public static final String outDir = "out/cg_unsoaked_" + SPECIES + (DAMAGED > 0f ? "_damaged" : "");
+//    public static final String outDir = "out/cg_gray_" + SPECIES + (DAMAGED > 0f ? "_damaged" : "");
+    public static final String outDir = "out/cg_pixel_" + SPECIES + (DAMAGED > 0f ? "_damaged" : "");
 //    public static final String outDir = "out/cg_" + SPECIES + (DAMAGED > 0f ? "_damaged" : "");
 //    public static final String outDir = "out/cg_small_" + SPECIES + (DAMAGED > 0f ? "_damaged" : "");
 //    public static final String outDir = "out/cg_small_Gourd_0_3";
@@ -101,7 +101,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Machine_Gun")).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Forward_Missile") || u.hasWeapon("Handgun")).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.name.equals("Light_Tank")).toList();
-        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.name.equals("Bazooka")).toList();
+//        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.name.equals("Bazooka")).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.name.equals("Infantry")).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.name.startsWith("Terrain")).toList();
 //        ColorGuardData.units = ColorGuardData.units.subList(52, ColorGuardData.units.size());
