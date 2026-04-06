@@ -89,7 +89,7 @@ public class SpecialRenderer {
         render =   new int[w][h];
         outlines = new byte[w][h];
         depths =   new int[w][h];
-        indices =  new byte[w][h];
+        indices =  fill(FLOOR_INDEX, w, h);
         outlineIndices =  new byte[w][h];
         lightIndices =  new byte[w][h];
         shading =  new float[w][h];
@@ -285,8 +285,6 @@ public class SpecialRenderer {
                             outlineShading[ax][ay] = paletteL[voxel & 255] * (1f + emit * 2.5f);
 //                            outlineIndices[ax][ay] = 0;
                         }
-                    } else {
-                        indices[ax][ay] = FLOOR_INDEX;
                     }
 //                                Coloring.darken(palette[voxel & 255], 0.375f - emit);
 //                                Coloring.adjust(palette[voxel & 255], 0.625f + emit, neutral);
@@ -321,7 +319,7 @@ public class SpecialRenderer {
         fill(depths, 0);
         fill(render, 0);
         fill(outlines, (byte) 0);
-        fill(indices, (byte) 0);
+        fill(indices, FLOOR_INDEX);
         fill(outlineIndices, (byte) 0);
         fill(lightIndices, (byte) 0);
         fill(voxels, -1);
@@ -609,7 +607,7 @@ public class SpecialRenderer {
         fill(saturation, 0f);
         fill(outlineShading, 0f);
         fill(outlines, (byte) 0);
-        fill(indices, (byte) 0);
+        fill(indices, FLOOR_INDEX);
         fill(outlineIndices, (byte) 0);
         fill(lightIndices, (byte) 0);
         fill(voxels, -1);
