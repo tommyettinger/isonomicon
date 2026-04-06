@@ -376,7 +376,7 @@ public class SpecialRenderer {
         VoxMaterial m;
         final int step = 1 << shrink;
         for (int sx = 0; sx <= xSize; sx++) {
-            for (int sy = 0; sy <= ySize; sy++) {
+            for (int sy = ySize; sy >= 0; sy--) {
                 if((v = voxels[sx][sy]) != -1) {
                     vx = v & 0x3FF;
                     vy = v >>> 10 & 0x3FF;
@@ -395,7 +395,7 @@ public class SpecialRenderer {
                     final float emit = m.getTrait(VoxMaterial.MaterialTrait._emit);
                     if(variance) {
                         final float dapple = m.getTrait(VoxMaterial.MaterialTrait._dapple);
-                        if (dapple != 0f) {
+                        if (dapple != 0f && shading[sx][sy] < 1000) {
                             final float d = dapple * bnBlocky(vx, vy, vz);
                             shading[sx][sy] += d;
                         }
@@ -408,7 +408,7 @@ public class SpecialRenderer {
                         float limit = 2;
 //                        if(fy >= shadeX.length || fz >= shadeX[fy].length)
 //                            System.out.println("fx="+fx+",fy="+fy+",fz="+fz);
-                        if (Math.abs(shadeX[fy][fz] - tx) <= limit || ((fy > 1 && Math.abs(shadeX[fy - 2][fz] - tx) <= limit) || (fy < shadeX.length - 2 && Math.abs(shadeX[fy + 2][fz] - tx) <= limit))) {
+                        if (shading[sx][sy] < 1000 && Math.abs(shadeX[fy][fz] - tx) <= limit || ((fy > 1 && Math.abs(shadeX[fy - 2][fz] - tx) <= limit) || (fy < shadeX.length - 2 && Math.abs(shadeX[fy + 2][fz] - tx) <= limit))) {
                             float spread = MathUtils.lerp(0.0025f, 0.001f, rough);
                             if (Math.abs(shadeZ[fx][fy] - tz) <= limit) {
                                 spread *= 2f;
@@ -424,7 +424,7 @@ public class SpecialRenderer {
                                     shading[si][sj] += change;
                                 }
                             }
-                        } else if (Math.abs(shadeZ[fx][fy] - tz) <= limit) {
+                        } else if (shading[sx][sy] < 1000 && Math.abs(shadeZ[fx][fy] - tz) <= limit) {
                             float spread = MathUtils.lerp(0.005f, 0.002f, rough);
                             float dist;
                             for (int i = -4, si = sx + i; i <= 4; i++, si++) {
@@ -450,10 +450,26 @@ public class SpecialRenderer {
                                 }
                             }
                         }
-                        if(shadows){
-                            if(indices[sx][sy] == FLOOR_INDEX && !floorShade[fx][fy]) {
-                                shading[sx][sy] = 1024f;
-                            }
+                    }
+                }
+            }
+        }
+        if(lighting && shadows){
+            for (int sx = 0; sx <= xSize; sx++) {
+                for (int sy = ySize; sy >= 0; sy--) {
+                    if ((v = voxels[sx][sy]) != -1) {
+                        vx = v & 0x3FF;
+                        vy = v >>> 10 & 0x3FF;
+                        vz = v >>> 20 & 0x3FF;
+                        ox = vx - hsp;
+                        oy = vy - hsp;
+                        oz = vz - hs;
+                        tx = ox * x_x + oy * y_x + oz * z_x + size + hs;
+                        fx = (int) (tx);
+                        ty = ox * x_y + oy * y_y + oz * z_y + size + hs;
+                        fy = (int) (ty);
+                        if (indices[sx][sy] == FLOOR_INDEX && shadeZ[fx][fy] == -1) {
+                            shading[sx][sy] = 1024f;
                         }
                     }
                 }
