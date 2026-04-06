@@ -452,11 +452,12 @@ public class SpecialRenderer {
                                 }
                             }
                         }
-                        if(shadows){
+                        if(shadows) {
                             if (shadeZ[fx][fy] <= -1) {
-                                if(indices[sx][sy] != FLOOR_INDEX)
+                                if (indices[sx][sy] == FLOOR_INDEX)
+                                    shading[sx][sy] = 1024f;
+                                else if(emit == 0f)
                                     System.out.println("On frame " + frame + ", shadeZ is " + shadeZ[fx][fy] + " for non-floor stuff " + stuffs[indices[sx][sy] & 0xFF].name + " at pixel " + sx + "," + sy + " and voxel " + fx + "," + fy + "," + fz);
-                                shading[sx][sy] = 1024f;
                             }
                         }
                     }
