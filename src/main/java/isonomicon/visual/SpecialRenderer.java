@@ -308,8 +308,8 @@ public class SpecialRenderer {
         else if (drawn && !drawnEmit) {
             shadeZ[(int) (hs + xPos)][(int) (hs + yPos)] = Math.max(shadeZ[(int) (hs + xPos)][(int) (hs + yPos)], (hs + zPos));
             shadeX[(int) (hs + yPos)][(int) (hs + zPos)] = Math.max(shadeX[(int) (hs + yPos)][(int) (hs + zPos)], (hs + xPos));
-        } else if(!drawn && xx == 272){
-            // The other debug print shows pixel 272 incorrect often, but it never prints here.
+        } else if(xx == 270){
+            // The other debug print shows pixel 270 incorrect often, but it never prints here.
             // We are probably returning before shadeZ is assigned or this print can run.
             System.out.println("Didn't draw voxel with stuff " + stuff.name + " at pixel " + xx + "," + yy);
         }
@@ -456,7 +456,7 @@ public class SpecialRenderer {
                             if (shadeZ[fx][fy] <= -1) {
                                 if (indices[sx][sy] == FLOOR_INDEX)
                                     shading[sx][sy] = 1024f;
-                                else if(emit == 0f)
+                                else if(emit == 0f && frame == 7)
                                     System.out.println("On frame " + frame + ", shadeZ is " + shadeZ[fx][fy] + " for non-floor stuff " + stuffs[indices[sx][sy] & 0xFF].name + " at pixel " + sx + "," + sy + " and voxel " + fx + "," + fy + "," + fz);
                             }
                         }
