@@ -225,23 +225,23 @@ public class SpecialRenderer {
     }
 
     public void splat(float xPos, float yPos, float zPos, int vx, int vy, int vz, byte voxel, int frame) {
-        if(xPos <= -1f || yPos <= -1f || zPos <= -1f
+        if (xPos <= -1f || yPos <= -1f || zPos <= -1f
                 || xPos >= size * 2 || yPos >= size * 2 || zPos >= size * 2)
             return;
         final Stuff stuff = stuffs[Math.min(voxel & 255, stuffs.length - 1)];
         final VoxMaterial m = stuff.material;
         final float alpha = m.getTrait(VoxMaterial.MaterialTrait._alpha);
-        if(alpha >= 1f) return;
+        if (alpha >= 1f) return;
         voxel = (byte) stuff.appearsAs;
         final float flip = m.getTrait(VoxMaterial.MaterialTrait._frame);
-        if(Tools3D.randomizePointRare(vx, vy, vz, frame) < m.getTrait(VoxMaterial.MaterialTrait._metal) || (frame & 1) == flip)
+        if (Tools3D.randomizePointRare(vx, vy, vz, frame) < m.getTrait(VoxMaterial.MaterialTrait._metal) || (frame & 1) == flip)
             return;
         final float rise = m.getTrait(VoxMaterial.MaterialTrait._rise) * (1.25f + IntPointHash.hash256(vx, vy, vz, 12345) * 0x1.Cp-8f);
         final float flow = m.getTrait(VoxMaterial.MaterialTrait._flow);
         final float swirl = m.getTrait(VoxMaterial.MaterialTrait._swirl) + 1f;
-        if(swirl != 1f) {
+        if (swirl != 1f) {
             float ns = swirlNoise.getNoise(vx, vy, vz, cosTurns(frame * 0x1p-7f) * 0.625f / swirlNoise.getFrequency(), sinTurns(frame * 0x1p-7f) * 0.625f / swirlNoise.getFrequency()) * 2f;
-            if(ns > swirl) return;
+            if (ns > swirl) return;
         }
         final float emit = m.getTrait(VoxMaterial.MaterialTrait._emit) * 0.75f;
         int lowX = 0, highX = 4, lowY = 0, highY = 4;
@@ -251,7 +251,7 @@ public class SpecialRenderer {
 //            lowX = lowY = 1;
 //            highX = highY = 3;
 //        } else
-        if(flow != 0f) {
+        if (flow != 0f) {
             float ns = Stuff.noise.getConfiguredNoise(xPos, yPos, zPos, frame * flow);
             if (ns > 0) highX = (int) (4.5 + ns * (3 << shrink));
             else if (ns < 0) lowX = Math.round(lowX + ns * (3 << shrink));
@@ -259,9 +259,9 @@ public class SpecialRenderer {
         xPos += fidget;
         yPos += fidget;
         final int
-                xx = (int)(0.5f + Math.max(0, (size + yPos - xPos) * distortHXY + 1)),
-                yy = (int)(0.5f + Math.max(0, (zPos * distortVZ + size * ((distortVXY) * 3) - distortVXY * (xPos + yPos)) + 1 + rise * frame)),
-                depth = (int)(0.5f + (xPos + yPos) * distortHXY + zPos * distortVZ);
+                xx = (int) (0.5f + Math.max(0, (size + yPos - xPos) * distortHXY + 1)),
+                yy = (int) (0.5f + Math.max(0, (zPos * distortVZ + size * ((distortVXY) * 3) - distortVXY * (xPos + yPos)) + 1 + rise * frame)),
+                depth = (int) (0.5f + (xPos + yPos) * distortHXY + zPos * distortVZ);
         boolean drawn = false, drawnEmit = false;
         final float hs = size * 0.5f;
         for (int x = lowX, ax = xx; x < highX && ax < render.length; x++, ax++) {
@@ -270,24 +270,22 @@ public class SpecialRenderer {
                 if ((depth > depths[ax][ay] || (depth == depths[ax][ay] &&
                         (indices[ax][ay] == 0 || stuffs[Math.min((indices[ax][ay] & 255), stuffs.length - 1)].material.getTrait(VoxMaterial.MaterialTrait._priority)
                                 <= stuffs[Math.min((voxel & 255), stuffs.length - 1)].material.getTrait(VoxMaterial.MaterialTrait._priority))))) {
+                    drawn = true;
+                    drawnEmit = emit != 0f;
                     depths[ax][ay] = depth;
                     materials[ax][ay] = m;
-                    if(voxel != 0) {
-                        drawn = true;
-                        drawnEmit = emit != 0f;
+                    if (voxel != 0) {
                         indices[ax][ay] = voxel;
                         if (emit == 0f) {
                             outlines[ax][ay] = 1;
                             outlineShading[ax][ay] = paletteL[voxel & 255] * 0.625f;
                             outlineIndices[ax][ay] = voxel;
-                        }
-                        else { //else if(outlineIndices[ax][ay] == 0) {
+                        } else { //else if(outlineIndices[ax][ay] == 0) {
                             outlines[ax][ay] = -1;
                             outlineShading[ax][ay] = paletteL[voxel & 255] * (1f + emit * 2.5f);
 //                            outlineIndices[ax][ay] = 0;
                         }
-                    }
-                    else {
+                    } else {
                         indices[ax][ay] = FLOOR_INDEX;
                     }
 //                                Coloring.darken(palette[voxel & 255], 0.375f - emit);
@@ -305,11 +303,13 @@ public class SpecialRenderer {
                 }
             }
         }
-        if(xPos < -hs || yPos < -hs || zPos < -hs || xPos + hs > shadeZ.length || yPos + hs > shadeZ[0].length || zPos + hs > shadeX[0].length)
+        if (xPos < -hs || yPos < -hs || zPos < -hs || xPos + hs > shadeZ.length || yPos + hs > shadeZ[0].length || zPos + hs > shadeX[0].length)
             System.out.println(xPos + ", " + yPos + ", " + zPos + " is out of bounds");
-        else if(drawn && (!drawnEmit && voxel != SHADOW_INDEX)) {
+        else if (drawn && !drawnEmit) {
             shadeZ[(int) (hs + xPos)][(int) (hs + yPos)] = Math.max(shadeZ[(int) (hs + xPos)][(int) (hs + yPos)], (hs + zPos));
             shadeX[(int) (hs + yPos)][(int) (hs + zPos)] = Math.max(shadeX[(int) (hs + yPos)][(int) (hs + zPos)], (hs + xPos));
+        } else if(!drawn && depth >= depths[xx][yy]){
+            System.out.println("Didn't draw voxel with stuff " + stuff.name + " at pixel " + xx + "," + yy);
         }
     }
     
