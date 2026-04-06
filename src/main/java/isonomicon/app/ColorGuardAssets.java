@@ -32,7 +32,7 @@ import java.io.FileNotFoundException;
 
 public class ColorGuardAssets extends ApplicationAdapter {
     public static boolean DIVERSE = false;
-    public static boolean ATTACKS = true;
+    public static boolean ATTACKS = false;
     public static boolean DEATHS = false;
     public static boolean EXPLOSION = false;
     public static boolean TERRAIN = false;
@@ -101,9 +101,11 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Machine_Gun")).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Forward_Missile") || u.hasWeapon("Handgun")).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.name.equals("Light_Tank")).toList();
+//        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.name.equals("Bike")).toList();
+        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.name.equals("Infantry")).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.name.startsWith("Terrain")).toList();
 //        ColorGuardData.units = ColorGuardData.units.subList(52, ColorGuardData.units.size());
-        ColorGuardData.units = ColorGuardData.units.subList(0, 1);
+//        ColorGuardData.units = ColorGuardData.units.subList(0, 1);
 //        ColorGuardData.units = ColorGuardData.units.subList(6, 9);
 //        ColorGuardData.units = ColorGuardData.units.subList(0, 11);
         try {
