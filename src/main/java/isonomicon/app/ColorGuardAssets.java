@@ -103,7 +103,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.name.equals("Light_Tank")).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.name.startsWith("Terrain")).toList();
 //        ColorGuardData.units = ColorGuardData.units.subList(52, ColorGuardData.units.size());
-//        ColorGuardData.units = ColorGuardData.units.subList(2, 3);
+        ColorGuardData.units = ColorGuardData.units.subList(0, 2);
 //        ColorGuardData.units = ColorGuardData.units.subList(6, 9);
 //        ColorGuardData.units = ColorGuardData.units.subList(0, 11);
         try {

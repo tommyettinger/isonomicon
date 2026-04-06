@@ -48,7 +48,6 @@ public class SpecialRenderer {
     public byte[][] outlines;
     public VoxMaterial[][] materials;
     public float[][] shadeX, shadeZ, shading, midShading, outlineShading, saturation;
-    public boolean[][] floorShade;
     public byte[][] indices, outlineIndices, lightIndices;
     public int[] palette;
     public float[] paletteL, paletteA, paletteB;
@@ -101,7 +100,6 @@ public class SpecialRenderer {
         voxels = fill(-1, w, h);
         shadeX = fill(-1f, size * 4, size * 4);
         shadeZ = fill(-1f, size * 4, size * 4);
-        floorShade = fill(false, size * 4, size * 4);
         this.stuffs = stuffs;
 
         if(computeNormals)
@@ -310,7 +308,6 @@ public class SpecialRenderer {
         if(xPos < -hs || yPos < -hs || zPos < -hs || xPos + hs > shadeZ.length || yPos + hs > shadeZ[0].length || zPos + hs > shadeX[0].length)
             System.out.println(xPos + ", " + yPos + ", " + zPos + " is out of bounds");
         else if(drawn && (!drawnEmit && voxel != SHADOW_INDEX)) {
-            floorShade[(int) (hs + xPos)][(int) (hs + yPos)] = true;
             shadeZ[(int) (hs + xPos)][(int) (hs + yPos)] = Math.max(shadeZ[(int) (hs + xPos)][(int) (hs + yPos)], (hs + zPos));
             shadeX[(int) (hs + yPos)][(int) (hs + zPos)] = Math.max(shadeX[(int) (hs + yPos)][(int) (hs + zPos)], (hs + xPos));
         }
@@ -328,7 +325,6 @@ public class SpecialRenderer {
         fill(voxels, -1);
         fill(shadeX, -1f);
         fill(shadeZ, -1f);
-        fill(floorShade, false);
         fill(shading, 0f);
         fill(midShading, 0f);
         fill(saturation, 0f);
@@ -614,7 +610,6 @@ public class SpecialRenderer {
         fill(voxels, -1);
         fill(shadeX, -1f);
         fill(shadeZ, -1f);
-        fill(floorShade, false);
         for (int i = 0; i < materials.length; i++) {
             Arrays.fill(materials[i], null);
         }
