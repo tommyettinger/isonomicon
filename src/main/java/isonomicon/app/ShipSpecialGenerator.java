@@ -19,7 +19,6 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.github.tommyettinger.anim8.*;
 import com.github.tommyettinger.digital.Hasher;
 import com.github.yellowstonegames.text.Language;
-import isonomicon.io.LittleEndianDataInputStream;
 import isonomicon.io.extended.VoxIOExtended;
 import isonomicon.io.extended.VoxModel;
 import isonomicon.physical.ModelMaker;
@@ -29,10 +28,10 @@ import isonomicon.visual.Coloring;
 import isonomicon.visual.ShaderUtils;
 import isonomicon.visual.SpecialRenderer;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.nio.ByteBuffer;
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class ShipSpecialGenerator extends ApplicationAdapter {
     public static final int SCREEN_WIDTH = 512;//640;
@@ -40,7 +39,6 @@ public class ShipSpecialGenerator extends ApplicationAdapter {
     public static final boolean TURNTABLE = false;
     private SpecialRenderer renderer;
     private VoxModel voxels;
-    private String name;
     private FastPNG png;
     private AnimatedGif gif;
     private AnimatedPNG apng;
@@ -94,14 +92,16 @@ public class ShipSpecialGenerator extends ApplicationAdapter {
         gif.palette = analyzed = new QualityPalette();
         gif.setDitherStrength(AppConfig.STRENGTH);
         long startTime = TimeUtils.millis();
-        long seed = Hasher.randomize3(startTime);
+        String date = DateFormat.getDateInstance().format(new Date());
+        long seed = Hasher.randomize3(Hasher.shax.hashBulk64(date));
         ModelMaker mm = new ModelMaker(seed, new PaletteReducer());
 
         for (int n = 0; n < 16; n++) {
+
             palette = new Texture(Gdx.files.local("assets/" + pals[n & 7]));
-            String output = this.name = lang.word(seed = Hasher.randomize3(seed), true);
-            while (Gdx.files.local("out/b/shipSpecialized/" + output).exists()){
-                output = this.name = lang.word(++seed, true);
+            String output = lang.word(seed = Hasher.randomize3(seed), true);
+            while (Gdx.files.local("out/b/shipSpecialized/" + date + "/" + output).exists()){
+                output = lang.word(++seed, true);
             }
             System.out.println("Rendering " + output);
             mm.rng.setSeed(Hasher.botis.hashBulk64(output));
@@ -150,18 +150,18 @@ public class ShipSpecialGenerator extends ApplicationAdapter {
 
                     fb.end();
                     pm.add(pixmap);
-                    png.write(Gdx.files.local("out/b/shipSpecialized/" + output + '/' + output + "_angle" + i + "_" + f + ".png"), pixmap);
-                    png.write(Gdx.files.local("out/b/shipSpecial_lab/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
+                    png.write(Gdx.files.local("out/b/shipSpecialized/" + date + "/" + output + '/' + output + "_angle" + i + "_" + f + ".png"), pixmap);
+                    png.write(Gdx.files.local("out/b/shipSpecial_lab/" + date + "/" + output + '/' + output + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                     fb.dispose();
                 }
                 pm.insertRange(pm.size - 4, 4);
             }
-            apng.write(Gdx.files.local("out/b/shipSpecialized/" + output + '/' + output + ".png"), pm, 8);
+            apng.write(Gdx.files.local("out/b/shipSpecialized/"  + date + "/"+ output + '/' + output + ".png"), pm, 8);
             if(gif != null){
                 SpecialRenderer.monoAlpha(pm);
                 analyzed.analyze(pm, 75.0, 256);
                 gif.palette = analyzed;
-                gif.write(Gdx.files.local("out/b/shipSpecialized/" + output + '/' + output + ".gif"), pm, 8);
+                gif.write(Gdx.files.local("out/b/shipSpecialized/"  + date + "/"+ output + '/' + output + ".gif"), pm, 8);
             }
             for (Pixmap pix : pm) {
                 if (!pix.isDisposed())
@@ -196,12 +196,12 @@ public class ShipSpecialGenerator extends ApplicationAdapter {
                     pm.add(pixmap);
                     fb.dispose();
                 }
-                apng.write(Gdx.files.local("out/b/shipSpecialized/" + output + '/' + output + "_Turntable.png"), pm, 24);
+                apng.write(Gdx.files.local("out/b/shipSpecialized/" + date + "/" + output + '/' + output + "_Turntable.png"), pm, 24);
                 if(gif != null) {
                     SpecialRenderer.monoAlpha(pm);
                     analyzed.analyze(pm, 75.0, 256);
                     gif.palette = analyzed;
-                    gif.write(Gdx.files.local("out/b/shipSpecialized/" + output + '/' + output + "_Turntable.gif"), pm, 24);
+                    gif.write(Gdx.files.local("out/b/shipSpecialized/" + date + "/" + output + '/' + output + "_Turntable.gif"), pm, 24);
                 }
 //                gif.palette = aurora;
 //                gif.setDitherStrength(0.5_0f);
@@ -235,23 +235,5 @@ public class ShipSpecialGenerator extends ApplicationAdapter {
         config.disableAudio(true);
         final ShipSpecialGenerator app = new ShipSpecialGenerator(arg);
         new Lwjgl3Application(app, config);
-    }
-
-    public void load(String name) {
-        try {
-            //// loads a file by its full path, which we get via a command-line arg
-            voxels = VoxIOExtended.readVox(new LittleEndianDataInputStream(new FileInputStream(name)));
-            if(voxels == null) {
-                voxels = new VoxModel();
-                return;
-            }
-            int nameStart = Math.max(name.lastIndexOf('/'), name.lastIndexOf('\\')) + 1;
-            this.name = name.substring(nameStart, name.indexOf('.', nameStart));
-            renderer = new SpecialRenderer(voxels.grids.get(0).length, Stuff.STUFFS_B);
-            renderer.palette(Coloring.BETTS64);
-            renderer.saturation(0f);
-        } catch (FileNotFoundException e) {
-            voxels = new VoxModel();
-        }
     }
 }
