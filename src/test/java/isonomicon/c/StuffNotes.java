@@ -23,7 +23,7 @@ import isonomicon.visual.Coloring;
 import java.io.IOException;
 
 public class StuffNotes extends ApplicationAdapter {
-    public static final boolean WRITING = true;
+    public static final boolean WRITING = false;
     public static final int WIDTH = 8 * 100;
     public static final int HEIGHT = 30 * 32;
     public BitmapFont font;
@@ -87,7 +87,8 @@ public class StuffNotes extends ApplicationAdapter {
 
         if(WRITING) {
             try {
-                png.write(Gdx.files.local("Notes_C_Palette.png"), pixmap);
+                if(!Gdx.files.local("Notes_C_Palette.png").exists())
+                    png.write(Gdx.files.local("Notes_C_Palette.png"), pixmap);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
