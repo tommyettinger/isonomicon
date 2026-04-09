@@ -58,10 +58,8 @@ public class SpecialRenderer {
     public int size;
     public float neutral = 1f;
 
-    public static final byte DARKEN = (byte) 128;
-    public static final byte LIGHTEN = (byte) 135;
-    public static final byte FLOOR_INDEX = (byte) -16;
-    public static final byte SHADOW_INDEX = (byte) 66;
+    public static byte FLOOR_INDEX = (byte) 240;
+    public static byte SHADOW_INDEX = (byte) 66;
 
     public static final CyclicNoise swirlNoise = new CyclicNoise(0xDEADBEEFBA77L, 6, 0.03f);
 
