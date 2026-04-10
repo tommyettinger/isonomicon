@@ -479,7 +479,7 @@ public class Stuff {
     public static final Stuff[] STUFFS_C = new Stuff[]{
             new Stuff("transparent", 0, "Glass", "Transparency 1.0"),
             new Stuff("constant black", 1, "Damage 1"), /* bottom row; black*/
-            new Stuff("shadow", 2, "Roughness 0.0 Reflection 0.0 Emission -0.25"),
+            new Stuff("shadow", 2, 9, "Roughness 0.0 Reflection 0.0 Emission -0.05"),
             new Stuff("tire rubber", 3, "Reflection 0.1 Roughness 0.8"),
             new Stuff("dark eye", 4, "Roughness 0.0 Reflection 0.1 Damage 4 Priority 10"),
             new Stuff("coal or asphalt", 5, "Roughness 0.1 Reflection 0.0 Dapple -0.07"),

@@ -4,7 +4,6 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -17,7 +16,6 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.github.tommyettinger.anim8.AnimatedGif;
-import com.github.tommyettinger.anim8.AnimatedPNG;
 import com.github.tommyettinger.anim8.FastPNG;
 import com.github.tommyettinger.anim8.QualityPalette;
 import isonomicon.io.LittleEndianDataInputStream;
@@ -27,7 +25,6 @@ import isonomicon.physical.Stuff;
 import isonomicon.physical.Tools3D;
 import isonomicon.visual.Coloring;
 import isonomicon.visual.ShaderUtils;
-import isonomicon.visual.SpecialRenderer;
 import isonomicon.visual.SpecialRenderer2025;
 
 import java.io.File;
@@ -53,7 +50,7 @@ public class SpecialistC extends ApplicationAdapter {
     private Texture palette;
     public SpecialistC(String[] args){
         VoxIOExtended.GENERAL = true;
-        SpecialRenderer.SHADOW_INDEX = (byte) 2;
+        SpecialRenderer2025.SHADOW_INDEX = (byte) 2;
         if(args != null && args.length > 0)
             inputs = args;
         else 
@@ -190,7 +187,7 @@ public class SpecialistC extends ApplicationAdapter {
                 pm.insertRange(pm.size - 4, 4);
             }
             if(GIF) {
-                SpecialRenderer.monoAlpha(pm);
+                SpecialRenderer2025.monoAlpha(pm);
                 analyzed.analyze(pm, 75.0, 256);
                 gif.palette = analyzed;
                 gif.write(Gdx.files.local("out/c/specialized/" + output + '/' + output + ".gif"), pm, 8);
@@ -232,7 +229,7 @@ public class SpecialistC extends ApplicationAdapter {
                     fb.dispose();
                 }
                 if(GIF) {
-                    SpecialRenderer.monoAlpha(pm);
+                    SpecialRenderer2025.monoAlpha(pm);
                     analyzed.analyze(pm, 75.0, 256);
                     gif.palette = analyzed;
                     gif.write(Gdx.files.local("out/c/specialized/" + output + '/' + output + "_Turntable.gif"), pm, 24);
