@@ -42,7 +42,7 @@ public class SpecialistC extends ApplicationAdapter {
     public static final boolean TURNTABLE = true;
     public static final boolean PNG = true;
     public static final boolean GIF = true;
-    private SpecialRenderer renderer;
+    private SpecialRenderer2025 renderer;
     private VoxModel voxels;
     private String name;
     private String[] inputs;
@@ -275,7 +275,7 @@ public class SpecialistC extends ApplicationAdapter {
             }
             int nameStart = Math.max(name.lastIndexOf('/'), name.lastIndexOf('\\')) + 1;
             this.name = name.substring(nameStart, name.indexOf('.', nameStart));
-            renderer = new SpecialRenderer(voxels.grids.get(0).length, Stuff.STUFFS_C);
+            renderer = new SpecialRenderer2025(voxels.grids.get(0).length, Stuff.STUFFS_C);
             renderer.palette(Coloring.YAM4);
             renderer.saturation(0f);
         } catch (FileNotFoundException e) {

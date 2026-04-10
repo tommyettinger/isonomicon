@@ -22,6 +22,7 @@ import isonomicon.physical.Tools3D;
 import isonomicon.visual.Coloring;
 import isonomicon.visual.ShaderUtils;
 import isonomicon.visual.SpecialRenderer;
+import isonomicon.visual.SpecialRenderer2025;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -33,7 +34,7 @@ public class Specialist extends ApplicationAdapter {
     public static final int SCREEN_WIDTH = 512;//640;
     public static final int SCREEN_HEIGHT = 512;//720;
     public static final boolean TURNTABLE = true;
-    private SpecialRenderer renderer;
+    private SpecialRenderer2025 renderer;
     private VoxModel voxels;
     private String name;
     private String[] inputs;
@@ -295,7 +296,7 @@ public class Specialist extends ApplicationAdapter {
             }
             int nameStart = Math.max(name.lastIndexOf('/'), name.lastIndexOf('\\')) + 1;
             this.name = name.substring(nameStart, name.indexOf('.', nameStart));
-            renderer = new SpecialRenderer(voxels.grids.get(0).length, Stuff.STUFFS_B);
+            renderer = new SpecialRenderer2025(voxels.grids.get(0).length, Stuff.STUFFS_B);
             renderer.palette(Coloring.BETTS64);
             renderer.saturation(0f);
         } catch (FileNotFoundException e) {
