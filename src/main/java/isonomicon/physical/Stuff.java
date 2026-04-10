@@ -274,7 +274,7 @@ public class Stuff {
 
             new Stuff("dark glass", 64, "Transparency 0.3 Roughness 0.0 Reflection 0.4 Damage 153"),
             new Stuff("dark eye", 65, "Roughness 0.0 Reflection 0.1 Damage 65 Priority 10"), /*black*/
-            new Stuff("shadow", 66, "Roughness 0.0 Reflection 0.0 Emission -0.25"),
+            new Stuff("shadow", 66, 69, "Roughness 0.0 Reflection 0.0 Emission -0.05"),
             new Stuff("smoke", 67, "Roughness 0.5 Reflection 0.0 Missing 0.05 Rise 0.4 Dapple -0.15 Disperse 0.3 Emission -0.04", 0, 2, 67, 7),
             new Stuff("gray glass", 68, "Transparency 0.5 Roughness 0.0 Reflection 0.65 Damage 153"),
             new Stuff("dead eye", 69, "Roughness 0.5 Reflection 0.0 Priority 10 Damage 69"),
