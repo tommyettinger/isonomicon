@@ -59,7 +59,7 @@ public class SpecialRenderer2025 {
     public float neutral = 1f;
 
     public static byte FLOOR_INDEX = (byte) 240;
-    public static byte SHADOW_INDEX = (byte) 67;
+    public static byte SHADOW_INDEX = (byte) 66;
 
     public static final CyclicNoise swirlNoise = new CyclicNoise(0xDEADBEEFBA77L, 6, 0.03f);
 
@@ -701,7 +701,7 @@ public class SpecialRenderer2025 {
                                         oy = ooy + ay;
                                         splat(ox * x_x + oy * y_x + oz * z_x + size + translateX,
                                                 ox * x_y + oy * y_y + oz * z_y + size + translateY,
-                                                0, x + ax, y + ay, 0, FLOOR_INDEX, frame);
+                                                0, x + ax, y + ay, 0, SHADOW_INDEX, frame);
                                     }
                                 }
                             }
