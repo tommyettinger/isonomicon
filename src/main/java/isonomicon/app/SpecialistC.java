@@ -165,7 +165,7 @@ public class SpecialistC extends ApplicationAdapter {
                     FrameBuffer fb = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), false);
                     fb.begin();
                     palette.bind(1);
-                    ScreenUtils.clear(Color.CLEAR);
+                    ScreenUtils.clear(1f, 1f, 1f, 0f);
                     batch.begin();
 
                     indexShader.setUniformi("u_texPalette", 1);
@@ -190,6 +190,7 @@ public class SpecialistC extends ApplicationAdapter {
                 pm.insertRange(pm.size - 4, 4);
             }
             if(GIF) {
+                SpecialRenderer.monoAlpha(pm);
                 analyzed.analyze(pm, 75.0, 256);
                 gif.palette = analyzed;
                 gif.write(Gdx.files.local("out/c/specialized/" + output + '/' + output + ".gif"), pm, 8);
@@ -216,7 +217,7 @@ public class SpecialistC extends ApplicationAdapter {
                     FrameBuffer fb = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), false);
                     fb.begin();
                     palette.bind(1);
-                    ScreenUtils.clear(Color.CLEAR);
+                    ScreenUtils.clear(1f, 1f, 1f, 0f);
                     batch.begin();
 
                     indexShader.setUniformi("u_texPalette", 1);
@@ -231,6 +232,7 @@ public class SpecialistC extends ApplicationAdapter {
                     fb.dispose();
                 }
                 if(GIF) {
+                    SpecialRenderer.monoAlpha(pm);
                     analyzed.analyze(pm, 75.0, 256);
                     gif.palette = analyzed;
                     gif.write(Gdx.files.local("out/c/specialized/" + output + '/' + output + "_Turntable.gif"), pm, 24);

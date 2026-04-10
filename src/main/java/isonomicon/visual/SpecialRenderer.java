@@ -497,7 +497,7 @@ public class SpecialRenderer {
 //                                128 << 8 | shade);
                         buffer.put(idx, lightIndices[x][y]);
 //                        buffer.put(idx+1, (byte) 255);
-                        buffer.put(idx+1, (byte) Math.min(Math.max((stuffs[lightIndices[x][y] & 255].material.getTrait(VoxMaterial.MaterialTrait._emit) + 1f) * 255.999f, 0), 255));
+                        buffer.put(idx+1, (byte) Math.min(Math.max(paletteL[lightIndices[x][y] & 255] * 255.999f, 0), 255));
                         buffer.put(idx+2, (byte) 96);
                         buffer.put(idx+3, (byte) shade);
                         outlineIndices[x][y] = 0;
@@ -514,7 +514,7 @@ public class SpecialRenderer {
 //                                128 << 8 | shade);
                         buffer.put(idx, lightIndices[x][y]);
 //                        buffer.put(idx+1, (byte) 0);
-                        buffer.put(idx+1, (byte) Math.min(Math.max((stuffs[lightIndices[x][y] & 255].material.getTrait(VoxMaterial.MaterialTrait._emit) + 1f) * 255.999f, 0), 255));
+                        buffer.put(idx+1, (byte) Math.min(Math.max(paletteL[lightIndices[x][y] & 255] * 255.999f, 0), 255));
                         buffer.put(idx+2, (byte) 96);
                         buffer.put(idx+3, (byte) shade);
                         outlineIndices[x][y] = 0;

@@ -82,7 +82,8 @@ public class Specialist extends ApplicationAdapter {
 //            inputs = new String[]{"b/vox/Figure_Split.vox", "palettes/b/TanClothDarkSkin.png"};
 //            inputs = new String[]{"b/vox/Damned.vox", "palettes/b/CherrySkinDarkCloth.png"};
 //            inputs = new String[]{"b/vox/Direction_Cube.vox", "palettes/b/TanClothDarkSkin.png"};
-            inputs = new String[]{"b/vox/Lomuk.vox", "palettes/b/BlueFurCyanCrystal.png", "Blue Lomuk"};
+            inputs = new String[]{"b/vox/Direction_Cube.vox", "palettes/b/TanClothDarkSkin.png", "Direction Cube"};
+//            inputs = new String[]{"b/vox/Lomuk.vox", "palettes/b/BlueFurCyanCrystal.png", "Blue Lomuk"};
 //            inputs = new String[]{"b/vox/Lomuk.vox", "palettes/b/BlueFurCyanCrystal.png",
 //                    "b/vox/Damned.vox", "palettes/b/CherrySkinDarkCloth.png",
 //                    "b/vox/Figure.vox", "palettes/b/TanClothDarkSkin.png",
@@ -182,7 +183,7 @@ public class Specialist extends ApplicationAdapter {
                     FrameBuffer fb = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), false);
                     fb.begin();
                     palette.bind(1);
-                    ScreenUtils.clear(Color.CLEAR);
+                    ScreenUtils.clear(1f, 1f, 1f, 0f);
                     batch.begin();
 
                     indexShader.setUniformi("u_texPalette", 1);
@@ -232,7 +233,7 @@ public class Specialist extends ApplicationAdapter {
                     FrameBuffer fb = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), false);
                     fb.begin();
                     palette.bind(1);
-                    ScreenUtils.clear(Color.CLEAR);
+                    ScreenUtils.clear(1f, 1f, 1f, 0f);
                     batch.begin();
 
                     indexShader.setUniformi("u_texPalette", 1);

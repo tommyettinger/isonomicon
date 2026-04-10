@@ -89,7 +89,7 @@ public class ShaderTest extends ApplicationAdapter {
         Texture t = new Texture(Gdx.files.local("src/test/resources/Color_Guard.png"));
         FrameBuffer fb = new FrameBuffer(Pixmap.Format.RGBA8888, SCREEN_WIDTH, SCREEN_HEIGHT, false);
         fb.begin();
-        ScreenUtils.clear(Color.CLEAR);
+        ScreenUtils.clear(1f, 1f, 1f, 0f);
         batch.begin();
 
         batch.draw(t, 0, t.getHeight(), t.getWidth(), -t.getHeight());
