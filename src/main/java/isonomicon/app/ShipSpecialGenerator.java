@@ -27,6 +27,7 @@ import isonomicon.physical.Tools3D;
 import isonomicon.visual.Coloring;
 import isonomicon.visual.ShaderUtils;
 import isonomicon.visual.SpecialRenderer;
+import isonomicon.visual.SpecialRenderer2025;
 
 import java.nio.ByteBuffer;
 import java.text.DateFormat;
@@ -37,7 +38,7 @@ public class ShipSpecialGenerator extends ApplicationAdapter {
     public static final int SCREEN_WIDTH = 512;//640;
     public static final int SCREEN_HEIGHT = 512;//720;
     public static final boolean TURNTABLE = false;
-    private SpecialRenderer renderer;
+    private SpecialRenderer2025 renderer;
     private VoxModel voxels;
     private FastPNG png;
     private AnimatedGif gif;
@@ -107,7 +108,7 @@ public class ShipSpecialGenerator extends ApplicationAdapter {
             mm.rng.setSeed(Hasher.botis.hashBulk64(output));
             byte[][][] voxelData = mm.shipLargeSmoothColorized();
             voxels = new VoxModel(voxelData, Coloring.BETTS64, Stuff.MATERIALS_B);
-            renderer = new SpecialRenderer(voxels.grids.get(0).length, Stuff.STUFFS_B);
+            renderer = new SpecialRenderer2025(voxels.grids.get(0).length, Stuff.STUFFS_B);
             renderer.palette(Coloring.BETTS64);
             renderer.saturation(0f);
 
