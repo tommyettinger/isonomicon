@@ -58,8 +58,8 @@ public class SpecialRenderer2025 {
     public int size;
     public float neutral = 1f;
 
-    public static final byte DARKEN = (byte) 128;
-    public static final byte LIGHTEN = (byte) 135;
+    public static byte FLOOR_INDEX = (byte) 240;
+    public static byte SHADOW_INDEX = (byte) 67;
 
     public static final CyclicNoise swirlNoise = new CyclicNoise(0xDEADBEEFBA77L, 6, 0.03f);
 
@@ -285,7 +285,7 @@ public class SpecialRenderer2025 {
                         }
                     }
                     else {
-                        indices[ax][ay] = -16;
+                        indices[ax][ay] = FLOOR_INDEX;
                     }
 //                                Coloring.darken(palette[voxel & 255], 0.375f - emit);
 //                                Coloring.adjust(palette[voxel & 255], 0.625f + emit, neutral);
@@ -448,8 +448,8 @@ public class SpecialRenderer2025 {
                             }
                         }
                         if(shadows){
-                            if(indices[sx][sy] == -16 && shadeZ[fx][fy] <= hs + 0.5f)
-//                            if(indices[sx][sy] == -16 && (vx <= step * 4 || vy <= step * 4 || vx >= xSize - step * 4 || vy >= ySize - step * 4))
+                            if(indices[sx][sy] == FLOOR_INDEX && shadeZ[fx][fy] <= hs + 0.5f)
+//                            if(indices[sx][sy] == FLOOR_INDEX && (vx <= step * 4 || vy <= step * 4 || vx >= xSize - step * 4 || vy >= ySize - step * 4))
                                 shading[sx][sy] = 1024f;
                         }
                     }
@@ -471,8 +471,8 @@ public class SpecialRenderer2025 {
 //                            shade << 16 |
 //                            sat << 8 | 255);
                     int idx = (y >>> shrink) * palettePixmap.getWidth() + (x >>> shrink) << 2;
-                    if (shadows && index == -16) {
-                        buffer.put(idx, (byte) 67); // shadow stuff
+                    if (shadows && index == FLOOR_INDEX) {
+                        buffer.put(idx, SHADOW_INDEX); // shadow stuff
                         buffer.put(idx + 1, (byte) ((shade & 255) >>> 1));
                         buffer.put(idx + 2, (byte) 0);
 //                        buffer.put(idx + 3, (byte) (255 - shade));
@@ -701,7 +701,7 @@ public class SpecialRenderer2025 {
                                         oy = ooy + ay;
                                         splat(ox * x_x + oy * y_x + oz * z_x + size + translateX,
                                                 ox * x_y + oy * y_y + oz * z_y + size + translateY,
-                                                0, x + ax, y + ay, 0, (byte) -16, frame);
+                                                0, x + ax, y + ay, 0, FLOOR_INDEX, frame);
                                     }
                                 }
                             }
