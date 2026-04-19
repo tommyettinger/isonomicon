@@ -473,7 +473,7 @@ public class SpecialRenderer {
                     int idx = (y >>> shrink) * palettePixmap.getWidth() + (x >>> shrink) << 2;
                     if (shadows && index == FLOOR_INDEX) {
                         buffer.put(idx, SHADOW_INDEX); // shadow stuff
-                        buffer.put(idx + 1, (byte) ((shade & 255) >>> 1));
+                        buffer.put(idx + 1, (byte) 128);
                         buffer.put(idx + 2, (byte) 0);
 //                        buffer.put(idx + 3, (byte) (255 - shade));
                         buffer.put(idx + 3, (byte) Math.min(Math.max(480 - (shade & 255) * 8, 0), 255));
@@ -494,7 +494,7 @@ public class SpecialRenderer {
 //                                128 << 16 |
 //                                128 << 8 | shade);
                         buffer.put(idx, lightIndices[x][y]);
-                        buffer.put(idx+1, (byte) shade);
+                        buffer.put(idx+1, (byte) Math.min(Math.max(paletteL[lightIndices[x][y] & 255] * 255.999f, 0), 255));
                         buffer.put(idx+2, (byte) 96);
                         buffer.put(idx+3, (byte) shade);
                         outlineIndices[x][y] = 0;
@@ -510,7 +510,7 @@ public class SpecialRenderer {
 //                                128 << 16 |
 //                                128 << 8 | shade);
                         buffer.put(idx, lightIndices[x][y]);
-                        buffer.put(idx+1, (byte) (255 - shade));
+                        buffer.put(idx+1, (byte) Math.min(Math.max(paletteL[lightIndices[x][y] & 255] * 255.999f, 0), 255));
                         buffer.put(idx+2, (byte) 96);
                         buffer.put(idx+3, (byte) shade);
                         outlineIndices[x][y] = 0;
@@ -755,8 +755,8 @@ public class SpecialRenderer {
                            byte[][][] g, IntObjectMap<float[]> link, float yaw, float pitch, float roll, int frame,
                            float translateX, float translateY, float translateZ){
         splatOnly(g, yaw, pitch, roll, frame, translateX, translateY, translateZ);
-        final int size = g.length;
-        final float hs = size * 0.5f;
+//        final int size = g.length;
+//        final float hs = size * 0.5f;
         float ox, oy, oz; // offset x,y,z
         final float cYaw = cosTurns(yaw), sYaw = sinTurns(yaw);
         final float cPitch = cosTurns(pitch), sPitch = sinTurns(pitch);
@@ -764,22 +764,22 @@ public class SpecialRenderer {
         final float x_x = cYaw * cPitch, y_x = cYaw * sPitch * sRoll - sYaw * cRoll, z_x = cYaw * sPitch * cRoll + sYaw * sRoll;
         final float x_y = sYaw * cPitch, y_y = sYaw * sPitch * sRoll + cYaw * cRoll, z_y = sYaw * sPitch * cRoll - cYaw * sRoll;
         final float x_z = -sPitch, y_z = cPitch * sRoll, z_z = cPitch * cRoll;
-        for (int z = 0; z < size; z++) {
-            for (int x = 0; x < size; x++) {
-                for (int y = 0; y < size; y++) {
-                    final byte v = g[x][y][z];
-                    if(v != 0)
-                    {
-                        ox = x - hs + fidget;
-                        oy = y - hs + fidget;
-                        oz = z - hs;
-                        splat(  ox * x_x + oy * y_x + oz * z_x + size + translateX,
-                                ox * x_y + oy * y_y + oz * z_y + size + translateY,
-                                ox * x_z + oy * y_z + oz * z_z + hs + translateZ, x, y, z, v, frame);
-                    }
-                }
-            }
-        }
+//        for (int z = 0; z < size; z++) {
+//            for (int x = 0; x < size; x++) {
+//                for (int y = 0; y < size; y++) {
+//                    final byte v = g[x][y][z];
+//                    if(v != 0)
+//                    {
+//                        ox = x - hs + fidget;
+//                        oy = y - hs + fidget;
+//                        oz = z - hs;
+//                        splat(  ox * x_x + oy * y_x + oz * z_x + size + translateX,
+//                                ox * x_y + oy * y_y + oz * z_y + size + translateY,
+//                                ox * x_z + oy * y_z + oz * z_z + hs + translateZ, x, y, z, v, frame);
+//                    }
+//                }
+//            }
+//        }
 
         for(IntObjectMap.Entry<float[]> ent : link) {
             if(ent.key == -1) continue;
