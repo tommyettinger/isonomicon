@@ -25,7 +25,7 @@ import isonomicon.physical.Stuff;
 import isonomicon.physical.Tools3D;
 import isonomicon.visual.Coloring;
 import isonomicon.visual.ShaderUtils;
-import isonomicon.visual.SpecialRenderer2025;
+import isonomicon.visual.SpecialRenderer;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -39,7 +39,7 @@ public class SpecialistC extends ApplicationAdapter {
     public static final boolean TURNTABLE = true;
     public static final boolean PNG = true;
     public static final boolean GIF = true;
-    private SpecialRenderer2025 renderer;
+    private SpecialRenderer renderer;
     private VoxModel voxels;
     private String name;
     private String[] inputs;
@@ -50,7 +50,7 @@ public class SpecialistC extends ApplicationAdapter {
     private Texture palette;
     public SpecialistC(String[] args){
         VoxIOExtended.GENERAL = true;
-        SpecialRenderer2025.SHADOW_INDEX = (byte) 2;
+        SpecialRenderer.SHADOW_INDEX = (byte) 2;
         if(args != null && args.length > 0)
             inputs = args;
         else 
@@ -187,7 +187,7 @@ public class SpecialistC extends ApplicationAdapter {
                 pm.insertRange(pm.size - 4, 4);
             }
             if(GIF) {
-                SpecialRenderer2025.monoAlpha(pm);
+                SpecialRenderer.monoAlpha(pm);
                 analyzed.analyze(pm, 75.0, 256);
                 gif.palette = analyzed;
                 gif.write(Gdx.files.local("out/c/specialized/" + output + '/' + output + ".gif"), pm, 8);
@@ -229,7 +229,7 @@ public class SpecialistC extends ApplicationAdapter {
                     fb.dispose();
                 }
                 if(GIF) {
-                    SpecialRenderer2025.monoAlpha(pm);
+                    SpecialRenderer.monoAlpha(pm);
                     analyzed.analyze(pm, 75.0, 256);
                     gif.palette = analyzed;
                     gif.write(Gdx.files.local("out/c/specialized/" + output + '/' + output + "_Turntable.gif"), pm, 24);
@@ -272,7 +272,7 @@ public class SpecialistC extends ApplicationAdapter {
             }
             int nameStart = Math.max(name.lastIndexOf('/'), name.lastIndexOf('\\')) + 1;
             this.name = name.substring(nameStart, name.indexOf('.', nameStart));
-            renderer = new SpecialRenderer2025(voxels.grids.get(0).length, Stuff.STUFFS_C);
+            renderer = new SpecialRenderer(voxels.grids.get(0).length, Stuff.STUFFS_C);
             renderer.palette(Coloring.YAM4);
             renderer.saturation(0f);
         } catch (FileNotFoundException e) {

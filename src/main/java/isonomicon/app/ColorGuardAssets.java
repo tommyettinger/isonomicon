@@ -26,7 +26,6 @@ import isonomicon.physical.Tools3D;
 import isonomicon.visual.Coloring;
 import isonomicon.visual.ShaderUtils;
 import isonomicon.visual.SpecialRenderer;
-import isonomicon.visual.SpecialRenderer2025;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -64,7 +63,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
 
     public static final int SCREEN_WIDTH = 512;//640;
     public static final int SCREEN_HEIGHT = 512;//720;
-    private SpecialRenderer2025 renderer;
+    private SpecialRenderer renderer;
     private VoxModel voxels, head;
     private VoxModel[] frames = new VoxModel[8];
     private String name;
@@ -592,8 +591,8 @@ public class ColorGuardAssets extends ApplicationAdapter {
         if(EXPLOSION)
         {
             voxels = new VoxModel();
-//            SpecialRenderer.shrink = 1;
-            renderer = new SpecialRenderer2025(120, Stuff.STUFFS_B);
+//            SpecialRenderer2025.shrink = 1;
+            renderer = new SpecialRenderer(120, Stuff.STUFFS_B);
             renderer.palette(Coloring.BETTS64);
             renderer.saturation(0f);
             voxels.links.clear();
@@ -761,8 +760,8 @@ public class ColorGuardAssets extends ApplicationAdapter {
             this.name = (name+suffix).substring(nameStart, (name+suffix).indexOf('.', nameStart));
 //            renderer = new NextRenderer(voxels.length, QUALITY);
 //            renderer = new AngledRenderer(voxels.length);
-//            SpecialRenderer.shrink = 1;
-            renderer = new SpecialRenderer2025(voxels.grids.get(0).length, Stuff.STUFFS_B);
+//            SpecialRenderer2025.shrink = 1;
+            renderer = new SpecialRenderer(voxels.grids.get(0).length, Stuff.STUFFS_B);
             renderer.palette(Coloring.BETTS64);
             renderer.saturation(0f);
             

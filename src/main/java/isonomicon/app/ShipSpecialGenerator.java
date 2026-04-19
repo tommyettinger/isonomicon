@@ -4,7 +4,6 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -26,7 +25,7 @@ import isonomicon.physical.Stuff;
 import isonomicon.physical.Tools3D;
 import isonomicon.visual.Coloring;
 import isonomicon.visual.ShaderUtils;
-import isonomicon.visual.SpecialRenderer2025;
+import isonomicon.visual.SpecialRenderer;
 
 import java.nio.ByteBuffer;
 import java.text.DateFormat;
@@ -37,7 +36,7 @@ public class ShipSpecialGenerator extends ApplicationAdapter {
     public static final int SCREEN_WIDTH = 512;//640;
     public static final int SCREEN_HEIGHT = 512;//720;
     public static final boolean TURNTABLE = false;
-    private SpecialRenderer2025 renderer;
+    private SpecialRenderer renderer;
     private VoxModel voxels;
     private FastPNG png;
     private AnimatedGif gif;
@@ -107,7 +106,7 @@ public class ShipSpecialGenerator extends ApplicationAdapter {
             mm.rng.setSeed(Hasher.botis.hashBulk64(output));
             byte[][][] voxelData = mm.shipLargeSmoothColorized();
             voxels = new VoxModel(voxelData, Coloring.BETTS64, Stuff.MATERIALS_B);
-            renderer = new SpecialRenderer2025(voxels.grids.get(0).length, Stuff.STUFFS_B);
+            renderer = new SpecialRenderer(voxels.grids.get(0).length, Stuff.STUFFS_B);
             renderer.palette(Coloring.BETTS64);
             renderer.saturation(0f);
 
@@ -158,7 +157,7 @@ public class ShipSpecialGenerator extends ApplicationAdapter {
             }
             apng.write(Gdx.files.local("out/b/shipSpecialized/"  + date + "/"+ output + '/' + output + ".png"), pm, 8);
             if(gif != null){
-                SpecialRenderer2025.monoAlpha(pm);
+                SpecialRenderer.monoAlpha(pm);
                 analyzed.analyze(pm, 75.0, 256);
                 gif.palette = analyzed;
                 gif.write(Gdx.files.local("out/b/shipSpecialized/"  + date + "/"+ output + '/' + output + ".gif"), pm, 8);
@@ -198,7 +197,7 @@ public class ShipSpecialGenerator extends ApplicationAdapter {
                 }
                 apng.write(Gdx.files.local("out/b/shipSpecialized/" + date + "/" + output + '/' + output + "_Turntable.png"), pm, 24);
                 if(gif != null) {
-                    SpecialRenderer2025.monoAlpha(pm);
+                    SpecialRenderer.monoAlpha(pm);
                     analyzed.analyze(pm, 75.0, 256);
                     gif.palette = analyzed;
                     gif.write(Gdx.files.local("out/b/shipSpecialized/" + date + "/" + output + '/' + output + "_Turntable.gif"), pm, 24);

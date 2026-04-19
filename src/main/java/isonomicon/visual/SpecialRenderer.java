@@ -36,8 +36,8 @@ import static com.github.tommyettinger.digital.TrigTools.sinTurns;
  */
 public class SpecialRenderer {
     public static int shrink = 2;
-        public static float distortHXY = 2, distortVXY = 1, distortVZ = 3; // ground truth for isometric
-//    public static float distortHXY = 2, distortVXY = 0, distortVZ = 3; // side view
+    public static float distortHXY = 2, distortVXY = 1, distortVZ = 3; // ground truth for isometric
+    //    public static float distortHXY = 2, distortVXY = 0, distortVZ = 3; // side view
 //    public static float distortHXY = 2, distortVXY = 0.5f, distortVZ = 3; // partially elevated side view ("shallow")
     public static final float fidget = 0.5f;
 
@@ -115,7 +115,7 @@ public class SpecialRenderer {
      * @return
      */
     public static float logisticky(float x) { return 1f / (1f + RoughMath.expRough(-x)) - 0.5f; }
-    
+
     protected float bn(int x, int y, int seed) {
         return (BlueNoise.getSeededTriangular(x, y, seed) + 128) * 0x1p-8f;
     }
@@ -223,23 +223,23 @@ public class SpecialRenderer {
     }
 
     public void splat(float xPos, float yPos, float zPos, int vx, int vy, int vz, byte voxel, int frame) {
-        if (xPos <= -1f || yPos <= -1f || zPos <= -1f
+        if(xPos <= -1f || yPos <= -1f || zPos <= -1f
                 || xPos >= size * 2 || yPos >= size * 2 || zPos >= size * 2)
             return;
         final Stuff stuff = stuffs[Math.min(voxel & 255, stuffs.length - 1)];
         final VoxMaterial m = stuff.material;
         final float alpha = m.getTrait(VoxMaterial.MaterialTrait._alpha);
-        if (alpha >= 1f) return;
+        if(alpha >= 1f) return;
         voxel = (byte) stuff.appearsAs;
         final float flip = m.getTrait(VoxMaterial.MaterialTrait._frame);
-        if (Tools3D.randomizePointRare(vx, vy, vz, frame) < m.getTrait(VoxMaterial.MaterialTrait._metal) || (frame & 1) == flip)
+        if(Tools3D.randomizePointRare(vx, vy, vz, frame) < m.getTrait(VoxMaterial.MaterialTrait._metal) || (frame & 1) == flip)
             return;
         final float rise = m.getTrait(VoxMaterial.MaterialTrait._rise) * (1.25f + IntPointHash.hash256(vx, vy, vz, 12345) * 0x1.Cp-8f);
         final float flow = m.getTrait(VoxMaterial.MaterialTrait._flow);
         final float swirl = m.getTrait(VoxMaterial.MaterialTrait._swirl) + 1f;
-        if (swirl != 1f) {
+        if(swirl != 1f) {
             float ns = swirlNoise.getNoise(vx, vy, vz, cosTurns(frame * 0x1p-7f) * 0.625f / swirlNoise.getFrequency(), sinTurns(frame * 0x1p-7f) * 0.625f / swirlNoise.getFrequency()) * 2f;
-            if (ns > swirl) return;
+            if(ns > swirl) return;
         }
         final float emit = m.getTrait(VoxMaterial.MaterialTrait._emit) * 0.75f;
         int lowX = 0, highX = 4, lowY = 0, highY = 4;
@@ -249,7 +249,7 @@ public class SpecialRenderer {
 //            lowX = lowY = 1;
 //            highX = highY = 3;
 //        } else
-        if (flow != 0f) {
+        if(flow != 0f) {
             float ns = Stuff.noise.getConfiguredNoise(xPos, yPos, zPos, frame * flow);
             if (ns > 0) highX = (int) (4.5 + ns * (3 << shrink));
             else if (ns < 0) lowX = Math.round(lowX + ns * (3 << shrink));
@@ -257,9 +257,9 @@ public class SpecialRenderer {
         xPos += fidget;
         yPos += fidget;
         final int
-                xx = (int) (0.5f + Math.max(0, (size + yPos - xPos) * distortHXY + 1)),
-                yy = (int) (0.5f + Math.max(0, (zPos * distortVZ + size * ((distortVXY) * 3) - distortVXY * (xPos + yPos)) + 1 + rise * frame)),
-                depth = (int) (0.5f + (xPos + yPos) * distortHXY + zPos * distortVZ);
+                xx = (int)(0.5f + Math.max(0, (size + yPos - xPos) * distortHXY + 1)),
+                yy = (int)(0.5f + Math.max(0, (zPos * distortVZ + size * ((distortVXY) * 3) - distortVXY * (xPos + yPos)) + 1 + rise * frame)),
+                depth = (int)(0.5f + (xPos + yPos) * distortHXY + zPos * distortVZ);
         boolean drawn = false;
         final float hs = size * 0.5f;
         for (int x = lowX, ax = xx; x < highX && ax < render.length; x++, ax++) {
@@ -271,18 +271,20 @@ public class SpecialRenderer {
                     drawn = true;
                     depths[ax][ay] = depth;
                     materials[ax][ay] = m;
-                    if (voxel != 0) {
+                    if(voxel != 0) {
                         indices[ax][ay] = voxel;
                         if (emit == 0f) {
                             outlines[ax][ay] = 1;
                             outlineShading[ax][ay] = paletteL[voxel & 255] * 0.625f;
                             outlineIndices[ax][ay] = voxel;
-                        } else { //else if(outlineIndices[ax][ay] == 0) {
+                        }
+                        else { //else if(outlineIndices[ax][ay] == 0) {
                             outlines[ax][ay] = -1;
                             outlineShading[ax][ay] = paletteL[voxel & 255] * (1f + emit * 2.5f);
 //                            outlineIndices[ax][ay] = 0;
                         }
-                    } else {
+                    }
+                    else {
                         indices[ax][ay] = FLOOR_INDEX;
                     }
 //                                Coloring.darken(palette[voxel & 255], 0.375f - emit);
@@ -300,14 +302,14 @@ public class SpecialRenderer {
                 }
             }
         }
-        if (xPos < -hs || yPos < -hs || zPos < -hs || xPos + hs > shadeZ.length || yPos + hs > shadeZ[0].length || zPos + hs > shadeX[0].length)
+        if(xPos < -hs || yPos < -hs || zPos < -hs || xPos + hs > shadeZ.length || yPos + hs > shadeZ[0].length || zPos + hs > shadeX[0].length)
             System.out.println(xPos + ", " + yPos + ", " + zPos + " is out of bounds");
-        else if (drawn && emit == 0) {
+        else if(drawn && emit == 0f) {
             shadeZ[(int) (hs + xPos)][(int) (hs + yPos)] = Math.max(shadeZ[(int) (hs + xPos)][(int) (hs + yPos)], (hs + zPos));
             shadeX[(int) (hs + yPos)][(int) (hs + zPos)] = Math.max(shadeX[(int) (hs + yPos)][(int) (hs + zPos)], (hs + xPos));
         }
     }
-    
+
     public SpecialRenderer clear() {
         palettePixmap.setColor(0);
         palettePixmap.fill();
@@ -371,7 +373,7 @@ public class SpecialRenderer {
         VoxMaterial m;
         final int step = 1 << shrink;
         for (int sx = 0; sx <= xSize; sx++) {
-            for (int sy = ySize; sy >= 0; sy--) {
+            for (int sy = 0; sy <= ySize; sy++) {
                 if((v = voxels[sx][sy]) != -1) {
                     vx = v & 0x3FF;
                     vy = v >>> 10 & 0x3FF;
@@ -390,11 +392,11 @@ public class SpecialRenderer {
                     final float emit = m.getTrait(VoxMaterial.MaterialTrait._emit);
                     if(variance) {
                         final float dapple = m.getTrait(VoxMaterial.MaterialTrait._dapple);
-                        if (dapple != 0f && shading[sx][sy] < 1000) {
+                        final float vary = m.getTrait(VoxMaterial.MaterialTrait._vary) * 10f;
+                        if (dapple != 0f) {
                             final float d = dapple * bnBlocky(vx, vy, vz);
                             shading[sx][sy] += d;
                         }
-                        final float vary = m.getTrait(VoxMaterial.MaterialTrait._vary) * 10f;
                         if (vary != 0f) {
                             saturation[sx][sy] = Math.min(Math.max(vary * bnBlocky(vy, vz, vx), -1f), 1f);
                         }
@@ -445,14 +447,11 @@ public class SpecialRenderer {
                                 }
                             }
                         }
-//                        if(shadows) {
-//                            if (shadeZ[fx][fy] <= -1) {
-//                                if (indices[sx][sy] == FLOOR_INDEX)
-//                                    shading[sx][sy] = 1024f;
-//                                else if(emit == 0f && frame == 7)
-//                                    System.out.println("On frame " + frame + ", shadeZ is " + shadeZ[fx][fy] + " for non-floor stuff " + stuffs[indices[sx][sy] & 0xFF].name + " at pixel " + sx + "," + sy + " and voxel " + fx + "," + fy + "," + fz);
-//                            }
-//                        }
+                        if(shadows){
+                            if(indices[sx][sy] == FLOOR_INDEX && shadeZ[fx][fy] <= hs + 0.5f)
+//                            if(indices[sx][sy] == FLOOR_INDEX && (vx <= step * 4 || vy <= step * 4 || vx >= xSize - step * 4 || vy >= ySize - step * 4))
+                                shading[sx][sy] = 1024f;
+                        }
                     }
                 }
             }
@@ -463,23 +462,22 @@ public class SpecialRenderer {
             for (int y = ySize; y >= 0; y--) {
                 if ((index = indices[x][y]) != 0) {
                     sh = shading[x][y];
-//                    if(sh >= 1000f)
-//                        continue;
+                    if(sh >= 1000f)
+                        continue;
+                    byte shade = (byte) (Math.min(Math.max((sh + logisticky(midShading[x][y])) * 0.625f + 0.1328125f, 0f), 1f) * 255.999f);
 //                    byte shade = (byte) (Math.min(Math.max((sh + midShading[x][y]) * 0.625f + 0.1328125f, 0f), 1f) * 255.999f);
                     byte sat = (byte) (Math.min(Math.max((saturation[x][y]) * 0.5f + 0.5f, 0f), 1f) * 255.999f);
 //                    palettePixmap.drawPixel(x >>> shrink, y >>> shrink, (indices[x][y] & 255) << 24 |
 //                            shade << 16 |
 //                            sat << 8 | 255);
                     int idx = (y >>> shrink) * palettePixmap.getWidth() + (x >>> shrink) << 2;
-                    if (shadows && index == SHADOW_INDEX) {
-                        byte shade = (byte) (Math.min(Math.max((sh + logisticky(midShading[x][y])) * 0.625f + 0.1328125f, 0f), 1f) * 255.999f);
+                    if (shadows && index == FLOOR_INDEX) {
                         buffer.put(idx, SHADOW_INDEX); // shadow stuff
-                        buffer.put(idx + 1, (byte) 128);
+                        buffer.put(idx + 1, (byte) ((shade & 255) >>> 1));
                         buffer.put(idx + 2, (byte) 0);
-                        buffer.put(idx + 3, (byte) (255 - shade));
-//                        buffer.put(idx + 3, (byte) Math.min(Math.max(480 - (shade & 255) * 8, 0), 255));
+//                        buffer.put(idx + 3, (byte) (255 - shade));
+                        buffer.put(idx + 3, (byte) Math.min(Math.max(480 - (shade & 255) * 8, 0), 255));
                     } else {
-                        byte shade = (byte) (Math.min(Math.max((sh + logisticky(midShading[x][y])) * 0.625f + 0.1328125f, 0f), 1f) * 255.999f);
                         buffer.put(idx, index);
                         buffer.put(idx + 1, shade);
                         buffer.put(idx + 2, sat);
@@ -496,8 +494,7 @@ public class SpecialRenderer {
 //                                128 << 16 |
 //                                128 << 8 | shade);
                         buffer.put(idx, lightIndices[x][y]);
-//                        buffer.put(idx+1, (byte) 255);
-                        buffer.put(idx+1, (byte) Math.min(Math.max(paletteL[lightIndices[x][y] & 255] * 255.999f, 0), 255));
+                        buffer.put(idx+1, (byte) shade);
                         buffer.put(idx+2, (byte) 96);
                         buffer.put(idx+3, (byte) shade);
                         outlineIndices[x][y] = 0;
@@ -513,8 +510,7 @@ public class SpecialRenderer {
 //                                128 << 16 |
 //                                128 << 8 | shade);
                         buffer.put(idx, lightIndices[x][y]);
-//                        buffer.put(idx+1, (byte) 0);
-                        buffer.put(idx+1, (byte) Math.min(Math.max(paletteL[lightIndices[x][y] & 255] * 255.999f, 0), 255));
+                        buffer.put(idx+1, (byte) (255 - shade));
                         buffer.put(idx+2, (byte) 96);
                         buffer.put(idx+3, (byte) shade);
                         outlineIndices[x][y] = 0;
@@ -768,22 +764,22 @@ public class SpecialRenderer {
         final float x_x = cYaw * cPitch, y_x = cYaw * sPitch * sRoll - sYaw * cRoll, z_x = cYaw * sPitch * cRoll + sYaw * sRoll;
         final float x_y = sYaw * cPitch, y_y = sYaw * sPitch * sRoll + cYaw * cRoll, z_y = sYaw * sPitch * cRoll - cYaw * sRoll;
         final float x_z = -sPitch, y_z = cPitch * sRoll, z_z = cPitch * cRoll;
-//        for (int z = 0; z < size; z++) {
-//            for (int x = 0; x < size; x++) {
-//                for (int y = 0; y < size; y++) {
-//                    final byte v = g[x][y][z];
-//                    if(v != 0)
-//                    {
-//                        ox = x - hs + fidget;
-//                        oy = y - hs + fidget;
-//                        oz = z - hs;
-//                        splat(  ox * x_x + oy * y_x + oz * z_x + size + translateX,
-//                                ox * x_y + oy * y_y + oz * z_y + size + translateY,
-//                                ox * x_z + oy * y_z + oz * z_z + hs + translateZ, x, y, z, v, frame);
-//                    }
-//                }
-//            }
-//        }
+        for (int z = 0; z < size; z++) {
+            for (int x = 0; x < size; x++) {
+                for (int y = 0; y < size; y++) {
+                    final byte v = g[x][y][z];
+                    if(v != 0)
+                    {
+                        ox = x - hs + fidget;
+                        oy = y - hs + fidget;
+                        oz = z - hs;
+                        splat(  ox * x_x + oy * y_x + oz * z_x + size + translateX,
+                                ox * x_y + oy * y_y + oz * z_y + size + translateY,
+                                ox * x_z + oy * y_z + oz * z_z + hs + translateZ, x, y, z, v, frame);
+                    }
+                }
+            }
+        }
 
         for(IntObjectMap.Entry<float[]> ent : link) {
             if(ent.key == -1) continue;
