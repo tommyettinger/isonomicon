@@ -45,7 +45,7 @@ public class SpecialistC extends ApplicationAdapter {
     private String[] inputs;
     private FastPNG png;
     private AnimatedGif gif;
-    private QualityPalette analyzed, snuggly256;
+    private QualityPalette analyzed;
     private SpriteBatch batch;
     private Texture palette;
     public SpecialistC(String[] args){
@@ -131,7 +131,6 @@ public class SpecialistC extends ApplicationAdapter {
             gif.palette = analyzed = new QualityPalette();
             gif.setDitherStrength(AppConfig.STRENGTH);
         }
-        snuggly256 = new QualityPalette();
         Gdx.files.local("out/vox").mkdirs();
         for (int n = 0; n < inputs.length - 2;) {
             String s = inputs[n++];
@@ -190,10 +189,8 @@ public class SpecialistC extends ApplicationAdapter {
                 SpecialRenderer.monoAlpha(pm);
                 analyzed.analyze(pm, 75.0, 256);
                 gif.palette = analyzed;
-                gif.write(Gdx.files.local("out/c/specialized/" + output + '/' + output + ".gif"), pm, 8);
-                gif.palette = snuggly256;
                 gif.setDitherStrength(AppConfig.STRENGTH);
-                gif.write(Gdx.files.local("out/c/specializedSnuggly256/" + output + '/' + output + ".gif"), pm, 8);
+                gif.write(Gdx.files.local("out/c/specialized/" + output + '/' + output + ".gif"), pm, 8);
             }
             for (Pixmap pix : pm) {
                 if (!pix.isDisposed())
@@ -201,13 +198,16 @@ public class SpecialistC extends ApplicationAdapter {
             }
             pm.clear();
             if(TURNTABLE) {
+                renderer.clear();
                 voxels.grids.clear();
                 for (int j = 0; j < original.size(); j++) {
                     voxels.grids.add(Tools3D.deepCopy(original.get(j)));
                 }
                 for (int i = 0; i < 128; i++) {
-                    for (int j = 0; j < voxels.grids.size(); j++) {
-                        Stuff.evolve(Stuff.STUFFS_C, voxels.grids.get(j), i);
+                    if((i & 3) == 0) {
+                        for (int j = 0; j < voxels.grids.size(); j++) {
+                            Stuff.evolve(Stuff.STUFFS_C, voxels.grids.get(j), i >>> 2 & 3);
+                        }
                     }
                     renderer.drawModelSimple(voxels, i * 0x1p-7f + 0.125f, 0f, 0f, i, 0, 0, 0);
                     t.draw(renderer.palettePixmap, 0, 0);

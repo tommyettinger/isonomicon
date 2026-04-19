@@ -220,15 +220,18 @@ public class Specialist extends ApplicationAdapter {
             }
             pm.clear();
             if(TURNTABLE) {
+                renderer.clear();
                 voxels.grids.clear();
                 for (int j = 0; j < original.size(); j++) {
                     voxels.grids.add(Tools3D.deepCopy(original.get(j)));
                 }
                 for (int i = 0; i < 128; i++) {
-                    for (int j = 0; j < voxels.grids.size(); j++) {
-                        Stuff.evolve(Stuff.STUFFS_B, voxels.grids.get(j), i);
+                    if((i & 3) == 0) {
+                        for (int j = 0; j < voxels.grids.size(); j++) {
+                            Stuff.evolve(Stuff.STUFFS_B, voxels.grids.get(j), i >>> 2 & 3);
+                        }
                     }
-                    renderer.drawModelSimple(voxels, i * 0x1p-7f + 0.125f, 0f, 0f, i, 0, 0, 0);
+                    renderer.drawModelSimple(voxels, i * 0x1p-7f + 0.125f, 0f, 0f, i >>> 2 & 3, 0, 0, 0);
                     t.draw(renderer.palettePixmap, 0, 0);
                     FrameBuffer fb = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), false);
                     fb.begin();
