@@ -21,7 +21,6 @@ import isonomicon.physical.Stuff;
 import isonomicon.physical.Tools3D;
 import isonomicon.visual.Coloring;
 import isonomicon.visual.ShaderUtils;
-import isonomicon.visual.SpecialRenderer;
 import isonomicon.visual.SpecialRenderer2025;
 
 import java.io.File;

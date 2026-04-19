@@ -26,7 +26,6 @@ import isonomicon.physical.Stuff;
 import isonomicon.physical.Tools3D;
 import isonomicon.visual.Coloring;
 import isonomicon.visual.ShaderUtils;
-import isonomicon.visual.SpecialRenderer;
 import isonomicon.visual.SpecialRenderer2025;
 
 import java.nio.ByteBuffer;
@@ -159,7 +158,7 @@ public class ShipSpecialGenerator extends ApplicationAdapter {
             }
             apng.write(Gdx.files.local("out/b/shipSpecialized/"  + date + "/"+ output + '/' + output + ".png"), pm, 8);
             if(gif != null){
-                SpecialRenderer.monoAlpha(pm);
+                SpecialRenderer2025.monoAlpha(pm);
                 analyzed.analyze(pm, 75.0, 256);
                 gif.palette = analyzed;
                 gif.write(Gdx.files.local("out/b/shipSpecialized/"  + date + "/"+ output + '/' + output + ".gif"), pm, 8);
@@ -199,7 +198,7 @@ public class ShipSpecialGenerator extends ApplicationAdapter {
                 }
                 apng.write(Gdx.files.local("out/b/shipSpecialized/" + date + "/" + output + '/' + output + "_Turntable.png"), pm, 24);
                 if(gif != null) {
-                    SpecialRenderer.monoAlpha(pm);
+                    SpecialRenderer2025.monoAlpha(pm);
                     analyzed.analyze(pm, 75.0, 256);
                     gif.palette = analyzed;
                     gif.write(Gdx.files.local("out/b/shipSpecialized/" + date + "/" + output + '/' + output + "_Turntable.gif"), pm, 24);

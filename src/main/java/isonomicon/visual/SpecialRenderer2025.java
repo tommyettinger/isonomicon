@@ -486,7 +486,7 @@ public class SpecialRenderer2025 {
                 }
                 else if(midShading[x][y] > 0f) {
 //                    int shade = (int) (logisticky((shading[x][y] + midShading[x][y])) * 255.999f);
-                    int shade = (int) (Math.min(Math.max((shading[x][y] + logisticky(midShading[x][y])) * 0.625f + 0.1328125f, 0f), 1f) * 255.999f);
+                    int shade = (int) (Math.min(Math.max((shading[x][y] + logisticky(midShading[x][y])) * 0.625f + 0.5f, 0f), 1f) * 255.999f);
 //                    int shade = (int) ((1f - Math.min(Math.max((shading[x][y] + midShading[x][y]) * 0.625f + 0.1328125f, 0f), 1f)) * 255.999f);
                     int idx = (y >>> shrink) * palettePixmap.getWidth() + (x >>> shrink) << 2;
                     if ((buffer.get(idx+3) & 255) < shade) {
@@ -502,7 +502,7 @@ public class SpecialRenderer2025 {
                 }
                 else if(midShading[x][y] < 0f) {
 //                    int shade = (int) (logisticky((shading[x][y] + midShading[x][y])) * 255.999f);
-                    int shade = (int) (1f - Math.min(Math.max((shading[x][y] + logisticky(midShading[x][y])) * 0.625f + 0.1328125f, 0f), 1f) * 255.999f);
+                    int shade = (int) (1f - Math.min(Math.max((shading[x][y] + logisticky(midShading[x][y])) * 0.625f + 0.5f, 0f), 1f) * 255.999f);
 //                    int shade = (int) ((1f - Math.min(Math.max((shading[x][y] + midShading[x][y]) * 0.625f + 0.1328125f, 0f), 1f)) * 255.999f);
                     int idx = (y >>> shrink) * palettePixmap.getWidth() + (x >>> shrink) << 2;
                     if ((buffer.get(idx+3) & 255) < shade) {
