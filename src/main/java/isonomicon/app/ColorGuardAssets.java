@@ -43,12 +43,12 @@ public class ColorGuardAssets extends ApplicationAdapter {
      * No shadows and light outlines.
      */
     public static boolean ALTERNATE = true;
-//    public static final String SPECIES = "human";
-//    public static final String SPECIES_PREFIX = "";
-//    public static final float DAMAGED = 0f;
-    public static final String SPECIES = "zombie";
-    public static final String SPECIES_PREFIX = "Zombie_";
-    public static final float DAMAGED = 0.65f;
+    public static final String SPECIES = "human";
+    public static final String SPECIES_PREFIX = "";
+    public static final float DAMAGED = 0f;
+//    public static final String SPECIES = "zombie";
+//    public static final String SPECIES_PREFIX = "Zombie_";
+//    public static final float DAMAGED = 0.65f;
 
     public static boolean PNG = true;
     public static boolean APNG = false;
@@ -88,18 +88,14 @@ public class ColorGuardAssets extends ApplicationAdapter {
         Tools3D.SHADOWS = !ALTERNATE;
         armies = new String[]{
                 "Dark",
-//                "White",
+                "White",
+                "Red",
+                "Orange",
+                "Yellow",
+                "Green",
+                "Blue",
+                "Purple",
         };
-//        armies = new String[]{
-//                "Dark",
-//                "White",
-//                "Red",
-//                "Orange",
-//                "Yellow",
-//                "Green",
-//                "Blue",
-//                "Purple",
-//        };
 
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.primaryStrength > 0).toList();
 //        ColorGuardData.units = ColorGuardData.units.stream().filter(u -> u.hasWeapon("Debug")).toList();
