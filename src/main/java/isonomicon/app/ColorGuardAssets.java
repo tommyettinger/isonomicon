@@ -40,15 +40,15 @@ public class ColorGuardAssets extends ApplicationAdapter {
     public static boolean TERRAIN = false;
 
     /**
-     * No shadows and light outlines.
+     * Light outlines instead of black outlines.
      */
-    public static boolean ALTERNATE = true;
-    public static final String SPECIES = "human";
-    public static final String SPECIES_PREFIX = "";
-    public static final float DAMAGED = 0f;
-//    public static final String SPECIES = "zombie";
-//    public static final String SPECIES_PREFIX = "Zombie_";
-//    public static final float DAMAGED = 0.65f;
+    public static boolean ALTERNATE = SpecialRenderer.outline == 2;
+//    public static final String SPECIES = "human";
+//    public static final String SPECIES_PREFIX = "";
+//    public static final float DAMAGED = 0f;
+    public static final String SPECIES = "zombie";
+    public static final String SPECIES_PREFIX = "Zombie_";
+    public static final float DAMAGED = 0.65f;
 
     public static boolean PNG = true;
     public static boolean APNG = false;
@@ -61,8 +61,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //    public static final String outDir = "out/cg_gray_" + SPECIES + (DAMAGED > 0f ? "_damaged" : "");
 //    public static final String outDir = "out/cg_pixel_" + SPECIES + (DAMAGED > 0f ? "_damaged" : "");
 //    public static final String outDir = "out/cg_" + SPECIES + (DAMAGED > 0f ? "_damaged" : "");
-    public static final String outDir = "out/cg/" + DateFormat.getDateInstance().format(new Date()) + "/shrink3_" + SPECIES + (DAMAGED > 0f ? "_damaged" : "");
-//    public static final String outDir = "out/cg/" + DateFormat.getDateInstance().format(new Date()) + "/shrink2_" + SPECIES + (DAMAGED > 0f ? "_damaged" : "");
+    public static final String outDir = "out/cg/" + DateFormat.getDateInstance().format(new Date()) + "/shrink" + SpecialRenderer.shrink + "_" + SPECIES + (DAMAGED > 0f ? "_damaged" : "");
 //    public static final String outDir = "out/cg_small_Gourd_0_3";
 //    public static final String outDir = "out/cg_Gourd_0_3";
 //    public static final String outDir = "out/cg_Banter_0_7";
