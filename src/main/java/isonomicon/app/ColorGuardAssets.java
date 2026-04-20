@@ -61,8 +61,8 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //    public static final String outDir = "out/cg_gray_" + SPECIES + (DAMAGED > 0f ? "_damaged" : "");
 //    public static final String outDir = "out/cg_pixel_" + SPECIES + (DAMAGED > 0f ? "_damaged" : "");
 //    public static final String outDir = "out/cg_" + SPECIES + (DAMAGED > 0f ? "_damaged" : "");
-//    public static final String outDir = "out/cg/" + DateFormat.getDateInstance().format(new Date()) + "/shrink3_" + SPECIES + (DAMAGED > 0f ? "_damaged" : "");
-    public static final String outDir = "out/cg/" + DateFormat.getDateInstance().format(new Date()) + "/shrink2_" + SPECIES + (DAMAGED > 0f ? "_damaged" : "");
+    public static final String outDir = "out/cg/" + DateFormat.getDateInstance().format(new Date()) + "/shrink3_" + SPECIES + (DAMAGED > 0f ? "_damaged" : "");
+//    public static final String outDir = "out/cg/" + DateFormat.getDateInstance().format(new Date()) + "/shrink2_" + SPECIES + (DAMAGED > 0f ? "_damaged" : "");
 //    public static final String outDir = "out/cg_small_Gourd_0_3";
 //    public static final String outDir = "out/cg_Gourd_0_3";
 //    public static final String outDir = "out/cg_Banter_0_7";
@@ -85,7 +85,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
 
     public ColorGuardAssets() {
         VoxIOExtended.GENERAL = false;
-        Tools3D.SHADOWS = !ALTERNATE;
+        Tools3D.SHADOWS = true;
         armies = new String[]{
                 "Dark",
                 "White",
@@ -190,12 +190,12 @@ public class ColorGuardAssets extends ApplicationAdapter {
                 ColorGuardData.Unit unit = ColorGuardData.units.get(n);
                 name = unit.name;
                 System.out.println("Rendering " + name);
-                if(ALTERNATE || ColorGuardData.terrains.contains(name) || name.startsWith("Terrain")){
+                if(ColorGuardData.terrains.contains(name) || name.startsWith("Terrain")){
                     renderer.shadows = false;
                     renderer.outline = 2;
                 } else {
                     renderer.shadows = true;
-                    renderer.outline = 4;
+                    renderer.outline = ALTERNATE ? 2 : 4;
                 }
                 Gdx.files.local(outDir + "/animated_diverse/" + SPECIES_PREFIX + name + '/').mkdirs();
                 load("specialized/b/vox/color_guard/" + name, ".vox");
@@ -400,12 +400,12 @@ public class ColorGuardAssets extends ApplicationAdapter {
                 String s = unit.name;
                 System.out.println("Rendering " + s);
                 load("specialized/b/vox/color_guard/" + s, ".vox");
-                if(ALTERNATE || ColorGuardData.terrains.contains(name) || name.startsWith("Terrain")){
+                if(ColorGuardData.terrains.contains(name) || name.startsWith("Terrain")){
                     renderer.shadows = false;
                     renderer.outline = 2;
                 } else {
                     renderer.shadows = true;
-                    renderer.outline = 4;
+                    renderer.outline = ALTERNATE ? 2 : 4;
                 }
                 Texture t = new Texture(renderer.palettePixmap.getWidth(), renderer.palettePixmap.getHeight(), Pixmap.Format.RGBA8888);
                 Pixmap pixmap;
