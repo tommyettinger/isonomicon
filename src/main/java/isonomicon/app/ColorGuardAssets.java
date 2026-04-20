@@ -29,6 +29,8 @@ import isonomicon.visual.SpecialRenderer;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.text.DateFormat;
+import java.util.Date;
 
 public class ColorGuardAssets extends ApplicationAdapter {
     public static boolean DIVERSE = false;
@@ -45,16 +47,16 @@ public class ColorGuardAssets extends ApplicationAdapter {
 
     public static boolean PNG = true;
     public static boolean APNG = false;
-    public static boolean GIF = true;
+    public static boolean GIF = false;
     public static boolean VOX = false;
 
 //    public static final String outDir = "out/color_guard";
 //    public static final String outDir = "out/cg";
 //    public static final String outDir = "out/cg_July_23_2024";
 //    public static final String outDir = "out/cg_gray_" + SPECIES + (DAMAGED > 0f ? "_damaged" : "");
-    public static final String outDir = "out/cg_pixel_" + SPECIES + (DAMAGED > 0f ? "_damaged" : "");
+//    public static final String outDir = "out/cg_pixel_" + SPECIES + (DAMAGED > 0f ? "_damaged" : "");
 //    public static final String outDir = "out/cg_" + SPECIES + (DAMAGED > 0f ? "_damaged" : "");
-//    public static final String outDir = "out/cg_small_" + SPECIES + (DAMAGED > 0f ? "_damaged" : "");
+    public static final String outDir = "out/cg/" + DateFormat.getDateInstance().format(new Date()) + "/small_" + SPECIES + (DAMAGED > 0f ? "_damaged" : "");
 //    public static final String outDir = "out/cg_small_Gourd_0_3";
 //    public static final String outDir = "out/cg_Gourd_0_3";
 //    public static final String outDir = "out/cg_Banter_0_7";
@@ -77,6 +79,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
 
     public ColorGuardAssets() {
         VoxIOExtended.GENERAL = false;
+        Tools3D.SHADOWS = false;
         armies = new String[]{
                 "Dark",
                 "White",
@@ -659,7 +662,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                     pixmap = Pixmap.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
                     fb.end();
                     pm.add(pixmap);
-                    if(png != null) png.write(Gdx.files.local(outDir + "/effects/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), pixmap);
+                    if(png != null) png.write(Gdx.files.local(outDir + "/Effects/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), pixmap);
                     if(png != null) png.write(Gdx.files.local(outDir + "/lab/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                 }
             }
