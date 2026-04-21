@@ -35,7 +35,7 @@ import static com.github.tommyettinger.digital.TrigTools.sinTurns;
  * unusual technique that stores a palette index in the R channel and a lightness adjustment in the G channel.
  */
 public class SpecialRenderer {
-    public static int shrink = 2;
+    public static int shrink = 3;
     public static float distortHXY = 2, distortVXY = 1, distortVZ = 3; // ground truth for isometric
     //    public static float distortHXY = 2, distortVXY = 0, distortVZ = 3; // side view
 //    public static float distortHXY = 2, distortVXY = 0.5f, distortVZ = 3; // partially elevated side view ("shallow")
@@ -51,8 +51,8 @@ public class SpecialRenderer {
     public byte[][] indices, outlineIndices, lightIndices;
     public int[] palette;
     public float[] paletteL, paletteA, paletteB;
-    public static int outline = 2;
-//    public int outline = 4;
+//    public static int outline = 2;
+    public static int outline = 4;
     public boolean variance = true;
     public boolean lighting = true;
     public boolean shadows = Tools3D.SHADOWS;
@@ -715,6 +715,7 @@ public class SpecialRenderer {
                     }
                 }
             }
+            ArrayTools.fill(outlines, (byte) 0);
         }
         for (int z = 0; z < size; z++) {
             for (int x = 0; x < size; x++) {
