@@ -37,7 +37,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
     public static boolean ATTACKS = true;
     public static boolean DEATHS = false;
     public static boolean EXPLOSION = true;
-    public static boolean TERRAIN = false;
+    public static boolean TERRAIN = true;
 
     /**
      * Light outlines instead of black outlines.

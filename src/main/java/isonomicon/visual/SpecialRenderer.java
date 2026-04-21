@@ -227,6 +227,7 @@ public class SpecialRenderer {
         if(xPos <= -1f || yPos <= -1f || zPos <= -1f
                 || xPos >= size * 2 || yPos >= size * 2 || zPos >= size * 2)
             return;
+        boolean isNotShadow = voxel != SHADOW_INDEX;
         final Stuff stuff = stuffs[Math.min(voxel & 255, stuffs.length - 1)];
         final VoxMaterial m = stuff.material;
         final float alpha = m.getTrait(VoxMaterial.MaterialTrait._alpha);
@@ -272,20 +273,18 @@ public class SpecialRenderer {
                     drawn = true;
                     depths[ax][ay] = depth;
                     materials[ax][ay] = m;
-                    if(voxel != 0) {
+                    if (isNotShadow && voxel != 0) {
                         indices[ax][ay] = voxel;
                         if (emit == 0f) {
                             outlines[ax][ay] = 1;
                             outlineShading[ax][ay] = paletteL[voxel & 255] * 0.625f;
                             outlineIndices[ax][ay] = voxel;
-                        }
-                        else { //else if(outlineIndices[ax][ay] == 0) {
+                        } else { //else if(outlineIndices[ax][ay] == 0) {
                             outlines[ax][ay] = -1;
                             outlineShading[ax][ay] = paletteL[voxel & 255] * (1f + emit * 2.5f);
 //                            outlineIndices[ax][ay] = 0;
                         }
-                    }
-                    else {
+                    } else {
                         indices[ax][ay] = FLOOR_INDEX;
                     }
 //                                Coloring.darken(palette[voxel & 255], 0.375f - emit);
@@ -715,7 +714,6 @@ public class SpecialRenderer {
                     }
                 }
             }
-            ArrayTools.fill(outlines, (byte) 0);
         }
         for (int z = 0; z < size; z++) {
             for (int x = 0; x < size; x++) {
