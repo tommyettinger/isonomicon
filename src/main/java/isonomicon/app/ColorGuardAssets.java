@@ -43,12 +43,12 @@ public class ColorGuardAssets extends ApplicationAdapter {
      * Light outlines instead of black outlines.
      */
     public static boolean ALTERNATE = SpecialRenderer.outline == 2;
-    public static final String SPECIES = "human";
-    public static final String SPECIES_PREFIX = "";
-    public static final float DAMAGED = 0f;
-//    public static final String SPECIES = "zombie";
-//    public static final String SPECIES_PREFIX = "Zombie_";
-//    public static final float DAMAGED = 0.65f;
+//    public static final String SPECIES = "human";
+//    public static final String SPECIES_PREFIX = "";
+//    public static final float DAMAGED = 0f;
+    public static final String SPECIES = "zombie";
+    public static final String SPECIES_PREFIX = "Zombie_";
+    public static final float DAMAGED = 0.65f;
 
     public static boolean PNG = true;
     public static boolean APNG = false;
