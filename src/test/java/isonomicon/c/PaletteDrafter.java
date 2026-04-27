@@ -125,11 +125,12 @@ public class PaletteDrafter extends ApplicationAdapter {
 
     private static final Stuff[] STUFFS = Stuff.STUFFS_C;
 
-    private final ObjectObjectOrderedMap<String, int[]> groups = new ObjectObjectOrderedMap<>(128);
+    private final ObjectObjectOrderedMap<String, int[]> groups = new ObjectObjectOrderedMap<>(256);
     {
         int[] all = new int[215];
 
         for (int i = 3, idx = 0; i < 220; i++) {
+            // we're removing "constant color" materials here.
             if(i == 9 || i == 15) continue;
             all[idx++] = i;
         }
@@ -164,7 +165,7 @@ public class PaletteDrafter extends ApplicationAdapter {
     public void create() {
         font = new BitmapFont(Gdx.files.internal("font.fnt"));
         workingPalette = new Pixmap(Gdx.files.internal("palettes/c/yam4.png"));
-        workingOklab = new float[128];
+        workingOklab = new float[256];
         palettes = new Texture(workingPalette);
         preview = new Pixmap(16, 16, Pixmap.Format.RGBA8888);
         preview.setColor(workingPalette.getPixel(stuffIndex & 255, 0));
@@ -187,7 +188,7 @@ public class PaletteDrafter extends ApplicationAdapter {
         A = ColorTools.channelA(oklab);
         B = ColorTools.channelB(oklab);
         alpha = 1f;// - STUFFS[groups.getAt(groupIndex)[stuffIndex]].material.getTrait(VoxMaterial.MaterialTrait._alpha);
-        for (int i = 1; i < 128; i++) {
+        for (int i = 1; i < 256; i++) {
             workingOklab[i] = ColorTools.fromRGBA8888(workingPalette.getPixel(i, 0));
         }
 
@@ -288,7 +289,7 @@ public class PaletteDrafter extends ApplicationAdapter {
         int[] group = groups.getAt(groupIndex);
         if(regroup || switched){
             stuffIndex = (stuffIndex + group.length) % group.length;
-            final float oklab = workingOklab[group[stuffIndex] - 1 & 127];
+            final float oklab = workingOklab[group[stuffIndex] - 1 & 255];
             L = ColorTools.channelL(oklab);
             A = ColorTools.channelA(oklab);
             B = ColorTools.channelB(oklab);
@@ -338,15 +339,15 @@ public class PaletteDrafter extends ApplicationAdapter {
             }
             if (changed) {
                 for (int i = 0; i < group.length; i++) {
-                    final float oklab = workingOklab[group[i] - 1 & 127];
+                    final float oklab = workingOklab[group[i] - 1 & 255];
                     float l = Math.min(Math.max(ColorTools.channelL(oklab) + allL,  0f),  1f);
                     float a = Math.min(Math.max((ColorTools.channelA(oklab) - 0.5f) * (1f + allS * 3f) + 0.5f + allA,  0f),  1f);
                     float b = Math.min(Math.max((ColorTools.channelB(oklab) - 0.5f) * (1f + allS * 3f) + 0.5f + allB,  0f),  1f);
                     float al = 1f;// - STUFFS[group[i]].material.getTrait(VoxMaterial.MaterialTrait._alpha);
                     float edited;
-                    workingOklab[group[i] - 1 & 127] = edited = ColorTools.limitToGamut(l, a, b, al);
+                    workingOklab[group[i] - 1 & 255] = edited = ColorTools.limitToGamut(l, a, b, al);
                     int pre = ColorTools.toRGBA8888(edited);
-                    workingPalette.drawPixel(group[i] - 1 & 127, 0, pre);
+                    workingPalette.drawPixel(group[i] - 1 & 255, 0, pre);
                     if(stuffIndex == i){
                         L = l;
                         A = a;
@@ -401,9 +402,9 @@ public class PaletteDrafter extends ApplicationAdapter {
                 B = Math.min(Math.max((B - 0.5f) * (1f - step * 3f) + 0.5f,  0f),  1f);
                 changed = true;
             }
-            currentPreview = ColorTools.toRGBA8888(workingOklab[group[stuffIndex] - 1 & 127] = ColorTools.limitToGamut(L, A, B, alpha));
+            currentPreview = ColorTools.toRGBA8888(workingOklab[group[stuffIndex] - 1 & 255] = ColorTools.limitToGamut(L, A, B, alpha));
             if (changed) {
-                workingPalette.drawPixel(group[stuffIndex] - 1 & 127, 0, currentPreview);
+                workingPalette.drawPixel(group[stuffIndex] - 1 & 255, 0, currentPreview);
                 palettes.draw(workingPalette, 0, 0);
             }
         }
