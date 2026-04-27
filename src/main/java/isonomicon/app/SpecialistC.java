@@ -87,7 +87,8 @@ public class SpecialistC extends ApplicationAdapter {
 //            inputs = new String[]{"b/vox/Figure.vox", "b/vox/Tree.vox"};
 //            inputs = new String[]{"b/vox/Figure_Split.vox", "palettes/b/TanClothDarkSkin.png"};
 //            inputs = new String[]{"b/vox/Damned.vox", "palettes/b/CherrySkinDarkCloth.png"};
-            inputs = new String[]{"c/Direction_Cube.vox", "palettes/c/yam4.png", "Direction Cube"};
+            inputs = new String[]{"c/Eye_Tyrant.vox", "palettes/c/yam4.png", "Eye Tyrant"};
+//            inputs = new String[]{"c/Direction_Cube.vox", "palettes/c/yam4.png", "Direction Cube"};
 //            inputs = new String[]{"b/vox/Lomuk.vox", "palettes/b/BlueFurCyanCrystal.png", "Blue Lomuk"};
 //            inputs = new String[]{"b/vox/Lomuk.vox", "palettes/b/BlueFurCyanCrystal.png",
 //                    "b/vox/Damned.vox", "palettes/b/CherrySkinDarkCloth.png",
