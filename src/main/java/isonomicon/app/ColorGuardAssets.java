@@ -43,16 +43,16 @@ public class ColorGuardAssets extends ApplicationAdapter {
      * Light outlines instead of black outlines.
      */
     public static boolean ALTERNATE = SpecialRenderer.outline == 2;
-//    public static final String SPECIES = "human";
-//    public static final String SPECIES_PREFIX = "";
-//    public static final float DAMAGED = 0f;
-    public static final String SPECIES = "zombie";
-    public static final String SPECIES_PREFIX = "Zombie_";
-    public static final float DAMAGED = 0.65f;
+    public static final String SPECIES = "human";
+    public static final String SPECIES_PREFIX = "";
+    public static final float DAMAGED = 0f;
+//    public static final String SPECIES = "zombie";
+//    public static final String SPECIES_PREFIX = "Zombie_";
+//    public static final float DAMAGED = 0.65f;
 
     public static boolean PNG = true;
     public static boolean APNG = false;
-    public static boolean GIF = false;
+    public static boolean GIF = true;
     public static boolean VOX = false;
 
 //    public static final String outDir = "out/color_guard";
@@ -61,6 +61,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //    public static final String outDir = "out/cg_gray_" + SPECIES + (DAMAGED > 0f ? "_damaged" : "");
 //    public static final String outDir = "out/cg_pixel_" + SPECIES + (DAMAGED > 0f ? "_damaged" : "");
 //    public static final String outDir = "out/cg_" + SPECIES + (DAMAGED > 0f ? "_damaged" : "");
+//public static final String outDir = "out/cg/Apr 24, 2026/shrink2_human";
     public static final String outDir = "out/cg/" + DateFormat.getDateInstance().format(new Date()) + "/shrink" + SpecialRenderer.shrink + "_" + SPECIES + (DAMAGED > 0f ? "_damaged" : "");
 //    public static final String outDir = "out/cg_small_Gourd_0_3";
 //    public static final String outDir = "out/cg_Gourd_0_3";
