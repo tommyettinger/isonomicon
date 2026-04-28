@@ -136,24 +136,26 @@ public class PaletteDrafter extends ApplicationAdapter {
         }
 
         groups.put("All", all);
-        groups.put("Skin", new int[]{52, 51, 53, 54, 55, 57, 37, 118, 121});
-        groups.put("Fluff", new int[]{49, 48, 50, 117});
-        groups.put("Eye", new int[]{65, 71, 69, 103});
-        groups.put("Bone", new int[]{63});
-        groups.put("Scales", new int[]{19, 18, 20});
-        groups.put("Wood", new int[]{59, 58, 60, 122});
-        groups.put("Leaves", new int[]{14, 15, 16, 12, 13, 8, 107});
-        groups.put("Fruit", new int[]{62, 56, 9});
-        groups.put("Water", new int[]{22, 21, 23, 85, 86, 87, 88});
-        groups.put("Cold", new int[]{25, 82, 83, 7});
-        groups.put("Earth", new int[]{46, 44, 47, 109, 111});
-        groups.put("Filth", new int[]{11, 10, 101, 99});
-        groups.put("Leather", new int[]{2, 1});
+        groups.put("Skin", new int[]{123, 121, 122, 124, 125, 126, 114});
+        groups.put("Fluff", new int[]{83, 82, 84, 77, 76, 78});
+        groups.put("Eye", new int[]{4, 25, 11, 113});
+        groups.put("Body", new int[]{90, 112, 89});
+        groups.put("Scales", new int[]{164, 163, 165, 179, 178, 180});
+        groups.put("Wood", new int[]{21, 22, 23, 24});
+        groups.put("Leaves", new int[]{96, 95, 94});
+        groups.put("Fruit", new int[]{158, 157, 159});
+        groups.put("Water", new int[]{51, 52, 53, 56, 57, 58, 59});
+        groups.put("Cold", new int[]{60, 55, 174});
+        groups.put("Earth", new int[]{18, 17, 20, 88});
+        groups.put("City", new int[]{65, 63, 64, 19, 3, 5, 61});
+        groups.put("Decay", new int[]{149, 148, 150, 152, 151, 106, 110, 109, 111, 202, 203, 204});
+        groups.put("Cardboard", new int[]{129, 127, 128});
+        groups.put("Fabric", new int[]{134, 133, 135, 28, 26, 29, 120, 16, 182, 181, 183, 188, 187, 189});
+// TODO: the rest of these
         groups.put("Marks", new int[]{28, 27, 26, 29});
         groups.put("Metal", new int[]{4, 5, 6, 89, 3, 61, 126});
         groups.put("Stone", new int[]{32, 24, 30, 31, 33, 34, 45, 123});
         groups.put("Crystal", new int[]{35, 98});
-        groups.put("Cloth", new int[]{41, 40, 42, 43, 124});
         groups.put("Eerie", new int[]{36, 38, 102, 66});
         groups.put("Gas", new int[]{17, 67, 70, 73});
         groups.put("Emotion", new int[]{106, 94, 91});

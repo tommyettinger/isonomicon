@@ -590,7 +590,7 @@ public class Stuff {
             new Stuff("rot base", 110, "Roughness 0.5 Reflection 0.01 Dapple -0.2 Vary -0.4"),
             new Stuff("rot high", 111, "Roughness 0.5 Reflection 0.01 Dapple -0.3 Vary -0.4"),
             new Stuff("blood or gore", 112, "Roughness 0.04 Reflection 0.4 Damage 112"), /*start of higher-saturation sections of three; red*/
-            new Stuff("evil eye", 113, "Roughness 0.75 Reflection 0.5 Emission 0.15 Damage 113 Priority 50"), /*row 15; middle red*/
+            new Stuff("evil eye", 113, "Roughness 0.75 Reflection 0.5 Damage 113 Priority 50"), /*row 15; middle red*/
             new Stuff("lips", 114, "Roughness 0.04 Reflection 0.5 Priority 2 Damage 112"),
             new Stuff("lava", 115, "Emission 0.2 Roughness 0.6 Reflection 0.0 Flow 0.05 Dapple -0.5"),
             new Stuff("hot metal", 116, "Roughness 1.0 Reflection 0.0 Emission 0.2"),
