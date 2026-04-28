@@ -17,6 +17,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.github.tommyettinger.colorful.oklab.ColorTools;
 import com.github.tommyettinger.digital.ArrayTools;
+import com.github.tommyettinger.digital.MathTools;
 import com.github.tommyettinger.ds.ObjectObjectOrderedMap;
 import isonomicon.physical.Stuff;
 
@@ -119,7 +120,7 @@ public class PaletteDrafter extends ApplicationAdapter {
     public SpriteBatch batch;
 
     private long startTime, scrollTime;
-    private float L = 0.5f, A = 0.5f, B = 0.5f, alpha = 1f, allL = 0f, allA = 0f, allB = 0f, allS = 0f;
+    private float L = 0.5f, A = 0.5f, B = 0.5f, alpha = 1f, allL = 0f, allA = 0f, allB = 0f, allH = 0f, allS = 0f;
 
     private PixmapIO.PNG png;
 
@@ -306,22 +307,27 @@ public class PaletteDrafter extends ApplicationAdapter {
         float step = Math.min(Gdx.graphics.getDeltaTime(), (1f/30f)) * (UIUtils.shift() ? 0.3f : -0.3f);;
 //        float step = Math.min(Gdx.graphics.getDeltaTime(), 0.3f) * (UIUtils.shift() ? 0.0625f : -0.0625f);
         if(UIUtils.ctrl()) {
-            //light
+            // dark to light
             if (Gdx.input.isKeyPressed(Input.Keys.L)) {
                 allL = step;
                 changed = true;
             }
-            //red
+            //green to red
             else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
                 allA = step;
                 changed = true;
             }
-            //yellow
+            //blue to yellow
             else if (Gdx.input.isKeyPressed(Input.Keys.B)) {
                 allB = step;
                 changed = true;
             }
-            //saturate
+            //hue
+            else if (Gdx.input.isKeyPressed(Input.Keys.H)) {
+                allH = step;
+                changed = true;
+            }
+            //saturation
             else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
                 allS = step;
                 changed = true;
@@ -330,21 +336,25 @@ public class PaletteDrafter extends ApplicationAdapter {
                 for (int i = 0; i < group.length; i++) {
                     final float oklab = workingOklab[group[i] - 1 & 255];
                     float l = Math.min(Math.max(ColorTools.channelL(oklab) + allL,  0f),  1f);
-                    float a = Math.min(Math.max((ColorTools.channelA(oklab) - 0.5f) * (1f + allS * 3f) + 0.5f + allA,  0f),  1f);
-                    float b = Math.min(Math.max((ColorTools.channelB(oklab) - 0.5f) * (1f + allS * 3f) + 0.5f + allB,  0f),  1f);
+                    float a = Math.min(Math.max(ColorTools.channelA(oklab) + allA,  0f),  1f);
+                    float b = Math.min(Math.max(ColorTools.channelB(oklab) + allB,  0f),  1f);
                     float al = 1f;// - STUFFS[group[i]].material.getTrait(VoxMaterial.MaterialTrait._alpha);
-                    float edited;
-                    workingOklab[group[i] - 1 & 255] = edited = ColorTools.limitToGamut(l, a, b, al);
+                    float edited = ColorTools.limitToGamut(l, a, b, al);
+
+                    float h = MathTools.fract(ColorTools.oklabHue(edited) + allH);
+                    float s = Math.min(Math.max(ColorTools.oklabSaturation(edited) + allS,  0f),  1f);
+                    workingOklab[group[i] - 1 & 255] = edited = ColorTools.oklabByHSL(h, s, ColorTools.channelL(edited), al);
+
                     int pre = ColorTools.toRGBA8888(edited);
                     workingPalette.drawPixel(group[i] - 1 & 255, 0, pre);
                     if(stuffIndex == i){
-                        L = l;
-                        A = a;
-                        B = b;
+                        L = ColorTools.channelL(edited);
+                        A = ColorTools.channelA(edited);
+                        B = ColorTools.channelB(edited);
                         alpha = al;
                     }
                 }
-                allL = allA = allB = allS = 0f;
+                allL = allA = allB = allH = allS = 0f;
                 palettes.draw(workingPalette, 0, 0);
             }
             currentPreview = ColorTools.toRGBA8888(ColorTools.limitToGamut(L, A, B, alpha));
