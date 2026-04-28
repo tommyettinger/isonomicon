@@ -147,11 +147,13 @@ public class PaletteDrafter extends ApplicationAdapter {
         groups.put("Leaves", new int[]{96, 95, 94});
         groups.put("Fruit", new int[]{158, 157, 159});
         groups.put("Flower", new int[]{209, 208, 210});
+        groups.put("Food", new int[]{118, 119});
+        groups.put("Drink", new int[]{139, 140, 217});
         groups.put("Water", new int[]{51, 52, 53, 56, 57, 58, 59});
         groups.put("Cold", new int[]{60, 55, 174});
         groups.put("Earth", new int[]{18, 17, 20, 88});
         groups.put("City", new int[]{65, 63, 64, 19, 3, 5, 61, 30});
-        groups.put("Decay", new int[]{149, 148, 150, 152, 151, 106, 110, 109, 111, 202, 203, 204});
+        groups.put("Decay", new int[]{149, 148, 150, 152, 151, 106, 110, 109, 111});
         groups.put("Cardboard", new int[]{129, 127, 128});
         groups.put("Fabric", new int[]{134, 133, 135, 28, 26, 29, 120, 16, 182, 181, 183, 188, 187, 189});
         groups.put("Camouflage", new int[]{92, 91, 93});
@@ -159,14 +161,13 @@ public class PaletteDrafter extends ApplicationAdapter {
         groups.put("Metal", new int[]{7, 10, 13, 14, 27, 70, 142, 143, 170, 194, 193, 195, 98, 97, 99, 101, 100, 102});
         groups.put("Stone", new int[]{32, 33, 34, 35, 62, 73, });
         groups.put("Plastic", new int[]{185, 184, 186, 137, 136, 138, 201});
+        groups.put("Glass", new int[]{171, 169, 54, 6, 12});
         groups.put("Crystal", new int[]{172, 74, 75});
         groups.put("Eerie", new int[]{8, 72, 71, 199, 215, 214, 216});
-// TODO: the rest of these
-        groups.put("Gas", new int[]{17, 67, 70, 73});
-        groups.put("Emotion", new int[]{106, 94, 91});
-        groups.put("Fire", new int[]{114, 112, 113, 115, 127});
-        groups.put("Light", new int[]{76, 80, 81});
-        groups.put("Energy", new int[]{72, 79, 95, 97});
+        groups.put("Fire", new int[]{132, 141, 131, 144, 31});
+        groups.put("Magic", new int[]{211, 212, 213, 219, 167, 166, 168});
+        groups.put("Science", new int[]{108, 202, 203, 204, });
+        groups.put("Light", new int[]{153, 162, 160, 161, 206, 205, 207});
     }
     @Override
     public void create() {

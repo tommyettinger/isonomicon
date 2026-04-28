@@ -513,7 +513,7 @@ public class Stuff {
             new Stuff("worked stone", 33, "Roughness 0.25 Reflection 0.2"), /*fifth row; gray saffron*/
             new Stuff("ore", 34, "Roughness 0.7 Reflection 0.1 Vary -0.3 Dapple 0.1"),
             new Stuff("chipped stone", 35, "Roughness 0.8 Reflection 0.05"),
-            new Stuff("cycling light 0", 36, 153, "Roughness 0.03 Reflection 0.5 Damage 54", 37, 1),
+            new Stuff("cycling light 0", 36, 153, "Roughness 0.0 Reflection 0.0 Emission 0.5 Damage 54", 37, 1),
             new Stuff("cycling light 1", 37, 160, "Roughness 0.03 Reflection 0.5 Damage 54", 38, 1),
             new Stuff("cycling light 2", 38, 160, "Roughness 0.03 Reflection 0.5 Damage 54", 39, 1),
             new Stuff("cycling light 3", 39, 160, "Roughness 0.03 Reflection 0.5 Damage 54", 36, 1),
