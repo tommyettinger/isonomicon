@@ -303,46 +303,26 @@ public class PaletteDrafter extends ApplicationAdapter {
             B = ColorTools.channelB(oklab);
             alpha = 1f;// - STUFFS[group[stuffIndex]].material.getTrait(VoxMaterial.MaterialTrait._alpha);
         }
-        float step = Math.min(Gdx.graphics.getDeltaTime(), 0.3f) * 0.0625f;
-        if(UIUtils.shift()) {
+        float step = Math.min(Gdx.graphics.getDeltaTime(), 0.3f) * (UIUtils.shift() ? 0.0625f : -0.0625f);
+        if(UIUtils.ctrl()) {
             //light
             if (Gdx.input.isKeyPressed(Input.Keys.L)) {
                 allL = 0.125f * step;
                 changed = true;
             }
-            //dark
-            else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-                allL = -0.125f * step;
-                changed = true;
-            }
             //red
-            else if (Gdx.input.isKeyPressed(Input.Keys.R)) {
+            else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
                 allA = 0.125f * step;
                 changed = true;
             }
-            //green...ish
-            else if (Gdx.input.isKeyPressed(Input.Keys.G)) {
-                allA = -0.125f * step;
-                changed = true;
-            }
             //yellow
-            else if (Gdx.input.isKeyPressed(Input.Keys.Y)) {
-                allB = 0.125f * step;
-                changed = true;
-            }
-            //blue
             else if (Gdx.input.isKeyPressed(Input.Keys.B)) {
-                allB = -0.125f * step;
+                allB = 0.125f * step;
                 changed = true;
             }
             //saturate
             else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
                 allS = step;
-                changed = true;
-            }
-            //fade
-            else if (Gdx.input.isKeyPressed(Input.Keys.F)) {
-                allS = -step;
                 changed = true;
             }
             if (changed) {
@@ -373,41 +353,20 @@ public class PaletteDrafter extends ApplicationAdapter {
                 L = Math.min(Math.max(L + step,  0f),  1f);
                 changed = true;
             }
-            //dark
-            else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-                L = Math.min(Math.max(L - step,  0f),  1f);
-                changed = true;
-            }
             //red
-            else if (Gdx.input.isKeyPressed(Input.Keys.R)) {
+            else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
                 A = Math.min(Math.max(A + step,  0f),  1f);
                 changed = true;
             }
-            //green...ish
-            else if (Gdx.input.isKeyPressed(Input.Keys.G)) {
-                A = Math.min(Math.max(A - step,  0f),  1f);
-                changed = true;
-            }
             //yellow
-            else if (Gdx.input.isKeyPressed(Input.Keys.Y)) {
-                B = Math.min(Math.max(B + step,  0f),  1f);
-                changed = true;
-            }
-            //blue
             else if (Gdx.input.isKeyPressed(Input.Keys.B)) {
-                B = Math.min(Math.max(B - step,  0f),  1f);
+                B = Math.min(Math.max(B + step,  0f),  1f);
                 changed = true;
             }
             //saturate
             else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
                 A = Math.min(Math.max((A - 0.5f) * (1f + step * 3f) + 0.5f,  0f),  1f);
                 B = Math.min(Math.max((B - 0.5f) * (1f + step * 3f) + 0.5f,  0f),  1f);
-                changed = true;
-            }
-            //fade
-            else if (Gdx.input.isKeyPressed(Input.Keys.F)) {
-                A = Math.min(Math.max((A - 0.5f) * (1f - step * 3f) + 0.5f,  0f),  1f);
-                B = Math.min(Math.max((B - 0.5f) * (1f - step * 3f) + 0.5f,  0f),  1f);
                 changed = true;
             }
             currentPreview = ColorTools.toRGBA8888(workingOklab[group[stuffIndex] - 1 & 255] = ColorTools.limitToGamut(L, A, B, alpha));
@@ -446,7 +405,7 @@ public class PaletteDrafter extends ApplicationAdapter {
 
     public static void main(String[] arg) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-        config.setTitle("Isonomicon Test: Special Viewer");
+        config.setTitle("Isonomicon C: Special Viewer");
         config.setWindowedMode(400, 400);
         config.setIdleFPS(10);
         config.setForegroundFPS(60);

@@ -445,7 +445,7 @@ public class PaletteDrafter extends ApplicationAdapter {
 
     public static void main(String[] arg) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-        config.setTitle("Isonomicon Test: Special Viewer");
+        config.setTitle("Isonomicon B: Special Viewer");
         config.setWindowedMode(400, 400);
         config.setIdleFPS(10);
         config.setForegroundFPS(60);
