@@ -303,36 +303,36 @@ public class PaletteDrafter extends ApplicationAdapter {
             B = ColorTools.channelB(oklab);
             alpha = 1f;// - STUFFS[group[stuffIndex]].material.getTrait(VoxMaterial.MaterialTrait._alpha);
         }
-        float step = Math.min(Gdx.graphics.getDeltaTime(), 0.3f) * 0.0625f;
+        float step = Math.min(Gdx.graphics.getDeltaTime(), (1f/30f)) * 0.3f;
         if(UIUtils.shift()) {
             //light
             if (Gdx.input.isKeyPressed(Input.Keys.L)) {
-                allL = 0.125f * step;
+                allL = step;
                 changed = true;
             }
             //dark
             else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-                allL = -0.125f * step;
+                allL = -step;
                 changed = true;
             }
             //red
             else if (Gdx.input.isKeyPressed(Input.Keys.R)) {
-                allA = 0.125f * step;
+                allA = step;
                 changed = true;
             }
             //green...ish
             else if (Gdx.input.isKeyPressed(Input.Keys.G)) {
-                allA = -0.125f * step;
+                allA = -step;
                 changed = true;
             }
             //yellow
             else if (Gdx.input.isKeyPressed(Input.Keys.Y)) {
-                allB = 0.125f * step;
+                allB = step;
                 changed = true;
             }
             //blue
             else if (Gdx.input.isKeyPressed(Input.Keys.B)) {
-                allB = -0.125f * step;
+                allB = -step;
                 changed = true;
             }
             //saturate
@@ -357,6 +357,11 @@ public class PaletteDrafter extends ApplicationAdapter {
                     int pre = ColorTools.toRGBA8888(edited);
                     workingPalette.drawPixel(group[i] - 1 & 127, 0, pre);
                     if(stuffIndex == i){
+                        System.out.printf("Changes: allL %1.4f allA %1.4f allB %1.4f allS %1.4f", allL, allA, allB, allS);
+                        System.out.print("Raw:     ");
+                        printDebugColor(l, a, b, al);
+                        System.out.print("Limited: ");
+                        printDebugColor(edited);
                         L = l;
                         A = a;
                         B = b;
@@ -442,13 +447,32 @@ public class PaletteDrafter extends ApplicationAdapter {
         batch.end();
     }
 
+    public static void printDebugColor(final float oklab){
+        System.out.printf("rgba=%08X (in gamut? %s) L=%1.4f A=%1.4f B=%1.4f alpha=%1.4f\n",
+                ColorTools.toRGBA8888(oklab),
+                ColorTools.inGamut(oklab),
+                ColorTools.channelL(oklab),
+                ColorTools.channelA(oklab),
+                ColorTools.channelB(oklab),
+                ColorTools.alpha(oklab));
+    }
+
+    public static void printDebugColor(final float l, final float a, final float b, final  float al){
+        System.out.printf("rgba=%08X (in gamut? %s) L=%1.4f A=%1.4f B=%1.4f alpha=%1.4f\n",
+                ColorTools.toRGBA8888(ColorTools.oklab(l, a, b, al)),
+                ColorTools.inGamut(l, a, b),
+                l,
+                a,
+                b,
+                al);
+    }
 
     public static void main(String[] arg) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         config.setTitle("Isonomicon B: Special Viewer");
         config.setWindowedMode(400, 400);
         config.setIdleFPS(10);
-        config.setForegroundFPS(60);
+        config.setForegroundFPS(30);
         config.useVsync(true);
         config.setResizable(false);
         config.disableAudio(true);

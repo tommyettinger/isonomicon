@@ -303,21 +303,22 @@ public class PaletteDrafter extends ApplicationAdapter {
             B = ColorTools.channelB(oklab);
             alpha = 1f;// - STUFFS[group[stuffIndex]].material.getTrait(VoxMaterial.MaterialTrait._alpha);
         }
-        float step = Math.min(Gdx.graphics.getDeltaTime(), 0.3f) * (UIUtils.shift() ? 0.0625f : -0.0625f);
+        float step = Math.min(Gdx.graphics.getDeltaTime(), (1f/30f)) * (UIUtils.shift() ? 0.3f : -0.3f);;
+//        float step = Math.min(Gdx.graphics.getDeltaTime(), 0.3f) * (UIUtils.shift() ? 0.0625f : -0.0625f);
         if(UIUtils.ctrl()) {
             //light
             if (Gdx.input.isKeyPressed(Input.Keys.L)) {
-                allL = 0.125f * step;
+                allL = step;
                 changed = true;
             }
             //red
             else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-                allA = 0.125f * step;
+                allA = step;
                 changed = true;
             }
             //yellow
             else if (Gdx.input.isKeyPressed(Input.Keys.B)) {
-                allB = 0.125f * step;
+                allB = step;
                 changed = true;
             }
             //saturate
@@ -408,7 +409,7 @@ public class PaletteDrafter extends ApplicationAdapter {
         config.setTitle("Isonomicon C: Special Viewer");
         config.setWindowedMode(400, 400);
         config.setIdleFPS(10);
-        config.setForegroundFPS(60);
+        config.setForegroundFPS(30);
         config.useVsync(true);
         config.setResizable(false);
         config.disableAudio(true);
