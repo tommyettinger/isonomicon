@@ -120,7 +120,7 @@ public class PaletteDrafter extends ApplicationAdapter {
     public SpriteBatch batch;
 
     private long startTime, scrollTime;
-    private float L = 0.5f, A = 0.5f, B = 0.5f, alpha = 1f, allL = 0f, allA = 0f, allB = 0f, allH = 0f, allS = 0f;
+    private float L = 0.5f, A = 0.5f, B = 0.5f, H = 0f, S = 0f, alpha = 1f, allL = 0f, allA = 0f, allB = 0f, allH = 0f, allS = 0f;
 
     private PixmapIO.PNG png;
 
@@ -225,7 +225,7 @@ public class PaletteDrafter extends ApplicationAdapter {
 
     @Override
     public void render() {
-        boolean changed = false, regroup = false, switched = false;
+        boolean changed = false, hsChanged = false, regroup = false, switched = false;
         int currentPreview;
         if(Gdx.input.isKeyJustPressed(Input.Keys.SLASH)){
             System.out.printf("rgba=%08X lim=%08X L=%1.4f A=%1.4f B=%1.4f alpha=%1.4f\n",
@@ -302,6 +302,8 @@ public class PaletteDrafter extends ApplicationAdapter {
             L = ColorTools.channelL(oklab);
             A = ColorTools.channelA(oklab);
             B = ColorTools.channelB(oklab);
+            H = ColorTools.oklabHue(oklab);
+            S = ColorTools.oklabSaturation(oklab);
             alpha = 1f;// - STUFFS[group[stuffIndex]].material.getTrait(VoxMaterial.MaterialTrait._alpha);
         }
         float step = Math.min(Gdx.graphics.getDeltaTime(), (1f/30f)) * (UIUtils.shift() ? 0.3f : -0.3f);;
@@ -329,7 +331,7 @@ public class PaletteDrafter extends ApplicationAdapter {
             }
             //saturation
             else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-                allS = step;
+                allS = step * 4f;
                 changed = true;
             }
             if (changed) {
@@ -360,31 +362,37 @@ public class PaletteDrafter extends ApplicationAdapter {
             currentPreview = ColorTools.toRGBA8888(ColorTools.limitToGamut(L, A, B, alpha));
         }
         else {
+            // dark to light
             if (Gdx.input.isKeyPressed(Input.Keys.L)) {
-                L = Math.min(Math.max(L + step,  0f),  1f);
-                changed = true;
+                L = Math.min(Math.max(L + step, 0f), 1f);
             }
-            //red
+            //green to red
             else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-                A = Math.min(Math.max(A + step,  0f),  1f);
-                changed = true;
+                A = Math.min(Math.max(A + step, 0f), 1f);
             }
-            //yellow
+            //blue to yellow
             else if (Gdx.input.isKeyPressed(Input.Keys.B)) {
-                B = Math.min(Math.max(B + step,  0f),  1f);
-                changed = true;
+                B = Math.min(Math.max(B + step, 0f), 1f);
             }
-            //saturate
-            else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-                A = Math.min(Math.max((A - 0.5f) * (1f + step * 3f) + 0.5f,  0f),  1f);
-                B = Math.min(Math.max((B - 0.5f) * (1f + step * 3f) + 0.5f,  0f),  1f);
-                changed = true;
+            float edited = ColorTools.limitToGamut(L, A, B, alpha);
+            //hue
+            if (Gdx.input.isKeyPressed(Input.Keys.H)) {
+                H = MathTools.fract(ColorTools.oklabHue(edited) + step);
+            } else {
+                H = ColorTools.oklabHue(edited);
             }
-            currentPreview = ColorTools.toRGBA8888(workingOklab[group[stuffIndex] - 1 & 255] = ColorTools.limitToGamut(L, A, B, alpha));
-            if (changed) {
-                workingPalette.drawPixel(group[stuffIndex] - 1 & 255, 0, currentPreview);
-                palettes.draw(workingPalette, 0, 0);
+            //saturation
+            if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+                S = Math.min(Math.max(ColorTools.oklabSaturation(edited) + step * 4f, 0f), 1f);
+            } else {
+                S = ColorTools.oklabSaturation(edited);
             }
+            edited = ColorTools.oklabByHSL(H, S, L, 1f);
+            A = ColorTools.channelA(edited);
+            B = ColorTools.channelB(edited);
+            currentPreview = ColorTools.toRGBA8888(workingOklab[group[stuffIndex] - 1 & 255] = edited);
+            workingPalette.drawPixel(group[stuffIndex] - 1 & 255, 0, currentPreview);
+            palettes.draw(workingPalette, 0, 0);
         }
         ScreenUtils.clear(0.5f, 0.5f, 0.5f, 1f);
         batch.setShader(Gdx.input.isKeyPressed(Input.Keys.SPACE) ? indexShader2 : indexShader);

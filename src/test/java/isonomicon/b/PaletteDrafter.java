@@ -357,11 +357,6 @@ public class PaletteDrafter extends ApplicationAdapter {
                     int pre = ColorTools.toRGBA8888(edited);
                     workingPalette.drawPixel(group[i] - 1 & 127, 0, pre);
                     if(stuffIndex == i){
-                        System.out.printf("Changes: allL %1.4f allA %1.4f allB %1.4f allS %1.4f", allL, allA, allB, allS);
-                        System.out.print("Raw:     ");
-                        printDebugColor(l, a, b, al);
-                        System.out.print("Limited: ");
-                        printDebugColor(edited);
                         L = l;
                         A = a;
                         B = b;
