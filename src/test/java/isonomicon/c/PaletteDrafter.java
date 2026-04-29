@@ -120,7 +120,8 @@ public class PaletteDrafter extends ApplicationAdapter {
     public SpriteBatch batch;
 
     private long startTime, scrollTime;
-    private float L = 0.5f, A = 0.5f, B = 0.5f, H = 0f, S = 0f, alpha = 1f, allL = 0f, allA = 0f, allB = 0f, allH = 0f, allS = 0f;
+    private float L = 0.5f, A = 0.5f, B = 0.5f, H = 0f, S = 0f, alpha = 1f,
+            allL = 0f, allA = 0f, allB = 0f, allH = 0f, allS = 0f;
 
     private PixmapIO.PNG png;
 
@@ -341,7 +342,7 @@ public class PaletteDrafter extends ApplicationAdapter {
                     float a = Math.min(Math.max(ColorTools.channelA(oklab) + allA,  0f),  1f);
                     float b = Math.min(Math.max(ColorTools.channelB(oklab) + allB,  0f),  1f);
                     float al = 1f;// - STUFFS[group[i]].material.getTrait(VoxMaterial.MaterialTrait._alpha);
-                    float edited = ColorTools.limitToGamut(l, a, b, al);
+                    float edited = ColorTools.oklab(l, a, b, al);
 
                     float h = MathTools.fract(ColorTools.oklabHue(edited) + allH);
                     float s = Math.min(Math.max(ColorTools.oklabSaturation(edited) + allS,  0f),  1f);
@@ -374,7 +375,7 @@ public class PaletteDrafter extends ApplicationAdapter {
             else if (Gdx.input.isKeyPressed(Input.Keys.B)) {
                 B = Math.min(Math.max(B + step, 0f), 1f);
             }
-            float edited = ColorTools.limitToGamut(L, A, B, alpha);
+            float edited = ColorTools.oklab(L, A, B, alpha);
             //hue
             if (Gdx.input.isKeyPressed(Input.Keys.H)) {
                 H = MathTools.fract(ColorTools.oklabHue(edited) + step);
