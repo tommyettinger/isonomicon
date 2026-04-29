@@ -305,9 +305,11 @@ public class PaletteDrafter extends ApplicationAdapter {
             L = ColorTools.channelL(oklab);
             A = ColorTools.channelA(oklab);
             B = ColorTools.channelB(oklab);
+            H = ColorTools.oklabHue(oklab);
+            S = ColorTools.oklabSaturation(oklab);
             alpha = 1f;// - STUFFS[group[stuffIndex]].material.getTrait(VoxMaterial.MaterialTrait._alpha);
         }
-        float step = Math.min(Gdx.graphics.getDeltaTime(), (1f/30f)) * (UIUtils.shift() ? 0.3f : -0.3f);;
+        float step = Math.min(Gdx.graphics.getDeltaTime(), (1f/15f)) * (UIUtils.shift() ? 0.3f : -0.3f);;
         if(UIUtils.ctrl()) {
             // dark to light
             if (Gdx.input.isKeyPressed(Input.Keys.L)) {
@@ -445,7 +447,7 @@ public class PaletteDrafter extends ApplicationAdapter {
         config.setTitle("Isonomicon B: Special Viewer");
         config.setWindowedMode(400, 400);
         config.setIdleFPS(10);
-        config.setForegroundFPS(30);
+        config.setForegroundFPS(15);
         config.useVsync(true);
         config.setResizable(false);
         config.disableAudio(true);
