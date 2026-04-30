@@ -185,8 +185,8 @@ public class PaletteDrafter extends ApplicationAdapter {
         preview.fill();
         previewTexture = new Texture(preview);
         png = new PixmapIO.PNG(1024);
-        String name = "Eye_Tyrant";
-//        String name = "Lomuk";
+//        String name = "Eye_Tyrant";
+        String name = "Lomuk";
 //        String name = "Damned";
 //        String name = "Figure";
 
