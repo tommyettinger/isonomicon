@@ -87,8 +87,9 @@ public class SpecialistC extends ApplicationAdapter {
 //            inputs = new String[]{"b/vox/Figure.vox", "b/vox/Tree.vox"};
 //            inputs = new String[]{"b/vox/Figure_Split.vox", "palettes/b/TanClothDarkSkin.png"};
 //            inputs = new String[]{"b/vox/Damned.vox", "palettes/b/CherrySkinDarkCloth.png"};
-            inputs = new String[]{"c/Lomuk.vox", "palettes/c/BlueFurCyanCrystal.png", "Lomuk"};
+//            inputs = new String[]{"c/Lomuk.vox", "palettes/c/BlueFurCyanCrystal.png", "Lomuk"};
 //            inputs = new String[]{"c/Eye_Tyrant.vox", "palettes/c/yam4.png", "Eye Tyrant"};
+            inputs = new String[]{"c/Eye_Tyrant.vox", "palettes/c/PurpleScalesRedEvilEye.png", "Eye Tyrant"};
 //            inputs = new String[]{"c/Direction_Cube.vox", "palettes/c/yam4.png", "Direction Cube"};
 //            inputs = new String[]{"b/vox/Lomuk.vox", "palettes/b/BlueFurCyanCrystal.png", "Blue Lomuk"};
 //            inputs = new String[]{"b/vox/Lomuk.vox", "palettes/b/BlueFurCyanCrystal.png",
@@ -108,6 +109,16 @@ public class SpecialistC extends ApplicationAdapter {
         ByteBuffer pixels = pixmap.getPixels();
         Gdx.gl.glReadPixels(x, y, w, h, GL20.GL_RGBA, GL20.GL_UNSIGNED_BYTE, pixels);
         return pixmap;
+    }
+
+    /**
+     * Returns {@code 0, 1, 0, -1} given {@code 0, 1, 2, 3}.
+     * @param i between 0 and 3, inclusive; usually a frame value
+     * @return an int between -1 and 1, inclusive
+     */
+    public int wiggle(int i){
+        i &= 3;
+        return ((i ^ i >>> 1) & 1) - (i >>> 1 & 1);
     }
 
     @Override
@@ -158,7 +169,7 @@ public class SpecialistC extends ApplicationAdapter {
                     for (int j = 0; j < voxels.grids.size(); j++) {
                         Stuff.evolve(Stuff.STUFFS_C, voxels.grids.get(j), f);
                     }
-                    renderer.drawModelSimple(voxels, i * 0.125f, 0f, 0f, f, 0, 0, 0);
+                    renderer.drawModelSimple(voxels, i * 0.125f + wiggle(f) * 0.03125f, 0f, 0f, f, 0, 0, 0);
                     t.draw(renderer.palettePixmap, 0, 0);
                     FrameBuffer fb = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), false);
                     fb.begin();
