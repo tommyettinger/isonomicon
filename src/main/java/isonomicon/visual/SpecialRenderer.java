@@ -704,10 +704,10 @@ public class SpecialRenderer {
 //                                                0, x + ax, y + ay, 0, SHADOW_INDEX, frame);
 //                                }
 //                            }
-                            ox = translateX + oox;
-                            oy = translateY + ooy;
-                            splat(ox * x_x + oy * y_x + oz * z_x + size,
-                                    ox * x_y + oy * y_y + oz * z_y + size,
+                            ox = oox;
+                            oy = ooy;
+                            splat(ox * x_x + oy * y_x + oz * z_x + size + translateX,
+                                    ox * x_y + oy * y_y + oz * z_y + size + translateY,
                                     0, x, y, 0, SHADOW_INDEX, frame);
                             break;
                         }
@@ -720,12 +720,12 @@ public class SpecialRenderer {
                 for (int y = 0; y < size; y++) {
                     final byte v = colors[x][y][z];
                     if (v != 0) {
-                        ox = translateX + x - hs + fidget;
-                        oy = translateY + y - hs + fidget;
-                        oz = translateZ + z - hs;
-                        splat(ox * x_x + oy * y_x + oz * z_x + size,
-                                ox * x_y + oy * y_y + oz * z_y + size,
-                                ox * x_z + oy * y_z + oz * z_z + hs, x, y, z, v, frame);
+                        ox = x - hs + fidget;
+                        oy = y - hs + fidget;
+                        oz = z - hs;
+                        splat(ox * x_x + oy * y_x + oz * z_x + size + translateX,
+                                ox * x_y + oy * y_y + oz * z_y + size + translateY,
+                                ox * x_z + oy * y_z + oz * z_z + hs + translateZ, x, y, z, v, frame);
                     }
                 }
             }
