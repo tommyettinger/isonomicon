@@ -302,7 +302,7 @@ public class GratitudeAssets extends ApplicationAdapter {
                 gif.palette = analyzed;
                 gif.write(Gdx.files.local(ANIMATION_PATH + output + '/' + output + ".gif"), pm, 8);
                 gif.palette = fixed;
-                gif.write(Gdx.files.local(ANIMATION_PATH_PALETTE + name + '/' + name + ".gif"), pm, 8);
+                gif.write(Gdx.files.local(ANIMATION_PATH_PALETTE + output + '/' + output + ".gif"), pm, 8);
                 for (Pixmap pix : pm) {
                     if (!pix.isDisposed())
                         pix.dispose();
