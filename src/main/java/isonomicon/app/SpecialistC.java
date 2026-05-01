@@ -111,16 +111,6 @@ public class SpecialistC extends ApplicationAdapter {
         return pixmap;
     }
 
-    /**
-     * Returns {@code 0, 1, 0, -1} given {@code 0, 1, 2, 3}.
-     * @param i between 0 and 3, inclusive; usually a frame value
-     * @return an int between -1 and 1, inclusive
-     */
-    public int wiggle(int i){
-        i &= 3;
-        return ((i ^ i >>> 1) & 1) - (i >>> 1 & 1);
-    }
-
     @Override
     public void create() {
         if (inputs == null) Gdx.app.exit();
@@ -171,7 +161,7 @@ public class SpecialistC extends ApplicationAdapter {
                     }
 //                    renderer.drawModelSimple(voxels, i * 0.125f, 0f, 0f, f, wiggle(f), 0, 0);
 //                    renderer.drawModelSimple(voxels, i * 0.125f + wiggle(f) * 0.0125f, 0f, 0f, f, wiggle(f), 0, 0); // looks bad; rotation is off.
-                    renderer.drawModelSimple(voxels, i * 0.125f + wiggle(f) * 0.0125f, 0f, 0f, f, 0, 0, 0);
+                    renderer.drawModelSimple(voxels, i * 0.125f + Tools3D.wiggle(f) * 0.0125f, 0f, 0f, f, 0, 0, 0);
                     t.draw(renderer.palettePixmap, 0, 0);
                     FrameBuffer fb = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), false);
                     fb.begin();

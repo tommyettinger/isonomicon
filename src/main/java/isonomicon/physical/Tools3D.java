@@ -1001,6 +1001,18 @@ public class Tools3D {
         return ((s >>> 41 ^ s >>> 32) & s & 0x7FFFFFL) * 0x1.8p-23f;
     }
 
+
+    /**
+     * Returns {@code 0, 1, 0, -1} given {@code 0, 1, 2, 3}.
+     * @param i between 0 and 3, inclusive; usually a frame value
+     * @return an int between -1 and 1, inclusive
+     */
+    public static int wiggle(int i){
+        i &= 3;
+        return ((i ^ i >>> 1) & 1) - (i >>> 1 & 1);
+    }
+
+
     public static StringBuilder show(byte[][][] data){
         final int sizeX = data.length, sizeY = data[0].length, sizeZ = data[0][0].length;
         StringBuilder sb = new StringBuilder(sizeX * (1+sizeY) * (1+sizeZ) << 2);
