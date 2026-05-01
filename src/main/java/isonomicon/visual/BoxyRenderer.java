@@ -508,7 +508,7 @@ public class BoxyRenderer {
                     int shade = (int) Math.min(Math.max(127.5f + midShading[x][y] * 256f, 0f), 255f);
                     int idx = (y >>> shrink) * palettePixmap.getWidth() + (x >>> shrink) << 2;
                     if ((buffer.get(idx+3) & 255) < (shade>>1)) {
-                        System.out.println("Writing light pixel at " + x + "," + y + " with shade " + shade + ", shading " + shading[x][y] + ", mid " + midShading[x][y]);
+//                        System.out.println("Writing light pixel at " + x + "," + y + " with shade " + shade + ", shading " + shading[x][y] + ", mid " + midShading[x][y]);
                         buffer.put(idx, lightIndices[x][y]);
                         buffer.put(idx+1, (byte) shade);
                         buffer.put(idx+2, (byte) 64);
