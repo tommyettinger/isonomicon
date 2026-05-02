@@ -62,9 +62,9 @@ public class AttitudeAssets extends ApplicationAdapter {
                                 "palettes/c/yam4mod.png", "Humble_Priest",
 //                                "palettes/b/ColorGuardBaseWhite.png", "Light_Priest",
 //                                "palettes/b/ColorGuardBaseRed.png", "War_Priest",
-//                        },
-//                "c/attitude/A25.vox", new String[]{
-//                        "palettes/b/ColorGuardBaseDark.png", "Man_In_Black",
+                        },
+                "c/attitude/Man.vox", new String[]{
+                        "palettes/c/yam4mod.png", "Man_In_Brown",
 //                        "palettes/b/ColorGuardBaseWhite.png", "Man_In_White",
 //                        "palettes/b/ColorGuardBaseRed.png", "Man_In_Red",
 //                        "palettes/b/ColorGuardBaseGreen.png", "Man_In_Green",
