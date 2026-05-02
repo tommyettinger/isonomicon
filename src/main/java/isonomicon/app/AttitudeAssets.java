@@ -54,6 +54,7 @@ public class AttitudeAssets extends ApplicationAdapter {
     public AttitudeAssets() {
         VoxIOExtended.GENERAL = true;
         SpecialRenderer.SHADOW_INDEX = (byte) 2;
+        SpecialRenderer.shrink = 2;
 
         System.out.println("INVALID ARGUMENTS. Please supply space-separated absolute paths to .vox models, or use the .bat file.");
         inputs = ObjectObjectOrderedMap.with(
@@ -168,7 +169,7 @@ public class AttitudeAssets extends ApplicationAdapter {
             for (int i = 0; i < voxels.grids.size(); i++) {
                 original.add(Tools3D.deepCopy(voxels.grids.get(i)));
             }
-            for (int i = 0; i < 8; i++) {
+            for (int i = 0; i < 4; i++) {
                 voxels.grids.clear();
                 for (int j = 0; j < original.size(); j++) {
                     voxels.grids.add(Tools3D.deepCopy(original.get(j)));
@@ -177,7 +178,7 @@ public class AttitudeAssets extends ApplicationAdapter {
                     for (int j = 0; j < voxels.grids.size(); j++) {
                         Stuff.evolve(Stuff.STUFFS_C, voxels.grids.get(j), f);
                     }
-                    renderer.drawModelSimple(voxels, i * 0.125f + Tools3D.wiggle(f) * 0.0125f, 0f, 0f, f, 0, 0, 0);
+                    renderer.drawModelSimple(voxels, i * 0.25f + Tools3D.wiggle(f) * 0.0125f, 0f, 0f, f, 0, 0, 0);
                     t.draw(renderer.palettePixmap, 0, 0);
                     for (int p = 0; p < outputs.length-1; p+=2) {
                         String paletteName = outputs[p], output = outputs[p+1];
