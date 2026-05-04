@@ -58,20 +58,20 @@ public class AttitudeAssets extends ApplicationAdapter {
 
         System.out.println("INVALID ARGUMENTS. Please supply space-separated absolute paths to .vox models, or use the .bat file.");
         inputs = ObjectObjectOrderedMap.with(
-                "c/attitude/Priest.vox", new String[]{
-                                "palettes/c/yam4mod.png", "Humble_Priest",
+//                "c/attitude/Priest.vox", new String[]{
+//                                "palettes/c/yam4mod.png", "Humble_Priest",
 //                                "palettes/b/ColorGuardBaseWhite.png", "Light_Priest",
 //                                "palettes/b/ColorGuardBaseRed.png", "War_Priest",
-                        },
-                "c/attitude/Man.vox", new String[]{
-                        "palettes/c/yam4mod.png", "Man_In_Brown",
+//                        },
+//                "c/attitude/Man.vox", new String[]{
+//                        "palettes/c/yam4mod.png", "Man_In_Brown",
 //                        "palettes/b/ColorGuardBaseWhite.png", "Man_In_White",
 //                        "palettes/b/ColorGuardBaseRed.png", "Man_In_Red",
 //                        "palettes/b/ColorGuardBaseGreen.png", "Man_In_Green",
 //                        "palettes/b/ColorGuardBaseBlue.png", "Man_In_Blue",
 //                },
-//                "c/attitude/A26.vox", new String[]{
-//                        "palettes/b/ColorGuardBaseDark.png", "Dark_Hunter",
+                "c/attitude/Hunter.vox", new String[]{
+                        "palettes/c/yam4mod.png", "Hunter",
 //                        "palettes/b/ColorGuardBaseBlue.png", "Sea_Hunter",
 //                },
 //                "c/attitude/A27.vox", new String[]{
