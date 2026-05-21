@@ -291,6 +291,10 @@ public class NoiseRenderer extends ApplicationAdapter {
             return hashLongs(x, hashLongs(y, hashLongs(z, hashLongs(w, hashLongs(u, v, s), s), s), s), s);
         }
 
+        public long hashLongs(long x, long y, long z, long w, long u, long v, long m, long s) {
+            return hashLongs(x, hashLongs(y, hashLongs(z, hashLongs(w, hashLongs(u, hashLongs(v, m, s), s), s), s), s), s);
+        }
+
         @Override
         public int hashWithState(int x, int y, int state) {
             return (int)(hashLongs(x, y, state) >>> 32);
@@ -314,6 +318,11 @@ public class NoiseRenderer extends ApplicationAdapter {
         @Override
         public int hashWithState(int x, int y, int z, int w, int u, int v, int state) {
             return (int)(hashLongs(x, y, z, w, u, v, state) >>> 32);
+        }
+
+        @Override
+        public int hashWithState(int x, int y, int z, int w, int u, int v, int m, int state) {
+            return (int)(hashLongs(x, y, z, w, u, v, m, state) >>> 32);
         }
     }
 

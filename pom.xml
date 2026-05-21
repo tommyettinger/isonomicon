@@ -76,12 +76,12 @@
         <jdk.version>21</jdk.version>
         <junit.version>4.13.2</junit.version>
         <anim8.version>0.5.3</anim8.version>
-        <squidsquad.version>9226756bfe</squidsquad.version><!-- was 60828c4a1c, before that fcf95825bd, fa55957446, before that 1a58b4cb26 -->
-        <gdx.version>1.13.1</gdx.version>
-        <digital.version>0.6.2</digital.version>
-        <juniper.version>0.6.9</juniper.version>
-        <jdkgdxds.version>1.9.2</jdkgdxds.version>
-        <colorful.version>0.9.0</colorful.version>
+        <squidsquad.version>4.0.10</squidsquad.version><!-- was 9226756bfe, before that 60828c4a1c, before that fcf95825bd, fa55957446, before that 1a58b4cb26 -->
+        <gdx.version>1.14.1</gdx.version>
+        <digital.version>0.10.0</digital.version>
+        <juniper.version>0.10.2</juniper.version>
+        <jdkgdxds.version>2.1.3</jdkgdxds.version>
+        <colorful.version>0.10.0</colorful.version>
     </properties>
 
 
@@ -92,17 +92,20 @@
             <version>${gdx.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.github.yellowstonegames.squidsquad</groupId>
+            <!--            <groupId>com.github.yellowstonegames.squidsquad</groupId>-->
+            <groupId>com.squidpony</groupId>
             <artifactId>squidcore</artifactId>
             <version>${squidsquad.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.github.yellowstonegames.squidsquad</groupId>
+            <!--            <groupId>com.github.yellowstonegames.squidsquad</groupId>-->
+            <groupId>com.squidpony</groupId>
             <artifactId>squidgrid</artifactId>
             <version>${squidsquad.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.github.yellowstonegames.squidsquad</groupId>
+            <!--            <groupId>com.github.yellowstonegames.squidsquad</groupId>-->
+            <groupId>com.squidpony</groupId>
             <artifactId>squidtext</artifactId>
             <version>${squidsquad.version}</version>
         </dependency>
