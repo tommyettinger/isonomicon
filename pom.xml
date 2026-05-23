@@ -75,7 +75,7 @@
         <maven.gpg.version>1.6</maven.gpg.version>
         <jdk.version>21</jdk.version>
         <junit.version>4.13.2</junit.version>
-        <anim8.version>0.5.3</anim8.version>
+        <anim8.version>0.6.2</anim8.version>
         <squidsquad.version>4.0.10</squidsquad.version><!-- was 9226756bfe, before that 60828c4a1c, before that fcf95825bd, fa55957446, before that 1a58b4cb26 -->
         <gdx.version>1.14.1</gdx.version>
         <digital.version>0.10.0</digital.version>

@@ -5,10 +5,13 @@ import com.github.tommyettinger.anim8.Dithered.DitherAlgorithm;
 public final class AppConfig {
     private AppConfig() {
     }
-
-    public static final DitherAlgorithm DITHER = DitherAlgorithm.GOURD;
-    public static final float STRENGTH = 0.3f;
     public static final boolean GRAY_BG = false;
+
+    public static final DitherAlgorithm DITHER = DitherAlgorithm.BAYDIENT;
+    public static final float STRENGTH = 0.8_0f;
+
+//    public static final DitherAlgorithm DITHER = DitherAlgorithm.GOURD;
+//    public static final float STRENGTH = 0.3f;
 
 //    public static final DitherAlgorithm DITHER = DitherAlgorithm.BANTER;
 //    public static final float STRENGTH = 0.3f;
