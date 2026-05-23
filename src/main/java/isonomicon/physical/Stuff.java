@@ -279,7 +279,7 @@ public class Stuff {
             new Stuff("gray glass", 68, "Transparency 0.5 Roughness 0.0 Reflection 0.65 Damage 153"),
             new Stuff("dead eye", 69, "Roughness 0.5 Reflection 0.0 Priority 10 Damage 69"),
             new Stuff("steam", 70, "Transparency 0.5 Roughness 0.3 Missing 0.2 Flow 0.3 Rise 0.7 Disperse 0.1", 0, 3, 70, 5),
-            new Stuff("light eye", 71, "Roughness 1.0 Reflection 1.0 Damage 71 Priority 50"), /*white*/
+            new Stuff("light eye", 71, "Roughness 0.7 Reflection 0.7 Damage 71 Priority 50"), /*white*/
             new Stuff("radioactive glow", 72, "Roughness 0.0 Reflection 0.0 Emission 0.6 Transparency 1.0"), /*light lime*/
             new Stuff("miasma", 73, "Roughness 0.3 Reflection 0.0 Flow 0.5 Rise -0.1 Missing 0.05 Disperse 0.05", 75, 2, 73, 5),
             new Stuff("rustling leaf", 74, "Roughness 0.4 Reflection 0.05 Dapple -0.35 Missing 0.2 Disperse -0.05"),

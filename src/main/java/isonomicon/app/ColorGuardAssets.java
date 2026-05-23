@@ -121,6 +121,8 @@ public class ColorGuardAssets extends ApplicationAdapter {
         try {
             if(SpecialRenderer.shrink == 0)
                 head = VoxIOExtended.readVox(new LittleEndianDataInputStream(new FileInputStream("specialized/b/vox/color_guard/"+SPECIES+"/Head_Shrink_0.vox")));
+            else if(SpecialRenderer.shrink == 1)
+                head = VoxIOExtended.readVox(new LittleEndianDataInputStream(new FileInputStream("specialized/b/vox/color_guard/"+SPECIES+"/Head_Shrink_1.vox")));
             else if(SpecialRenderer.shrink == 3)
                 head = VoxIOExtended.readVox(new LittleEndianDataInputStream(new FileInputStream("specialized/b/vox/color_guard/"+SPECIES+"/Head_Shrink_3.vox")));
             else
