@@ -25,7 +25,7 @@ import isonomicon.physical.Stuff;
 import isonomicon.physical.Tools3D;
 import isonomicon.visual.Coloring;
 import isonomicon.visual.ShaderUtils;
-import isonomicon.visual.SpecialRenderer;
+import isonomicon.visual.SpecialRenderer2024;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -42,7 +42,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
     /**
      * Light outlines instead of black outlines.
      */
-    public static boolean ALTERNATE = SpecialRenderer.outline == 2;
+    public static boolean ALTERNATE = SpecialRenderer2024.outline == 2;
     public static final String SPECIES = "human";
     public static final String SPECIES_PREFIX = "";
     public static final float DAMAGED = 0f;
@@ -62,7 +62,8 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //    public static final String outDir = "out/cg_pixel_" + SPECIES + (DAMAGED > 0f ? "_damaged" : "");
 //    public static final String outDir = "out/cg_" + SPECIES + (DAMAGED > 0f ? "_damaged" : "");
 //public static final String outDir = "out/cg/Apr 24, 2026/shrink2_human";
-    public static final String outDir = "out/cg/" + DateFormat.getDateInstance().format(new Date()) + "/shrink" + SpecialRenderer.shrink + "_" + SPECIES + (DAMAGED > 0f ? "_damaged" : "");
+    public static final String outDir = "out/cg2024/" + DateFormat.getDateInstance().format(new Date()) + "/shrink" + SpecialRenderer2024.shrink + "_" + SPECIES + (DAMAGED > 0f ? "_damaged" : "");
+//    public static final String outDir = "out/cg/" + DateFormat.getDateInstance().format(new Date()) + "/shrink" + SpecialRenderer2024.shrink + "_" + SPECIES + (DAMAGED > 0f ? "_damaged" : "");
 //    public static final String outDir = "out/cg_small_Gourd_0_3";
 //    public static final String outDir = "out/cg_Gourd_0_3";
 //    public static final String outDir = "out/cg_Banter_0_7";
@@ -71,7 +72,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
 
     public static final int SCREEN_WIDTH = 512;//640;
     public static final int SCREEN_HEIGHT = 512;//720;
-    private SpecialRenderer renderer;
+    private SpecialRenderer2024 renderer;
     private VoxModel voxels, head;
     private VoxModel[] frames = new VoxModel[8];
     private String name;
@@ -119,11 +120,11 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //        ColorGuardData.units = ColorGuardData.units.subList(6, 9);
 //        ColorGuardData.units = ColorGuardData.units.subList(0, 11);
         try {
-            if(SpecialRenderer.shrink == 0)
+            if(SpecialRenderer2024.shrink == 0)
                 head = VoxIOExtended.readVox(new LittleEndianDataInputStream(new FileInputStream("specialized/b/vox/color_guard/"+SPECIES+"/Head_Shrink_0.vox")));
-            else if(SpecialRenderer.shrink == 1)
+            else if(SpecialRenderer2024.shrink == 1)
                 head = VoxIOExtended.readVox(new LittleEndianDataInputStream(new FileInputStream("specialized/b/vox/color_guard/"+SPECIES+"/Head_Shrink_1.vox")));
-            else if(SpecialRenderer.shrink == 3)
+            else if(SpecialRenderer2024.shrink == 3)
                 head = VoxIOExtended.readVox(new LittleEndianDataInputStream(new FileInputStream("specialized/b/vox/color_guard/"+SPECIES+"/Head_Shrink_3.vox")));
             else
                 head = VoxIOExtended.readVox(new LittleEndianDataInputStream(new FileInputStream("specialized/b/vox/color_guard/"+SPECIES+"/Head.vox")));
@@ -252,7 +253,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                     }
                 }
                 if(apng != null) apng.write(Gdx.files.local(outDir + "/animated_diverse/" + name + '/' + SPECIES_PREFIX + name + ".png"), pm, 8);
-                if(gif != null) SpecialRenderer.monoAlpha(pm);
+                if(gif != null) SpecialRenderer2024.monoAlpha(pm);
                 if(gif != null) gif.write(Gdx.files.local(outDir + "/animated_diverse/" + name + '/' + SPECIES_PREFIX + name + ".gif"), pm, 8);
 //                if(apng != null) apng.write(Gdx.files.local(outDir + "/animated_diverse_flat/" + name + ".png"), pm, 8);
                 for (Pixmap pix : pm) {
@@ -334,7 +335,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                             }
                         }
                         if(apng != null) apng.write(Gdx.files.local(outDir + "/animated_diverse/" + name + '/' + SPECIES_PREFIX + name + ps + ".png"), pm, 8);
-                        if(gif != null) SpecialRenderer.monoAlpha(pm);
+                        if(gif != null) SpecialRenderer2024.monoAlpha(pm);
                         if(gif != null) gif.write(Gdx.files.local(outDir + "/animated_diverse/" + name + '/' + SPECIES_PREFIX + name + ps + ".gif"), pm, 8);
 //                        if(apng != null) apng.write(Gdx.files.local(outDir + "/animated_diverse_flat/" + name + ps + ".png"), pm, 8);
                         for (Pixmap pix : pm) {
@@ -376,7 +377,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                         }
                                     }
                                     if(apng != null) apng.write(Gdx.files.local(outDir + "/animated_diverse/" + attack + "_Receive/" + attack + "_Receive_" + strength + ".png"), pm, 8);
-                                    if(gif != null) SpecialRenderer.monoAlpha(pm);
+                                    if(gif != null) SpecialRenderer2024.monoAlpha(pm);
                                     if(gif != null) gif.write(Gdx.files.local(outDir + "/animated_diverse/" + attack + "_Receive/" + attack + "_Receive_" + strength + ".gif"), pm, 8);
                                     for (Pixmap pix : pm) {
                                         if (!pix.isDisposed())
@@ -460,7 +461,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                     }
                 }
                 if(apng != null) apng.write(Gdx.files.local(outDir + "/animated/" + name + '/' + SPECIES_PREFIX + name + ".png"), pm, 8);
-                if(gif != null) SpecialRenderer.monoAlpha(pm);
+                if(gif != null) SpecialRenderer2024.monoAlpha(pm);
                 if(gif != null) gif.write(Gdx.files.local(outDir + "/animated/" + name + '/' + SPECIES_PREFIX + name + ".gif"), pm, 8);
                 for (Pixmap pix : pm) {
                     if (!pix.isDisposed())
@@ -539,7 +540,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                             }
                         }
                         if(apng != null) apng.write(Gdx.files.local(outDir + "/animated/" + name + '/' + SPECIES_PREFIX + name + ps + ".png"), pm, 8);
-                        if(gif != null) SpecialRenderer.monoAlpha(pm);
+                        if(gif != null) SpecialRenderer2024.monoAlpha(pm);
                         if(gif != null) gif.write(Gdx.files.local(outDir + "/animated/" + name + '/' + SPECIES_PREFIX + name + ps + ".gif"), pm, 8);
                         for (Pixmap pix : pm) {
                             if (!pix.isDisposed())
@@ -580,7 +581,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                         }
                                     }
                                     if(apng != null) apng.write(Gdx.files.local(outDir + "/animated/" + attack + "_Receive/" + attack + "_Receive_" + strength + ".png"), pm, 8);
-                                    if(gif != null) SpecialRenderer.monoAlpha(pm);
+                                    if(gif != null) SpecialRenderer2024.monoAlpha(pm);
                                     if(gif != null) gif.write(Gdx.files.local(outDir + "/animated/" + attack + "_Receive/" + attack + "_Receive_" + strength + ".gif"), pm, 8);
                                     for (Pixmap pix : pm) {
                                         if (!pix.isDisposed())
@@ -604,7 +605,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
         {
             voxels = new VoxModel();
 //            SpecialRenderer2025.shrink = 1;
-            renderer = new SpecialRenderer(120, Stuff.STUFFS_B);
+            renderer = new SpecialRenderer2024(120, Stuff.STUFFS_B);
             renderer.palette(Coloring.BETTS64);
             renderer.saturation(0f);
             voxels.links.clear();
@@ -676,7 +677,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                 }
             }
             if(apng != null) apng.write(Gdx.files.local(outDir + "/animated/" + name + '/' + name + ".png"), pm, 8);
-            if(gif != null) SpecialRenderer.monoAlpha(pm);
+            if(gif != null) SpecialRenderer2024.monoAlpha(pm);
             if(gif != null) gif.write(Gdx.files.local(outDir + "/animated/" + name + '/' + name + ".gif"), pm, 8);
             for (Pixmap pix : pm) {
                 if(!pix.isDisposed())
@@ -752,8 +753,8 @@ public class ColorGuardAssets extends ApplicationAdapter {
     public void load(String name, String suffix) {
         try {
             //// loads a file by its full path, which we get via a command-line arg
-            if(Gdx.files.absolute(name + ("_Shrink_" + SpecialRenderer.shrink) + suffix).exists())
-                voxels = VoxIOExtended.readVox(new LittleEndianDataInputStream(new FileInputStream(name + "_Shrink_" + SpecialRenderer.shrink + suffix)));
+            if(Gdx.files.absolute(name + ("_Shrink_" + SpecialRenderer2024.shrink) + suffix).exists())
+                voxels = VoxIOExtended.readVox(new LittleEndianDataInputStream(new FileInputStream(name + "_Shrink_" + SpecialRenderer2024.shrink + suffix)));
             else
                 voxels = VoxIOExtended.readVox(new LittleEndianDataInputStream(new FileInputStream(name + suffix)));
             if(voxels == null) {
@@ -773,7 +774,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //            renderer = new NextRenderer(voxels.length, QUALITY);
 //            renderer = new AngledRenderer(voxels.length);
 //            SpecialRenderer2025.shrink = 1;
-            renderer = new SpecialRenderer(voxels.grids.get(0).length, Stuff.STUFFS_B);
+            renderer = new SpecialRenderer2024(voxels.grids.get(0).length, Stuff.STUFFS_B);
             renderer.palette(Coloring.BETTS64);
             renderer.saturation(0f);
             

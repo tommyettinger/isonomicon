@@ -14,6 +14,7 @@ import com.github.yellowstonegames.grid.BlueNoise;
 import com.github.yellowstonegames.grid.CyclicNoise;
 import com.github.yellowstonegames.grid.IntPointHash;
 import com.github.yellowstonegames.grid.Noise;
+import isonomicon.app.AppConfig;
 import isonomicon.io.extended.GroupChunk;
 import isonomicon.io.extended.ShapeModel;
 import isonomicon.io.extended.TransformChunk;
@@ -35,7 +36,7 @@ import static com.github.tommyettinger.digital.TrigTools.sinTurns;
  * unusual technique that stores a palette index in the R channel and a lightness adjustment in the G channel.
  */
 public class SpecialRenderer2024 {
-    public static int shrink = 2;
+    public static int shrink = 1;
     public static float distortHXY = 2, distortVXY = 1, distortVZ = 3; // ground truth for isometric
     //    public static float distortHXY = 2, distortVXY = 0, distortVZ = 3; // side view
 //    public static float distortHXY = 2, distortVXY = 0.5f, distortVZ = 3; // partially elevated side view ("shallow")
@@ -51,7 +52,7 @@ public class SpecialRenderer2024 {
     public byte[][] indices, outlineIndices, lightIndices;
     public int[] palette;
     public float[] paletteL, paletteA, paletteB;
-    public int outline = 4;
+    public static int outline = 4;
     public boolean variance = true;
     public boolean lighting = true;
     public boolean shadows = Tools3D.SHADOWS;
@@ -623,8 +624,10 @@ public class SpecialRenderer2024 {
     }
 
     public static void monoAlpha(Array<Pixmap> pms) {
-        for(Pixmap pm : pms) {
-            monoAlpha(pm);
+        if(AppConfig.GRAY_BG) {
+            for (Pixmap pm : pms) {
+                monoAlpha(pm);
+            }
         }
     }
 
