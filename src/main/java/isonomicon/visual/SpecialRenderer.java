@@ -98,7 +98,7 @@ public class SpecialRenderer {
         materials = new VoxMaterial[w][h];
         voxels = fill(-1, w, h);
         shadeX = fill(-1f, size * 4, size * 4);
-        shadeZ = fill(-1f, size * 4, size * 4);
+        shadeZ = fill(-1000f, size * 4, size * 4);
         this.stuffs = stuffs;
 
         if(computeNormals)
@@ -321,7 +321,7 @@ public class SpecialRenderer {
         fill(lightIndices, (byte) 0);
         fill(voxels, -1);
         fill(shadeX, -1f);
-        fill(shadeZ, -1f);
+        fill(shadeZ, -1000f);
         fill(shading, 0f);
         fill(midShading, 0f);
         fill(saturation, 0f);
@@ -448,8 +448,7 @@ public class SpecialRenderer {
                             }
                         }
                         if(shadows){
-                            if(indices[sx][sy] == FLOOR_INDEX && shadeZ[fx][fy] <= hs + 0.5f)
-//                            if(indices[sx][sy] == FLOOR_INDEX && (vx <= step * 4 || vy <= step * 4 || vx >= xSize - step * 4 || vy >= ySize - step * 4))
+                            if(indices[sx][sy] == FLOOR_INDEX && shadeZ[fx][fy] <= -500)
                                 shading[sx][sy] = 1024f;
                         }
                     }
@@ -473,7 +472,7 @@ public class SpecialRenderer {
                     int idx = (y >>> shrink) * palettePixmap.getWidth() + (x >>> shrink) << 2;
                     if (shadows && index == FLOOR_INDEX) {
                         buffer.put(idx, SHADOW_INDEX); // shadow stuff
-                        buffer.put(idx + 1, (byte) 128);
+                        buffer.put(idx + 1, (byte) 96);
                         buffer.put(idx + 2, (byte) 0);
 //                        buffer.put(idx + 3, (byte) (255 - shade));
                         buffer.put(idx + 3, (byte) Math.min(Math.max(480 - (shade & 255) * 8, 0), 255));
@@ -606,7 +605,7 @@ public class SpecialRenderer {
         fill(lightIndices, (byte) 0);
         fill(voxels, -1);
         fill(shadeX, -1f);
-        fill(shadeZ, -1f);
+        fill(shadeZ, -1000f);
         for (int i = 0; i < materials.length; i++) {
             Arrays.fill(materials[i], null);
         }
