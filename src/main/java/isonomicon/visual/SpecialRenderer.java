@@ -39,7 +39,7 @@ public class SpecialRenderer {
     public static float distortHXY = 2, distortVXY = 1, distortVZ = 3; // ground truth for isometric
     //    public static float distortHXY = 2, distortVXY = 0, distortVZ = 3; // side view
 //    public static float distortHXY = 2, distortVXY = 0.5f, distortVZ = 3; // partially elevated side view ("shallow")
-    public static final float fidget = 0.5f;
+    public static final float fidget = 0f;
 
     public final Stuff[] stuffs;
     public Pixmap palettePixmap;
@@ -385,7 +385,7 @@ public class SpecialRenderer {
                     fx = (int)(tx);
                     ty = ox * x_y + oy * y_y + oz * z_y + size + hs;
                     fy = (int)(ty);
-                    tz = ox * x_z + oy * y_z + oz * z_z + hs + hs;
+                    tz = ox * x_z + oy * y_z + oz * z_z + size;
                     fz = (int)(tz);
                     m = materials[sx][sy];
                     final float rough = m.getTrait(VoxMaterial.MaterialTrait._rough);
@@ -448,7 +448,7 @@ public class SpecialRenderer {
                             }
                         }
                         if(shadows){
-                            if(indices[sx][sy] == FLOOR_INDEX && shadeZ[fx][fy] <= -500)
+                            if(indices[sx][sy] == FLOOR_INDEX && shadeZ[fx][fy] <= hs + 0.5f)
                                 shading[sx][sy] = 1024f;
                         }
                     }
@@ -742,7 +742,7 @@ public class SpecialRenderer {
 //                        if (voxel != 0) {
                             float oox = x - hs + fidget;
                             float ooy = y - hs + fidget;
-                            oz = -hs;
+                            oz = 0;
 //                            for (int ax = -6; ax <= 6; ax++) {
 //                                for (int ay = -3; ay <= 3; ay++) {
 //                                    if (x + ax >= 0 && y + ay >= 0 && x + ax < size && y + ay < size) {
@@ -756,9 +756,10 @@ public class SpecialRenderer {
 //                            }
                             ox = oox;
                             oy = ooy;
-                            splat(ox * x_x + oy * y_x + oz * z_x + size + translateX,
-                                    ox * x_y + oy * y_y + oz * z_y + size + translateY,
-                                    0, x, y, 0, FLOOR_INDEX, frame);
+                            splat(ox * x_x + oy * y_x + oz * z_x + size,
+                                    ox * x_y + oy * y_y + oz * z_y + size,
+                                    0,
+                                    x, y, 0, FLOOR_INDEX, frame);
 //                            break;
 //                        }
 //                    }
