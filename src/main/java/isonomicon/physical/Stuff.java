@@ -465,7 +465,7 @@ public class Stuff {
             new Stuff("unused 252", 252, "Transparency 1.0"),
             new Stuff("unused 253", 253, "Transparency 1.0"),
             new Stuff("unused 254", 254, "Transparency 1.0"),
-            new Stuff("connector sentinel", 255, "Transparency 1.0 Damage 255"),
+            new Stuff("connector sentinel", 255, 0, "Transparency 1.0 Damage 255"),
     };
 
     /**
