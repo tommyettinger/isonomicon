@@ -35,11 +35,18 @@ import static com.github.tommyettinger.digital.TrigTools.sinTurns;
  * unusual technique that stores a palette index in the R channel and a lightness adjustment in the G channel.
  */
 public class SpecialRenderer {
-    public static int shrink = 2;
+//    public static int shrink = 1; // quite large! Allows more facial detail.
+//    public static int shrink = 2; // "normal size," but eyes need to be simplified.
+    public static int shrink = 3; // tiny, eyes need to be drawn as large dark rectangles to appear at all.
+
     public static float distortHXY = 2, distortVXY = 1, distortVZ = 3; // ground truth for isometric
     //    public static float distortHXY = 2, distortVXY = 0, distortVZ = 3; // side view
 //    public static float distortHXY = 2, distortVXY = 0.5f, distortVZ = 3; // partially elevated side view ("shallow")
-    public static final float fidget = 0f;
+
+    //    public static int outline = 2; // shaded, not black outlines
+    public static int outline = 4; // hard black outlines
+
+    public static final float fidget = 0f; // doesn't seem to need to be changed now? or needed?
 
     public final Stuff[] stuffs;
     public Pixmap palettePixmap;
@@ -51,8 +58,6 @@ public class SpecialRenderer {
     public byte[][] indices, outlineIndices, lightIndices;
     public int[] palette;
     public float[] paletteL, paletteA, paletteB;
-    public static int outline = 2; // shaded, not black outlines
-//    public static int outline = 4; // hard black outlines
     public boolean variance = true;
     public boolean lighting = true;
     public boolean shadows = Tools3D.SHADOWS;
