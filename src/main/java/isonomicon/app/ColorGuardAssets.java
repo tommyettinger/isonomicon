@@ -43,12 +43,12 @@ public class ColorGuardAssets extends ApplicationAdapter {
      * Light outlines instead of black outlines.
      */
     public static boolean ALTERNATE = SpecialRenderer.outline == 2;
-    public static final String SPECIES = "human";
-    public static final String SPECIES_PREFIX = "";
-    public static final float DAMAGED = 0f;
-//    public static final String SPECIES = "zombie";
-//    public static final String SPECIES_PREFIX = "Zombie_";
-//    public static final float DAMAGED = 0.65f;
+//    public static final String SPECIES = "human";
+//    public static final String SPECIES_PREFIX = "";
+//    public static final float DAMAGED = 0f;
+    public static final String SPECIES = "zombie";
+    public static final String SPECIES_PREFIX = "Zombie_";
+    public static final float DAMAGED = 0.65f;
 
     public static boolean PNG = true;
     public static boolean APNG = false;
@@ -117,7 +117,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //        ColorGuardData.units = ColorGuardData.units.subList(52, ColorGuardData.units.size());
 //        ColorGuardData.units = ColorGuardData.units.subList(0, 1);
 //        ColorGuardData.units = ColorGuardData.units.subList(6, 9);
-        ColorGuardData.units = ColorGuardData.units.subList(0, 11);
+//        ColorGuardData.units = ColorGuardData.units.subList(0, 11);
         try {
             if(SpecialRenderer.shrink == 0)
                 head = VoxIOExtended.readVox(new LittleEndianDataInputStream(new FileInputStream("specialized/b/vox/color_guard/"+SPECIES+"/Head_Shrink_0.vox")));

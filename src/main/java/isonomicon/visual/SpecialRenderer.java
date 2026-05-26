@@ -35,7 +35,7 @@ import static com.github.tommyettinger.digital.TrigTools.sinTurns;
  * unusual technique that stores a palette index in the R channel and a lightness adjustment in the G channel.
  */
 public class SpecialRenderer {
-    public static int shrink = 1;
+    public static int shrink = 2;
     public static float distortHXY = 2, distortVXY = 1, distortVZ = 3; // ground truth for isometric
     //    public static float distortHXY = 2, distortVXY = 0, distortVZ = 3; // side view
 //    public static float distortHXY = 2, distortVXY = 0.5f, distortVZ = 3; // partially elevated side view ("shallow")
@@ -720,52 +720,15 @@ public class SpecialRenderer {
 
             for (int x = 0; x < size; x++) {
                 for (int y = 0; y < size; y++) {
-//                    for (int z = size - 1; z >= 0; z--) {
-//                        byte voxel = colors[x][y][z];
-//                        if(voxel == 0) continue;
-//                        final Stuff stuff = stuffs[Math.min(voxel & 255, stuffs.length - 1)];
-//                        final VoxMaterial m = stuff.material;
-//                        final float alpha = m.getTrait(VoxMaterial.MaterialTrait._alpha);
-//                        if (alpha >= 1f) continue;
-//                        voxel = (byte) stuff.appearsAs;
-//                        final float flip = m.getTrait(VoxMaterial.MaterialTrait._frame);
-//                        if (Tools3D.randomizePointRare(x, y, z, frame) < m.getTrait(VoxMaterial.MaterialTrait._metal) || (frame & 1) == flip)
-//                            continue;
-//                        final float swirl = m.getTrait(VoxMaterial.MaterialTrait._swirl) + 1f;
-//                        if (swirl != 1f) {
-//                            float ns = swirlNoise.getNoise(x, y, z, cosTurns(frame * 0x1p-7f) * 0.625f / swirlNoise.getFrequency(), sinTurns(frame * 0x1p-7f) * 0.625f / swirlNoise.getFrequency()) * 2f;
-//                            if (ns > swirl) continue;
-//                        }
-//                        final float emit = m.getTrait(VoxMaterial.MaterialTrait._emit) * 0.75f;
-//                        if (emit != 0f) continue;
-
-//                        if (voxel != 0) {
-                            float oox = x - hs + fidget;
-                            float ooy = y - hs + fidget;
-                            oz = 0;
-//                            for (int ax = -6; ax <= 6; ax++) {
-//                                for (int ay = -3; ay <= 3; ay++) {
-//                                    if (x + ax >= 0 && y + ay >= 0 && x + ax < size && y + ay < size) {
-//                                        ox = oox + ax;
-//                                        oy = ooy + ay;
-//                                        splat(ox * x_x + oy * y_x + oz * z_x + size + translateX,
-//                                                ox * x_y + oy * y_y + oz * z_y + size + translateY,
-//                                                0, x + ax, y + ay, 0, FLOOR_INDEX, frame);
-//                                    }
-//                                }
-//                            }
-                            ox = oox;
-                            oy = ooy;
-                            splat(ox * x_x + oy * y_x + oz * z_x + size,
-                                    ox * x_y + oy * y_y + oz * z_y + size,
-                                    0,
-                                    x, y, 0, FLOOR_INDEX, frame);
-//                            break;
-//                        }
-//                    }
+                    ox = x - hs + fidget;
+                    oy = y - hs + fidget;
+                    oz = 0;
+                    splat(ox * x_x + oy * y_x + oz * z_x + size,
+                            ox * x_y + oy * y_y + oz * z_y + size,
+                            0,
+                            x, y, 0, FLOOR_INDEX, frame);
                 }
             }
-
         }
         for (int z = 0; z < size; z++) {
             for (int x = 0; x < size; x++) {
