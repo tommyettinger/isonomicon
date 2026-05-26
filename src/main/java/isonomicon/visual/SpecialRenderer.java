@@ -51,8 +51,8 @@ public class SpecialRenderer {
     public byte[][] indices, outlineIndices, lightIndices;
     public int[] palette;
     public float[] paletteL, paletteA, paletteB;
-//    public static int outline = 2;
-    public static int outline = 4;
+    public static int outline = 2; // shaded, not black outlines
+//    public static int outline = 4; // hard black outlines
     public boolean variance = true;
     public boolean lighting = true;
     public boolean shadows = Tools3D.SHADOWS;
