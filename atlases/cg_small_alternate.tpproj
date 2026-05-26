@@ -1,4 +1,4 @@
-name=cg_small
+name=cg_small_alternate
 filename=cg_small_alternate.atlas
 output=cg_small_alternate
 
@@ -13,8 +13,8 @@ filterMin=Nearest
 ignoreBlankImages=true
 maxHeight=4096
 maxWidth=4096
-minHeight=512
-minWidth=512
+minHeight=2048
+minWidth=2048
 paddingX=2
 paddingY=2
 pot=true

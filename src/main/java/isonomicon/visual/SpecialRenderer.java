@@ -43,8 +43,8 @@ public class SpecialRenderer {
     //    public static float distortHXY = 2, distortVXY = 0, distortVZ = 3; // side view
 //    public static float distortHXY = 2, distortVXY = 0.5f, distortVZ = 3; // partially elevated side view ("shallow")
 
-    //    public static int outline = 2; // shaded, not black outlines
-    public static int outline = 4; // hard black outlines
+        public static int outline = 2; // shaded, not black outlines
+//    public static int outline = 4; // hard black outlines
 
     public static final float fidget = 0f; // doesn't seem to need to be changed now? or needed?
 
