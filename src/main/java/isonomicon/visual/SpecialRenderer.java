@@ -39,9 +39,9 @@ public class SpecialRenderer {
 //    public static int shrink = 2; // "normal size," but eyes need to be simplified.
     public static int shrink = 3; // tiny, eyes need to be drawn as large dark rectangles to appear at all.
 
-    public static float distortHXY = 2, distortVXY = 1, distortVZ = 3; // ground truth for isometric
-    //    public static float distortHXY = 2, distortVXY = 0, distortVZ = 3; // side view
-//    public static float distortHXY = 2, distortVXY = 0.5f, distortVZ = 3; // partially elevated side view ("shallow")
+    public static float distortHX = 2, distortHY = 2, distortVX = 1,  distortVY = 1, distortVZ = 3; // ground truth for isometric
+    //    public static float distortHX = 2, distortHY = 2, distortVX = 0, distortVY = 0, distortVZ = 3; // side view
+//    public static float distortHX = 2, distortHY = 2, distortVX = 0.5f, distortVY = 0.5f, distortVZ = 3; // partially elevated side view ("shallow")
 
         public static int outline = 2; // shaded, not black outlines
 //    public static int outline = 4; // hard black outlines
@@ -86,7 +86,7 @@ public class SpecialRenderer {
 
     public SpecialRenderer(final int size, Stuff[] stuffs) {
         this.size = size;
-        final int w = MathUtils.ceil(size * distortHXY * 2 + 4), h = MathUtils.ceil(size * (distortVZ + distortVXY * 2) + 4);
+        final int w = MathUtils.ceil(size * 2 * Math.max(distortHX, distortHY) + 4), h = MathUtils.ceil(size * (distortVZ + distortVX + distortVY) + 4);
         palettePixmap = new Pixmap(w>>>shrink, h>>>shrink, Pixmap.Format.RGBA8888);
         palettePixmap.setBlending(Pixmap.Blending.None);
         buffer = palettePixmap.getPixels();
@@ -189,7 +189,7 @@ public class SpecialRenderer {
         if(indices[x][y] == 0) return;
         int[][] data = this.depths;
         // for other usage, this calculation will have to be different.
-        float maxDepth = 1.5f * (0.5f + (size + size) * distortHXY + size * distortVZ);
+        float maxDepth = 1.5f * (0.5f + size * distortHX + size * distortHY + size * distortVZ);
         float invMaxDepth = 1f / maxDepth;
         // how many pixels away from (x,y) each direction will move per step.
         final int u = 1 << shrink;
@@ -264,9 +264,9 @@ public class SpecialRenderer {
         xPos += fidget;
         yPos += fidget;
         final int
-                xx = (int)(0.5f + Math.max(0, (size + yPos - xPos) * distortHXY + 1)),
-                yy = (int)(0.5f + Math.max(0, (zPos * distortVZ + size * ((distortVXY) * 3) - distortVXY * (xPos + yPos)) + 1 + rise * frame)),
-                depth = (int)(0.5f + (xPos + yPos) * distortHXY + zPos * distortVZ);
+                xx = (int)(0.5f + Math.max(0, (size - xPos) * distortHX + yPos * distortHY + 1 + size * (distortHX - distortHY))),
+                yy = (int)(0.5f + Math.max(0, (zPos * distortVZ + size * ((distortVX + distortVY) * 1.5f) - distortVX * xPos - distortVY * yPos) + 1 + rise * frame)),
+                depth = (int)(0.5f + xPos * distortHX + yPos * distortHY + zPos * distortVZ);
         boolean drawn = false;
         final float hs = size * 0.5f;
         for (int x = lowX, ax = xx; x < highX && ax < render.length; x++, ax++) {
