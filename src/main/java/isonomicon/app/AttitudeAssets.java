@@ -55,6 +55,9 @@ public class AttitudeAssets extends ApplicationAdapter {
         VoxIOExtended.GENERAL = true;
         SpecialRenderer.SHADOW_INDEX = (byte) 2;
         SpecialRenderer.shrink = 2;
+        SpecialRenderer.distortHXY = 2;
+        SpecialRenderer.distortVXY = 1;
+        SpecialRenderer.distortVZ = 2;
 
         System.out.println("INVALID ARGUMENTS. Please supply space-separated absolute paths to .vox models, or use the .bat file.");
         inputs = ObjectObjectOrderedMap.with(
@@ -70,8 +73,10 @@ public class AttitudeAssets extends ApplicationAdapter {
 //                        "palettes/b/ColorGuardBaseGreen.png", "Man_In_Green",
 //                        "palettes/b/ColorGuardBaseBlue.png", "Man_In_Blue",
 //                },
-                "c/attitude/Hunter.vox", new String[]{
-                        "palettes/c/yam4mod.png", "Hunter",
+                "c/attitude/Earth_Voxel.vox", new String[]{
+                        "palettes/c/yam4mod.png", "Earth_Voxel",
+//                "c/attitude/Hunter.vox", new String[]{
+//                        "palettes/c/yam4mod.png", "Hunter",
 //                        "palettes/b/ColorGuardBaseBlue.png", "Sea_Hunter",
 //                },
 //                "c/attitude/A27.vox", new String[]{
