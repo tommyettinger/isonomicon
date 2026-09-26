@@ -184,7 +184,9 @@ public class SpecialistC extends ApplicationAdapter {
                     pm.add(pixmap);
                     if (PNG) {
                         png.write(Gdx.files.local("out/c/specialized/" + output + '/' + output + "_angle" + i + "_" + f + ".png"), pixmap);
+                        png.setFlipY(true);
                         png.write(Gdx.files.local("out/c/special_lab/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
+                        png.setFlipY(false);
                     }
                     fb.dispose();
                 }
