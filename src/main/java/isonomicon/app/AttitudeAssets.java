@@ -55,10 +55,14 @@ public class AttitudeAssets extends ApplicationAdapter {
         VoxIOExtended.GENERAL = true;
         SpecialRenderer.SHADOW_INDEX = (byte) 2;
         SpecialRenderer.shrink = 2;
-        SpecialRenderer.distortHX = 2;
-        SpecialRenderer.distortHY = 1;
-        SpecialRenderer.distortVX = 1;
-        SpecialRenderer.distortVY = 1;
+
+        // Cabinet projection? Earthbound-like.
+//        SpecialRenderer.distortHX = 2;
+//        SpecialRenderer.distortHY = 1;
+//        SpecialRenderer.distortVX = 1;
+//        SpecialRenderer.distortVY = 1;
+//        SpecialRenderer.distortVZ = 2;
+        // Isometric with less vertical stretch.
         SpecialRenderer.distortVZ = 2;
 
         System.out.println("INVALID ARGUMENTS. Please supply space-separated absolute paths to .vox models, or use the .bat file.");
@@ -185,7 +189,11 @@ public class AttitudeAssets extends ApplicationAdapter {
                     for (int j = 0; j < voxels.grids.size(); j++) {
                         Stuff.evolve(Stuff.STUFFS_C, voxels.grids.get(j), f);
                     }
-                    renderer.drawModelSimple(voxels, i * 0.25f + 0.125f, 0f, 0f, f, 0, 0, 0);
+                    // orthographic
+//                    renderer.drawModelSimple(voxels, i * 0.25f + 0.125f, 0f, 0f, f, 0, 0, 0);
+                    // isometric
+                    renderer.drawModelSimple(voxels, i * 0.25f, 0f, 0f, f, 0, 0, 0);
+                    // isometric with wiggle
 //                    renderer.drawModelSimple(voxels, i * 0.25f + Tools3D.wiggle(f) * 0.0125f, 0f, 0f, f, 0, 0, 0);
                     t.draw(renderer.palettePixmap, 0, 0);
                     for (int p = 0; p < outputs.length-1; p+=2) {

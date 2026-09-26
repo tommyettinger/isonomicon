@@ -86,7 +86,7 @@ public class SpecialRenderer {
 
     public SpecialRenderer(final int size, Stuff[] stuffs) {
         this.size = size;
-        final int w = MathUtils.ceil(size * 2 * Math.max(distortHX, distortHY) + 4), h = MathUtils.ceil(size * (distortVZ + distortVX + distortVY) + 4);
+        final int w = MathUtils.ceil(size * 2 * Math.max(distortHX, distortHY) + (2 << shrink)), h = MathUtils.ceil(size * (distortVZ + distortVX + distortVY) + (2 << shrink));
         palettePixmap = new Pixmap(w>>>shrink, h>>>shrink, Pixmap.Format.RGBA8888);
         palettePixmap.setBlending(Pixmap.Blending.None);
         buffer = palettePixmap.getPixels();

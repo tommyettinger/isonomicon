@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
-import isonomicon.app.ColorGuardData;
 import isonomicon.visual.ShaderUtils;
 
 public class SpecialViewer extends ApplicationAdapter {
@@ -75,7 +74,6 @@ public class SpecialViewer extends ApplicationAdapter {
         config.useVsync(true);
         config.setResizable(false);
         config.disableAudio(true);
-//        new Specialist(null);
         final SpecialViewer app = new SpecialViewer();
         new Lwjgl3Application(app, config);
     }
