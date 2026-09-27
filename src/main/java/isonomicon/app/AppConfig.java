@@ -7,11 +7,11 @@ public final class AppConfig {
     }
     public static final boolean GRAY_BG = false;
 
-    public static final DitherAlgorithm DITHER = DitherAlgorithm.BAYDIENT;
-    public static final float STRENGTH = 0.5_0f;
+//    public static final DitherAlgorithm DITHER = DitherAlgorithm.BAYDIENT;
+//    public static final float STRENGTH = 0.5_0f;
 
-//    public static final DitherAlgorithm DITHER = DitherAlgorithm.GOURD;
-//    public static final float STRENGTH = 0.3f;
+    public static final DitherAlgorithm DITHER = DitherAlgorithm.GOURD;
+    public static final float STRENGTH = 0.3f;
 
 //    public static final DitherAlgorithm DITHER = DitherAlgorithm.BANTER;
 //    public static final float STRENGTH = 0.3f;
