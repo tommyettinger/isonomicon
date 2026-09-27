@@ -1,6 +1,6 @@
-name=cg_squashed
-filename=
-output=cg_squashed
+name=zombie_chess_squashed
+filename=zombie_chess_squashed.atlas
+output=zombie_chess_squashed
 
 alias=true
 alphaThreshold=0
@@ -13,8 +13,8 @@ filterMin=Nearest
 ignoreBlankImages=true
 maxHeight=4096
 maxWidth=4096
-minHeight=2048
-minWidth=2048
+minHeight=512
+minWidth=512
 paddingX=2
 paddingY=2
 pot=true
@@ -34,7 +34,7 @@ prettyPrint=false
 legacyOutput=false
 
 scaleFactors=[{suffix:"",factor:1,resampling:bicubic}]
-inputFiles=[{path:../raw/cg_squashed,type:Input,dirFilePrefix:null,recursive:true,flattenPaths:true}]
+inputFiles=[{path:../raw/zombie_chess_squashed,type:Input,dirFilePrefix:null,recursive:true,flattenPaths:true}]
 keepInputFileExtensions=false
 
 
