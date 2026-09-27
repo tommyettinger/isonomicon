@@ -53,7 +53,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
     public static boolean PNG = true;
     public static boolean APNG = false;
     public static boolean GIF = true;
-    public static boolean VOX = false;
+    public static boolean VOX = true;
 
 //    public static final String outDir = "out/color_guard";
 //    public static final String outDir = "out/cg";
