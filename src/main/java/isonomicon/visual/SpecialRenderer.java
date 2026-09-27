@@ -291,7 +291,7 @@ public class SpecialRenderer {
 //                            outlineIndices[ax][ay] = 0;
                         }
                     } else {
-                        indices[ax][ay] = FLOOR_INDEX;
+                        if(indices[ax][ay] == 0) indices[ax][ay] = FLOOR_INDEX;
                     }
 //                                Coloring.darken(palette[voxel & 255], 0.375f - emit);
 //                                Coloring.adjust(palette[voxel & 255], 0.625f + emit, neutral);
