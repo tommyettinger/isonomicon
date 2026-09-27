@@ -53,7 +53,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
     public static boolean PNG = true;
     public static boolean APNG = false;
     public static boolean GIF = true;
-    public static boolean VOX = false;
+    public static boolean VOX = true;
 
 //    public static final String outDir = "out/color_guard";
 //    public static final String outDir = "out/cg";
@@ -452,7 +452,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                 if (png != null)
                                     png.write(Gdx.files.local(outDir + "/lab/" + name + '/' + SPECIES_PREFIX + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                                 if(VOX && i == 0)
-                                    VoxIOExtended.writeVOX(outDir + "/vox/" + name + "/" + SPECIES_PREFIX + name + "_" + f + ".vox", VoxIOExtended.mergeModelSimple(voxels, f, 0, 0, 0), palette0, Stuff.MATERIALS_B);
+                                    VoxIOExtended.writeVOX(outDir + "/vox/" + name + "/" + SPECIES_PREFIX + name + "_" + f + ".vox", VoxIOExtended.mergeModelSimple(voxels, f, 0, 0, 0), palette0, null);
 
                             }
                         }
@@ -528,7 +528,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
                                         if (png != null)
                                             png.write(Gdx.files.local(outDir + "/lab/" + name + '/' + SPECIES_PREFIX + name + ps + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                                         if(VOX && i == 0)
-                                            VoxIOExtended.writeVOX(outDir + "/vox/" + name + "/" + SPECIES_PREFIX + name + ps + "_" + f + ".vox", VoxIOExtended.mergeModelSimple(frames[f], f, 0, 0, 0), palette0, Stuff.MATERIALS_B);
+                                            VoxIOExtended.writeVOX(outDir + "/vox/" + name + "/" + SPECIES_PREFIX + name + ps + "_" + f + ".vox", VoxIOExtended.mergeModelSimple(frames[f], f, 0, 0, 0), palette0, null);
 
                                     }
                                 }

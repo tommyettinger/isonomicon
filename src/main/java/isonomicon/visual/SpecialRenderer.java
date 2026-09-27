@@ -39,7 +39,8 @@ public class SpecialRenderer {
     public static int shrink = 2; // "normal size," but eyes need to be simplified.
 //    public static int shrink = 3; // tiny, eyes need to be drawn as large dark rectangles to appear at all.
 
-    public static float distortHX = 2, distortHY = 2, distortVX = 1,  distortVY = 1, distortVZ = 3; // ground truth for isometric
+    public static float distortHX = 2, distortHY = 2, distortVX = 1,  distortVY = 1, distortVZ = 2; // elevation-squashed isometric
+//    public static float distortHX = 2, distortHY = 2, distortVX = 1,  distortVY = 1, distortVZ = 3; // elevation-stretched isometric
     //    public static float distortHX = 2, distortHY = 2, distortVX = 0, distortVY = 0, distortVZ = 3; // side view
 //    public static float distortHX = 2, distortHY = 2, distortVX = 0.5f, distortVY = 0.5f, distortVZ = 3; // partially elevated side view ("shallow")
 
