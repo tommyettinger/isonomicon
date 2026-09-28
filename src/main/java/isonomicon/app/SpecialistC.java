@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -51,56 +52,29 @@ public class SpecialistC extends ApplicationAdapter {
     public SpecialistC(String[] args){
         VoxIOExtended.GENERAL = true;
         SpecialRenderer.SHADOW_INDEX = (byte) 2;
-        if(args != null && args.length > 0)
-            inputs = args;
-        else 
-        {
-            System.out.println("INVALID ARGUMENTS. Please supply space-separated absolute paths to .vox models, or use the .bat file.");
-//            inputs = new String[]{
-//                    "b/vox/color_guard/Coast.vox", "palettes/b/ColorGuardBaseDark.png", "Coast",
-//                    "b/vox/color_guard/Desert.vox", "palettes/b/ColorGuardBaseDark.png", "Desert",
-//                    "b/vox/color_guard/Forest.vox", "palettes/b/ColorGuardBaseDark.png", "Forest",
-//                    "b/vox/color_guard/Ice.vox", "palettes/b/ColorGuardBaseDark.png", "Ice",
-//                    "b/vox/color_guard/Jungle.vox", "palettes/b/ColorGuardBaseDark.png", "Jungle",
-//                    "b/vox/color_guard/Mountains.vox", "palettes/b/ColorGuardBaseDark.png", "Mountains",
-//                    "b/vox/color_guard/Ocean.vox", "palettes/b/ColorGuardBaseDark.png", "Ocean",
-//                    "b/vox/color_guard/Plains.vox", "palettes/b/ColorGuardBaseDark.png", "Plains",
-//                    "b/vox/color_guard/River.vox", "palettes/b/ColorGuardBaseDark.png", "River",
-//                    "b/vox/color_guard/Rocky.vox", "palettes/b/ColorGuardBaseDark.png", "Rocky",
-//                    "b/vox/color_guard/Ruins.vox", "palettes/b/ColorGuardBaseDark.png", "Ruins",
-//                    "b/vox/color_guard/Volcano.vox", "palettes/b/ColorGuardBaseDark.png", "Volcano",
-//            };
-//            inputs = new String[]{
-//                    "b/vox/gratitude/A24.vox", "palettes/b/ColorGuardBaseDark.png", "Dark_Priest",
-//                    "b/vox/gratitude/A24.vox", "palettes/b/ColorGuardBaseWhite.png", "Light_Priest",
-//                    "b/vox/gratitude/A24.vox", "palettes/b/ColorGuardBaseRed.png", "War_Priest",
-//                    "b/vox/gratitude/A25.vox", "palettes/b/ColorGuardBaseDark.png", "Man_In_Black",
-//                    "b/vox/gratitude/A25.vox", "palettes/b/ColorGuardBaseWhite.png", "Man_In_White",
-//                    "b/vox/gratitude/A25.vox", "palettes/b/ColorGuardBaseRed.png", "Man_In_Red",
-//                    "b/vox/gratitude/A25.vox", "palettes/b/ColorGuardBaseGreen.png", "Man_In_Green",
-//                    "b/vox/gratitude/A25.vox", "palettes/b/ColorGuardBaseBlue.png", "Man_In_Blue",
-//            };
-//            inputs = new String[]{
-//                    "b/vox/odyssey/Assassin_Dagger.vox", "palettes/b/TanClothDarkSkin.png",
-//                    "b/vox/odyssey/Noble_Knife.vox", "palettes/b/TanClothDarkSkin.png",
-//            };
-//            inputs = new String[]{"b/vox/Figure.vox", "b/vox/Tree.vox"};
-//            inputs = new String[]{"b/vox/Figure_Split.vox", "palettes/b/TanClothDarkSkin.png"};
-//            inputs = new String[]{"b/vox/Damned.vox", "palettes/b/CherrySkinDarkCloth.png"};
-//            inputs = new String[]{"c/Lomuk.vox", "palettes/c/BlueFurCyanCrystal.png", "Lomuk"};
-//            inputs = new String[]{"c/Eye_Tyrant.vox", "palettes/c/yam4.png", "Eye Tyrant"};
-            inputs = new String[]{"c/Eye_Tyrant.vox", "palettes/c/PurpleScalesRedEvilEye.png", "Eye Tyrant"};
-//            inputs = new String[]{"c/Direction_Cube.vox", "palettes/c/yam4.png", "Direction Cube"};
-//            inputs = new String[]{"b/vox/Lomuk.vox", "palettes/b/BlueFurCyanCrystal.png", "Blue Lomuk"};
-//            inputs = new String[]{"b/vox/Lomuk.vox", "palettes/b/BlueFurCyanCrystal.png",
-//                    "b/vox/Damned.vox", "palettes/b/CherrySkinDarkCloth.png",
-//                    "b/vox/Figure.vox", "palettes/b/TanClothDarkSkin.png",
-//                    "b/vox/Figure_Split.vox", "palettes/b/TanClothDarkSkin.png"};
-            if(!new File("specialized/" + inputs[0]).exists()) {
-                System.out.println("File not found: specialized/" + inputs[0]);
-                System.exit(0);
-            }
-        }
+        SpecialRenderer.shrink = 2;
+//        if(args != null && args.length > 0)
+//            inputs = args;
+//        else
+//        {
+////            System.out.println("INVALID ARGUMENTS. Please supply space-separated absolute paths to .vox models, or use the .bat file.");
+////            inputs = new String[]{"c/Lomuk.vox", "palettes/c/BlueFurCyanCrystal.png", "Lomuk"};
+////            inputs = new String[]{"c/Eye_Tyrant.vox", "palettes/c/yam4mod.png", "Eye Tyrant"};
+////            inputs = new String[]{"c/Eye_Tyrant.vox", "palettes/c/PurpleScalesRedEvilEye.png", "Eye Tyrant"};
+////            inputs = new String[]{"c/Direction_Cube.vox", "palettes/c/yam4.png", "Direction Cube"};
+////            inputs = new String[]{"b/vox/Lomuk.vox", "palettes/b/BlueFurCyanCrystal.png", "Blue Lomuk"};
+////            inputs = new String[]{"b/vox/Lomuk.vox", "palettes/b/BlueFurCyanCrystal.png",
+////                    "b/vox/Damned.vox", "palettes/b/CherrySkinDarkCloth.png",
+////                    "b/vox/Figure.vox", "palettes/b/TanClothDarkSkin.png",
+////                    "b/vox/Figure_Split.vox", "palettes/b/TanClothDarkSkin.png"};
+//
+//
+//            inputs = new String[]{"c/Eye_Tyrant.vox", "palettes/c/yam4mod.png", "Eye Tyrant"};
+//            if(!new File("specialized/" + inputs[0]).exists()) {
+//                System.out.println("File not found: specialized/" + inputs[0]);
+//                System.exit(0);
+//            }
+//        }
     }
 
     public static Pixmap createFromFrameBuffer(int x, int y, int w, int h) {
@@ -113,8 +87,15 @@ public class SpecialistC extends ApplicationAdapter {
 
     @Override
     public void create() {
-        if (inputs == null) Gdx.app.exit();
+//        if (inputs == null) Gdx.app.exit();
 
+        FileHandle[] cubes = Gdx.files.local("specialized/c/cubes/").list();
+        inputs = new String[cubes.length * 3];
+        for (int i = 0; i < cubes.length; i++) {
+            inputs[i * 3] = cubes[i].path();
+            inputs[i * 3 + 1] = "palettes/c/yam4mod.png";
+            inputs[i * 3 + 2] = cubes[i].nameWithoutExtension().replace('_', ' ');
+        }
         ShaderProgram indexShader = new ShaderProgram(ShaderUtils.stuffSelectVertex, ShaderUtils.stuffSelectFragment);
         if (!indexShader.isCompiled()) throw new GdxRuntimeException("Error compiling shader: " + indexShader.getLog());
         batch = new SpriteBatch(256, indexShader);
@@ -140,7 +121,7 @@ public class SpecialistC extends ApplicationAdapter {
             palette = new Texture(Gdx.files.local("assets/" + inputs[n++]));
             String output = inputs[n++];
             System.out.println("Rendering " + s + " to " + output);
-            load("specialized/" + s);
+            load(s);
 //            VoxIO.writeVOX("out/" + s, voxels, renderer.palette, VoxIO.lastMaterials);
 //            load("out/"+s);
             Texture t = new Texture(renderer.palettePixmap.getWidth(), renderer.palettePixmap.getHeight(), Pixmap.Format.RGBA8888);
