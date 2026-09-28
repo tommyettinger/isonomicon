@@ -23,7 +23,9 @@ public class NoiseCubeGenerator extends ApplicationAdapter {
     public static final ObjectObjectOrderedMap<String, IntIntToIntBiFunction> SHAPES =
             ObjectObjectOrderedMap.with(
                     "Cube", (x, y) -> CUBE_SIZE,
-                    "Slope", (x, y) -> x
+                    "Slope", (x, y) -> x,
+                    "Corner", Math::min,
+                    "Nick", Math::max
                     );
 
     @Override
