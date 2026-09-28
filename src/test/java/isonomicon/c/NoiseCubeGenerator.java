@@ -5,9 +5,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.github.tommyettinger.digital.ArrayTools;
+import com.github.tommyettinger.digital.Hasher;
+import com.github.tommyettinger.ds.ObjectObjectOrderedMap;
+import com.github.tommyettinger.function.IntIntToIntBiFunction;
 import com.github.yellowstonegames.grid.*;
 import isonomicon.io.extended.VoxIOExtended;
 import isonomicon.visual.Coloring;
+
+import java.util.Map;
 
 public class NoiseCubeGenerator extends ApplicationAdapter {
 
@@ -15,18 +20,26 @@ public class NoiseCubeGenerator extends ApplicationAdapter {
     public static final int CUBE_SIZE = 32;
     public static final int OFFSET = SIZE - CUBE_SIZE >>> 1;
 
+    public static final ObjectObjectOrderedMap<String, IntIntToIntBiFunction> SHAPES =
+            ObjectObjectOrderedMap.with(
+                    "Cube", (x, y) -> CUBE_SIZE,
+                    "Slope", (x, y) -> x
+                    );
+
     @Override
     public void create() {
         byte[][][] data = new byte[SIZE][SIZE][SIZE];
-        fillRock(data, 12L);
-        VoxIOExtended.writeVOX("specialized/c/cubes/" + "Rock_Cube" + ".vox", data, Coloring.YAM4, null);
-        ArrayTools.fill(data, (byte) 0);
-        fillSand(data, 12L);
-        VoxIOExtended.writeVOX("specialized/c/cubes/" + "Sand_Cube" + ".vox", data, Coloring.YAM4, null);
+        for (Map.Entry<String, IntIntToIntBiFunction> e : SHAPES.entrySet()) {
+
+//        fillRock(data, 12L);
+//        VoxIOExtended.writeVOX("specialized/c/cubes/" + "Rock_Cube" + ".vox", data, Coloring.YAM4, null);
 //        ArrayTools.fill(data, (byte) 0);
-//        fillEarth(data, 123L);
-//        VoxIOExtended.writeVOX("specialized/c/cubes/" + "Earth_Cube" + ".vox", data, Coloring.YAM4, null);
+//        fillSand(data, 12L);
+//        VoxIOExtended.writeVOX("specialized/c/cubes/" + "Sand_Cube" + ".vox", data, Coloring.YAM4, null);
 //        ArrayTools.fill(data, (byte) 0);
+            fillEarth(data, Hasher.curium.hashBulk64(e.getKey()), e.getValue());
+            VoxIOExtended.writeVOX("specialized/c/cubes/" + "Earth_" + e.getKey() + ".vox", data, Coloring.YAM4, null);
+            ArrayTools.fill(data, (byte) 0);
 //        fillEarthGrassTop(data, 1234L);
 //        VoxIOExtended.writeVOX("specialized/c/cubes/" + "Earth_Grass_Cube" + ".vox", data, Coloring.YAM4, null);
 //        ArrayTools.fill(data, (byte) 0);
@@ -36,20 +49,21 @@ public class NoiseCubeGenerator extends ApplicationAdapter {
 //        INoise base = new HuskyNoise(123L, 3, 1.5f);
 //        fillGradient(data, base);
 //        VoxIOExtended.writeVOX("specialized/c/test/" + "Gradient_Cube_" + INoise.Serializer.serialize(base) + ".vox", data, Coloring.YAM4, null);
-
+        }
         Gdx.app.exit();
     }
 
-    public void fillEarth(byte[][][] data, long seed){
+    public void fillEarth(byte[][][] data, long seed, IntIntToIntBiFunction topFinder){
         INoise noise = new NoiseWrapper(new CellularNoise(seed, CellularNoise.NoiseType.DISTANCE), 0.15f, NoiseWrapper.RIDGED_MULTI, 1);
         for (int x = 0; x < CUBE_SIZE; x++) {
             for (int y = 0; y < CUBE_SIZE; y++) {
-                for (int z = 0; z < CUBE_SIZE; z++) {
+                int top = topFinder.applyAsInt(x, y);
+                for (int z = 0; z < top; z++) {
                     float n = noise.getNoise(x, y, z);
                     data[x + OFFSET][y + OFFSET][z] = (byte)(n > 0.9f ? 35 : n > 0.1f ? 19 : 18);
                 }
-                float n = noise.getNoise(x, y, CUBE_SIZE);
-                data[x + OFFSET][y + OFFSET][CUBE_SIZE] = (byte)(n > 0.9f ? 35 : n > 0.1f ? 0 : 18);
+                float n = noise.getNoise(x, y, top);
+                data[x + OFFSET][y + OFFSET][top] = (byte)(n > 0.9f ? 35 : n > 0.1f ? 0 : 18);
             }
         }
     }
