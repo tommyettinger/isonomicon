@@ -20,6 +20,9 @@ public class NoiseCubeGenerator extends ApplicationAdapter {
         byte[][][] data = new byte[SIZE][SIZE][SIZE];
         fillRock(data, 12L);
         VoxIOExtended.writeVOX("specialized/c/cubes/" + "Rock_Cube" + ".vox", data, Coloring.YAM4, null);
+        ArrayTools.fill(data, (byte) 0);
+        fillSand(data, 12L);
+        VoxIOExtended.writeVOX("specialized/c/cubes/" + "Sand_Cube" + ".vox", data, Coloring.YAM4, null);
 //        ArrayTools.fill(data, (byte) 0);
 //        fillEarth(data, 123L);
 //        VoxIOExtended.writeVOX("specialized/c/cubes/" + "Earth_Cube" + ".vox", data, Coloring.YAM4, null);
@@ -64,6 +67,18 @@ public class NoiseCubeGenerator extends ApplicationAdapter {
                 for (int z = Math.min(0, bn); z <= Math.max(0, bn); z++) {
                     data[x + OFFSET][y + OFFSET][CUBE_SIZE + z] = (byte)((rn & 7) < 2 ? 95 : 96);
                 }
+            }
+        }
+    }
+
+    public void fillSand(byte[][][] data, long seed){
+        INoise noise = new NoiseWrapper(new FoamNoise(seed), 0.14f, NoiseWrapper.RIDGED_MULTI, 1);
+        for (int x = 0; x < CUBE_SIZE; x++) {
+            for (int y = 0; y < CUBE_SIZE; y++) {
+                for (int z = 0; z < CUBE_SIZE; z++) {
+                    data[x + OFFSET][y + OFFSET][z] = 20;
+                }
+                data[x + OFFSET][y + OFFSET][CUBE_SIZE] = (byte)(noise.getNoise(x, y) < 0.85f ? 20 : 0);
             }
         }
     }
