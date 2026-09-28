@@ -39,6 +39,9 @@ public class NoiseCubeGenerator extends ApplicationAdapter {
 //        fillSand(data, 12L);
 //        VoxIOExtended.writeVOX("specialized/c/cubes/" + "Sand_Cube" + ".vox", data, Coloring.YAM4, null);
 //        ArrayTools.fill(data, (byte) 0);
+            fillSand(data, Hasher.hashBulk64(122L, e.getKey()), e.getValue());
+            VoxIOExtended.writeVOX("specialized/c/cubes/" + "Sand_" + e.getKey() + ".vox", data, Coloring.YAM4, null);
+            ArrayTools.fill(data, (byte) 0);
             fillEarth(data, Hasher.hashBulk64(123L, e.getKey()), e.getValue());
             VoxIOExtended.writeVOX("specialized/c/cubes/" + "Earth_" + e.getKey() + ".vox", data, Coloring.YAM4, null);
             ArrayTools.fill(data, (byte) 0);
@@ -70,7 +73,7 @@ public class NoiseCubeGenerator extends ApplicationAdapter {
         }
     }
 
-    public void fillEarthGrassTop(byte[][][] data, long seed, IntIntToIntBiFunction topFinder){
+    public void fillEarthGrassTop(byte[][][] data, long seed, IntIntToIntBiFunction topFinder) {
         INoise noise = new NoiseWrapper(new CellularNoise(seed, CellularNoise.NoiseType.DISTANCE), 0.15f, NoiseWrapper.RIDGED_MULTI, 1);
         for (int x = 0; x < CUBE_SIZE; x++) {
             for (int y = 0; y < CUBE_SIZE; y++) {
@@ -91,14 +94,15 @@ public class NoiseCubeGenerator extends ApplicationAdapter {
         }
     }
 
-    public void fillSand(byte[][][] data, long seed){
+    public void fillSand(byte[][][] data, long seed, IntIntToIntBiFunction topFinder) {
         INoise noise = new NoiseWrapper(new FoamNoise(seed), 0.14f, NoiseWrapper.RIDGED_MULTI, 1);
         for (int x = 0; x < CUBE_SIZE; x++) {
             for (int y = 0; y < CUBE_SIZE; y++) {
-                for (int z = 0; z < CUBE_SIZE; z++) {
+                int top = topFinder.applyAsInt(x, y);
+                for (int z = 0; z < top; z++) {
                     data[x + OFFSET][y + OFFSET][z] = 20;
                 }
-                data[x + OFFSET][y + OFFSET][CUBE_SIZE] = (byte)(noise.getNoise(x, y) < 0.85f ? 20 : 0);
+                data[x + OFFSET][y + OFFSET][top] = (byte)(noise.getNoise(x, y) < 0.85f ? 20 : 0);
             }
         }
     }
