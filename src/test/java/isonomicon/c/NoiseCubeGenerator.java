@@ -46,11 +46,27 @@ public class NoiseCubeGenerator extends ApplicationAdapter {
             VoxIOExtended.writeVOX("specialized/c/cubes/" + "Earth_Grass_" + e.getKey() + ".vox", data, Coloring.YAM4, null);
             ArrayTools.fill(data, (byte) 0);
 
-//        INoise base = new CellularNoise(123l, CellularNoise.NoiseType.DISTANCE);
-//        INoise base = new FoamNoise(123L);
-//        INoise base = new HuskyNoise(123L, 3, 1.5f);
-//        fillGradient(data, base);
-//        VoxIOExtended.writeVOX("specialized/c/test/" + "Gradient_Cube_" + INoise.Serializer.serialize(base) + ".vox", data, Coloring.YAM4, null);
+            INoise base;
+            base = new CellularNoise(Hasher.hashBulk64(1234L, e.getKey()), CellularNoise.NoiseType.DISTANCE);
+            fillGradient(data, base, e.getValue());
+            VoxIOExtended.writeVOX("specialized/c/test/" + "Gradient_" + e.getKey() + "_" + INoise.Serializer.serialize(base) + ".vox", data, Coloring.YAM4, null);
+            ArrayTools.fill(data, (byte) 0);
+            base = new FoamNoise(Hasher.hashBulk64(1234L, e.getKey()));
+            fillGradient(data, base, e.getValue());
+            VoxIOExtended.writeVOX("specialized/c/test/" + "Gradient_" + e.getKey() + "_" + INoise.Serializer.serialize(base) + ".vox", data, Coloring.YAM4, null);
+            ArrayTools.fill(data, (byte) 0);
+            base = new HuskyNoise(Hasher.hashBulk64(1234L, e.getKey()), 3, 1.5f);
+            fillGradient(data, base, e.getValue());
+            VoxIOExtended.writeVOX("specialized/c/test/" + "Gradient_" + e.getKey() + "_" + INoise.Serializer.serialize(base) + ".vox", data, Coloring.YAM4, null);
+            ArrayTools.fill(data, (byte) 0);
+            base = new PerlueNoise(Hasher.hashBulk64(1234L, e.getKey()));
+            fillGradient(data, base, e.getValue());
+            VoxIOExtended.writeVOX("specialized/c/test/" + "Gradient_" + e.getKey() + "_" + INoise.Serializer.serialize(base) + ".vox", data, Coloring.YAM4, null);
+            ArrayTools.fill(data, (byte) 0);
+            base = new SimplexNoise(Hasher.hashBulk64(1234L, e.getKey()));
+            fillGradient(data, base, e.getValue());
+            VoxIOExtended.writeVOX("specialized/c/test/" + "Gradient_" + e.getKey() + "_" + INoise.Serializer.serialize(base) + ".vox", data, Coloring.YAM4, null);
+            ArrayTools.fill(data, (byte) 0);
         }
         Gdx.app.exit();
     }
@@ -104,7 +120,7 @@ public class NoiseCubeGenerator extends ApplicationAdapter {
         }
     }
 
-    public void fillRock(byte[][][] data, long seed, IntIntToIntBiFunction topFinder){
+    public void fillRock(byte[][][] data, long seed, IntIntToIntBiFunction topFinder) {
         INoise noise = new NoiseWrapper(new CellularNoise(seed, CellularNoise.NoiseType.DISTANCE), 0.14f, NoiseWrapper.RIDGED_MULTI, 1);
         final float threshold = 0.04f;
         for (int x = 1; x < CUBE_SIZE - 1; x++) {
@@ -136,11 +152,12 @@ public class NoiseCubeGenerator extends ApplicationAdapter {
         }
     }
 
-    public void fillGradient(byte[][][] data, INoise base){
+    public void fillGradient(byte[][][] data, INoise base, IntIntToIntBiFunction topFinder) {
         INoise noise = new NoiseWrapper(base, 0.15f, NoiseWrapper.RIDGED_MULTI, 1);
         for (int x = 0; x < CUBE_SIZE; x++) {
             for (int y = 0; y < CUBE_SIZE; y++) {
-                for (int z = 0; z < CUBE_SIZE; z++) {
+                int top = topFinder.applyAsInt(x, y);
+                for (int z = 0; z < top; z++) {
                     float n = noise.getNoise(x, y, z);
                     data[x + OFFSET][y + OFFSET][z] = (byte)(236 + n * 16);
                 }
