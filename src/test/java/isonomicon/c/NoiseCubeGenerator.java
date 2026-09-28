@@ -115,7 +115,9 @@ public class NoiseCubeGenerator extends ApplicationAdapter {
                 for (int z = 0; z < top; z++) {
                     data[x + OFFSET][y + OFFSET][z] = 20;
                 }
-                data[x + OFFSET][y + OFFSET][top] = (byte)(noise.getNoise(x, y) < 0.85f ? 20 : 0);
+                float n = noise.getNoise(x, y);
+                data[x + OFFSET][y + OFFSET][top] = (byte)(n < 0.85f ? 20 : 0);
+                data[x + OFFSET][y + OFFSET][top + 1] = (byte)(n < 0.7f ? 20 : 0);
             }
         }
     }
