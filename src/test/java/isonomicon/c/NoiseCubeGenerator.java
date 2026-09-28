@@ -18,12 +18,16 @@ public class NoiseCubeGenerator extends ApplicationAdapter {
     @Override
     public void create() {
         byte[][][] data = new byte[SIZE][SIZE][SIZE];
-        fillEarth(data, 123L);
-        VoxIOExtended.writeVOX("specialized/c/cubes/" + "Earth_Cube" + ".vox", data, Coloring.YAM4, null);
-        ArrayTools.fill(data, (byte) 0);
-        fillEarthGrassTop(data, 1234L);
-        VoxIOExtended.writeVOX("specialized/c/cubes/" + "Earth_Grass_Cube" + ".vox", data, Coloring.YAM4, null);
-//        ArrayTools.fill(data, 0);
+        fillRock(data, 12L);
+        VoxIOExtended.writeVOX("specialized/c/cubes/" + "Rock_Cube" + ".vox", data, Coloring.YAM4, null);
+//        ArrayTools.fill(data, (byte) 0);
+//        fillEarth(data, 123L);
+//        VoxIOExtended.writeVOX("specialized/c/cubes/" + "Earth_Cube" + ".vox", data, Coloring.YAM4, null);
+//        ArrayTools.fill(data, (byte) 0);
+//        fillEarthGrassTop(data, 1234L);
+//        VoxIOExtended.writeVOX("specialized/c/cubes/" + "Earth_Grass_Cube" + ".vox", data, Coloring.YAM4, null);
+//        ArrayTools.fill(data, (byte) 0);
+
 //        INoise base = new CellularNoise(123l, CellularNoise.NoiseType.DISTANCE);
 //        INoise base = new FoamNoise(123L);
 //        INoise base = new HuskyNoise(123L, 3, 1.5f);
@@ -47,7 +51,6 @@ public class NoiseCubeGenerator extends ApplicationAdapter {
         }
     }
 
-
     public void fillEarthGrassTop(byte[][][] data, long seed){
         INoise noise = new NoiseWrapper(new CellularNoise(seed, CellularNoise.NoiseType.DISTANCE), 0.15f, NoiseWrapper.RIDGED_MULTI, 1);
         for (int x = 0; x < CUBE_SIZE; x++) {
@@ -61,6 +64,32 @@ public class NoiseCubeGenerator extends ApplicationAdapter {
                 for (int z = Math.min(0, bn); z <= Math.max(0, bn); z++) {
                     data[x + OFFSET][y + OFFSET][CUBE_SIZE + z] = (byte)((rn & 7) < 2 ? 95 : 96);
                 }
+            }
+        }
+    }
+
+    public void fillRock(byte[][][] data, long seed){
+        INoise noise = new NoiseWrapper(new CellularNoise(seed, CellularNoise.NoiseType.DISTANCE), 0.14f, NoiseWrapper.RIDGED_MULTI, 1);
+        final float threshold = 0.04f;
+        for (int x = 1; x < CUBE_SIZE - 1; x++) {
+            for (int y = 1; y < CUBE_SIZE - 1; y++) {
+                for (int z = 0; z < CUBE_SIZE; z++) {
+                    data[x + OFFSET][y + OFFSET][z] = 32;
+                }
+            }
+        }
+        for (int fx = 0; fx < CUBE_SIZE; fx++) {
+            for (int fz = 0; fz <= CUBE_SIZE; fz++) {
+                data[fx + OFFSET][OFFSET][fz] = (byte)(noise.getNoiseWithSeed(fx, fz, seed) > threshold ? 0 : 32);
+                data[fx + OFFSET][CUBE_SIZE - 1 + OFFSET][fz] = (byte)(noise.getNoiseWithSeed(fx, fz, seed+1) > threshold ? 0 : 32);
+                data[OFFSET][fx + OFFSET][fz] = (byte)(noise.getNoiseWithSeed(fx, fz, seed+2) > threshold ? 0 : 32);
+                data[CUBE_SIZE - 1 + OFFSET][fx + OFFSET][fz] = (byte)(noise.getNoiseWithSeed(fx, fz, seed+3) > threshold ? 0 : 32);
+            }
+        }
+
+        for (int x = 0; x < CUBE_SIZE; x++) {
+            for (int y = 0; y < CUBE_SIZE; y++) {
+                data[x + OFFSET][y + OFFSET][CUBE_SIZE] = (byte)(noise.getNoiseWithSeed(x, y, seed) > threshold ? 0 : 32);
             }
         }
     }
