@@ -33,12 +33,9 @@ public class NoiseCubeGenerator extends ApplicationAdapter {
         byte[][][] data = new byte[SIZE][SIZE][SIZE];
         for (Map.Entry<String, IntIntToIntBiFunction> e : SHAPES.entrySet()) {
 
-//        fillRock(data, 12L);
-//        VoxIOExtended.writeVOX("specialized/c/cubes/" + "Rock_Cube" + ".vox", data, Coloring.YAM4, null);
-//        ArrayTools.fill(data, (byte) 0);
-//        fillSand(data, 12L);
-//        VoxIOExtended.writeVOX("specialized/c/cubes/" + "Sand_Cube" + ".vox", data, Coloring.YAM4, null);
-//        ArrayTools.fill(data, (byte) 0);
+            fillRock(data, Hasher.hashBulk64(121L, e.getKey()), e.getValue());
+            VoxIOExtended.writeVOX("specialized/c/cubes/" + "Rock_" + e.getKey() + ".vox", data, Coloring.YAM4, null);
+            ArrayTools.fill(data, (byte) 0);
             fillSand(data, Hasher.hashBulk64(122L, e.getKey()), e.getValue());
             VoxIOExtended.writeVOX("specialized/c/cubes/" + "Sand_" + e.getKey() + ".vox", data, Coloring.YAM4, null);
             ArrayTools.fill(data, (byte) 0);
@@ -107,28 +104,34 @@ public class NoiseCubeGenerator extends ApplicationAdapter {
         }
     }
 
-    public void fillRock(byte[][][] data, long seed){
+    public void fillRock(byte[][][] data, long seed, IntIntToIntBiFunction topFinder){
         INoise noise = new NoiseWrapper(new CellularNoise(seed, CellularNoise.NoiseType.DISTANCE), 0.14f, NoiseWrapper.RIDGED_MULTI, 1);
         final float threshold = 0.04f;
         for (int x = 1; x < CUBE_SIZE - 1; x++) {
             for (int y = 1; y < CUBE_SIZE - 1; y++) {
-                for (int z = 0; z < CUBE_SIZE; z++) {
+                int top = topFinder.applyAsInt(x, y);
+                for (int z = 0; z < top; z++) {
                     data[x + OFFSET][y + OFFSET][z] = 32;
                 }
             }
         }
         for (int fx = 0; fx < CUBE_SIZE; fx++) {
-            for (int fz = 0; fz <= CUBE_SIZE; fz++) {
-                data[fx + OFFSET][OFFSET][fz] = (byte)(noise.getNoiseWithSeed(fx, fz, seed) > threshold ? 0 : 32);
-                data[fx + OFFSET][CUBE_SIZE - 1 + OFFSET][fz] = (byte)(noise.getNoiseWithSeed(fx, fz, seed+1) > threshold ? 0 : 32);
-                data[OFFSET][fx + OFFSET][fz] = (byte)(noise.getNoiseWithSeed(fx, fz, seed+2) > threshold ? 0 : 32);
-                data[CUBE_SIZE - 1 + OFFSET][fx + OFFSET][fz] = (byte)(noise.getNoiseWithSeed(fx, fz, seed+3) > threshold ? 0 : 32);
+            for (int fz = 0; fz < CUBE_SIZE; fz++) {
+                if(topFinder.applyAsInt(fx, 0) > fz)
+                    data[fx + OFFSET][OFFSET][fz] = (byte)(noise.getNoiseWithSeed(fx, fz, seed) > threshold ? 0 : 32);
+                if(topFinder.applyAsInt(fx, CUBE_SIZE - 1) > fz)
+                    data[fx + OFFSET][CUBE_SIZE - 1 + OFFSET][fz] = (byte)(noise.getNoiseWithSeed(fx, fz, seed+1) > threshold ? 0 : 32);
+                if(topFinder.applyAsInt(0, fx) > fz)
+                    data[OFFSET][fx + OFFSET][fz] = (byte)(noise.getNoiseWithSeed(fx, fz, seed+2) > threshold ? 0 : 32);
+                if(topFinder.applyAsInt(CUBE_SIZE - 1, fx) > fz)
+                    data[CUBE_SIZE - 1 + OFFSET][fx + OFFSET][fz] = (byte)(noise.getNoiseWithSeed(fx, fz, seed+3) > threshold ? 0 : 32);
             }
         }
 
         for (int x = 0; x < CUBE_SIZE; x++) {
             for (int y = 0; y < CUBE_SIZE; y++) {
-                data[x + OFFSET][y + OFFSET][CUBE_SIZE] = (byte)(noise.getNoiseWithSeed(x, y, seed) > threshold ? 0 : 32);
+                int top = topFinder.applyAsInt(x, y);
+                data[x + OFFSET][y + OFFSET][top] = (byte)(noise.getNoiseWithSeed(x, y, seed) > threshold ? 0 : 32);
             }
         }
     }
