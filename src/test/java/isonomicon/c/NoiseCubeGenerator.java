@@ -39,12 +39,12 @@ public class NoiseCubeGenerator extends ApplicationAdapter {
 //        fillSand(data, 12L);
 //        VoxIOExtended.writeVOX("specialized/c/cubes/" + "Sand_Cube" + ".vox", data, Coloring.YAM4, null);
 //        ArrayTools.fill(data, (byte) 0);
-            fillEarth(data, Hasher.curium.hashBulk64(e.getKey()), e.getValue());
+            fillEarth(data, Hasher.hashBulk64(123L, e.getKey()), e.getValue());
             VoxIOExtended.writeVOX("specialized/c/cubes/" + "Earth_" + e.getKey() + ".vox", data, Coloring.YAM4, null);
             ArrayTools.fill(data, (byte) 0);
-//        fillEarthGrassTop(data, 1234L);
-//        VoxIOExtended.writeVOX("specialized/c/cubes/" + "Earth_Grass_Cube" + ".vox", data, Coloring.YAM4, null);
-//        ArrayTools.fill(data, (byte) 0);
+            fillEarthGrassTop(data, Hasher.hashBulk64(124L, e.getKey()), e.getValue());
+            VoxIOExtended.writeVOX("specialized/c/cubes/" + "Earth_Grass_" + e.getKey() + ".vox", data, Coloring.YAM4, null);
+            ArrayTools.fill(data, (byte) 0);
 
 //        INoise base = new CellularNoise(123l, CellularNoise.NoiseType.DISTANCE);
 //        INoise base = new FoamNoise(123L);
@@ -70,18 +70,22 @@ public class NoiseCubeGenerator extends ApplicationAdapter {
         }
     }
 
-    public void fillEarthGrassTop(byte[][][] data, long seed){
+    public void fillEarthGrassTop(byte[][][] data, long seed, IntIntToIntBiFunction topFinder){
         INoise noise = new NoiseWrapper(new CellularNoise(seed, CellularNoise.NoiseType.DISTANCE), 0.15f, NoiseWrapper.RIDGED_MULTI, 1);
         for (int x = 0; x < CUBE_SIZE; x++) {
             for (int y = 0; y < CUBE_SIZE; y++) {
-                for (int z = 0; z < CUBE_SIZE; z++) {
+                int top = topFinder.applyAsInt(x, y);
+                for (int z = 0; z < top; z++) {
                     float n = noise.getNoise(x, y, z);
                     data[x + OFFSET][y + OFFSET][z] = (byte) (n > 0.9f ? 35 : n > 0.1f ? 19 : 18);
                 }
                 int rn = BlueNoise.getSeeded(x, y, (int) seed);
                 int bn = (rn + 10) / 40;
+                for (int z = 0; z < 2; z++) {
+                    data[x + OFFSET][y + OFFSET][top + z] = 17;
+                }
                 for (int z = Math.min(0, bn); z <= Math.max(0, bn); z++) {
-                    data[x + OFFSET][y + OFFSET][CUBE_SIZE + z] = (byte)((rn & 7) < 2 ? 95 : 96);
+                    data[x + OFFSET][y + OFFSET][top + 2 + z] = (byte)((rn & 7) < 2 ? 95 : 96);
                 }
             }
         }
