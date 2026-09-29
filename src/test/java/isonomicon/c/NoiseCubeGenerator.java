@@ -28,13 +28,15 @@ public class NoiseCubeGenerator extends ApplicationAdapter {
                             "Corner",
                             "Nick",
                             "Ridge",
+                            "Valley",
                     },
                     new IntIntToIntBiFunction[]{
                             (x, y) -> CUBE_SIZE,
                             (x, y) -> x,
                             Math::min,
                             Math::max,
-                            (x, y) -> CUBE_SIZE - Math.abs(x - y)
+                            (x, y) -> CUBE_SIZE - Math.abs(x - y),
+                            (x, y) -> Math.abs(x - y),
                     });
 
     @Override
