@@ -21,12 +21,21 @@ public class NoiseCubeGenerator extends ApplicationAdapter {
     public static final int OFFSET = SIZE - CUBE_SIZE >>> 1;
 
     public static final ObjectObjectOrderedMap<String, IntIntToIntBiFunction> SHAPES =
-            ObjectObjectOrderedMap.with(
-                    "Cube", (x, y) -> CUBE_SIZE,
-                    "Slope", (x, y) -> x,
-                    "Corner", Math::min,
-                    "Nick", Math::max
-                    );
+            new ObjectObjectOrderedMap<>(
+                    new String[]{
+                            "Cube",
+                            "Slope",
+                            "Corner",
+                            "Nick",
+                            "Ridge",
+                    },
+                    new IntIntToIntBiFunction[]{
+                            (x, y) -> CUBE_SIZE,
+                            (x, y) -> x,
+                            Math::min,
+                            Math::max,
+                            (x, y) -> CUBE_SIZE - Math.abs(x - y)
+                    });
 
     @Override
     public void create() {
