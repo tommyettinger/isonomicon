@@ -53,6 +53,7 @@ public class SpecialistC extends ApplicationAdapter {
         VoxIOExtended.GENERAL = true;
         SpecialRenderer.SHADOW_INDEX = (byte) 2;
         SpecialRenderer.shrink = 2;
+        SpecialRenderer.outline = 2;
 //        if(args != null && args.length > 0)
 //            inputs = args;
 //        else
