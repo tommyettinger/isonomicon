@@ -56,6 +56,9 @@ public class NoiseCubeGenerator extends ApplicationAdapter {
             fillEarthGrassTop(data, Hasher.hashBulk64(124L, e.getKey()), e.getValue());
             VoxIOExtended.writeVOX("specialized/c/cubes/" + "Earth_Grass_" + e.getKey() + ".vox", data, Coloring.YAM4, null);
             ArrayTools.fill(data, (byte) 0);
+            fillDryGrassTop(data, Hasher.hashBulk64(125L, e.getKey()), e.getValue());
+            VoxIOExtended.writeVOX("specialized/c/cubes/" + "Dry_Grass_" + e.getKey() + ".vox", data, Coloring.YAM4, null);
+            ArrayTools.fill(data, (byte) 0);
 
             INoise base;
             base = new CellularNoise(Hasher.hashBulk64(1234L, e.getKey()), CellularNoise.NoiseType.DISTANCE);
@@ -113,6 +116,28 @@ public class NoiseCubeGenerator extends ApplicationAdapter {
                 }
                 for (int z = Math.min(0, bn); z <= Math.max(0, bn); z++) {
                     data[x + OFFSET][y + OFFSET][top + 2 + z] = (byte)((rn & 7) < 2 ? 95 : 96);
+                }
+            }
+        }
+    }
+
+
+    public void fillDryGrassTop(byte[][][] data, long seed, IntIntToIntBiFunction topFinder) {
+        INoise noise = new NoiseWrapper(new CellularNoise(seed, CellularNoise.NoiseType.DISTANCE), 0.19f, NoiseWrapper.RIDGED_MULTI, 1);
+        for (int x = 0; x < CUBE_SIZE; x++) {
+            for (int y = 0; y < CUBE_SIZE; y++) {
+                int top = topFinder.applyAsInt(x, y);
+                for (int z = 0; z < top; z++) {
+                    float n = noise.getNoise(x, y, z);
+                    data[x + OFFSET][y + OFFSET][z] = (byte) (n > 0.9f ? 35 : n > 0.1f ? 19 : 18);
+                }
+                int rn = BlueNoise.getSeeded(x, y, (int) seed);
+                int bn = (rn & 3) == 3 ? 0 : (rn + 10) / 40;
+                for (int z = 0; z < 2; z++) {
+                    data[x + OFFSET][y + OFFSET][top + z] = (byte)((rn & 15 + z) < 5 ? 20 : 18);
+                }
+                for (int z = Math.min(0, bn); z <= Math.max(0, bn); z++) {
+                    data[x + OFFSET][y + OFFSET][top + 2 + z] = (byte)((rn & 3) == 3 ? ((rn & 15) < 5 ? 20 : 18) : (rn & 3) + 148);
                 }
             }
         }
