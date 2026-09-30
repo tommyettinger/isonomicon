@@ -35,8 +35,8 @@ import static com.github.tommyettinger.digital.TrigTools.sinTurns;
  * unusual technique that stores a palette index in the R channel and a lightness adjustment in the G channel.
  */
 public class SpecialRenderer {
-//    public static int shrink = 1; // quite large! Allows more facial detail.
-    public static int shrink = 2; // "normal size," but eyes need to be simplified.
+    public static int shrink = 1; // quite large! Allows more facial detail.
+//    public static int shrink = 2; // "normal size," but eyes need to be simplified.
 //    public static int shrink = 3; // tiny, eyes need to be drawn as large dark rectangles to appear at all.
 
     public static float distortHX = 2, distortHY = 2, distortVX = 1,  distortVY = 1, distortVZ = 2; // elevation-squashed isometric
