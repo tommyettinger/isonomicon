@@ -53,7 +53,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
     public static boolean PNG = true;
     public static boolean APNG = false;
     public static boolean GIF = true;
-    public static boolean VOX = true;
+    public static boolean VOX = false;
 
 //    public static final String outDir = "out/color_guard";
 //    public static final String outDir = "out/cg";
@@ -75,13 +75,11 @@ public class ColorGuardAssets extends ApplicationAdapter {
     private VoxModel voxels, head;
     private VoxModel[] frames = new VoxModel[8];
     private String name;
-    private String[] armies;
+    private final String[] armies;
     private FastPNG png;
     private AnimatedGif gif;
     private AnimatedPNG apng;
-    private SpriteBatch batch;
-    private Texture palette;
-    private int[] palette0 = new int[256];
+    private final int[] palette0 = new int[256];
 
     public ColorGuardAssets() {
         VoxIOExtended.GENERAL = false;
@@ -136,10 +134,13 @@ public class ColorGuardAssets extends ApplicationAdapter {
     @Override
     public void create() {
 //        if (inputs == null) Gdx.app.exit();
-        palette = new Texture(Gdx.files.local("assets/palettes/b/ColorGuardMasterPalette.png"));
-        Pixmap p0 = new Pixmap(Gdx.files.local("assets/palettes/b/ColorGuardBaseDark.png"));
-        for (int i = 0; i < 255; i++) {
-            palette0[i+1] = p0.getPixel(i, 0);
+        Texture palette = new Texture(Gdx.files.local("assets/palettes/b/ColorGuardMasterPalette.png"));
+        if(VOX) {
+            Pixmap p0 = new Pixmap(Gdx.files.local("assets/palettes/b/ColorGuardBaseDark.png"));
+            for (int i = 0; i < 255; i++) {
+                palette0[i + 1] = p0.getPixel(i, 0);
+            }
+            p0.dispose();
         }
 //        palettes = new Texture[]{
 //                new Texture(Gdx.files.local("assets/palettes/b/ColorGuardBaseDark.png")),
@@ -154,7 +155,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
 
         ShaderProgram indexShader = new ShaderProgram(ShaderUtils.stuffSelectVertex, ShaderUtils.stuffSelectFragment);
         if (!indexShader.isCompiled()) throw new GdxRuntimeException("Error compiling shader: " + indexShader.getLog());
-        batch = new SpriteBatch(16, indexShader);
+        SpriteBatch batch = new SpriteBatch(16, indexShader);
 
         long startTime = TimeUtils.millis();
         if(PNG) {
@@ -162,7 +163,6 @@ public class ColorGuardAssets extends ApplicationAdapter {
             png.setCompression(2); // we are likely to compress these with something better, like oxipng.
         }
         if(GIF) {
-//        gif = new LoafGif();
             gif = new AnimatedGif();
             gif.setDitherAlgorithm(AppConfig.DITHER);
 //            gif.palette = new com.github.tommyettinger.anim8.QualityPalette(); // Uses Snuggly255
@@ -209,9 +209,6 @@ public class ColorGuardAssets extends ApplicationAdapter {
                     0x425A52FF, 0x002173FF, 0x4A00CEFF, 0x2939A5FF, 0x522900FF, 0x184AA5FF, 0x8C4A31FF, 0xEFE784FF
             });
             gif.setDitherStrength(AppConfig.STRENGTH);
-//            gif.setDitherAlgorithm(AppConfig.DITHER);
-//            gif.palette = new com.github.tommyettinger.anim8.QualityPalette(Coloring.SNUGGLY255); // uses OklabCareful metric
-//            gif.setDitherStrength(0.5_0f);
         }
         if(APNG) {
             apng = new AnimatedPNG();
@@ -237,10 +234,10 @@ public class ColorGuardAssets extends ApplicationAdapter {
                 System.out.println("Rendering " + name);
                 if(ColorGuardData.terrains.contains(name) || name.startsWith("Terrain")){
                     renderer.shadows = false;
-                    renderer.outline = 2;
+                    SpecialRenderer.outline = 2;
                 } else {
                     renderer.shadows = true;
-                    renderer.outline = ALTERNATE ? 2 : 4;
+                    SpecialRenderer.outline = ALTERNATE ? 2 : 4;
                 }
                 Gdx.files.local(outDir + "/animated_diverse/" + SPECIES_PREFIX + name + '/').mkdirs();
                 load("specialized/b/vox/color_guard/" + name, ".vox");
@@ -730,7 +727,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
         {
             load("specialized/b/vox/color_guard/Terrain_Small", ".vox");
             renderer.shadows = false;
-            renderer.outline = 2;
+            SpecialRenderer.outline = 2;
             Texture t = new Texture(renderer.palettePixmap.getWidth(), renderer.palettePixmap.getHeight(), Pixmap.Format.RGBA8888);
             for (int n = 0; n < ColorGuardData.terrains.size(); n++) {
                 name = ColorGuardData.terrains.getAt(n);
