@@ -91,12 +91,15 @@ public class SpecialistC extends ApplicationAdapter {
 //        if (inputs == null) Gdx.app.exit();
 
         FileHandle[] cubes = Gdx.files.local("specialized/c/cubes/").list();
-        inputs = new String[cubes.length * 3];
+        inputs = new String[(cubes.length + 1) * 3];
         for (int i = 0; i < cubes.length; i++) {
             inputs[i * 3] = cubes[i].path();
             inputs[i * 3 + 1] = "palettes/c/yam4mod.png";
             inputs[i * 3 + 2] = cubes[i].nameWithoutExtension().replace('_', ' ');
         }
+        inputs[cubes.length * 3] = "specialized/c/boxer/Pandora.vox";
+        inputs[cubes.length * 3 + 1] = "palettes/c/yam4mod.png";
+        inputs[cubes.length * 3 + 2] = "Pandora";
         ShaderProgram indexShader = new ShaderProgram(ShaderUtils.stuffSelectVertex, ShaderUtils.stuffSelectFragment);
         if (!indexShader.isCompiled()) throw new GdxRuntimeException("Error compiling shader: " + indexShader.getLog());
         batch = new SpriteBatch(256, indexShader);
