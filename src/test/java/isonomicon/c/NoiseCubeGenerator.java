@@ -47,20 +47,23 @@ public class NoiseCubeGenerator extends ApplicationAdapter {
             fillRock(data, Hasher.hashBulk64(121L, e.getKey()), e.getValue());
             VoxIOExtended.writeVOX("specialized/c/cubes/" + "Rock_" + e.getKey() + ".vox", data, Coloring.YAM4, null);
             ArrayTools.fill(data, (byte) 0);
+            fillRockMossTop(data, Hasher.hashBulk64(1211L, e.getKey()), e.getValue());
+            VoxIOExtended.writeVOX("specialized/c/cubes/" + "Rock_Moss_" + e.getKey() + ".vox", data, Coloring.YAM4, null);
+            ArrayTools.fill(data, (byte) 0);
             fillSand(data, Hasher.hashBulk64(122L, e.getKey()), e.getValue());
             VoxIOExtended.writeVOX("specialized/c/cubes/" + "Sand_" + e.getKey() + ".vox", data, Coloring.YAM4, null);
             ArrayTools.fill(data, (byte) 0);
             fillEarth(data, Hasher.hashBulk64(123L, e.getKey()), e.getValue());
             VoxIOExtended.writeVOX("specialized/c/cubes/" + "Earth_" + e.getKey() + ".vox", data, Coloring.YAM4, null);
             ArrayTools.fill(data, (byte) 0);
-            fillEarthGrassTop(data, Hasher.hashBulk64(124L, e.getKey()), e.getValue());
+            fillEarthGrassTop(data, Hasher.hashBulk64(1231L, e.getKey()), e.getValue());
             VoxIOExtended.writeVOX("specialized/c/cubes/" + "Earth_Grass_" + e.getKey() + ".vox", data, Coloring.YAM4, null);
             ArrayTools.fill(data, (byte) 0);
-            fillDryGrassTop(data, Hasher.hashBulk64(125L, e.getKey()), e.getValue());
-            VoxIOExtended.writeVOX("specialized/c/cubes/" + "Dry_Grass_" + e.getKey() + ".vox", data, Coloring.YAM4, null);
-            ArrayTools.fill(data, (byte) 0);
-            fillDry(data, Hasher.hashBulk64(126L, e.getKey()), e.getValue());
+            fillDry(data, Hasher.hashBulk64(124L, e.getKey()), e.getValue());
             VoxIOExtended.writeVOX("specialized/c/cubes/" + "Dry_" + e.getKey() + ".vox", data, Coloring.YAM4, null);
+            ArrayTools.fill(data, (byte) 0);
+            fillDryGrassTop(data, Hasher.hashBulk64(1241L, e.getKey()), e.getValue());
+            VoxIOExtended.writeVOX("specialized/c/cubes/" + "Dry_Grass_" + e.getKey() + ".vox", data, Coloring.YAM4, null);
             ArrayTools.fill(data, (byte) 0);
 
             INoise base;
@@ -224,6 +227,63 @@ public class NoiseCubeGenerator extends ApplicationAdapter {
                 data[x + OFFSET][y + OFFSET][top] = (byte)(n > threshold ? 0 : 32);
                 data[x + OFFSET][y + OFFSET][top+1] = (byte)(n > threshold - 0.1f ? 0 : 32);
                 data[x + OFFSET][y + OFFSET][top+2] = (byte)(n > threshold - 0.2f ? 0 : 32);
+            }
+        }
+    }
+
+    public void fillRockMossTop(byte[][][] data, long seed, IntIntToIntBiFunction topFinder) {
+        INoise cracks = new NoiseWrapper(new CellularNoise(seed, CellularNoise.NoiseType.DISTANCE), 0.14f, NoiseWrapper.RIDGED_MULTI, 1);
+        INoise moss = new NoiseWrapper(new PerlueNoise(~seed), 0.1f, NoiseWrapper.FBM, 1);
+        final float threshold = 0.04f;
+        for (int x = 1; x < CUBE_SIZE - 1; x++) {
+            for (int y = 1; y < CUBE_SIZE - 1; y++) {
+                int top = topFinder.applyAsInt(x, y);
+                for (int z = 0; z < top; z++) {
+                    data[x + OFFSET][y + OFFSET][z] = 32;
+                }
+            }
+        }
+        for (int fx = 0; fx < CUBE_SIZE; fx++) {
+            for (int fz = 0; fz < CUBE_SIZE; fz++) {
+                if(topFinder.applyAsInt(fx, 0) > fz) {
+                    float n = cracks.getNoiseWithSeed(fx, fz, seed);
+                    data[fx + OFFSET][OFFSET+2][fz] = (byte) (n > threshold ? 0 : 32);
+                    data[fx + OFFSET][OFFSET+1][fz] = (byte) (n > threshold - 0.1f? 0 : 32);
+                    data[fx + OFFSET][OFFSET][fz] = (byte) (n > threshold - 0.2f ? 0 : 32);
+                }
+                if(topFinder.applyAsInt(fx, CUBE_SIZE - 1) > fz) {
+                    float n = cracks.getNoiseWithSeed(fx, fz, seed + 1);
+                    data[fx + OFFSET][CUBE_SIZE - 3 + OFFSET][fz] = (byte) (n > threshold ? 0 : 32);
+                    data[fx + OFFSET][CUBE_SIZE - 2 + OFFSET][fz] = (byte) (n > threshold - 0.1f? 0 : 32);
+                    data[fx + OFFSET][CUBE_SIZE - 1 + OFFSET][fz] = (byte) (n > threshold - 0.2f ? 0 : 32);
+                }
+                if(topFinder.applyAsInt(0, fx) > fz) {
+                    float n = cracks.getNoiseWithSeed(fx, fz, seed + 2);
+                    data[OFFSET+2][fx + OFFSET][fz] = (byte) (n > threshold ? 0 : 32);
+                    data[OFFSET+1][fx + OFFSET][fz] = (byte) (n > threshold - 0.1f? 0 : 32);
+                    data[OFFSET  ][fx + OFFSET][fz] = (byte) (n > threshold - 0.2f ? 0 : 32);
+                }
+                if(topFinder.applyAsInt(CUBE_SIZE - 1, fx) > fz) {
+                    float n = cracks.getNoiseWithSeed(fx, fz, seed + 3);
+                    data[CUBE_SIZE - 3 + OFFSET][fx + OFFSET][fz] = (byte) (n > threshold ? 0 : 32);
+                    data[CUBE_SIZE - 2 + OFFSET][fx + OFFSET][fz] = (byte) (n > threshold - 0.1f? 0 : 32);
+                    data[CUBE_SIZE - 1 + OFFSET][fx + OFFSET][fz] = (byte) (n > threshold - 0.2f ? 0 : 32);
+                }
+            }
+        }
+
+        for (int x = 0; x < CUBE_SIZE; x++) {
+            for (int y = 0; y < CUBE_SIZE; y++) {
+                int top = topFinder.applyAsInt(x, y);
+                float n = cracks.getNoiseWithSeed(x, y, seed+4);
+                // stuff 32 is raw stone
+                data[x + OFFSET][y + OFFSET][top] = (byte)(n > threshold ? 0 : 32);
+                data[x + OFFSET][y + OFFSET][top+1] = (byte)(n > threshold - 0.1f ? 0 : 32);
+                boolean t = n > threshold - 0.2f;
+                data[x + OFFSET][y + OFFSET][top+2] = (byte)(t ? 0 : 32);
+                if(!t && Math.sqrt(moss.getNoise(x, y) * 0.5f + 0.5f) > (Math.max(Math.abs(x + 0.5f - CUBE_SIZE * 0.5f), Math.abs(y + 0.5f - CUBE_SIZE * 0.5f)) + 0.6f) / (CUBE_SIZE * 0.5f)){
+                    data[x + OFFSET][y + OFFSET][top+3] = 94; // stuff 94 is moss
+                }
             }
         }
     }
