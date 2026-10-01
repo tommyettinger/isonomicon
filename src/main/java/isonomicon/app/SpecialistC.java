@@ -90,8 +90,9 @@ public class SpecialistC extends ApplicationAdapter {
     public void create() {
 //        if (inputs == null) Gdx.app.exit();
 
-        FileHandle[] cubes = Gdx.files.local("specialized/c/cubes/").list();
-        inputs = new String[(cubes.length + 1) * 3];
+//        FileHandle[] cubes = Gdx.files.local("specialized/c/cubes/").list();
+        FileHandle[] cubes = new FileHandle[0]; // for when we don't need to render cubes.
+        inputs = new String[(cubes.length + 2) * 3];
         for (int i = 0; i < cubes.length; i++) {
             inputs[i * 3] = cubes[i].path();
             inputs[i * 3 + 1] = "palettes/c/yam4mod.png";
@@ -100,6 +101,9 @@ public class SpecialistC extends ApplicationAdapter {
         inputs[cubes.length * 3] = "specialized/c/boxer/Pandora.vox";
         inputs[cubes.length * 3 + 1] = "palettes/c/yam4mod.png";
         inputs[cubes.length * 3 + 2] = "Pandora";
+        inputs[cubes.length * 3 + 3] = "specialized/c/boxer/Eye_Tyrant.vox";
+        inputs[cubes.length * 3 + 4] = "palettes/c/PurpleScalesRedEvilEye.png";
+        inputs[cubes.length * 3 + 5] = "Eye Tyrant";
         ShaderProgram indexShader = new ShaderProgram(ShaderUtils.stuffSelectVertex, ShaderUtils.stuffSelectFragment);
         if (!indexShader.isCompiled()) throw new GdxRuntimeException("Error compiling shader: " + indexShader.getLog());
         batch = new SpriteBatch(256, indexShader);
