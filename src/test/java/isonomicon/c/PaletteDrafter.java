@@ -178,7 +178,7 @@ public class PaletteDrafter extends ApplicationAdapter {
     public void create() {
         font = new BitmapFont(Gdx.files.internal("font.fnt"));
 //        workingPalette = new Pixmap(Gdx.files.internal("palettes/c/BlueFurCyanCrystal.png"));
-        workingPalette = new Pixmap(Gdx.files.internal("palettes/c/yam4.png"));
+        workingPalette = new Pixmap(Gdx.files.internal("palettes/c/yam4mod.png"));
         workingOklab = new float[256];
         palettes = new Texture(workingPalette);
         preview = new Pixmap(16, 16, Pixmap.Format.RGBA8888);
@@ -187,9 +187,10 @@ public class PaletteDrafter extends ApplicationAdapter {
         previewTexture = new Texture(preview);
         png = new PixmapIO.PNG(1024);
 //        String name = "Eye_Tyrant";
-        String name = "Lomuk";
+//        String name = "Lomuk";
 //        String name = "Damned";
 //        String name = "Figure";
+        String name = "Pandora";
 
         images = new Texture[32];
         for (int a = 0, i = 0; a < 8; a++) {
@@ -369,7 +370,7 @@ public class PaletteDrafter extends ApplicationAdapter {
         Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
         batch.setColor(0f, 0.5f, 0.5f, 1f);
         Texture img = images[(int) (TimeUtils.timeSinceMillis(startTime) >>> 8) & 31];
-        batch.draw(img, 0, img.getHeight(), img.getWidth(), -img.getHeight());
+        batch.draw(img, 0, 0, img.getWidth(), img.getHeight());
         batch.end();
 
         batch.setShader(regularShader);

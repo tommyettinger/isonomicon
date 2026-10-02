@@ -53,7 +53,7 @@ public class SpecialistC extends ApplicationAdapter {
         VoxIOExtended.GENERAL = true;
         SpecialRenderer.SHADOW_INDEX = (byte) 2;
         SpecialRenderer.shrink = 2;
-        SpecialRenderer.outline = 2;
+        SpecialRenderer.outline = 4;
 //        if(args != null && args.length > 0)
 //            inputs = args;
 //        else
@@ -100,10 +100,10 @@ public class SpecialistC extends ApplicationAdapter {
         }
         int idx = cubes.length * 3;
         inputs[idx++] = "specialized/c/boxer/Pandora.vox";
-        inputs[idx++] = "palettes/c/yam4mod.png";
+        inputs[idx++] = "palettes/c/LightClothDarkHair.png";
         inputs[idx++] = "Pandora";
         inputs[idx++] = "specialized/c/boxer/Pandora_Attack.vox";
-        inputs[idx++] = "palettes/c/yam4mod.png";
+        inputs[idx++] = "palettes/c/LightClothDarkHair.png";
         inputs[idx++] = "Pandora Attack";
         inputs[idx++] = "specialized/c/boxer/Eye_Tyrant.vox";
         inputs[idx++] = "palettes/c/PurpleScalesRedEvilEye.png";
