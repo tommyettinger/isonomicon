@@ -53,7 +53,6 @@ public class SpecialistC extends ApplicationAdapter {
         VoxIOExtended.GENERAL = true;
         SpecialRenderer.SHADOW_INDEX = (byte) 2;
         SpecialRenderer.shrink = 2;
-        SpecialRenderer.outline = 4;
 //        if(args != null && args.length > 0)
 //            inputs = args;
 //        else
@@ -90,33 +89,40 @@ public class SpecialistC extends ApplicationAdapter {
     public void create() {
 //        if (inputs == null) Gdx.app.exit();
 
-//        FileHandle[] cubes = Gdx.files.local("specialized/c/cubes/").list();
-        FileHandle[] cubes = new FileHandle[0]; // for when we don't need to render cubes.
-        inputs = new String[(cubes.length + 5) * 3];
-        for (int i = 0; i < cubes.length; i++) {
-            inputs[i * 3] = cubes[i].path();
-            inputs[i * 3 + 1] = "palettes/c/yam4mod.png";
-            inputs[i * 3 + 2] = cubes[i].nameWithoutExtension().replace('_', ' ');
+        final boolean CUBES = true;
+        if(CUBES) {
+            SpecialRenderer.outline = 2;
+            FileHandle[] cubes = Gdx.files.local("specialized/c/cubes/").list();
+            inputs = new String[(cubes.length) * 3];
+            for (int i = 0; i < cubes.length; i++) {
+                inputs[i * 3] = cubes[i].path();
+                inputs[i * 3 + 1] = "palettes/c/yam4mod.png";
+                inputs[i * 3 + 2] = cubes[i].nameWithoutExtension().replace('_', ' ');
+            }
+        } else {
+            SpecialRenderer.outline = 4;
+            int idx = 0;
+            inputs = new String[5 * 3];
+            inputs[idx++] = "specialized/c/boxer/Pandora.vox";
+            inputs[idx++] = "palettes/c/LightClothDarkHair.png";
+            inputs[idx++] = "Pandora";
+            inputs[idx++] = "specialized/c/boxer/Pandora_Attack.vox";
+            inputs[idx++] = "palettes/c/LightClothDarkHair.png";
+            inputs[idx++] = "Pandora Attack";
+            inputs[idx++] = "specialized/c/boxer/Eye_Tyrant.vox";
+            inputs[idx++] = "palettes/c/PurpleScalesRedEvilEye.png";
+            inputs[idx++] = "Eye Tyrant";
+            inputs[idx++] = "specialized/c/boxer/Box_Open.vox";
+            inputs[idx++] = "palettes/c/yam4mod.png";
+            inputs[idx++] = "Box Open";
+            inputs[idx++] = "specialized/c/boxer/Box_Closed.vox";
+            inputs[idx++] = "palettes/c/yam4mod.png";
+            inputs[idx++] = "Box Closed";
         }
-        int idx = cubes.length * 3;
-        inputs[idx++] = "specialized/c/boxer/Pandora.vox";
-        inputs[idx++] = "palettes/c/LightClothDarkHair.png";
-        inputs[idx++] = "Pandora";
-        inputs[idx++] = "specialized/c/boxer/Pandora_Attack.vox";
-        inputs[idx++] = "palettes/c/LightClothDarkHair.png";
-        inputs[idx++] = "Pandora Attack";
-        inputs[idx++] = "specialized/c/boxer/Eye_Tyrant.vox";
-        inputs[idx++] = "palettes/c/PurpleScalesRedEvilEye.png";
-        inputs[idx++] = "Eye Tyrant";
-        inputs[idx++] = "specialized/c/boxer/Box_Open.vox";
-        inputs[idx++] = "palettes/c/yam4mod.png";
-        inputs[idx++] = "Box Open";
-        inputs[idx++] = "specialized/c/boxer/Box_Closed.vox";
-        inputs[idx++] = "palettes/c/yam4mod.png";
-        inputs[idx++] = "Box Closed";
         ShaderProgram indexShader = new ShaderProgram(ShaderUtils.stuffSelectVertex, ShaderUtils.stuffSelectFragment);
         if (!indexShader.isCompiled()) throw new GdxRuntimeException("Error compiling shader: " + indexShader.getLog());
         batch = new SpriteBatch(256, indexShader);
+        int limit = CUBES ? 1 : 4;
 
         long startTime = TimeUtils.millis();
 //        Gdx.files.local("out/vox/").mkdirs();
@@ -149,16 +155,17 @@ public class SpecialistC extends ApplicationAdapter {
             for (int i = 0; i < voxels.grids.size(); i++) {
                 original.add(Tools3D.deepCopy(voxels.grids.get(i)));
             }
-            for (int i = 0; i < 8; i++) {
+            for (int i = 0; i < 4; i++) {
                 voxels.grids.clear();
                 for (int j = 0; j < original.size(); j++) {
                     voxels.grids.add(Tools3D.deepCopy(original.get(j)));
                 }
-                for (int f = 0; f < 4; f++) {
+                for (int f = 0; f < limit; f++) {
                     for (int j = 0; j < voxels.grids.size(); j++) {
                         Stuff.evolve(Stuff.STUFFS_C, voxels.grids.get(j), f);
                     }
-                    renderer.drawModelSimple(voxels, i * 0.125f, 0f, 0f, f, 0, 0, 0);
+                    renderer.drawModelSimple(voxels, i * 0.25f, 0f, 0f, f, 0, 0, 0);
+//                    renderer.drawModelSimple(voxels, i * 0.125f, 0f, 0f, f, 0, 0, 0);
 //                    renderer.drawModelSimple(voxels, i * 0.125f + wiggle(f) * 0.0125f, 0f, 0f, f, wiggle(f), 0, 0); // looks bad; rotation is off.
 //                    renderer.drawModelSimple(voxels, i * 0.125f + Tools3D.wiggle(f) * 0.0125f, 0f, 0f, f, 0, 0, 0);
                     t.draw(renderer.palettePixmap, 0, 0);
@@ -189,14 +196,14 @@ public class SpecialistC extends ApplicationAdapter {
                     }
                     fb.dispose();
                 }
-                pm.insertRange(pm.size - 4, 4);
+                pm.insertRange(pm.size - limit, limit);
             }
             if(GIF) {
                 SpecialRenderer.monoAlpha(pm);
                 analyzed.analyze(pm, 75.0, 256);
                 gif.palette = analyzed;
                 gif.setDitherStrength(AppConfig.STRENGTH);
-                gif.write(Gdx.files.local("out/c/specialized/" + output + '/' + output + ".gif"), pm, 8);
+                gif.write(Gdx.files.local("out/c/specialized/" + output + '/' + output + ".gif"), pm, 2 * limit);
             }
             for (Pixmap pix : pm) {
                 if (!pix.isDisposed())
