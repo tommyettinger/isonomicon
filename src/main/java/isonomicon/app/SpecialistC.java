@@ -37,9 +37,9 @@ import java.util.ArrayList;
 public class SpecialistC extends ApplicationAdapter {
     public static final int SCREEN_WIDTH = 512;//640;
     public static final int SCREEN_HEIGHT = 512;//720;
-    public static final boolean TURNTABLE = true;
+    public static final boolean TURNTABLE = false;
     public static final boolean PNG = true;
-    public static final boolean GIF = true;
+    public static final boolean GIF = false;
     private SpecialRenderer renderer;
     private VoxModel voxels;
     private String name;
@@ -89,7 +89,7 @@ public class SpecialistC extends ApplicationAdapter {
     public void create() {
 //        if (inputs == null) Gdx.app.exit();
 
-        final boolean CUBES = true;
+        final boolean CUBES = false;
         if(CUBES) {
             SpecialRenderer.outline = 2;
             FileHandle[] cubes = Gdx.files.local("specialized/c/cubes/").list();
@@ -190,6 +190,7 @@ public class SpecialistC extends ApplicationAdapter {
                     pm.add(pixmap);
                     if (PNG) {
                         png.write(Gdx.files.local("out/c/specialized/" + output + '/' + output + "_angle" + i + "_" + f + ".png"), pixmap);
+                        png.write(Gdx.files.local("out/c/prepared/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), pixmap);
                         png.setFlipY(true);
                         png.write(Gdx.files.local("out/c/special_lab/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                         png.setFlipY(false);
