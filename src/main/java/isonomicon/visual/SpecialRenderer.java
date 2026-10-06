@@ -47,7 +47,7 @@ public class SpecialRenderer {
 //        public static int outline = 2; // shaded, not black outlines
     public static int outline = 4; // hard black outlines
 
-    public static final float fidget = 0f; // doesn't seem to need to be changed now? or needed?
+    public static final float fidget = distortVZ == 2 ? 0.5f : 0f; // doesn't seem to need to be changed now? or needed?
 
     public final Stuff[] stuffs;
     public Pixmap palettePixmap;
