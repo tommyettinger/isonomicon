@@ -89,7 +89,7 @@ public class SpecialistC extends ApplicationAdapter {
     public void create() {
 //        if (inputs == null) Gdx.app.exit();
 
-        final boolean CUBES = false;
+        final boolean CUBES = true;
         if(CUBES) {
             SpecialRenderer.outline = 2;
             FileHandle[] cubes = Gdx.files.local("specialized/c/cubes/").list();
@@ -189,8 +189,9 @@ public class SpecialistC extends ApplicationAdapter {
                     fb.end();
                     pm.add(pixmap);
                     if (PNG) {
-                        png.write(Gdx.files.local("out/c/specialized/" + output + '/' + output + "_angle" + i + "_" + f + ".png"), pixmap);
-                        png.write(Gdx.files.local("out/c/prepared/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), pixmap);
+                        FileHandle specialized = Gdx.files.local("out/c/specialized/" + output + '/' + output + "_angle" + i + "_" + f + ".png");
+                        png.write(specialized, pixmap);
+                        specialized.copyTo(Gdx.files.local("out/c/prepared/" + name + '/' + name + "_angle" + i + "_" + f + ".png"));
                         png.setFlipY(true);
                         png.write(Gdx.files.local("out/c/special_lab/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                         png.setFlipY(false);
