@@ -89,7 +89,7 @@ public class SpecialistC extends ApplicationAdapter {
     public void create() {
 //        if (inputs == null) Gdx.app.exit();
 
-        final boolean CUBES = true;
+        final boolean CUBES = false;
         if(CUBES) {
             SpecialRenderer.outline = 2;
             FileHandle[] cubes = Gdx.files.local("specialized/c/cubes/").list();
@@ -102,7 +102,7 @@ public class SpecialistC extends ApplicationAdapter {
         } else {
             SpecialRenderer.outline = 4;
             int idx = 0;
-            inputs = new String[5 * 3];
+            inputs = new String[6 * 3];
             inputs[idx++] = "specialized/c/boxer/Pandora.vox";
             inputs[idx++] = "palettes/c/LightClothDarkHair.png";
             inputs[idx++] = "Pandora";
@@ -112,6 +112,9 @@ public class SpecialistC extends ApplicationAdapter {
             inputs[idx++] = "specialized/c/boxer/Eye_Tyrant.vox";
             inputs[idx++] = "palettes/c/PurpleScalesRedEvilEye.png";
             inputs[idx++] = "Eye Tyrant";
+            inputs[idx++] = "specialized/c/boxer/Eye_Tyrant_Attack.vox";
+            inputs[idx++] = "palettes/c/PurpleScalesRedEvilEye.png";
+            inputs[idx++] = "Eye Tyrant Attack";
             inputs[idx++] = "specialized/c/boxer/Box_Open.vox";
             inputs[idx++] = "palettes/c/yam4mod.png";
             inputs[idx++] = "Box Open";
