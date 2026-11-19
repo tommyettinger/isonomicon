@@ -39,6 +39,8 @@ public class BoxyRenderer {
     public static int distortHXY = 2, distortVXY = 1, distortVZ = 2; // ground truth for isometric
     public static boolean CORNER_OUTLINES = false;
     public static int outline = 4;
+    public static final float fidget = 0f;
+//    public static final float fidget = distortVZ == 2 ? 0.5f : 0f;
 
     public final Stuff[] stuffs;
     public Pixmap palettePixmap;
@@ -280,11 +282,13 @@ public class BoxyRenderer {
 //            lowX = lowY = 1;
 //            highX = highY = 3;
 //        } else
-            if(flow != 0f) {
-                float ns = noise.getConfiguredNoise(xPos, yPos, zPos, frame * flow);
-                if (ns > 0) highX = (int) (4.5 + ns * (3 << shrink));
-                else if (ns < 0) lowX = Math.round(lowX + ns * (3 << shrink));
-            }
+        if(flow != 0f) {
+            float ns = noise.getConfiguredNoise(xPos, yPos, zPos, frame * flow);
+            if (ns > 0) highX = (int) (4.5 + ns * (3 << shrink));
+            else if (ns < 0) lowX = Math.round(lowX + ns * (3 << shrink));
+        }
+        xPos += fidget;
+        yPos += fidget;
         final int
                 xx = (int)(0.5f + Math.max(0, (size + yPos - xPos) * distortHXY + 1)),
                 yy = (int)(0.5f + Math.max(0, (zPos * distortVZ + size * ((distortVXY) * 3) - distortVXY * (xPos + yPos)) + 1 + rise * frame)),
@@ -393,7 +397,7 @@ public class BoxyRenderer {
 
         int xSize = render.length - 1, ySize = render[0].length - 1, depth;
         int v, vx, vy, vz, fx, fy, fz;
-        float hs = (size) * 0.5f, hsp = hs, ox, oy, oz, tx, ty, tz;
+        float hs = (size) * 0.5f, hsp = hs - fidget, ox, oy, oz, tx, ty, tz;
         final float cYaw = cosTurns(yaw), sYaw = sinTurns(yaw);
         final float cPitch = cosTurns(pitch), sPitch = sinTurns(pitch);
         final float cRoll = cosTurns(roll), sRoll = sinTurns(roll);
@@ -500,12 +504,12 @@ public class BoxyRenderer {
 //                            shade << 16 |
 //                            sat << 8 | 255);
                     int idx = (y >>> shrink) * palettePixmap.getWidth() + (x >>> shrink) << 2;
-                        buffer.put(idx + 1, (byte) ((shade & 255) >>> 1));
                     if (shadows && index == FLOOR_INDEX) {
                         buffer.put(idx, SHADOW_INDEX); // shadow stuff
+                        buffer.put(idx + 1, (byte) 96);
                         buffer.put(idx + 2, (byte) 0);
-//                        buffer.put(idx + 3, (byte) (255 - shade));
-                        buffer.put(idx + 3, (byte) Math.min(Math.max(480 - (shade & 255) * 8, 0), 255));
+                        buffer.put(idx + 3, (byte) (255 - shade));
+//                        buffer.put(idx + 3, (byte) Math.min(Math.max(480 - (shade & 255) * 8, 0), 255));
                     } else {
                         buffer.put(idx, index);
                         buffer.put(idx + 1, shade);
@@ -514,11 +518,13 @@ public class BoxyRenderer {
                     }
                 }
                 else if(midShading[x][y] > 0f) {
-                    int shade = (int) Math.min(Math.max(127.5f + midShading[x][y] * 256f, 0f), 255f);
+                    int shade = (int) (Math.min(Math.max((shading[x][y] + logisticky(midShading[x][y])) * 0.625f + 0.1328125f, 0f), 1f) * 255.999f);
+//                    int shade = (int) Math.min(Math.max(127.5f + midShading[x][y] * 256f, 0f), 255f);
                     int idx = (y >>> shrink) * palettePixmap.getWidth() + (x >>> shrink) << 2;
-                    if ((buffer.get(idx+3) & 255) < (shade>>1)) {
+                    if ((buffer.get(idx+3) & 255) < (shade)) {
 //                        System.out.println("Writing light pixel at " + x + "," + y + " with shade " + shade + ", shading " + shading[x][y] + ", mid " + midShading[x][y]);
                         buffer.put(idx, lightIndices[x][y]);
+//                        buffer.put(idx+1, (byte) Math.min(Math.max(paletteL[lightIndices[x][y] & 255] * 255.999f, 0), 255));
                         buffer.put(idx+1, (byte) shade);
                         buffer.put(idx+2, (byte) 64);
                         buffer.put(idx+3, (byte) (shade));
@@ -526,14 +532,20 @@ public class BoxyRenderer {
                     }
                 }
                 else if(midShading[x][y] < 0f) {
-                    int shade = (int) Math.min(Math.max(127.5f + midShading[x][y] * 256f, 0f), 255f);
+                    int shade = (int) (1f - Math.min(Math.max((shading[x][y] + logisticky(midShading[x][y])) * 0.625f + 0.1328125f, 0f), 1f) * 255.999f);
+//                    int shade = (int) Math.min(Math.max(127.5f + midShading[x][y] * 256f, 0f), 255f);
                     int idx = (y >>> shrink) * palettePixmap.getWidth() + (x >>> shrink) << 2;
-                    if ((buffer.get(idx+3) & 255) < (255-shade>>1)) {
-                        System.out.println("Writing dark pixel at " + x + "," + y + " with shade " + shade + ", shading " + shading[x][y] + ", mid " + midShading[x][y]);
+//                    if ((buffer.get(idx+3) & 255) < (255-shade)) {
+                    if ((buffer.get(idx+3) & 255) < shade) {
+//                        System.out.println("Writing dark pixel at " + x + "," + y + " with shade " + shade + ", shading " + shading[x][y] + ", mid " + midShading[x][y]);
                         buffer.put(idx, lightIndices[x][y]);
+//                        buffer.put(idx+1, (byte) Math.min(Math.max(paletteL[lightIndices[x][y] & 255] * 255.999f, 0), 255));
+//                        buffer.put(idx+2, (byte) 96);
+//                        buffer.put(idx+3, (byte) shade);
                         buffer.put(idx+1, (byte) (shade));
                         buffer.put(idx+2, (byte) 64);
-                        buffer.put(idx+3, (byte) (255-shade));
+//                        buffer.put(idx+3, (byte) (255-shade));
+                        buffer.put(idx+3, (byte) (shade));
                         outlineIndices[x][y] = 0;
                     }
                 }
@@ -717,12 +729,13 @@ public class BoxyRenderer {
         if (shadows) {
             for (int x = 0; x < size; x++) {
                 for (int y = 0; y < size; y++) {
-                    ox = x - hs;
-                    oy = y - hs;
-                    oz = -hs;
-                    splat(ox * x_x + oy * y_x + oz * z_x + size + translateX,
-                            ox * x_y + oy * y_y + oz * z_y + size + translateY,
-                            0, x, y, 0, (byte) -16, frame);
+                    ox = x - hs + fidget;
+                    oy = y - hs + fidget;
+                    oz = 0;
+                    splat(ox * x_x + oy * y_x + oz * z_x + size,
+                            ox * x_y + oy * y_y + oz * z_y + size,
+                            0,
+                            x, y, 0, FLOOR_INDEX, frame);
                 }
             }
         }
@@ -731,8 +744,8 @@ public class BoxyRenderer {
                 for (int y = 0; y < size; y++) {
                     final byte v = colors[x][y][z];
                     if (v != 0) {
-                        ox = x - hs;
-                        oy = y - hs;
+                        ox = x - hs + fidget;
+                        oy = y - hs + fidget;
                         oz = z - hs;
                         splat(ox * x_x + oy * y_x + oz * z_x + size + translateX,
                                 ox * x_y + oy * y_y + oz * z_y + size + translateY,
@@ -801,8 +814,8 @@ public class BoxyRenderer {
             for (int j = 0; j < links.size(); j++) {
                 float[] got;
                 if((got = links.get(j).get(ent.key)) != null) {
-                    ox = ent.value[0] - got[0];
-                    oy = ent.value[1] - got[1];
+                    ox = ent.value[0] - got[0] + fidget;
+                    oy = ent.value[1] - got[1] + fidget;
                     oz = ent.value[2] - got[2];
 
                     subDraw(grids, links, grids.remove(j), links.remove(j), yaw, pitch, roll, frame,
