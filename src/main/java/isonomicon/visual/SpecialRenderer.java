@@ -47,7 +47,7 @@ public class SpecialRenderer {
 //        public static int outline = 2; // shaded, not black outlines
     public static int outline = 4; // hard black outlines
 
-    public static final float fidget = distortVZ == 2 ? 0.5f : 0f; // doesn't seem to need to be changed now? or needed?
+    public static final float fidget = distortVZ == 2 ? 0.5f : 0f;
 
     public final Stuff[] stuffs;
     public Pixmap palettePixmap;
@@ -118,8 +118,8 @@ public class SpecialRenderer {
 
     /**
      * Like the logistic distribution, but shifted to lower results; an input of 0 produces 0, max is 0.5, min is -0.5.
-     * @param x
-     * @return
+     * @param x any float
+     * @return a float between -0.5f and 0.5f
      */
     public static float logisticky(float x) { return 1f / (1f + RoughMath.expRough(-x)) - 0.5f; }
 
@@ -675,55 +675,6 @@ public class SpecialRenderer {
         final float x_y = sYaw * cPitch, y_y = sYaw * sPitch * sRoll + cYaw * cRoll, z_y = sYaw * sPitch * cRoll - cYaw * sRoll;
         final float x_z = -sPitch, y_z = cPitch * sRoll, z_z = cPitch * cRoll;
         if (shadows) {
-//            for (int x = 0; x < size; x++) {
-//                for (int y = 0; y < size; y++) {
-//                    for (int z = size - 1; z >= 0; z--) {
-//                        byte voxel = colors[x][y][z];
-//                        if(voxel == 0) continue;
-//                        final Stuff stuff = stuffs[Math.min(voxel & 255, stuffs.length - 1)];
-//                        final VoxMaterial m = stuff.material;
-//                        final float alpha = m.getTrait(VoxMaterial.MaterialTrait._alpha);
-//                        if (alpha >= 1f) continue;
-//                        voxel = (byte) stuff.appearsAs;
-//                        final float flip = m.getTrait(VoxMaterial.MaterialTrait._frame);
-//                        if (Tools3D.randomizePointRare(x, y, z, frame) < m.getTrait(VoxMaterial.MaterialTrait._metal) || (frame & 1) == flip)
-//                            continue;
-//                        final float swirl = m.getTrait(VoxMaterial.MaterialTrait._swirl) + 1f;
-//                        if (swirl != 1f) {
-//                            float ns = swirlNoise.getNoise(x, y, z, cosTurns(frame * 0x1p-7f) * 0.625f / swirlNoise.getFrequency(), sinTurns(frame * 0x1p-7f) * 0.625f / swirlNoise.getFrequency()) * 2f;
-//                            if (ns > swirl) continue;
-//                        }
-//                        final float emit = m.getTrait(VoxMaterial.MaterialTrait._emit) * 0.75f;
-//                        if (emit != 0f) continue;
-//
-//                        if (voxel != 0) {
-//                            float oox = x - hs + fidget;
-//                            float ooy = y - hs + fidget;
-//                            oz = -hs;
-//                            for (int ax = -6; ax <= 6; ax++) {
-//                                for (int ay = -3; ay <= 3; ay++) {
-//                                    if (x + ax >= 0 && y + ay >= 0 && x + ax < size && y + ay < size) {
-//                                        ox = oox + ax;
-//                                        oy = ooy + ay;
-//                                        splat(ox * x_x + oy * y_x + oz * z_x + size + translateX,
-//                                                ox * x_y + oy * y_y + oz * z_y + size + translateY,
-//                                                0, x + ax, y + ay, 0, FLOOR_INDEX, frame);
-//                                    }
-//                                }
-//                            }
-////                            ox = oox;
-////                            oy = ooy;
-////                            splat(ox * x_x + oy * y_x + oz * z_x + size + translateX,
-////                                    ox * x_y + oy * y_y + oz * z_y + size + translateY,
-////                                    0, x, y, 0, SHADOW_INDEX, frame);
-//                            break;
-//                        }
-//                    }
-//                }
-//            }
-
-
-
             for (int x = 0; x < size; x++) {
                 for (int y = 0; y < size; y++) {
                     ox = x - hs + fidget;

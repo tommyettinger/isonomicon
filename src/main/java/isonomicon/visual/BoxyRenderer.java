@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Array;
 import com.github.tommyettinger.anim8.PaletteReducer;
 import com.github.tommyettinger.colorful.oklab.ColorTools;
 import com.github.tommyettinger.digital.ArrayTools;
+import com.github.tommyettinger.digital.RoughMath;
 import com.github.tommyettinger.ds.IntObjectMap;
 import com.github.yellowstonegames.grid.BlueNoise;
 import com.github.yellowstonegames.grid.CyclicNoise;
@@ -34,9 +35,10 @@ import static com.github.tommyettinger.digital.TrigTools.sinTurns;
  * unusual technique that stores a palette index in the R channel and a lightness adjustment in the G channel.
  */
 public class BoxyRenderer {
-    public static int shrink = 0;
+    public static int shrink = 2;
     public static int distortHXY = 2, distortVXY = 1, distortVZ = 2; // ground truth for isometric
     public static boolean CORNER_OUTLINES = false;
+    public static int outline = 4;
 
     public final Stuff[] stuffs;
     public Pixmap palettePixmap;
@@ -48,15 +50,14 @@ public class BoxyRenderer {
     public byte[][] indices, outlineIndices, lightIndices;
     public int[] palette;
     public float[] paletteL, paletteA, paletteB;
-    public int outline = 4;
     public boolean variance = true;
     public boolean lighting = true;
     public boolean shadows = Tools3D.SHADOWS;
     public int size;
     public float neutral = 1f;
 
-    public static final byte DARKEN = (byte) 128;
-    public static final byte LIGHTEN = (byte) 135;
+    public static byte FLOOR_INDEX = (byte) 240;
+    public static byte SHADOW_INDEX = (byte) 66;
 
     public static final Noise noise = new Noise(0x1337BEEF, 0.0125f, Noise.SIMPLEX_FRACTAL, 2);
     public static final CyclicNoise swirlNoise = new CyclicNoise(0xDEADBEEFBA77L, 6, 0.03f);
@@ -140,6 +141,13 @@ public class BoxyRenderer {
         x = (12 + x * (6 + x))/(12 + x * (-6 + x));
         return (x * x - 0.00516498f) * 1.0051918f;
     }
+
+    /**
+     * Like the logistic distribution, but shifted to lower results; an input of 0 produces 0, max is 0.5, min is -0.5.
+     * @param x any float
+     * @return a float between -0.5f and 0.5f
+     */
+    public static float logisticky(float x) { return 1f / (1f + RoughMath.expRough(-x)) - 0.5f; }
 
     protected float bn(int x, int y, int seed) {
         return (BlueNoise.getSeededTriangular(x, y, seed) + 128) * 0x1p-8f;
@@ -307,7 +315,7 @@ public class BoxyRenderer {
                         }
                     }
                     else {
-                        indices[ax][ay] = -16;
+                        if(indices[ax][ay] == 0) indices[ax][ay] = FLOOR_INDEX;
                     }
 //                                Coloring.darken(palette[voxel & 255], 0.375f - emit);
 //                                Coloring.adjust(palette[voxel & 255], 0.625f + emit, neutral);
@@ -455,7 +463,7 @@ public class BoxyRenderer {
                         }
                         if (emit != 0) {
                             float spread = emit * 0.08f;
-                            final int radius = 3 * (1 + shrink);
+                            final int radius = 3;// * (1 + shrink);
                             for (int i = -radius, si = sx + i; i <= radius; i++, si++) {
                                 for (int j = -radius, sj = sy + j; j <= radius; j++, sj++) {
                                     final int dist = i * i + j * j;
@@ -469,8 +477,8 @@ public class BoxyRenderer {
                             }
                         }
                         if(shadows){
-                            if(indices[sx][sy] == -16 && shadeZ[fx][fy] <= hs + 0.5f)
-//                            if(indices[sx][sy] == -16 && (vx <= step * 4 || vy <= step * 4 || vx >= xSize - step * 4 || vy >= ySize - step * 4))
+                            if(indices[sx][sy] == FLOOR_INDEX && shadeZ[fx][fy] <= hs + 0.5f)
+//                            if(indices[sx][sy] == FLOOR_INDEX && (vx <= step * 4 || vy <= step * 4 || vx >= xSize - step * 4 || vy >= ySize - step * 4))
                                 shading[sx][sy] = 1024f;
                         }
                     }
@@ -485,15 +493,16 @@ public class BoxyRenderer {
                     sh = shading[x][y];
                     if(sh >= 1000f)
                         continue;
+//                    byte shade = (byte) (Math.min(Math.max((sh + logisticky(midShading[x][y])) * 0.625f + 0.1328125f, 0f), 1f) * 255.999f);
                     byte shade = (byte) (Math.min(Math.max((sh + midShading[x][y]) * 0.625f + 0.1328125f, 0f), 1f) * 255.999f);
                     byte sat = (byte) (Math.min(Math.max((saturation[x][y]) * 0.5f + 0.5f, 0f), 1f) * 255.999f);
 //                    palettePixmap.drawPixel(x >>> shrink, y >>> shrink, (indices[x][y] & 255) << 24 |
 //                            shade << 16 |
 //                            sat << 8 | 255);
                     int idx = (y >>> shrink) * palettePixmap.getWidth() + (x >>> shrink) << 2;
-                    if (shadows && index == -16) {
-                        buffer.put(idx, (byte) 67); // shadow stuff
                         buffer.put(idx + 1, (byte) ((shade & 255) >>> 1));
+                    if (shadows && index == FLOOR_INDEX) {
+                        buffer.put(idx, SHADOW_INDEX); // shadow stuff
                         buffer.put(idx + 2, (byte) 0);
 //                        buffer.put(idx + 3, (byte) (255 - shade));
                         buffer.put(idx + 3, (byte) Math.min(Math.max(480 - (shade & 255) * 8, 0), 255));
