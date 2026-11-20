@@ -54,6 +54,7 @@ public class ShipBoxyGenerator extends ApplicationAdapter {
         VoxIOExtended.USE_MATERIALS = false;
         VoxIOExtended.SCALE = false;
         VoxIOExtended.SOAK = false;
+        BoxyRenderer.CORNER_OUTLINES = true;
         Tools3D.STUFFS = Stuff.STUFFS_B;
     }
 
@@ -135,7 +136,7 @@ public class ShipBoxyGenerator extends ApplicationAdapter {
                     for (int j = 0; j < voxels.grids.size(); j++) {
                         Stuff.evolve(Stuff.STUFFS_B, voxels.grids.get(j), f);
                     }
-                    renderer.drawModelSimple(voxels, i * 0.125f, 0f, 0f, f, 0, 0, Tools3D.wiggle(f));
+                    renderer.drawModelSimple(voxels, i * 0.125f, 0f, 0f, f, 0, 0, 0);//Tools3D.wiggle(f));
                     t.draw(renderer.palettePixmap, 0, 0);
                     FrameBuffer fb = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), false);
                     fb.begin();

@@ -497,8 +497,8 @@ public class BoxyRenderer {
                     sh = shading[x][y];
                     if(sh >= 1000f)
                         continue;
-//                    byte shade = (byte) (Math.min(Math.max((sh + logisticky(midShading[x][y])) * 0.625f + 0.1328125f, 0f), 1f) * 255.999f);
-                    byte shade = (byte) (Math.min(Math.max((sh + midShading[x][y]) * 0.625f + 0.1328125f, 0f), 1f) * 255.999f);
+                    byte shade = (byte) (Math.min(Math.max((sh + logisticky(midShading[x][y])) * 0.625f + 0.1328125f, 0f), 1f) * 255.999f);
+//                    byte shade = (byte) (Math.min(Math.max((sh + midShading[x][y]) * 0.625f + 0.1328125f, 0f), 1f) * 255.999f);
                     byte sat = (byte) (Math.min(Math.max((saturation[x][y]) * 0.5f + 0.5f, 0f), 1f) * 255.999f);
 //                    palettePixmap.drawPixel(x >>> shrink, y >>> shrink, (indices[x][y] & 255) << 24 |
 //                            shade << 16 |
@@ -508,8 +508,8 @@ public class BoxyRenderer {
                         buffer.put(idx, SHADOW_INDEX); // shadow stuff
                         buffer.put(idx + 1, (byte) 96);
                         buffer.put(idx + 2, (byte) 0);
-                        buffer.put(idx + 3, (byte) (255 - shade));
-//                        buffer.put(idx + 3, (byte) Math.min(Math.max(480 - (shade & 255) * 8, 0), 255));
+//                        buffer.put(idx + 3, (byte) (255 - shade));
+                        buffer.put(idx + 3, (byte) Math.min(Math.max(480 - (shade & 255) * 8, 0), 255));
                     } else {
                         buffer.put(idx, index);
                         buffer.put(idx + 1, shade);
@@ -524,9 +524,9 @@ public class BoxyRenderer {
                     if ((buffer.get(idx+3) & 255) < (shade)) {
 //                        System.out.println("Writing light pixel at " + x + "," + y + " with shade " + shade + ", shading " + shading[x][y] + ", mid " + midShading[x][y]);
                         buffer.put(idx, lightIndices[x][y]);
-//                        buffer.put(idx+1, (byte) Math.min(Math.max(paletteL[lightIndices[x][y] & 255] * 255.999f, 0), 255));
-                        buffer.put(idx+1, (byte) shade);
-                        buffer.put(idx+2, (byte) 64);
+                        buffer.put(idx+1, (byte) Math.min(Math.max(paletteL[lightIndices[x][y] & 255] * 255.999f, 0), 255));
+//                        buffer.put(idx+1, (byte) shade);
+                        buffer.put(idx+2, (byte) 96);
                         buffer.put(idx+3, (byte) (shade));
                         outlineIndices[x][y] = 0;
                     }
@@ -539,11 +539,11 @@ public class BoxyRenderer {
                     if ((buffer.get(idx+3) & 255) < shade) {
 //                        System.out.println("Writing dark pixel at " + x + "," + y + " with shade " + shade + ", shading " + shading[x][y] + ", mid " + midShading[x][y]);
                         buffer.put(idx, lightIndices[x][y]);
-//                        buffer.put(idx+1, (byte) Math.min(Math.max(paletteL[lightIndices[x][y] & 255] * 255.999f, 0), 255));
+                        buffer.put(idx+1, (byte) Math.min(Math.max(paletteL[lightIndices[x][y] & 255] * 255.999f, 0), 255));
 //                        buffer.put(idx+2, (byte) 96);
 //                        buffer.put(idx+3, (byte) shade);
-                        buffer.put(idx+1, (byte) (shade));
-                        buffer.put(idx+2, (byte) 64);
+//                        buffer.put(idx+1, (byte) (shade));
+                        buffer.put(idx+2, (byte) 96);
 //                        buffer.put(idx+3, (byte) (255-shade));
                         buffer.put(idx+3, (byte) (shade));
                         outlineIndices[x][y] = 0;

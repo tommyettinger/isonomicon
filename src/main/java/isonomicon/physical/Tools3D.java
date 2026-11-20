@@ -208,7 +208,6 @@ public class Tools3D {
         if(smoothLevel < 1)
             return voxels;
         final int xs = voxels.length, ys = voxels[0].length, zs = voxels[0][0].length;
-        //Dictionary<byte, int> colorCount = new Dictionary<byte, int>();
         int[] colorCount = new int[256];
         byte[][][] vs0 = deepCopy(voxels), vs1 = new byte[xs][ys][zs];
         for(int v = 0; v < smoothLevel; v++)
@@ -216,7 +215,6 @@ public class Tools3D {
             if(v >= 1)
             {
                 deepCopyInto(vs1, vs0);
-                //fetch(vs1, (byte) 0);
             }
             for(int x = 0; x < xs; x++)
             {
