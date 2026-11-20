@@ -20,9 +20,8 @@ import static com.github.yellowstonegames.grid.IntPointHash.hashAll;
  * Created by Tommy Ettinger on 11/4/2017.
  */
 public class ModelMaker {
-    public final boolean RINSED_PALETTE = true;
-    public final byte EYE_DARK = RINSED_PALETTE ? 22 : 30;
-    public final byte EYE_LIGHT = 17;
+    public final byte EYE_DARK = 65;
+    public final byte EYE_LIGHT = 71;
     public ChopRandom rng;
     private byte[][][] ship, shipLarge;
     private int xSize, ySize, zSize;
@@ -273,7 +272,7 @@ public class ModelMaker {
                         voxels[x][12 - y][z] = voxels[x][y - 1][z] = EYE_DARK;
                         voxels[x][11 - y][z] = voxels[x][y    ][z] = EYE_DARK;
                         voxels[x + 1][12 - y][z] = voxels[x + 1][y    ][z] = EYE_DARK;     // intentionally asymmetrical
-                        voxels[x + 1][11 - y][z] = voxels[x + 1][y - 1][z] = 4; // intentionally asymmetrical
+                        voxels[x + 1][11 - y][z] = voxels[x + 1][y - 1][z] = EYE_LIGHT; // intentionally asymmetrical
                         if(x <= 9) {
                             voxels[x + 2][12 - y][z] = voxels[x + 2][y - 1][z] = 0;
                             voxels[x + 2][11 - y][z] = voxels[x + 2][y    ][z] = 0;
@@ -426,13 +425,21 @@ public class ModelMaker {
         return nextShip;
     }
     
-    protected static int determine32(int state)
+    protected static int determine32(int x)
     {
-        int z = (state *= 0xB79F5);
-        z = (z ^ z >>> 15) * (z | 0xFFF0003D);
-        z ^= z >>> 8;
-        z = (z ^ z >>> 7) * (state >>> 12 | 1);
-        return z ^ z >>> 14;
+//        int z = (x *= 0xB79F5);
+//        z = (z ^ z >>> 15) * (z | 0xFFF0003D);
+//        z ^= z >>> 8;
+//        z = (z ^ z >>> 7) * (x >>> 12 | 1);
+//        return z ^ z >>> 14;
+        x ^= x >>> 17;
+        x *= 0xed5ad4bb;
+        x ^= x >>> 11;
+        x *= 0xac4c1b51;
+        x ^= x >>> 15;
+        x *= 0x31848bab;
+        x ^= x >>> 14;
+        return x;
 
     }
     
@@ -473,37 +480,4 @@ public class ModelMaker {
         }
         return frames;
     }
-    /**
-     * Gets the minimum random int between 0 and {@code bound} generated out of {@code trials} generated numbers.
-     * Useful for when numbers should have a strong bias toward zero, but all possible values are between 0, inclusive,
-     * and bound, exclusive.
-     * @param bound the outer exclusive bound; may be negative or positive
-     * @param trials how many numbers to generate and get the minimum of
-     * @return the minimum generated int between 0 and bound out of the specified amount of trials
-     */
-    public int minIntOf(final int bound, final int trials)
-    {
-        int value = rng.nextSignedInt(bound);
-        for (int i = 1; i < trials; i++) {
-            value = Math.min(value, rng.nextSignedInt(bound));
-        }
-        return value;
-    }
-    /**
-     * Gets the maximum random int between 0 and {@code bound} generated out of {@code trials} generated numbers.
-     * Useful for when numbers should have a strong bias away from zero, but all possible values are between 0,
-     * inclusive, and bound, exclusive.
-     * @param bound the outer exclusive bound; may be negative or positive
-     * @param trials how many numbers to generate and get the maximum of
-     * @return the maximum generated int between 0 and bound out of the specified amount of trials
-     */
-    public int maxIntOf(final int bound, final int trials)
-    {
-        int value = rng.nextSignedInt(bound);
-        for (int i = 1; i < trials; i++) {
-            value = Math.max(value, rng.nextSignedInt(bound));
-        }
-        return value;
-    }
-
 }

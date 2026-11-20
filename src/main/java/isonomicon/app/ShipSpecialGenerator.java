@@ -15,7 +15,10 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
-import com.github.tommyettinger.anim8.*;
+import com.github.tommyettinger.anim8.AnimatedGif;
+import com.github.tommyettinger.anim8.AnimatedPNG;
+import com.github.tommyettinger.anim8.FastPNG;
+import com.github.tommyettinger.anim8.QualityPalette;
 import com.github.tommyettinger.digital.Hasher;
 import com.github.yellowstonegames.text.Language;
 import isonomicon.io.extended.VoxIOExtended;
@@ -93,7 +96,7 @@ public class ShipSpecialGenerator extends ApplicationAdapter {
         long startTime = TimeUtils.millis();
         String date = DateFormat.getDateInstance().format(new Date());
         long seed = Hasher.randomize3(Hasher.shax.hashBulk64(date));
-        ModelMaker mm = new ModelMaker(seed, new PaletteReducer());
+        ModelMaker mm = new ModelMaker(seed, new QualityPalette());
 
         for (int n = 0; n < 16; n++) {
 
