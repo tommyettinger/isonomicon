@@ -362,6 +362,7 @@ public class ModelMaker {
         ySize = ship[0].length;
         zSize = ship[0][0].length;
         byte[][][] nextShip = new byte[xSize][ySize][zSize];
+        final int quarterX = xSize >> 2;
         final int halfY = ySize >> 1, smallYSize = ySize - 1;
         int color;
         int seed = rng.nextInt(), current = seed;
@@ -412,7 +413,8 @@ public class ModelMaker {
                 }
             }             
             for (int z = 1; z < zSize; z++) {
-                for (int x = 0; x < xSize; x++) {
+                // We don't want thrusters in the front half of the model.
+                for (int x = 0; x < quarterX; x++) {
                     if (hash32(z * 3 >>> 2, y * 5 + (z >>> 1) >>> 3, current) < 15) {
                         if (nextShip[x][y][z] != 0 && nextShip[x][y][z] != cockpitColor) {
                             nextShip[x - 1][smallYSize - y][z] = nextShip[x - 1][y][z] = thrustColor;
