@@ -419,8 +419,8 @@ public class SpecialRenderer {
                                 shading[sx][sy] += change;
                             }
                             int dist;
-                            for (int i = -4, si = sx + i; i <= 4; i++, si++) {
-                                for (int j = -4, sj = sy + j; j <= 4; j++, sj++) {
+                            for (int i = -3, si = sx + i; i <= 3; i++, si++) {
+                                for (int j = -3, sj = sy + j; j <= 3; j++, sj++) {
                                     if ((dist = i * i + j * j) > 9 || si < 0 || sj < 0 || si > xSize || sj > ySize)
                                         continue;
                                     float change = spread * (4 - (float) Math.sqrt(dist));
@@ -430,8 +430,8 @@ public class SpecialRenderer {
                         } else if (Math.abs(shadeZ[fx][fy] - tz) <= limit) {
                             float spread = MathUtils.lerp(0.005f, 0.002f, rough);
                             float dist;
-                            for (int i = -4, si = sx + i; i <= 4; i++, si++) {
-                                for (int j = -4, sj = sy + j; j <= 4; j++, sj++) {
+                            for (int i = -3, si = sx + i; i <= 3; i++, si++) {
+                                for (int j = -3, sj = sy + j; j <= 3; j++, sj++) {
                                     if ((dist = i * i + j * j) > 9 || si < 0 || sj < 0 || si > xSize || sj > ySize)
                                         continue;
                                     float change = spread * (4 - (float) Math.sqrt(dist));
