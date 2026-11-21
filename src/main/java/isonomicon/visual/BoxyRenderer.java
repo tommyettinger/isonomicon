@@ -14,6 +14,7 @@ import com.github.yellowstonegames.grid.BlueNoise;
 import com.github.yellowstonegames.grid.CyclicNoise;
 import com.github.yellowstonegames.grid.IntPointHash;
 import com.github.yellowstonegames.grid.Noise;
+import isonomicon.app.AppConfig;
 import isonomicon.io.extended.GroupChunk;
 import isonomicon.io.extended.ShapeModel;
 import isonomicon.io.extended.TransformChunk;
@@ -674,18 +675,19 @@ public class BoxyRenderer {
     public static void monoAlpha(Pixmap pm) {
         final ByteBuffer buffer = pm.getPixels();
         final int limit = buffer.limit();
-        int alpha, rgba;
+        int rgba;
         for (int i = 3; i < limit; i += 4) {
-            if((alpha = buffer.get(i)) < -1) {
-                rgba = buffer.getInt(i - 3);
-                buffer.putInt(i - 3, Coloring.lerp(0xC0C0C0FF, rgba | 255, (alpha & 255) / 255f));
+            if(((rgba = buffer.getInt(i - 3)) & 255) != 255) {
+                buffer.putInt(i - 3, Coloring.lerp(0xC0C0C0FF, rgba | 255, (rgba & 255) / 255f));
             }
         }
     }
 
     public static void monoAlpha(Array<Pixmap> pms) {
-        for(Pixmap pm : pms) {
-            monoAlpha(pm);
+        if(AppConfig.GRAY_BG) {
+            for (Pixmap pm : pms) {
+                monoAlpha(pm);
+            }
         }
     }
 

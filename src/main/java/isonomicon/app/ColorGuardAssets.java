@@ -174,7 +174,7 @@ public class ColorGuardAssets extends ApplicationAdapter {
 //            }
 //            System.out.println("\n}");
 
-            gif.palette = new com.github.tommyettinger.anim8.QualityPalette(new int[]{
+            gif.palette = new QualityPalette(new int[]{
                     0x00000000, 0x000000FF, 0x636363FF, 0x424242FF, 0xFFFF84FF, 0x737373FF, 0x7B7B7BFF, 0x212121FF,
                     0x9C9C9CFF, 0xFFB563FF, 0x313131FF, 0xFFA552FF, 0xB5B5B5FF, 0x212939FF, 0x181818FF, 0x007B00FF,
                     0xE7BD00FF, 0xD63900FF, 0xAD0042FF, 0x101010FF, 0x6B00EFFF, 0xB5CEDEFF, 0x21319CFF, 0x6B6B6BFF,
