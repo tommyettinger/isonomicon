@@ -154,24 +154,37 @@ public class ShipSpecialGenerator extends ApplicationAdapter {
             Texture t = new Texture(renderer.palettePixmap.getWidth(), renderer.palettePixmap.getHeight(), Pixmap.Format.RGBA8888);
             Pixmap pixmap;
             Array<Pixmap> pm = new Array<>(128);
+//            ArrayList<byte[][][]> original = new ArrayList<>(voxels.grids.size());
+//            for (int i = 0; i < voxels.grids.size(); i++) {
+//                original.add(Tools3D.deepCopy(voxels.grids.get(i)));
+//            }
+//            for (int i = 0; i < 8; i++) {
+//                for (int f = 0; f < 4; f++) {
+//                    voxels.grids.clear();
+//                    for (int j = 0; j < original.size(); j++) {
+//                        voxels.grids.add(Tools3D.translateCopy(original.get(j), 0, 0, Tools3D.wiggle(f)));
+//                    }
+//                    for (int j = 0; j < voxels.grids.size(); j++) {
+//                        byte[][][] grid = voxels.grids.get(j);
+//                        for (int iter = 0; iter <= f; iter++) {
+//                            Stuff.evolve(Stuff.STUFFS_B, grid, f);
+//                        }
+//                    }
             ArrayList<byte[][][]> original = new ArrayList<>(voxels.grids.size());
             for (int i = 0; i < voxels.grids.size(); i++) {
                 original.add(Tools3D.deepCopy(voxels.grids.get(i)));
             }
             for (int i = 0; i < 8; i++) {
+                voxels.grids.clear();
+                for (int j = 0; j < original.size(); j++) {
+                    voxels.grids.add(Tools3D.deepCopy(original.get(j)));
+                }
                 for (int f = 0; f < 4; f++) {
-                    voxels.grids.clear();
-                    for (int j = 0; j < original.size(); j++) {
-                        voxels.grids.add(Tools3D.translateCopy(original.get(j), 0, 0, Tools3D.wiggle(f)));
-                    }
                     for (int j = 0; j < voxels.grids.size(); j++) {
-                        byte[][][] grid = voxels.grids.get(j);
-                        for (int iter = 0; iter <= f; iter++) {
-                            Stuff.evolve(Stuff.STUFFS_B, grid, f);
-                        }
+                        Stuff.evolve(Stuff.STUFFS_B, voxels.grids.get(j), f);
                     }
-                    renderer.drawModelSimple(voxels, i * 0.125f, 0f, 0f, f, 0, 0, 0);
-//                    renderer.drawModelSimple(voxels, i * 0.125f, 0f, 0f, f, 0, 0, Tools3D.wiggle(f));
+//                    renderer.drawModelSimple(voxels, i * 0.125f, 0f, 0f, f, 0, 0, 0);
+                    renderer.drawModelSimple(voxels, i * 0.125f, 0f, 0f, f, 0, 0, Tools3D.wiggle(f));
                     t.draw(renderer.palettePixmap, 0, 0);
                     FrameBuffer fb = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), false);
                     fb.begin();

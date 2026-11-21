@@ -229,7 +229,8 @@ public class SpecialRenderer {
         }
     }
 
-    public void splat(float xPos, float yPos, float zPos, int vx, int vy, int vz, byte voxel, int frame) {
+    public void splat(float xPos, float yPos, float zPos, int vx, int vy, int vz, byte voxel, int frame,
+                      float translateX, float translateY, float translateZ) {
         if(xPos <= -1f || yPos <= -1f || zPos <= -1f
                 || xPos >= size * 2 || yPos >= size * 2 || zPos >= size * 2)
             return;
@@ -308,6 +309,9 @@ public class SpecialRenderer {
                 }
             }
         }
+        xPos -= translateX;
+        yPos -= translateY;
+        zPos -= translateZ;
         if(xPos < -hs || yPos < -hs || zPos < -hs || xPos + hs > shadeZ.length || yPos + hs > shadeZ[0].length || zPos + hs > shadeX[0].length)
             System.out.println(xPos + ", " + yPos + ", " + zPos + " is out of bounds");
         else if(drawn && emit == 0f) {
@@ -339,22 +343,22 @@ public class SpecialRenderer {
     }
 
     /**
-     * Compiles all the individual voxels drawn with {@link #splat(float, float, float, int, int, int, byte, int)} into a
+     * Compiles all the individual voxels drawn with {@link #splat(float, float, float, int, int, int, byte, int, float, float, float)} into a
      * single Pixmap and returns it.
      * @param turns yaw in turns; like turning your head or making a turn in a car
-     * @return {@link #palettePixmap}, edited to contain the render of all the voxels put in this with {@link #splat(float, float, float, int, int, int, byte, int)}
+     * @return {@link #palettePixmap}, edited to contain the render of all the voxels put in this with {@link #splat(float, float, float, int, int, int, byte, int, float, float, float)}
      */
     public Pixmap blit(float turns, int frame) {
         return blit(turns, 0f, 0f, frame);
     }
 
     /**
-     * Compiles all the individual voxels drawn with {@link #splat(float, float, float, int, int, int, byte, int)} into a
+     * Compiles all the individual voxels drawn with {@link #splat(float, float, float, int, int, int, byte, int, float, float, float)} into a
      * single Pixmap and returns it.
      * @param yaw in turns; like turning your head or making a turn in a car
      * @param pitch in turns; like looking up or down or making a nosedive in a plane
      * @param roll in turns; like tilting your head to one side or doing a barrel roll in a starship
-     * @return {@link #palettePixmap}, edited to contain the render of all the voxels put in this with {@link #splat(float, float, float, int, int, int, byte, int)}
+     * @return {@link #palettePixmap}, edited to contain the render of all the voxels put in this with {@link #splat(float, float, float, int, int, int, byte, int, float, float, float)}
      */
     public Pixmap blit(float yaw, float pitch, float roll, int frame) {
         final int threshold = 10+shrink*3;//13;
@@ -656,7 +660,7 @@ public class SpecialRenderer {
                     {
                         final float xPos = (x-hs) * c - (y-hs) * s + size;
                         final float yPos = (x-hs) * s + (y-hs) * c + size;
-                        splat(xPos, yPos, z, x, y, z, v, frame);
+                        splat(xPos, yPos, z, x, y, z, v, frame, 0, 0, 0);
                     }
                 }
             }
@@ -680,10 +684,10 @@ public class SpecialRenderer {
                     ox = x - hs + fidget;
                     oy = y - hs + fidget;
                     oz = 0;
-                    splat(ox * x_x + oy * y_x + oz * z_x + size,
-                            ox * x_y + oy * y_y + oz * z_y + size,
+                    splat(ox * x_x + oy * y_x + oz * z_x + size + translateX,
+                            ox * x_y + oy * y_y + oz * z_y + size + translateY,
                             0,
-                            x, y, 0, FLOOR_INDEX, frame);
+                            x, y, 0, FLOOR_INDEX, frame, translateX, translateY, 0);
                 }
             }
         }
@@ -697,7 +701,8 @@ public class SpecialRenderer {
                         oz = z - hs;
                         splat(ox * x_x + oy * y_x + oz * z_x + size + translateX,
                                 ox * x_y + oy * y_y + oz * z_y + size + translateY,
-                                ox * x_z + oy * y_z + oz * z_z + hs + translateZ, x, y, z, v, frame);
+                                ox * x_z + oy * y_z + oz * z_z + hs + translateZ, x, y, z, v, frame,
+                                translateX, translateY, translateZ);
                     }
                 }
             }
