@@ -47,7 +47,7 @@ public class ShipBoxyGenerator extends ApplicationAdapter {
     private SpriteBatch batch;
     private Texture palette;
     public ShipBoxyGenerator(String[] args){
-        BoxyRenderer.shrink = 2;
+        BoxyRenderer.shrink = 1;
         VoxIOExtended.GENERAL = true;
         VoxIOExtended.USE_MATERIALS = false;
         VoxIOExtended.SCALE = true;
