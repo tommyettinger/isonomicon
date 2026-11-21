@@ -167,7 +167,8 @@ public class ShipBoxyGenerator extends ApplicationAdapter {
                 for (int f = 0; f < 4; f++) {
                     voxels.grids.clear();
                     for (int j = 0; j < original.size(); j++) {
-                        voxels.grids.add(Tools3D.translateCopy(original.get(j), 0, 0, Tools3D.wiggle(f)));
+                        voxels.grids.add(Tools3D.deepCopy(original.get(j)));
+//                        voxels.grids.add(Tools3D.translateCopy(original.get(j), 0, 0, Tools3D.wiggle(f)));
                     }
                     for (int j = 0; j < voxels.grids.size(); j++) {
                         byte[][][] grid = voxels.grids.get(j);
@@ -175,8 +176,18 @@ public class ShipBoxyGenerator extends ApplicationAdapter {
                             Stuff.evolve(Stuff.STUFFS_B, grid, f);
                         }
                     }
-                    renderer.drawModelSimple(voxels, i * 0.125f, 0f, 0f, f, 0, 0, 0);
-//                    renderer.drawModelSimple(voxels, i * 0.125f, 0f, 0f, f, 0, 0, Tools3D.wiggle(f));
+//                    renderer.drawModelSimple(voxels, i * 0.125f, 0f, 0f, f, 0, 0, 0);
+                    // We need this to test why translateZ changes lightness badly.
+                    renderer.drawModelSimple(voxels, i * 0.125f, 0f, 0f, f, 0, 0, Tools3D.wiggle(f));
+//            VoxModel original = voxels.copy();
+//            for (int i = 0; i < 8; i++) {
+//                voxels = original.copy();
+//                for (int f = 0; f < 4; f++) {
+//                    for (int j = 0; j < voxels.grids.size(); j++) {
+//                        Stuff.evolve(Stuff.STUFFS_B, voxels.grids.get(j), f);
+//                    }
+//                    renderer.drawModelSimple(voxels, i * 0.125f, 0f, 0f, f, 0.00f, 0.00f, Tools3D.wiggle(f));
+
                     t.draw(renderer.palettePixmap, 0, 0);
                     FrameBuffer fb = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), false);
                     fb.begin();
@@ -218,7 +229,10 @@ public class ShipBoxyGenerator extends ApplicationAdapter {
             if(TURNTABLE) {
                 renderer.clear();
 
-                voxels = original.copy();
+                voxels.grids.clear();
+                for (int j = 0; j < original.size(); j++) {
+                    voxels.grids.add(Tools3D.deepCopy(original.get(j)));
+                }
                 for (int i = 0; i < 128; i++) {
                     if((i & 3) == 0) {
                         for (int j = 0; j < voxels.grids.size(); j++) {
