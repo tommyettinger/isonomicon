@@ -162,7 +162,9 @@ public class ShipSpecialGenerator extends ApplicationAdapter {
                     }
                     for (int j = 0; j < voxels.grids.size(); j++) {
                         byte[][][] grid = voxels.grids.get(j);
-                        Stuff.evolve(Stuff.STUFFS_B, grid, f);
+                        for (int iter = 0; iter <= f; iter++) {
+                            Stuff.evolve(Stuff.STUFFS_B, grid, f);
+                        }
                     }
                     renderer.drawModelSimple(voxels, i * 0.125f, 0f, 0f, f, 0, 0, 0);
 //                    renderer.drawModelSimple(voxels, i * 0.125f, 0f, 0f, f, 0, 0, Tools3D.wiggle(f));
