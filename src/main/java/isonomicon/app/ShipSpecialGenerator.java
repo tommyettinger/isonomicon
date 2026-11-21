@@ -137,6 +137,10 @@ public class ShipSpecialGenerator extends ApplicationAdapter {
             while (Gdx.files.local("out/b/shipSpecialized/" + date + "/" + output).exists()){
                 output = lang.word(++seed, true);
             }
+            Gdx.files.local("out/b/shipSpecialized/" + date + "/" + output).mkdirs();
+            if (!Gdx.files.local("out/b/shipSpecialized/" + date + "/" + output).exists()){
+                output = lang.word(++seed, true);
+            }
             System.out.println("Rendering " + output);
             mm.rng.setSeed(Hasher.botis.hashBulk64(output));
             byte[][][] voxelData = mm.shipLargeSmoothColorized();

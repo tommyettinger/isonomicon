@@ -278,14 +278,14 @@ public class BoxyRenderer {
             if(ns > swirl) return;
         }
         final float emit = m.getTrait(VoxMaterial.MaterialTrait._emit) * 0.75f;
-        int lowX = 0, highX = 4, lowY = 0, highY = 4;
+        int lowX = 0, highX = 3, lowY = 0, highY = 3;
 //        if(emit != 0f) {
 //            lowX = lowY = 1;
 //            highX = highY = 3;
 //        } else
         if(flow != 0f) {
             float ns = noise.getConfiguredNoise(xPos, yPos, zPos, frame * flow);
-            if (ns > 0) highX = (int) (4.5 + ns * (3 << shrink));
+            if (ns > 0) highX = (int) (3.5 + ns * (3 << shrink));
             else if (ns < 0) lowX = Math.round(lowX + ns * (3 << shrink));
         }
         xPos += fidget;
@@ -297,14 +297,14 @@ public class BoxyRenderer {
 //                depth = (int)(0.5f + (xPos + yPos) * distortHXY + zPos * distortVZ);
         boolean drawn = false;
         final float hs = size * 0.5f;
-        for (int x = lowX, ax = xx; x < highX && ax < render.length; x++, ax++) {
+        for (int x = lowX, ax = xx; x <= highX && ax < render.length; x++, ax++) {
             if (ax < 0) continue;
-            for (int y = lowY, ay = yy; y < highY && ay < render[0].length; y++, ay++) {
-                if((x == lowX && y == lowY) || (x == lowX && y == highY-1) || (x == highX-1 && y == lowY) || (x == highX-1 && y == highY-1))
-                    continue;
+            for (int y = lowY, ay = yy; y <= highY && ay < render[0].length; y++, ay++) {
+//                if((x == lowX && y == lowY) || (x == lowX && y == highY) || (x == highX && y == lowY) || (x == highX && y == highY))
+//                    continue;
                 if ((depth > depths[ax][ay] || (depth == depths[ax][ay] && (indices[ax][ay] & 255) > (voxel & 255)))) {
                     drawn = true;
-                    depths[ax][ay] = (x == lowX || x == highX-1 || y == lowY || y == highY-1) ? depth - 1 :  depth;
+                    depths[ax][ay] = (x == lowX || x == highX || y == lowY || y == highY) ? depth - 1 :  depth;
                     materials[ax][ay] = m;
                     if(voxel != 0) {
                         indices[ax][ay] = voxel;

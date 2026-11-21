@@ -47,7 +47,7 @@ public class ShipBoxyGenerator extends ApplicationAdapter {
     private SpriteBatch batch;
     private Texture palette;
     public ShipBoxyGenerator(String[] args){
-        BoxyRenderer.shrink = 1;
+        BoxyRenderer.shrink = 2;
         VoxIOExtended.GENERAL = true;
         VoxIOExtended.USE_MATERIALS = false;
         VoxIOExtended.SCALE = true;
@@ -142,6 +142,10 @@ public class ShipBoxyGenerator extends ApplicationAdapter {
             while (Gdx.files.local("out/b/shipBoxy/" + date + "/" + output).exists()){
                 output = lang.word(++seed, true);
             }
+            Gdx.files.local("out/b/shipBoxy/" + date + "/" + output).mkdirs();
+            if (!Gdx.files.local("out/b/shipBoxy/" + date + "/" + output).exists()){
+                output = lang.word(++seed, true);
+            }
             System.out.println("Rendering " + output);
             mm.rng.setSeed(Hasher.botis.hashBulk64(output));
             byte[][][] voxelData = mm.shipLargeSmoothColorized();
@@ -213,10 +217,8 @@ public class ShipBoxyGenerator extends ApplicationAdapter {
             pm.clear();
             if(TURNTABLE) {
                 renderer.clear();
-                voxels.grids.clear();
-                for (int j = 0; j < original.size(); j++) {
-                    voxels.grids.add(Tools3D.deepCopy(original.get(j)));
-                }
+
+                voxels = original.copy();
                 for (int i = 0; i < 128; i++) {
                     if((i & 3) == 0) {
                         for (int j = 0; j < voxels.grids.size(); j++) {
