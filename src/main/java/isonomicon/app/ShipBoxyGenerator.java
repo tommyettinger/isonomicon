@@ -87,14 +87,11 @@ public class ShipBoxyGenerator extends ApplicationAdapter {
 
         png = new FastPNG();
         png.setCompression(2); // we are likely to compress these with something better, like oxipng.
-        png.setFlipY(false);
 //        png8 = new PNG8();
         gif = new AnimatedGif();
         gif.setDitherAlgorithm(AppConfig.DITHER);
-        gif.setFlipY(false);
         apng = new AnimatedPNG();
         apng.setCompression(2);
-        apng.setFlipY(false);
         gif.palette = new QualityPalette(new int[]{
                 0x00000000, 0x000000FF, 0x636363FF, 0x424242FF, 0xFFFF84FF, 0x737373FF, 0x7B7B7BFF, 0x212121FF,
                 0x9C9C9CFF, 0xFFB563FF, 0x313131FF, 0xFFA552FF, 0xB5B5B5FF, 0x212939FF, 0x181818FF, 0x007B00FF,
@@ -188,10 +185,8 @@ public class ShipBoxyGenerator extends ApplicationAdapter {
 //                    }
 //                    renderer.drawModelSimple(voxels, i * 0.125f, 0f, 0f, f, 0.00f, 0.00f, Tools3D.wiggle(f));
 
-                    png.setFlipY(true);
                     png.write(Gdx.files.local("out/b/shipBoxy_lab/" + date + "/" + output + '/' + output + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                     png.write(Gdx.files.local("out/b/shipBoxy_lab/" + date + "/" + output + '/' + output + "_shadow_angle" + i + "_" + f + ".png"), renderer.shadowPixmap);
-                    png.setFlipY(false);
 
                     renderer.shadowPixmap.drawPixmap(renderer.palettePixmap, 0, 0);
                     t.draw(renderer.shadowPixmap, 0, 0);
@@ -205,7 +200,7 @@ public class ShipBoxyGenerator extends ApplicationAdapter {
                     Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
                     batch.setColor(0f, 0.5f, 0.5f, 1f);
 
-                    batch.draw(t, 0, 0, t.getWidth(), t.getHeight());
+                    batch.draw(t, 0, t.getHeight(), t.getWidth(), -t.getHeight());
                     batch.end();
 
 //                    pixmap = Pixmap.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
@@ -260,7 +255,7 @@ public class ShipBoxyGenerator extends ApplicationAdapter {
                     Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
                     batch.setColor(0f, 0.5f, 0.5f, 1f);
 
-                    batch.draw(t, 0, 0, t.getWidth(), t.getHeight());
+                    batch.draw(t, 0, t.getHeight(), t.getWidth(), -t.getHeight());
                     batch.end();
                     pixmap = createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
                     fb.end();
