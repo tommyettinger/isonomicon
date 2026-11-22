@@ -416,22 +416,22 @@ public class BoxyRenderer {
         VoxMaterial m;
         final int step = 1 << shrink;
 
-        shadowPixmap.setColor(SHADOW_INDEX << 24 | 96 << 16 | 255);
-
+        int deepShadow = SHADOW_INDEX << 24 | 96 << 16 | 160;
+        shadowPixmap.setColor(deepShadow);
         for (vx = 0; vx < size; vx++) {
             for (vy = 0; vy < size; vy++) {
                 if (blobShadow.current.contains(vx, vy)) {
                     ox = vx - hsp;
                     oy = vy - hsp;
                     oz = 0;
-                    tx = ox * x_x + oy * y_x + oz * z_x + size + hs;
-                    ty = ox * x_y + oy * y_y + oz * z_y + size + hs;
+                    tx = ox * x_x + oy * y_x + oz * z_x + size;
+                    ty = ox * x_y + oy * y_y + oz * z_y + size;
 
                     final int
                             xx = (int) (0.5f + Math.max(0, (size + ty - tx) * distortHXY + 1)),
                             yy = (int) (0.5f + Math.max(0, (size * ((distortVXY) * 3) - distortVXY * (tx + ty)) + 1));
 
-                    shadowPixmap.drawPixel(xx, yy);
+                    shadowPixmap.fillCircle(xx >> shrink, yy >> shrink, 3);
                 }
             }
         }
