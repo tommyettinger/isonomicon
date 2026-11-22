@@ -263,7 +263,12 @@ public class ColorGuardAssetsBoxy extends ApplicationAdapter {
                             Stuff.evolve(Stuff.STUFFS_B, voxels.grids.get(j), f);
                         }
                         renderer.drawModelSimple(voxels, i * 0.25f, 0f, 0f, f, 0.00f, 0.00f, 0.00f);
-                        t.draw(renderer.palettePixmap, 0, 0);
+                        if(png != null){
+                            png.write(Gdx.files.local(outDir + "/lab/" + name + '/' + SPECIES_PREFIX + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
+                            png.write(Gdx.files.local(outDir + "/lab/" + name + '/' + SPECIES_PREFIX + name + "_shadow_angle" + i + "_" + f + ".png"), renderer.shadowPixmap);
+                        }
+                        renderer.shadowPixmap.drawPixmap(renderer.palettePixmap, 0, 0);
+                        t.draw(renderer.shadowPixmap, 0, 0);
                         for (int look = 0, lk = 0; look < 168; look+=8, lk++) {
 //                            if(lk == 3 || lk == 8 || lk == 11 || lk == 18 || lk == 21 || lk == 25)
 //                                continue;
@@ -282,8 +287,6 @@ public class ColorGuardAssetsBoxy extends ApplicationAdapter {
                                 pixmap = Pixmap.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
                                 fb.end();
                                 if(png != null) png.write(Gdx.files.local(outDir + "/" + armies[j] + "/" + name + '/' + SPECIES_PREFIX + armies[j] + "_look" + lk + '_' + name + "_angle" + i + "_" + f + ".png"), pixmap);
-                                if(look + j == 0)
-                                    if(png != null) png.write(Gdx.files.local(outDir + "/lab/" + name + '/' + SPECIES_PREFIX + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                                 if(lk == canonicalLooks[j]) {
                                     pm.set(j * 32 + i * 8 + f, pixmap);
                                     pm.set(j * 32 + i * 8 + f + 4, pixmap);
@@ -343,7 +346,12 @@ public class ColorGuardAssetsBoxy extends ApplicationAdapter {
 
                             for (int f = 0; f < frames.length; f++) {
                                 renderer.drawModelSimple(frames[f], i * 0.25f, 0f, 0f, f, 0.00f, 0.00f, 0.00f);
-                                t.draw(renderer.palettePixmap, 0, 0);
+                                if(png != null) {
+                                    png.write(Gdx.files.local(outDir + "/lab/" + name + '/' + SPECIES_PREFIX + name + ps + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
+                                    png.write(Gdx.files.local(outDir + "/lab/" + name + '/' + SPECIES_PREFIX + name + ps + "_shadow_angle" + i + "_" + f + ".png"), renderer.shadowPixmap);
+                                }
+                                renderer.shadowPixmap.drawPixmap(renderer.palettePixmap, 0, 0);
+                                t.draw(renderer.shadowPixmap, 0, 0);
                                 for (int look = 0, lk = 0; look < 153; look+=8, lk++) {
                                     for (int j = 0; j < armies.length; j++) {
                                         fb.begin();
@@ -360,8 +368,6 @@ public class ColorGuardAssetsBoxy extends ApplicationAdapter {
                                         pixmap = Pixmap.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
                                         fb.end();
                                         if(png != null) png.write(Gdx.files.local(outDir + "/" + armies[j] + "/" + name + '/' + SPECIES_PREFIX + armies[j] + "_look" + lk + "_" + name + ps + "_angle" + i + "_" + f + ".png"), pixmap);
-                                        if (look + j == 0)
-                                            if(png != null) png.write(Gdx.files.local(outDir + "/lab/" + name + '/' + SPECIES_PREFIX + name + ps + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                                         if(lk == canonicalLooks[j]) {
                                             pm.set(j * 32 + i * 8 + f, pixmap);
                                         } else {
@@ -396,7 +402,12 @@ public class ColorGuardAssetsBoxy extends ApplicationAdapter {
                                         frames = recEff.runEffect(60 << 1, 8, strength);
                                         for (int f = 0; f < frames.length; f++) {
                                             renderer.drawModelSimple(frames[f], i * 0.25f, 0f, 0f, f, 0.00f, 0.00f, 0.00f);
-                                            t.draw(renderer.palettePixmap, 0, 0);
+                                            if (png != null) {
+                                                png.write(Gdx.files.local(outDir + "/lab/" + attack + "_Receive/" + attack + "_Receive_" + strength + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
+                                                png.write(Gdx.files.local(outDir + "/lab/" + attack + "_Receive/" + attack + "_Receive_" + strength + "_shadow_angle" + i + "_" + f + ".png"), renderer.shadowPixmap);
+                                            }
+                                            renderer.shadowPixmap.drawPixmap(renderer.palettePixmap, 0, 0);
+                                            t.draw(renderer.shadowPixmap, 0, 0);
                                             int look = 0;
                                             for (int j = 0; j < armies.length; j++) {
                                                 fb.begin();
@@ -414,8 +425,6 @@ public class ColorGuardAssetsBoxy extends ApplicationAdapter {
                                                 fb.end();
                                                 pm.set(j * 32 + i * 8 + f, pixmap);
                                                 if(png != null) png.write(Gdx.files.local(outDir + "/" + armies[j] + "/" + attack + "_Receive/" + armies[j] + "_look" + look + "_" + attack + "_Receive_" + strength + "_angle" + i + "_" + f + ".png"), pixmap);
-                                                if (look + j == 0)
-                                                    if(png != null) png.write(Gdx.files.local(outDir + "/lab/" + attack + "_Receive/" + attack + "_Receive_" + strength + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                                             }
                                         }
                                     }
@@ -472,7 +481,14 @@ public class ColorGuardAssetsBoxy extends ApplicationAdapter {
                             Stuff.evolve(Stuff.STUFFS_B, voxels.grids.get(j), f);
                         }
                         renderer.drawModelSimple(voxels, i * 0.25f, 0f, 0f, f, 0.00f, 0.00f, 0.00f);
-                        t.draw(renderer.palettePixmap, 0, 0);
+                        if (png != null) {
+                            png.write(Gdx.files.local(outDir + "/lab/" + name + '/' + SPECIES_PREFIX + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
+                            png.write(Gdx.files.local(outDir + "/lab/" + name + '/' + SPECIES_PREFIX + name + "_shadow_angle" + i + "_" + f + ".png"), renderer.shadowPixmap);
+                        }
+                        if(VOX && i == 0)
+                            VoxIOExtended.writeVOX(outDir + "/vox/" + name + "/" + SPECIES_PREFIX + name + "_" + f + ".vox", VoxIOExtended.mergeModelSimple(voxels, f, 0, 0, 0), palette0, null);
+                        renderer.shadowPixmap.drawPixmap(renderer.palettePixmap, 0, 0);
+                        t.draw(renderer.shadowPixmap, 0, 0);
                         for (int j = 0; j < armies.length; j++) {
                             int look = canonicalLooks[j] * armies.length;
                             fb.begin();
@@ -492,13 +508,6 @@ public class ColorGuardAssetsBoxy extends ApplicationAdapter {
                             pm.set(j * 32 + i * 8 + f + 4, pixmap);
                             if (png != null)
                                 png.write(Gdx.files.local(outDir + "/" + armies[j] + "/" + name + '/' + SPECIES_PREFIX + armies[j] + "_look" + look + "_" + name + "_angle" + i + "_" + f + ".png"), pixmap);
-                            if (look + j == 0) {
-                                if (png != null)
-                                    png.write(Gdx.files.local(outDir + "/lab/" + name + '/' + SPECIES_PREFIX + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
-                                if(VOX && i == 0)
-                                    VoxIOExtended.writeVOX(outDir + "/vox/" + name + "/" + SPECIES_PREFIX + name + "_" + f + ".vox", VoxIOExtended.mergeModelSimple(voxels, f, 0, 0, 0), palette0, null);
-
-                            }
                         }
 //                png8.write(Gdx.files.local("out/" + name + '/' + name + "_angle" + i + ".png"), p, false, true);
                     }
@@ -550,7 +559,14 @@ public class ColorGuardAssetsBoxy extends ApplicationAdapter {
 
                             for (int f = 0; f < frames.length; f++) {
                                 renderer.drawModelSimple(frames[f], i * 0.25f, 0f, 0f, f, 0.00f, 0.00f, 0.00f);
-                                t.draw(renderer.palettePixmap, 0, 0);
+                                if (png != null) {
+                                    png.write(Gdx.files.local(outDir + "/lab/" + name + '/' + SPECIES_PREFIX + name + ps + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
+                                    png.write(Gdx.files.local(outDir + "/lab/" + name + '/' + SPECIES_PREFIX + name + ps + "_shadow_angle" + i + "_" + f + ".png"), renderer.shadowPixmap);
+                                }
+                                if(VOX && i == 0)
+                                    VoxIOExtended.writeVOX(outDir + "/vox/" + name + "/" + SPECIES_PREFIX + name + ps + "_" + f + ".vox", VoxIOExtended.mergeModelSimple(frames[f], f, 0, 0, 0), palette0, null);
+                                renderer.shadowPixmap.drawPixmap(renderer.palettePixmap, 0, 0);
+                                t.draw(renderer.shadowPixmap, 0, 0);
                                 for (int j = 0; j < armies.length; j++) {
                                     int look = canonicalLooks[j] * armies.length;
                                     fb.begin();
@@ -568,13 +584,6 @@ public class ColorGuardAssetsBoxy extends ApplicationAdapter {
                                     fb.end();
                                     pm.set(j * 32 + i * 8 + f, pixmap);
                                     if(png != null) png.write(Gdx.files.local(outDir + "/" + armies[j] + "/" + name + '/' + SPECIES_PREFIX + armies[j] + "_look" + look + "_" + name + ps + "_angle" + i + "_" + f + ".png"), pixmap);
-                                    if (look + j == 0) {
-                                        if (png != null)
-                                            png.write(Gdx.files.local(outDir + "/lab/" + name + '/' + SPECIES_PREFIX + name + ps + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
-                                        if(VOX && i == 0)
-                                            VoxIOExtended.writeVOX(outDir + "/vox/" + name + "/" + SPECIES_PREFIX + name + ps + "_" + f + ".vox", VoxIOExtended.mergeModelSimple(frames[f], f, 0, 0, 0), palette0, null);
-
-                                    }
                                 }
                                 byte[][][] g = frames[f].grids.get(0);
                                 for (int j = 1; j < frames[f].grids.size(); j++) {
@@ -600,7 +609,12 @@ public class ColorGuardAssetsBoxy extends ApplicationAdapter {
                                         frames = recEff.runEffect(60 << 1, 8, strength);
                                         for (int f = 0; f < frames.length; f++) {
                                             renderer.drawModelSimple(frames[f], i * 0.25f, 0f, 0f, f, 0.00f, 0.00f, 0.00f);
-                                            t.draw(renderer.palettePixmap, 0, 0);
+                                            if(png != null) {
+                                                png.write(Gdx.files.local(outDir + "/lab/" + attack + "_Receive/" + attack + "_Receive_" + strength + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
+                                                png.write(Gdx.files.local(outDir + "/lab/" + attack + "_Receive/" + attack + "_Receive_" + strength + "_shadow_angle" + i + "_" + f + ".png"), renderer.shadowPixmap);
+                                            }
+                                            renderer.shadowPixmap.drawPixmap(renderer.palettePixmap, 0, 0);
+                                            t.draw(renderer.shadowPixmap, 0, 0);
                                             for (int j = 0; j < armies.length; j++) {
                                                 int look = canonicalLooks[j] * armies.length;
                                                 fb.begin();
@@ -618,8 +632,6 @@ public class ColorGuardAssetsBoxy extends ApplicationAdapter {
                                                 fb.end();
                                                 pm.set(j * 32 + i * 8 + f, pixmap);
                                                 if(png != null) png.write(Gdx.files.local(outDir + "/" + armies[j] + "/" + attack + "_Receive/" + armies[j] + "_look" + look + "_" + attack + "_Receive_" + strength + "_angle" + i + "_" + f + ".png"), pixmap);
-                                                if (look + j == 0)
-                                                    if(png != null) png.write(Gdx.files.local(outDir + "/lab/" + attack + "_Receive/" + attack + "_Receive_" + strength + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                                             }
                                         }
                                     }
@@ -700,7 +712,12 @@ public class ColorGuardAssetsBoxy extends ApplicationAdapter {
 //                    Stuff.evolve(Stuff.STUFFS_B, fireSeed, f);
 //                    voxels.grids.add(fireSeed);
                     renderer.drawModelSimple(voxels, i * 0.25f, 0f, 0f, f, 0.00f, 0.00f, 0.00f);
-                    t.draw(renderer.palettePixmap, 0, 0);
+                    if(png != null) {
+                        png.write(Gdx.files.local(outDir + "/lab/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
+                        png.write(Gdx.files.local(outDir + "/lab/" + name + '/' + name + "_shadow_angle" + i + "_" + f + ".png"), renderer.shadowPixmap);
+                    }
+                    renderer.shadowPixmap.drawPixmap(renderer.palettePixmap, 0, 0);
+                    t.draw(renderer.shadowPixmap, 0, 0);
                     fb.begin();
                     palette.bind(1);
                     ScreenUtils.clear(1f, 1f, 1f, 0f);
@@ -716,7 +733,6 @@ public class ColorGuardAssetsBoxy extends ApplicationAdapter {
                     fb.end();
                     pm.add(pixmap);
                     if(png != null) png.write(Gdx.files.local(outDir + "/Effects/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), pixmap);
-                    if(png != null) png.write(Gdx.files.local(outDir + "/lab/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                 }
             }
             if(apng != null) apng.write(Gdx.files.local(outDir + "/animated/" + name + '/' + name + ".png"), pm, 8);
@@ -744,6 +760,12 @@ public class ColorGuardAssetsBoxy extends ApplicationAdapter {
                     voxels = original.copy();
                     for (int f = 0; f < 1; f++) {
                         renderer.drawModelSimple(voxels, i * 0.25f, 0f, 0f, f, 0.00f, 0.00f, 0.00f);
+                        if (n == 0)
+                            if(png != null) {
+                                png.write(Gdx.files.local(outDir + "/lab/Landscape/" + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
+//                                png.write(Gdx.files.local(outDir + "/lab/Landscape/" + name + "_shadow_angle" + i + "_" + f + ".png"), renderer.shadowPixmap);
+                            }
+//                        renderer.shadowPixmap.drawPixmap(renderer.palettePixmap, 0, 0);
                         t.draw(renderer.palettePixmap, 0, 0);
                         fb.begin();
                         palette.bind(1);
@@ -760,8 +782,6 @@ public class ColorGuardAssetsBoxy extends ApplicationAdapter {
                         fb.end();
                         try {
                             if(png != null) png.write(Gdx.files.local(outDir + "/Landscape/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), pixmap);
-                            if (n == 0)
-                                if(png != null) png.write(Gdx.files.local(outDir + "/lab/Landscape/" + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                         } finally {
                             pixmap.dispose();
                         }
