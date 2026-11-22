@@ -10,10 +10,7 @@ import com.github.tommyettinger.colorful.oklab.ColorTools;
 import com.github.tommyettinger.digital.ArrayTools;
 import com.github.tommyettinger.digital.RoughMath;
 import com.github.tommyettinger.ds.IntObjectMap;
-import com.github.yellowstonegames.grid.BlueNoise;
-import com.github.yellowstonegames.grid.CyclicNoise;
-import com.github.yellowstonegames.grid.IntPointHash;
-import com.github.yellowstonegames.grid.Noise;
+import com.github.yellowstonegames.grid.*;
 import isonomicon.app.AppConfig;
 import isonomicon.io.extended.GroupChunk;
 import isonomicon.io.extended.ShapeModel;
@@ -38,14 +35,14 @@ import static com.github.tommyettinger.digital.TrigTools.sinTurns;
 public class BoxyRenderer {
     public static int shrink = 2;
     public static int distortHXY = 2, distortVXY = 1, distortVZ = 2; // ground truth for isometric
-    public static boolean CORNER_OUTLINES = false;
+    public static boolean CORNER_OUTLINES = true;
     public static int outline = 4;
     public static final float fidget = 0f;
 //    public static final float fidget = distortVZ == 2 ? 0.5f : 0f;
 
     public final Stuff[] stuffs;
-    public Pixmap palettePixmap;
-    public ByteBuffer buffer;
+    public Pixmap palettePixmap, shadowPixmap;
+    public ByteBuffer buffer, shadowBuffer;
     public int[][] depths, voxels, render;
     public byte[][] outlines;
     public VoxMaterial[][] materials;
@@ -57,6 +54,7 @@ public class BoxyRenderer {
     public boolean lighting = true;
     public boolean shadows = Tools3D.SHADOWS;
     public int size;
+    public CellularAutomaton blobShadow;
     public float neutral = 1f;
 
     public static byte FLOOR_INDEX = (byte) 240;
@@ -86,6 +84,8 @@ public class BoxyRenderer {
         palettePixmap = new Pixmap(w>>>shrink, h>>>shrink, Pixmap.Format.RGBA8888);
         palettePixmap.setBlending(Pixmap.Blending.None);
         buffer = palettePixmap.getPixels();
+        shadowPixmap = new Pixmap(w>>>shrink, h>>>shrink, Pixmap.Format.RGBA8888);
+        shadowPixmap.setBlending(Pixmap.Blending.SourceOver);
         render =   new int[w][h];
         outlines = new byte[w][h];
         depths =   new int[w][h];
@@ -101,6 +101,7 @@ public class BoxyRenderer {
         shadeX = fill(-1f, size * 4, size * 4);
         shadeZ = fill(-1f, size * 4, size * 4);
         this.stuffs = stuffs;
+        blobShadow = new CellularAutomaton(size, size);
 
         if(computeNormals)
         {
@@ -320,9 +321,9 @@ public class BoxyRenderer {
 //                            outlineIndices[ax][ay] = 0;
                         }
                     }
-                    else {
-                        if(indices[ax][ay] == 0) indices[ax][ay] = FLOOR_INDEX;
-                    }
+//                    else {
+//                        if(indices[ax][ay] == 0) indices[ax][ay] = FLOOR_INDEX;
+//                    }
 //                                Coloring.darken(palette[voxel & 255], 0.375f - emit);
 //                                Coloring.adjust(palette[voxel & 255], 0.625f + emit, neutral);
 //                    else
@@ -352,6 +353,8 @@ public class BoxyRenderer {
     public BoxyRenderer clear() {
         palettePixmap.setColor(0);
         palettePixmap.fill();
+        shadowPixmap.setColor(0);
+        shadowPixmap.fill();
         fill(depths, 0);
         fill(render, 0);
         fill(outlines, (byte) 0);
@@ -393,7 +396,8 @@ public class BoxyRenderer {
         final int threshold = 20+shrink*6;
         palettePixmap.setColor(0);
         palettePixmap.fill();
-
+        shadowPixmap.setColor(0);
+        shadowPixmap.fill();
         if(computeNormals) {
             ArrayTools.fill(normals, 0f);
             normalMap.setColor(0);
@@ -411,6 +415,27 @@ public class BoxyRenderer {
         final float x_z = -sPitch, y_z = cPitch * sRoll, z_z = cPitch * cRoll;
         VoxMaterial m;
         final int step = 1 << shrink;
+
+        shadowPixmap.setColor(SHADOW_INDEX << 24 | 96 << 16 | 255);
+
+        for (vx = 0; vx < size; vx++) {
+            for (vy = 0; vy < size; vy++) {
+                if (blobShadow.current.contains(vx, vy)) {
+                    ox = vx - hsp;
+                    oy = vy - hsp;
+                    oz = 0;
+                    tx = ox * x_x + oy * y_x + oz * z_x + size + hs;
+                    ty = ox * x_y + oy * y_y + oz * z_y + size + hs;
+
+                    final int
+                            xx = (int) (0.5f + Math.max(0, (size + ty - tx) * distortHXY + 1)),
+                            yy = (int) (0.5f + Math.max(0, (size * ((distortVXY) * 3) - distortVXY * (tx + ty)) + 1));
+
+                    shadowPixmap.drawPixel(xx, yy);
+                }
+            }
+        }
+
         for (int sx = 0; sx <= xSize; sx++) {
             for (int sy = 0; sy <= ySize; sy++) {
                 if((v = voxels[sx][sy]) != -1) {
@@ -485,11 +510,10 @@ public class BoxyRenderer {
                                 }
                             }
                         }
-                        if(shadows){
-                            if(indices[sx][sy] == FLOOR_INDEX && shadeZ[fx][fy] <= hs + 0.5f)
-//                            if(indices[sx][sy] == FLOOR_INDEX && (vx <= step * 4 || vy <= step * 4 || vx >= xSize - step * 4 || vy >= ySize - step * 4))
-                                shading[sx][sy] = 1024f;
-                        }
+//                        if(shadows){
+//                            if(indices[sx][sy] == FLOOR_INDEX && shadeZ[fx][fy] <= hs + 0.5f)
+//                                shading[sx][sy] = 1024f;
+//                        }
                     }
                 }
             }
@@ -509,18 +533,18 @@ public class BoxyRenderer {
 //                            shade << 16 |
 //                            sat << 8 | 255);
                     int idx = (y >>> shrink) * palettePixmap.getWidth() + (x >>> shrink) << 2;
-                    if (shadows && index == FLOOR_INDEX) {
-                        buffer.put(idx, SHADOW_INDEX); // shadow stuff
-                        buffer.put(idx + 1, (byte) 96);
-                        buffer.put(idx + 2, (byte) 0);
-//                        buffer.put(idx + 3, (byte) (255 - shade));
-                        buffer.put(idx + 3, (byte) Math.min(Math.max(480 - (shade & 255) * 8, 0), 255));
-                    } else {
+//                    if (shadows && index == FLOOR_INDEX) {
+//                        buffer.put(idx, SHADOW_INDEX); // shadow stuff
+//                        buffer.put(idx + 1, (byte) 96);
+//                        buffer.put(idx + 2, (byte) 0);
+////                        buffer.put(idx + 3, (byte) (255 - shade));
+//                        buffer.put(idx + 3, (byte) Math.min(Math.max(480 - (shade & 255) * 8, 0), 255));
+//                    } else {
                         buffer.put(idx, index);
                         buffer.put(idx + 1, shade);
                         buffer.put(idx + 2, sat);
                         buffer.put(idx + 3, (byte) 255);
-                    }
+//                    }
                 }
                 else if(midShading[x][y] > 0f) {
                     int shade = (int) (Math.min(Math.max((shading[x][y] + logisticky(midShading[x][y])) * 0.625f + 0.1328125f, 0f), 1f) * 255.999f);
@@ -733,17 +757,34 @@ public class BoxyRenderer {
         final float x_y = sYaw * cPitch, y_y = sYaw * sPitch * sRoll + cYaw * cRoll, z_y = sYaw * sPitch * cRoll - cYaw * sRoll;
         final float x_z = -sPitch, y_z = cPitch * sRoll, z_z = cPitch * cRoll;
         if (shadows) {
+//            for (int x = 0; x < size; x++) {
+//                for (int y = 0; y < size; y++) {
+//                    ox = x - hs + fidget;
+//                    oy = y - hs + fidget;
+//                    oz = 0;
+//                    splat(ox * x_x + oy * y_x + oz * z_x + size + translateX,
+//                            ox * x_y + oy * y_y + oz * z_y + size + translateY,
+//                            0,
+//                            x, y, 0, FLOOR_INDEX, frame, translateX, translateY, 0);
+//                }
+//            }
+            blobShadow.current.clear();
             for (int x = 0; x < size; x++) {
                 for (int y = 0; y < size; y++) {
-                    ox = x - hs + fidget;
-                    oy = y - hs + fidget;
-                    oz = 0;
-                    splat(ox * x_x + oy * y_x + oz * z_x + size + translateX,
-                            ox * x_y + oy * y_y + oz * z_y + size + translateY,
-                            0,
-                            x, y, 0, FLOOR_INDEX, frame, translateX, translateY, 0);
+                    for (int z = 0; z < size; z++) {
+                        final byte v = colors[x][y][z];
+                        if (v != 0){
+                            if(stuffs[Math.min(v & 255, stuffs.length - 1)].material.getTrait(VoxMaterial.MaterialTrait._emit) == 0f){
+                                blobShadow.current.insert(x, y);
+                            }
+                            break;
+                        }
+                    }
                 }
             }
+            blobShadow.current.expand();
+            blobShadow.runBasicSmoothing().expand();
+            blobShadow.runBasicSmoothing();
         }
         for (int z = 0; z < size; z++) {
             for (int x = 0; x < size; x++) {

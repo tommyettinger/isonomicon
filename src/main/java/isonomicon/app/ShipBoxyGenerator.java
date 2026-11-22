@@ -47,7 +47,7 @@ public class ShipBoxyGenerator extends ApplicationAdapter {
     private SpriteBatch batch;
     private Texture palette;
     public ShipBoxyGenerator(String[] args){
-        BoxyRenderer.shrink = 1;
+        BoxyRenderer.shrink = 2;
         VoxIOExtended.GENERAL = true;
         VoxIOExtended.USE_MATERIALS = false;
         VoxIOExtended.SCALE = true;
@@ -188,7 +188,8 @@ public class ShipBoxyGenerator extends ApplicationAdapter {
 //                    }
 //                    renderer.drawModelSimple(voxels, i * 0.125f, 0f, 0f, f, 0.00f, 0.00f, Tools3D.wiggle(f));
 
-                    t.draw(renderer.palettePixmap, 0, 0);
+                    renderer.shadowPixmap.drawPixmap(renderer.palettePixmap, 0, 0);
+                    t.draw(renderer.shadowPixmap, 0, 0);
                     FrameBuffer fb = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), false);
                     fb.begin();
                     palette.bind(1);
@@ -242,7 +243,9 @@ public class ShipBoxyGenerator extends ApplicationAdapter {
                     renderer.drawModelSimple(voxels, i * 0x1p-7f + 0.125f, 0f, 0f, i >>> 2 & 3, 0, 0, 0);
                     // Use this to debug when rotation is a problem.
 //                    renderer.drawModelSimple(voxels, 0.5f + 0.125f, 0f, 0f, i >>> 2 & 3, 0, 0, 0);
-                    t.draw(renderer.palettePixmap, 0, 0);
+//                    t.draw(renderer.palettePixmap, 0, 0);
+                    renderer.shadowPixmap.drawPixmap(renderer.palettePixmap, 0, 0);
+                    t.draw(renderer.shadowPixmap, 0, 0);
                     FrameBuffer fb = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), false);
                     fb.begin();
                     palette.bind(1);
