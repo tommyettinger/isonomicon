@@ -188,6 +188,11 @@ public class ShipBoxyGenerator extends ApplicationAdapter {
 //                    }
 //                    renderer.drawModelSimple(voxels, i * 0.125f, 0f, 0f, f, 0.00f, 0.00f, Tools3D.wiggle(f));
 
+                    png.setFlipY(true);
+                    png.write(Gdx.files.local("out/b/shipBoxy_lab/" + date + "/" + output + '/' + output + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
+                    png.write(Gdx.files.local("out/b/shipBoxy_lab/" + date + "/" + output + '/' + output + "_shadow_angle" + i + "_" + f + ".png"), renderer.shadowPixmap);
+                    png.setFlipY(false);
+
                     renderer.shadowPixmap.drawPixmap(renderer.palettePixmap, 0, 0);
                     t.draw(renderer.shadowPixmap, 0, 0);
                     FrameBuffer fb = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), false);
@@ -210,7 +215,6 @@ public class ShipBoxyGenerator extends ApplicationAdapter {
                     fb.end();
                     pm.add(pixmap);
                     png.write(Gdx.files.local("out/b/shipBoxy/" + date + "/" + output + '/' + output + "_angle" + i + "_" + f + ".png"), pixmap);
-                    png.write(Gdx.files.local("out/b/shipBoxy_lab/" + date + "/" + output + '/' + output + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
                     fb.dispose();
                 }
                 pm.insertRange(pm.size - 4, 4);
