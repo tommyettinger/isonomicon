@@ -101,7 +101,7 @@ public class BoxyRenderer {
         shadeX = fill(-1f, size * 4, size * 4);
         shadeZ = fill(-1f, size * 4, size * 4);
         this.stuffs = stuffs;
-        blobShadow = new CellularAutomaton(size, size);
+        blobShadow = new CellularAutomaton(size + 4, size + 4);
 
         if(computeNormals)
         {
@@ -417,11 +417,11 @@ public class BoxyRenderer {
         final int step = 1 << shrink;
 
         int deepShadow = SHADOW_INDEX << 24 | 96 << 16 | 160;
-        int weakShadow = SHADOW_INDEX << 24 | 96 << 16 | 90;
+        int weakShadow = SHADOW_INDEX << 24 | 96 << 16 | 64;
         Region fringeShadow = blobShadow.current.copy().fringe();
         shadowPixmap.setColor(weakShadow);
-        for (vx = 0; vx < size; vx++) {
-            for (vy = 0; vy < size; vy++) {
+        for (vx = 0; vx < size + 4; vx++) {
+            for (vy = 0; vy < size + 4; vy++) {
                 if (fringeShadow.contains(vx, vy)) {
                     ox = vx - hsp;
                     oy = vy - hsp;
@@ -433,16 +433,16 @@ public class BoxyRenderer {
                             xx = (int) (0.5f + Math.max(0, (size + ty - tx) * distortHXY + 1)),
                             yy = (int) (0.5f + Math.max(0, (size * ((distortVXY) * 3) - distortVXY * (tx + ty)) + 1));
 
-                    shadowPixmap.fillCircle(xx >> shrink, yy >> shrink, 4);
+                    shadowPixmap.fillCircle((xx >> shrink) + 4, (yy >> shrink) + 4, 4);
                 }
             }
         }
         shadowPixmap.setColor(deepShadow);
-        for (vx = 0; vx < size; vx++) {
-            for (vy = 0; vy < size; vy++) {
+        for (vx = 0; vx < size + 4; vx++) {
+            for (vy = 0; vy < size + 4; vy++) {
                 if (blobShadow.current.contains(vx, vy)) {
-                    ox = vx - hsp;
-                    oy = vy - hsp;
+                    ox = vx - hsp - 2;
+                    oy = vy - hsp - 2;
                     oz = 0;
                     tx = ox * x_x + oy * y_x + oz * z_x + size;
                     ty = ox * x_y + oy * y_y + oz * z_y + size;
@@ -451,7 +451,7 @@ public class BoxyRenderer {
                             xx = (int) (0.5f + Math.max(0, (size + ty - tx) * distortHXY + 1)),
                             yy = (int) (0.5f + Math.max(0, (size * ((distortVXY) * 3) - distortVXY * (tx + ty)) + 1));
 
-                    shadowPixmap.fillCircle(xx >> shrink, yy >> shrink, 3);
+                    shadowPixmap.fillCircle((xx >> shrink) + 1, (yy >> shrink) + 1, 1);
                 }
             }
         }
@@ -788,14 +788,13 @@ public class BoxyRenderer {
 //                            x, y, 0, FLOOR_INDEX, frame, translateX, translateY, 0);
 //                }
 //            }
-            blobShadow.current.clear();
             for (int x = 0; x < size; x++) {
                 for (int y = 0; y < size; y++) {
                     for (int z = 0; z < size; z++) {
                         final byte v = colors[x][y][z];
                         if (v != 0){
                             if(stuffs[Math.min(v & 255, stuffs.length - 1)].material.getTrait(VoxMaterial.MaterialTrait._emit) == 0f){
-                                blobShadow.current.insert(x, y);
+                                blobShadow.current.insert(x + 2, y + 2);
                             }
                             break;
                         }
@@ -826,13 +825,14 @@ public class BoxyRenderer {
 
     public Pixmap drawSplats(byte[][][] colors, float yaw, float pitch, float roll, int frame,
                              float translateX, float translateY, float translateZ) {
+        blobShadow.current.clear();
         splatOnly(colors, yaw, pitch, roll, frame, translateX, translateY, translateZ);
         return blit(yaw, pitch, roll, frame);
     }
 
     public Pixmap drawModel(VoxModel model, float yaw, float pitch, float roll, int frame,
                             float translateX, float translateY, float translateZ){
-
+        blobShadow.current.clear();
         for(GroupChunk gc : model.groupChunks.values()) {
             for(int ch : gc.childIds) {
                 TransformChunk tc = model.transformChunks.get(ch);
@@ -900,6 +900,7 @@ public class BoxyRenderer {
     public Pixmap drawModelSimple(VoxModel model, float yaw, float pitch, float roll, int frame,
                                   float translateX, float translateY, float translateZ){
         boolean foundAnything = false;
+        blobShadow.current.clear();
         ArrayList<byte[][][]> grids = new ArrayList<>(model.grids.size());
         ArrayList<IntObjectMap<float[]>> links = new ArrayList<>(model.links.size());
         for (int i = 0; i < model.grids.size(); i++) {
