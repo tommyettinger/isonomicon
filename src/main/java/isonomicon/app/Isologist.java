@@ -34,6 +34,7 @@ import java.util.ArrayList;
 public class Isologist extends ApplicationAdapter {
     public static final int SCREEN_WIDTH = 512;//640;
     public static final int SCREEN_HEIGHT = 512;//720;
+    public static final boolean TURNTABLE = true;
     private BoxyRenderer renderer;
     private VoxModel voxels;
     private String name;
@@ -212,7 +213,60 @@ public class Isologist extends ApplicationAdapter {
                     pix.dispose();
             }
             pm.clear();
+            if(TURNTABLE) {
+                renderer.clear();
+
+                voxels.grids.clear();
+                for (int j = 0; j < original.size(); j++) {
+                    voxels.grids.add(Tools3D.deepCopy(original.get(j)));
+                }
+                for (int i = 0; i < 128; i++) {
+                    if((i & 3) == 0) {
+                        for (int j = 0; j < voxels.grids.size(); j++) {
+                            Stuff.evolve(Stuff.STUFFS_B, voxels.grids.get(j), i >>> 2 & 3);
+                        }
+                    }
+                    renderer.drawModelSimple(voxels, i * 0x1p-7f + 0.125f, 0f, 0f, i >>> 2 & 3, 0, 0, 0);
+                    // Use this to debug when rotation is a problem.
+//                    renderer.drawModelSimple(voxels, 0.5f + 0.125f, 0f, 0f, i >>> 2 & 3, 0, 0, 0);
+//                    t.draw(renderer.palettePixmap, 0, 0);
+                    renderer.shadowPixmap.drawPixmap(renderer.palettePixmap, 0, 0);
+                    t.draw(renderer.shadowPixmap, 0, 0);
+                    FrameBuffer fb = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), false);
+                    fb.begin();
+                    palette.bind(1);
+                    ScreenUtils.clear(1f, 1f, 1f, 0f);
+                    batch.begin();
+
+                    indexShader.setUniformi("u_texPalette", 1);
+                    Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
+                    batch.setColor(0f, 0.5f, 0.5f, 1f);
+
+                    batch.draw(t, 0, t.getHeight(), t.getWidth(), -t.getHeight());
+                    batch.end();
+                    pixmap = createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
+                    fb.end();
+                    pm.add(pixmap);
+                    fb.dispose();
+                }
+                if(gif != null) {
+                    BoxyRenderer.monoAlpha(pm);
+                    analyzed.analyze(pm, 75.0, 256);
+                    gif.palette = analyzed;
+                    gif.write(Gdx.files.local("out/boxy/specialized/" + output + '/' + output + "_Turntable.gif"), pm, 24);
+//                    apng.write(Gdx.files.local("out/b/specialized/" + output + '/' + output + ".png"), pm, 8);
+                    gif.palette = aurora;
+                    gif.write(Gdx.files.local("out/boxy/specializedAurora/" + output + '/' + output + "_Turntable.gif"), pm, 24);
+                    gif.palette = yam4;
+                    gif.write(Gdx.files.local("out/boxy/specializedYam4/" + output + '/' + output + "_Turntable.gif"), pm, 24);
+                }
+                for (Pixmap pix : pm) {
+                    if (!pix.isDisposed())
+                        pix.dispose();
+                }
+            }
             t.dispose();
+
         }
         System.out.println("Finished in " + TimeUtils.timeSinceMillis(startTime) * 0.001 + " seconds.");
         Gdx.app.exit();
