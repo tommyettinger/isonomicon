@@ -42,7 +42,7 @@ public class BoxyRenderer {
 
     public final Stuff[] stuffs;
     public Pixmap palettePixmap, shadowPixmap;
-    public ByteBuffer buffer, shadowBuffer;
+    public ByteBuffer buffer;
     public int[][] depths, voxels, render;
     public byte[][] outlines;
     public VoxMaterial[][] materials;
@@ -101,7 +101,7 @@ public class BoxyRenderer {
         shadeX = fill(-1f, size * 4, size * 4);
         shadeZ = fill(-1f, size * 4, size * 4);
         this.stuffs = stuffs;
-        blobShadow = new CellularAutomaton(size + 4, size + 4);
+        blobShadow = new CellularAutomaton(size + (2 << shrink), size + (2 << shrink));
 
         if(computeNormals)
         {
@@ -296,7 +296,6 @@ public class BoxyRenderer {
                 xx = (int)(0.5f + Math.max(0, (size + yPos - xPos) * distortHXY + 1)),
                 yy = (int)(0.5f + Math.max(0, (zPos * distortVZ + size * ((distortVXY) * 3) - distortVXY * (xPos + yPos)) + 1 + rise * frame)),
                 depth = (int)(0.5f + (xPos + yPos + zPos)*2);
-//                depth = (int)(0.5f + (xPos + yPos) * distortHXY + zPos * distortVZ);
         boolean drawn = false;
         final float hs = size * 0.5f;
         for (int x = lowX, ax = xx; x <= highX && ax < render.length; x++, ax++) {
@@ -420,8 +419,8 @@ public class BoxyRenderer {
         int weakShadow = SHADOW_INDEX << 24 | 96 << 16 | 64;
         Region fringeShadow = blobShadow.current.copy().fringe();
         shadowPixmap.setColor(weakShadow);
-        for (vx = 0; vx < size + 4; vx++) {
-            for (vy = 0; vy < size + 4; vy++) {
+        for (vx = 0; vx < size + (2 << shrink); vx++) {
+            for (vy = 0; vy < size + (2 << shrink); vy++) {
                 if (fringeShadow.contains(vx, vy)) {
                     ox = vx - hsp;
                     oy = vy - hsp;
@@ -438,8 +437,8 @@ public class BoxyRenderer {
             }
         }
         shadowPixmap.setColor(deepShadow);
-        for (vx = 0; vx < size + 4; vx++) {
-            for (vy = 0; vy < size + 4; vy++) {
+        for (vx = 0; vx < size + (2 << shrink); vx++) {
+            for (vy = 0; vy < size + (2 << shrink); vy++) {
                 if (blobShadow.current.contains(vx, vy)) {
                     ox = vx - hsp - 2;
                     oy = vy - hsp - 2;
@@ -794,7 +793,7 @@ public class BoxyRenderer {
                         final byte v = colors[x][y][z];
                         if (v != 0){
                             if(stuffs[Math.min(v & 255, stuffs.length - 1)].material.getTrait(VoxMaterial.MaterialTrait._emit) == 0f){
-                                blobShadow.current.insert(x + 2, y + 2);
+                                blobShadow.current.insert(x + (1 << shrink), y + (1 << shrink));
                             }
                             break;
                         }
