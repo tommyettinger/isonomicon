@@ -422,8 +422,8 @@ public class BoxyRenderer {
         for (vx = 0; vx < size + (2 << shrink); vx++) {
             for (vy = 0; vy < size + (2 << shrink); vy++) {
                 if (fringeShadow.contains(vx, vy)) {
-                    ox = vx - hsp;
-                    oy = vy - hsp;
+                    ox = vx - hsp - (1 << shrink);
+                    oy = vy - hsp - (1 << shrink);
                     oz = 0;
                     tx = ox * x_x + oy * y_x + oz * z_x + size;
                     ty = ox * x_y + oy * y_y + oz * z_y + size;
@@ -432,7 +432,7 @@ public class BoxyRenderer {
                             xx = (int) (0.5f + Math.max(0, (size + ty - tx) * distortHXY + 1)),
                             yy = (int) (0.5f + Math.max(0, (size * ((distortVXY) * 3) - distortVXY * (tx + ty)) + 1));
 
-                    shadowPixmap.fillCircle((xx >> shrink) + 4, (yy >> shrink) + 4, 4);
+                    shadowPixmap.fillCircle((xx >> shrink), (yy >> shrink), 4);
                 }
             }
         }
@@ -450,7 +450,7 @@ public class BoxyRenderer {
                             xx = (int) (0.5f + Math.max(0, (size + ty - tx) * distortHXY + 1)),
                             yy = (int) (0.5f + Math.max(0, (size * ((distortVXY) * 3) - distortVXY * (tx + ty)) + 1));
 
-                    shadowPixmap.fillCircle((xx >> shrink) + 1, (yy >> shrink) + 1, 1);
+                    shadowPixmap.fillCircle((xx >> shrink), (yy >> shrink), 1);
                 }
             }
         }
