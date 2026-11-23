@@ -46,8 +46,11 @@ public class ColorGuardAssetsBoxy extends ApplicationAdapter {
      * Light outlines instead of black outlines.
      */
     public static boolean ALTERNATE = BoxyRenderer.outline == 2;
-    public static final String SPECIES = "human";
-    public static final String SPECIES_PREFIX = "";
+//    public static final String SPECIES = "human";
+//    public static final String SPECIES_PREFIX = "";
+//    public static final float DAMAGED = 0f;
+    public static final String SPECIES = "helmet";
+    public static final String SPECIES_PREFIX = "Helmet_";
     public static final float DAMAGED = 0f;
 //    public static final String SPECIES = "zombie";
 //    public static final String SPECIES_PREFIX = "Zombie_";
