@@ -71,14 +71,16 @@ public class Isologist extends ApplicationAdapter {
 //            inputs = new String[]{"b/vox/Figure_Split.vox", "palettes/b/TanClothDarkSkin.png"};
 //            inputs = new String[]{"b/vox/Damned.vox", "palettes/b/CherrySkinDarkCloth.png", "Damned"};
 //            inputs = new String[]{"b/vox/Direction_Cube.vox", "palettes/b/TanClothDarkSkin.png"};
-            inputs = new String[]{"b/vox/Lomuk.vox", "palettes/b/BlueFurCyanCrystal.png", "Lomuk"};
+//            inputs = new String[]{"b/vox/Lomuk.vox", "palettes/b/BlueFurCyanCrystal.png", "Lomuk"};
 
-//            inputs = new String[]{
-//                    "b/vox/Box.vox", "palettes/palettes-b.png", "Box",
-//                    "b/vox/Direction_Cube.vox", "palettes/b/TanClothDarkSkin.png", "Direction_Cube",
-//                    "b/vox/Lomuk.vox", "palettes/b/BlueFurCyanCrystal.png", "Lomuk",
-//                    "b/vox/Damned.vox", "palettes/b/CherrySkinDarkCloth.png", "Damned",
-//                    "b/vox/Figure.vox", "palettes/b/TanClothDarkSkin.png", "Figure"};
+            inputs = new String[]{
+                    "b/vox/Lomuk.vox", "palettes/b/BlueFurCyanCrystal.png", "Lomuk",
+                    "b/vox/Box.vox", "palettes/palettes-b.png", "Box",
+                    "b/vox/Tree.vox", "palettes/palettes-b.png", "Tree",
+                    "b/vox/Direction_Cube.vox", "palettes/palettes-b.png", "Direction_Cube",
+                    "b/vox/Damned.vox", "palettes/b/CherrySkinDarkCloth.png", "Damned",
+//                    "b/vox/Figure.vox", "palettes/b/TanClothDarkSkin.png", "Figure",
+            };
             if(!new File("specialized/" + inputs[0]).exists()) {
                 System.out.println("File not found: specialized/" + inputs[0]);
                 System.exit(0);
@@ -106,12 +108,10 @@ public class Isologist extends ApplicationAdapter {
 //        Gdx.files.local("out/vox/").mkdirs();
         png = new FastPNG();
         png.setCompression(2); // we are likely to compress these with something better, like oxipng.
-        png.setFlipY(false);
 //        png8 = new PNG8();
         gif = new AnimatedGif();
         gif.setDitherAlgorithm(AppConfig.DITHER);
 
-        gif.setFlipY(false);
 //        apng = new AnimatedPNG();
 //        apng.setCompression(2);
 //        apng.setFlipY(false);
@@ -172,7 +172,8 @@ public class Isologist extends ApplicationAdapter {
                         Stuff.evolve(Stuff.STUFFS_B, voxels.grids.get(j), f);
                     }
                     renderer.drawModelSimple(voxels, i * 0.25f, 0f, 0f, f, 0, 0, 0);
-                    t.draw(renderer.palettePixmap, 0, 0);
+                    renderer.shadowPixmap.drawPixmap(renderer.palettePixmap, 0, 0);
+                    t.draw(renderer.shadowPixmap, 0, 0);
                     FrameBuffer fb = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), false);
                     fb.begin();
                     palette.bind(1);
@@ -183,7 +184,7 @@ public class Isologist extends ApplicationAdapter {
                     Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
                     batch.setColor(0f, 0.5f, 0.5f, 1f);
 
-                    batch.draw(t, 0, 0, t.getWidth(), t.getHeight());
+                    batch.draw(t, 0, t.getHeight(), t.getWidth(), -t.getHeight());
                     batch.end();
 
 //                    pixmap = Pixmap.createFromFrameBuffer(0, 0, t.getWidth(), t.getHeight());
@@ -193,9 +194,7 @@ public class Isologist extends ApplicationAdapter {
                     fb.end();
                     pm.add(pixmap);
                     png.write(Gdx.files.local("out/boxy/specialized/" + output + '/' + output + "_angle" + i + "_" + f + ".png"), pixmap);
-                    png.setFlipY(true);
                     png.write(Gdx.files.local("out/boxy/special_lab/" + name + '/' + name + "_angle" + i + "_" + f + ".png"), renderer.palettePixmap);
-                    png.setFlipY(false);
                     fb.dispose();
                 }
                 pm.insertRange(pm.size - 4, 4);
