@@ -779,7 +779,7 @@ public class ColorGuardAssetsBoxy extends ApplicationAdapter {
 
                         indexShader.setUniformi("u_texPalette", 1);
                         Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
-                        batch.setColor((168 + n) / 255f, 0.625f, 0.5f, 1f);
+                        batch.setColor((176 + n) / 255f, 0.625f, 0.5f, 1f);
 
                         batch.draw(t, 0, t.getHeight(), t.getWidth(), -t.getHeight());
                         batch.end();
