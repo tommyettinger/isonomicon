@@ -363,10 +363,10 @@ public class Stuff {
             new Stuff("unused 151", 151, "Transparency 1.0"),
             new Stuff("unused 152", 152, "Transparency 1.0"),
             new Stuff("broken glass", 153, 25, "Roughness 0.7 Reflection 0.45 Disperse -0.25"), /*light azure*/
-            new Stuff("glowing mark 0", 154, 27, "Roughness 0.0 Reflection 0.0 Emission 0.25", 155, 1), /*light blue*/
-            new Stuff("glowing mark 1", 155, 27, "Roughness 0.0 Reflection 0.0 Emission 0.45", 156, 1),
-            new Stuff("glowing mark 2", 156, 27, "Roughness 0.0 Reflection 0.0 Emission 0.65", 157, 1),
-            new Stuff("glowing mark 3", 157, 27, "Roughness 0.0 Reflection 0.0 Emission 0.45", 154, 1), /*dark blue*/
+            new Stuff("glowing mark 0", 154, 27, "Roughness 0.0 Reflection 0.0 Emission 0.1", 155, 1), /*light blue*/
+            new Stuff("glowing mark 1", 155, 27, "Roughness 0.0 Reflection 0.0 Emission 0.2", 156, 1),
+            new Stuff("glowing mark 2", 156, 27, "Roughness 0.0 Reflection 0.0 Emission 0.3", 157, 1),
+            new Stuff("glowing mark 3", 157, 27, "Roughness 0.0 Reflection 0.0 Emission 0.2", 154, 1), /*dark blue*/
             new Stuff("unused 158", 158, "Transparency 1.0"), /*dark violet*/
             new Stuff("unused 159", 159, "Transparency 1.0"),
             new Stuff("unused 160", 160, "Transparency 1.0"),
@@ -382,9 +382,9 @@ public class Stuff {
             new Stuff("unused 170", 170, "Transparency 1.0"),
             new Stuff("unused 171", 171, "Transparency 1.0"), /*light pink*/
             new Stuff("glowing base 0", 172, 28, "Roughness 0.0 Reflection 0.0 Emission 0.2", 173, 1), /*light tan*/
-            new Stuff("glowing base 1", 173, 28, "Roughness 0.0 Reflection 0.0 Emission 0.4", 174, 1),
-            new Stuff("glowing base 2", 174, 28, "Roughness 0.0 Reflection 0.0 Emission 0.6", 175, 1),
-            new Stuff("glowing base 3", 175, 28, "Roughness 0.0 Reflection 0.0 Emission 0.4", 172, 1), /*dark tan*/
+            new Stuff("glowing base 1", 173, 28, "Roughness 0.0 Reflection 0.0 Emission 0.3", 174, 1),
+            new Stuff("glowing base 2", 174, 28, "Roughness 0.0 Reflection 0.0 Emission 0.4", 175, 1),
+            new Stuff("glowing base 3", 175, 28, "Roughness 0.0 Reflection 0.0 Emission 0.3", 172, 1), /*dark tan*/
             new Stuff("unused 176", 176, "Transparency 1.0"), /*dark orange*/
             new Stuff("unused 177", 177, "Transparency 1.0"),
             new Stuff("unused 178", 178, "Transparency 1.0"), /*hot orange*/
