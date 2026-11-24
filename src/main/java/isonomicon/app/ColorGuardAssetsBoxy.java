@@ -49,8 +49,8 @@ public class ColorGuardAssetsBoxy extends ApplicationAdapter {
 //    public static final String SPECIES = "human";
 //    public static final String SPECIES_PREFIX = "";
 //    public static final float DAMAGED = 0f;
-    public static final String SPECIES = "helmet";
-    public static final String SPECIES_PREFIX = "Helmet_";
+    public static final String SPECIES = "suit";
+    public static final String SPECIES_PREFIX = "Suit_";
     public static final float DAMAGED = 0f;
 //    public static final String SPECIES = "zombie";
 //    public static final String SPECIES_PREFIX = "Zombie_";
@@ -230,8 +230,10 @@ public class ColorGuardAssetsBoxy extends ApplicationAdapter {
         int[] canonicalLooks;
         if("human".equals(SPECIES))
             canonicalLooks = new int[]{0, 7, 15, 3, 18, 17, 1, 12};
-        else // zombie for now
+        else if("zombie".equals(SPECIES)) // zombie for now
             canonicalLooks = new int[]{20, 20, 20, 20, 20, 20, 20, 20};
+        else // helmet
+            canonicalLooks = new int[]{21, 21, 21, 21, 21, 21, 21, 21};
         // many skin and hair colors
         if(DIVERSE)
         {
@@ -272,7 +274,7 @@ public class ColorGuardAssetsBoxy extends ApplicationAdapter {
                         }
                         renderer.shadowPixmap.drawPixmap(renderer.palettePixmap, 0, 0);
                         t.draw(renderer.shadowPixmap, 0, 0);
-                        for (int look = 0, lk = 0; look < 168; look+=8, lk++) {
+                        for (int look = 0, lk = 0; look < 176; look+=8, lk++) {
 //                            if(lk == 3 || lk == 8 || lk == 11 || lk == 18 || lk == 21 || lk == 25)
 //                                continue;
                             for (int j = 0; j < armies.length; j++) {
