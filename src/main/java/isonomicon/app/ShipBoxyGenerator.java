@@ -20,6 +20,7 @@ import com.github.tommyettinger.anim8.AnimatedPNG;
 import com.github.tommyettinger.anim8.FastPNG;
 import com.github.tommyettinger.anim8.QualityPalette;
 import com.github.tommyettinger.digital.Hasher;
+import com.github.tommyettinger.digital.Interpolations;
 import com.github.yellowstonegames.text.Language;
 import isonomicon.io.extended.VoxIOExtended;
 import isonomicon.io.extended.VoxModel;
@@ -149,7 +150,8 @@ public class ShipBoxyGenerator extends ApplicationAdapter {
             System.out.println("Rendering " + output);
             long hash = Hasher.botis.hashBulk64(output);
             float hue = Hasher.randomize3Float(hash);
-            float light = (Hasher.randomizeHFloat(hash) + 1f) / 3f;
+            float light = Interpolations.smoother.apply(Hasher.randomizeHFloat(hash)) * 0.8f + 0.1f;
+//            float light = Interpolations.smootherOutIn.apply(Hasher.randomizeHFloat(hash)) * 0.8f + 0.1f;
             hue *= (float)Math.sqrt(hue);
             mm.rng.setSeed(hash);
             byte[][][] voxelData = mm.shipLargeSmoothColorized();
