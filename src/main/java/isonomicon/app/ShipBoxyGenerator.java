@@ -149,6 +149,7 @@ public class ShipBoxyGenerator extends ApplicationAdapter {
             System.out.println("Rendering " + output);
             long hash = Hasher.botis.hashBulk64(output);
             float hue = Hasher.randomize3Float(hash);
+            hue *= (float)Math.sqrt(hue);
             mm.rng.setSeed(hash);
             byte[][][] voxelData = mm.shipLargeSmoothColorized();
             voxels = new VoxModel(voxelData, Coloring.BETTS64, Stuff.MATERIALS_B);
