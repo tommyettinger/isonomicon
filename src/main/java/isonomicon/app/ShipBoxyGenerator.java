@@ -149,6 +149,7 @@ public class ShipBoxyGenerator extends ApplicationAdapter {
             System.out.println("Rendering " + output);
             long hash = Hasher.botis.hashBulk64(output);
             float hue = Hasher.randomize3Float(hash);
+            float light = (Hasher.randomizeHFloat(hash) + 1f) / 3f;
             hue *= (float)Math.sqrt(hue);
             mm.rng.setSeed(hash);
             byte[][][] voxelData = mm.shipLargeSmoothColorized();
@@ -204,7 +205,7 @@ public class ShipBoxyGenerator extends ApplicationAdapter {
 
                     indexShader.setUniformi("u_texPalette", 1);
                     Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
-                    batch.setColor(hue, 0.5f, 0.5f, 1f);
+                    batch.setColor(hue, 0.5f, light, 1f);
 
                     batch.draw(t, 0, t.getHeight(), t.getWidth(), -t.getHeight());
                     batch.end();
@@ -259,7 +260,7 @@ public class ShipBoxyGenerator extends ApplicationAdapter {
 
                     indexShader.setUniformi("u_texPalette", 1);
                     Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
-                    batch.setColor(hue, 0.5f, 0.5f, 1f);
+                    batch.setColor(hue, 0.5f, light, 1f);
 
                     batch.draw(t, 0, t.getHeight(), t.getWidth(), -t.getHeight());
                     batch.end();
