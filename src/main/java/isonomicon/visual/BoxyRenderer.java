@@ -415,13 +415,13 @@ public class BoxyRenderer {
         VoxMaterial m;
         final int step = 1 << shrink;
 
-        int deepShadow = SHADOW_INDEX << 24 | 96 << 16 | 160;
-        int weakShadow = SHADOW_INDEX << 24 | 96 << 16 | 64;
-        Region fringeShadow = blobShadow.current.copy().fringe();
-        shadowPixmap.setColor(weakShadow);
+        int deepShadow = SHADOW_INDEX << 24 | 128 << 16;
+        int weakShadow = SHADOW_INDEX << 24 | 128 << 16 | 255;
+//        Region fringeShadow = blobShadow.current.copy().fringe();
+//        shadowPixmap.setColor(weakShadow);
         for (vx = 0; vx < size + (2 << shrink); vx++) {
             for (vy = 0; vy < size + (2 << shrink); vy++) {
-                if (fringeShadow.contains(vx, vy)) {
+                if (blobShadow.current.contains(vx, vy)) {
                     ox = vx - hsp - (1 << shrink);
                     oy = vy - hsp - (1 << shrink);
                     oz = 0;
@@ -432,28 +432,36 @@ public class BoxyRenderer {
                             xx = (int) (0.5f + Math.max(0, (size + ty - tx) * distortHXY + 1)),
                             yy = (int) (0.5f + Math.max(0, (size * ((distortVXY) * 3) - distortVXY * (tx + ty)) + 1));
 
-                    shadowPixmap.fillCircle((xx >> shrink), (yy >> shrink), 4);
+                    for (int px = (xx >> shrink), ix = -3; ix <= 3; ix++) {
+                        for (int py = (yy >> shrink), iy = -3; iy <= 3; iy++) {
+                            if(ix * ix + iy * iy > 10) continue;
+//                            int alpha = shadowPixmap.getPixel(px, py) & 0xFF;
+//                            alpha = Math.max(alpha, Math.min(64, (int)(RoughMath.expRougher(-0.125f * (ix * ix + iy * iy)) * 64)));
+                            shadowPixmap.drawPixel(px + ix, py + iy, weakShadow);
+                        }
+                    }
+//                    shadowPixmap.fillCircle((xx >> shrink), (yy >> shrink), 4);
                 }
             }
         }
-        shadowPixmap.setColor(deepShadow);
-        for (vx = 0; vx < size + (2 << shrink); vx++) {
-            for (vy = 0; vy < size + (2 << shrink); vy++) {
-                if (blobShadow.current.contains(vx, vy)) {
-                    ox = vx - hsp - 2;
-                    oy = vy - hsp - 2;
-                    oz = 0;
-                    tx = ox * x_x + oy * y_x + oz * z_x + size;
-                    ty = ox * x_y + oy * y_y + oz * z_y + size;
-
-                    final int
-                            xx = (int) (0.5f + Math.max(0, (size + ty - tx) * distortHXY + 1)),
-                            yy = (int) (0.5f + Math.max(0, (size * ((distortVXY) * 3) - distortVXY * (tx + ty)) + 1));
-
-                    shadowPixmap.fillCircle((xx >> shrink), (yy >> shrink), 1);
-                }
-            }
-        }
+//        shadowPixmap.setColor(deepShadow);
+//        for (vx = 0; vx < size + (2 << shrink); vx++) {
+//            for (vy = 0; vy < size + (2 << shrink); vy++) {
+//                if (blobShadow.current.contains(vx, vy)) {
+//                    ox = vx - hsp - 2;
+//                    oy = vy - hsp - 2;
+//                    oz = 0;
+//                    tx = ox * x_x + oy * y_x + oz * z_x + size;
+//                    ty = ox * x_y + oy * y_y + oz * z_y + size;
+//
+//                    final int
+//                            xx = (int) (0.5f + Math.max(0, (size + ty - tx) * distortHXY + 1)),
+//                            yy = (int) (0.5f + Math.max(0, (size * ((distortVXY) * 3) - distortVXY * (tx + ty)) + 1));
+//
+//                    shadowPixmap.fillCircle((xx >> shrink), (yy >> shrink), 1);
+//                }
+//            }
+//        }
 
         for (int sx = 0; sx <= xSize; sx++) {
             for (int sy = 0; sy <= ySize; sy++) {
@@ -552,7 +560,7 @@ public class BoxyRenderer {
 //                            shade << 16 |
 //                            sat << 8 | 255);
                     int idx = (y >>> shrink) * palettePixmap.getWidth() + (x >>> shrink) << 2;
-//                    if (shadows && index == FLOOR_INDEX) {
+//                    if (shadows && index != FLOOR_INDEX) {
 //                        buffer.put(idx, SHADOW_INDEX); // shadow stuff
 //                        buffer.put(idx + 1, (byte) 96);
 //                        buffer.put(idx + 2, (byte) 0);
